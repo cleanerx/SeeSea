@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="net.sf.seesea.navigation.ui.view.SensorDataView"
+            icon="res/position.png"
+            id="net.sf.seesea.navigation.ui.sensorData"
+            name="%SensorData"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>
