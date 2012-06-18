@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ui
+Bundle-SymbolicName: net.sf.seesea.gps.bluetooth.ui
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.gps.bluetooth.ui.GPSBluetoothUIActivator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ net.sf.seesea.provider.navigation.nmea.ui,
+ net.sf.seesea.gps.bluetooth,
+ net.sf.seesea.provider.navigation.nmea,
+ net.sf.seesea.services.navigation,
+ net.sf.seesea.lib
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Service-Component: OSGI-INF/bluetoothprovider.xml
+Export-Package: net.sf.seesea.gps.bluetooth.ui

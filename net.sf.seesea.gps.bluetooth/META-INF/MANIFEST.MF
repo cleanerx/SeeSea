@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GPS Bluetooth
+Bundle-SymbolicName: net.sf.seesea.gps.bluetooth
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.gps.bluetooth.GPSBluetootActivator
+Require-Bundle: org.eclipse.core.runtime,
+ net.sf.seesea.services.navigation;bundle-version="1.0.0",
+ org.apache.log4j
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/bluecove-2.1.1-SNAPSHOT.jar,
+ .
+Export-Package: javax.bluetooth,
+ net.sf.seesea.gps.bluetooth
