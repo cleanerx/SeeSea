@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: NMEA Datalogger
+Bundle-SymbolicName: net.sf.seesea.nmea.rcp;singleton:=true
+Bundle-Version: 0.9.0
+Bundle-Activator: net.sf.seesea.nmea.rcp.NMEARCPActivator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources;bundle-version="3.6.1",
+ org.apache.log4j;bundle-version="1.2.16",
+ org.eclipse.osgi.services;bundle-version="3.2.100",
+ org.eclipse.equinox.ds;bundle-version="1.2.1",
+ org.eclipse.help.ui,
+ org.eclipse.help.webapp,
+ org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
+ net.sf.seesea.model.core;bundle-version="1.0.0",
+ net.sf.seesea.osm;bundle-version="1.0.0",
+ net.sf.seesea.rendering.chart;bundle-version="1.0.0",
+ net.sf.seesea.provider.navigation.nmea;bundle-version="1.0.0",
+ net.sf.seesea.provider.navigation.nmea.ui;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: net.sf.seesea.nmea.rcp
+Service-Component: OSGI-INF/ModelService.xml, OSGI-INF/TrackRecoder.xml
