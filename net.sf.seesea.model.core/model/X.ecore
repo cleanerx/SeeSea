@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="net"
+    nsURI="net.sf.seesea.model.core" nsPrefix="net.sf.seesea.model.core">
+  <eSubpackages name="sf" nsURI="x" nsPrefix="x">
+    <eSubpackages name="seesea" nsURI="y" nsPrefix="y">
+      <eSubpackages name="model" nsURI="z" nsPrefix="z">
+        <eSubpackages name="core" nsURI="a" nsPrefix="a">
+          <eClassifiers xsi:type="ecore:EClass" name="ModelRoot" eSuperTypes="#//sf/seesea/model/core/geo/NavigationCompound">
+            <eStructuralFeatures xsi:type="ecore:EReference" name="chartContainer"
+                eType="#//sf/seesea/model/core/geo/ChartContainer" containment="true"/>
+            <eStructuralFeatures xsi:type="ecore:EReference" name="instruments" eType="#//sf/seesea/model/core/data/Instruments"
+                containment="true"/>
+          </eClassifiers>
+          <eClassifiers xsi:type="ecore:EClass" name="ModelObject"/>
+          <eSubpackages name="geo" nsURI="b" nsPrefix="b">
+            <eClassifiers xsi:type="ecore:EClass" name="GeoPosition" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="longitude" eType="#//sf/seesea/model/core/geo/Longitude"
+                  containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="latitude" eType="#//sf/seesea/model/core/geo/Latitude"
+                  containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Coordinate" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="degree" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                  defaultValueLiteral="0"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="minute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                  defaultValueLiteral="0"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="second" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+                  defaultValueLiteral="0"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Latitude" eSuperTypes="#//sf/seesea/model/core/geo/Coordinate"/>
+            <eClassifiers xsi:type="ecore:EClass" name="Longitude" eSuperTypes="#//sf/seesea/model/core/geo/Coordinate"/>
+            <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="#//sf/seesea/model/core/geo/NamedArtifact">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="waypoints" upperBound="-1"
+                  eType="#//sf/seesea/model/core/geo/NamedPosition"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="NamedArtifact" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="NamedPosition" eSuperTypes="#//sf/seesea/model/core/geo/GeoPosition #//sf/seesea/model/core/geo/NamedArtifact"/>
+            <eClassifiers xsi:type="ecore:EClass" name="RoutingContainer" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="routes" upperBound="-1"
+                  eType="#//sf/seesea/model/core/geo/Route" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="area" eType="#//sf/seesea/model/core/geo/osm/Area"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="POIContainer" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="pois" upperBound="-1"
+                  eType="#//sf/seesea/model/core/geo/NamedPosition" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="area" eType="#//sf/seesea/model/core/geo/osm/Area"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="ChartContainer" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="charts" upperBound="-1"
+                  eType="#//sf/seesea/model/core/geo/Chart" containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="NavigationCompound" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="poiContainer"
+                  eType="#//sf/seesea/model/core/geo/POIContainer" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="routingContainer"
+                  eType="#//sf/seesea/model/core/geo/RoutingContainer" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="tracksContainer"
+                  eType="#//sf/seesea/model/core/geo/TracksContainer" containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Chart" eSuperTypes="#//sf/seesea/model/core/geo/NamedArtifact">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="chartConfiguration"
+                  eType="#//sf/seesea/model/core/diagramInterchange/Diagram" containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="GeoPosition3D" eSuperTypes="#//sf/seesea/model/core/geo/GeoPosition">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="altitude" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="MeasuredPosition3D" eSuperTypes="#//sf/seesea/model/core/physx/Measurement #//sf/seesea/model/core/geo/GeoPosition3D"/>
+            <eClassifiers xsi:type="ecore:EClass" name="TracksContainer" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="tracks" upperBound="-1"
+                  eType="#//sf/seesea/model/core/geo/Track" containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Track" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="measuredPosition"
+                  upperBound="-1" eType="#//sf/seesea/model/core/geo/MeasuredPosition3D"
+                  containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="ChartSymbol"/>
+            <eClassifiers xsi:type="ecore:EClass" name="ChartArea" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="bounds" upperBound="-1"
+                  eType="#//sf/seesea/model/core/geo/GeoPosition" containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="ChartWay" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="waypoints" upperBound="-1"
+                  eType="#//sf/seesea/model/core/geo/GeoPosition"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Navarea" eSuperTypes="#//sf/seesea/model/core/geo/osm/Area">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="areanumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="Direction">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="N" value="1"/>
+              <eLiterals name="NNE" value="2"/>
+              <eLiterals name="NE" value="3"/>
+              <eLiterals name="ENE" value="4"/>
+              <eLiterals name="E" value="5"/>
+              <eLiterals name="ESE" value="6"/>
+              <eLiterals name="SE" value="7"/>
+              <eLiterals name="SSE" value="8" literal="SSE"/>
+              <eLiterals name="S" value="9"/>
+              <eLiterals name="SSW" value="10"/>
+              <eLiterals name="SW" value="11"/>
+              <eLiterals name="WSW" value="12"/>
+              <eLiterals name="W" value="13"/>
+              <eLiterals name="WNW" value="14"/>
+              <eLiterals name="NW" value="15"/>
+              <eLiterals name="NNW" value="16"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="LatitudeHemisphere">
+              <eLiterals name="N"/>
+              <eLiterals name="S" value="1"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="LongitudeHemisphere">
+              <eLiterals name="W"/>
+              <eLiterals name="E" value="1"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Depth" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="measurementPosition"
+                  eType="#//sf/seesea/model/core/geo/RelativeDepthMeasurementPosition"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="depth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="RelativeDepthMeasurementPosition">
+              <eLiterals name="unknown"/>
+              <eLiterals name="Transducer" value="1"/>
+              <eLiterals name="Surface" value="2"/>
+              <eLiterals name="Keel" value="3"/>
+            </eClassifiers>
+            <eSubpackages name="osm" nsURI="osm" nsPrefix="osm">
+              <eClassifiers xsi:type="ecore:EClass" name="Area" eSuperTypes="#//sf/seesea/model/core/geo/Chart #//sf/seesea/model/core/geo/NavigationCompound">
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="zoomLevel"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+                    defaultValueLiteral="0"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="mapCenterPosition"
+                    eType="#//sf/seesea/model/core/geo/GeoPosition" containment="true"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="subArea" upperBound="-1"
+                    eType="#//sf/seesea/model/core/geo/osm/Area" containment="true"/>
+              </eClassifiers>
+              <eClassifiers xsi:type="ecore:EClass" name="World" eSuperTypes="#//sf/seesea/model/core/geo/osm/Area">
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="longitudeScale"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                    defaultValueLiteral="true"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="latitudeScale"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+                    defaultValueLiteral="true"/>
+              </eClassifiers>
+            </eSubpackages>
+          </eSubpackages>
+          <eSubpackages name="physx" nsURI="physx" nsPrefix="physx">
+            <eClassifiers xsi:type="ecore:EClass" name="Temperature" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="#//sf/seesea/model/core/physx/TemperatureUnit"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="TemperatureUnit">
+              <eLiterals name="CELSIUS"/>
+              <eLiterals name="FAHRENHEIT" value="1"/>
+              <eLiterals name="KELVIN" value="2"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Speed" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="speedUnit" eType="#//sf/seesea/model/core/physx/SpeedUnit"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Heading" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="degrees" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="headingType"
+                  eType="#//sf/seesea/model/core/physx/HeadingType"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="HeadingType">
+              <eLiterals name="Unknown"/>
+              <eLiterals name="Compass" value="1" literal="Compass"/>
+              <eLiterals name="Magnetic" value="2"/>
+              <eLiterals name="True" value="3"/>
+              <eLiterals name="CourseThroughWater" value="4"/>
+              <eLiterals name="COG" value="5"/>
+              <eLiterals name="Relative" value="6"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="SpeedUnit">
+              <eLiterals name="K" value="1"/>
+              <eLiterals name="M" value="2"/>
+              <eLiterals name="N" value="3"/>
+              <eLiterals name="Unknown"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Measurement" abstract="true"
+                eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="ShipMovementVector">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="headings" upperBound="-1"
+                  eType="#//sf/seesea/model/core/physx/Heading2DegreesEntry" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="speeds" upperBound="-1"
+                  eType="#//sf/seesea/model/core/physx/SpeedType2SpeedEntry" containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="RelativeWind" eSuperTypes="#//sf/seesea/model/core/physx/Heading #//sf/seesea/model/core/physx/Speed">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="bowOrientation"
+                  eType="#//sf/seesea/model/core/physx/HandOrientation"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="HandOrientation">
+              <eLiterals name="unknown"/>
+              <eLiterals name="left" value="1"/>
+              <eLiterals name="right" value="2"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="SatelliteInfo">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="elevation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="azimuth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="signalStrength"
+                  eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="SatellitesVisible">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="satelliteInfo"
+                  upperBound="-1" eType="#//sf/seesea/model/core/physx/SatelliteInfo"
+                  containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="LengthUnit">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="Meters" value="1"/>
+              <eLiterals name="Feet" value="2"/>
+              <eLiterals name="NauticalMile" value="3"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Heading2DegreesEntry" instanceClassName="java.util.Map$Entry">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//sf/seesea/model/core/physx/HeadingType"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="SpeedType">
+              <eLiterals name="Unknown"/>
+              <eLiterals name="COG" value="1"/>
+              <eLiterals name="SPEEDTHOUGHWATER" value="2"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="SpeedType2SpeedEntry" instanceClassName="java.util.Map$Entry">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//sf/seesea/model/core/physx/SpeedType"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//sf/seesea/model/core/physx/Speed"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="SpeedMap"/>
+            <eClassifiers xsi:type="ecore:EClass" name="Time">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="timezone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eClassifiers>
+          </eSubpackages>
+          <eSubpackages name="weather" nsURI="weather" nsPrefix="weather">
+            <eClassifiers xsi:type="ecore:EClass" name="WindMeasurement" eSuperTypes="#//sf/seesea/model/core/physx/Measurement #//sf/seesea/model/core/physx/Speed">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="angle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="reference" eType="#//sf/seesea/model/core/weather/Reference"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="Reference">
+              <eLiterals name="Relative" value="1"/>
+              <eLiterals name="Absolute" value="2"/>
+              <eLiterals name="Unknown"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="BarometricPressure" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="#//sf/seesea/model/core/weather/PressureUnit"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="PressureUnit">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="Torr" value="1"/>
+              <eLiterals name="Hectopascal" value="2"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="CloudMeasurement" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudCoverage"
+                  eType="#//sf/seesea/model/core/weather/CloudCoverage"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudTypes" upperBound="-1"
+                  eType="#//sf/seesea/model/core/weather/CloudType"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="CloudType">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="Cirrus" value="1"/>
+              <eLiterals name="Cirrocumulus" value="2"/>
+              <eLiterals name="Cirrostratus" value="3"/>
+              <eLiterals name="Altocumulus" value="4"/>
+              <eLiterals name="Altostratus" value="5"/>
+              <eLiterals name="Nimbostratus" value="6"/>
+              <eLiterals name="Stratocumulus" value="7" literal="Stratocumulus"/>
+              <eLiterals name="Stratus" value="8"/>
+              <eLiterals name="Cumulus" value="9"/>
+              <eLiterals name="Cumulonimbus" value="10"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Visibility" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="#//sf/seesea/model/core/physx/LengthUnit"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="CloudCoverage">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="Cloudless" value="1"/>
+              <eLiterals name="Fair" value="2"/>
+              <eLiterals name="PartlyCloudyWeak" value="3"/>
+              <eLiterals name="PartlyCloudyMedium" value="4" literal="PartlyCloudyMedium"/>
+              <eLiterals name="PartlyCloudyHeavy" value="5"/>
+              <eLiterals name="WeaklyClouded" value="6"/>
+              <eLiterals name="MediumClouded" value="7"/>
+              <eLiterals name="HeavilyClouded" value="8" literal="HeavilyClouded"/>
+              <eLiterals name="Dull" value="9"/>
+              <eLiterals name="Obscured" value="10"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="Beaufort">
+              <eLiterals name="Undefined" value="13"/>
+              <eLiterals name="Calm"/>
+              <eLiterals name="LightAir" value="1"/>
+              <eLiterals name="LightBreeze" value="2"/>
+              <eLiterals name="GentleBreeze" value="3"/>
+              <eLiterals name="ModerateBreeze" value="4"/>
+              <eLiterals name="FreshBreeze" value="5"/>
+              <eLiterals name="StrongBreeze" value="6"/>
+              <eLiterals name="NearGale" value="7"/>
+              <eLiterals name="Gale" value="8"/>
+              <eLiterals name="StrongGale" value="9"/>
+              <eLiterals name="Storm" value="10"/>
+              <eLiterals name="ViolentStorm" value="11"/>
+              <eLiterals name="HurricaneForce" value="12"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="SeaState">
+              <eLiterals name="CalmGlassy"/>
+              <eLiterals name="CalmRippled" value="1"/>
+              <eLiterals name="SmoothWavelets" value="2"/>
+              <eLiterals name="Slight" value="3"/>
+              <eLiterals name="Moderate" value="4"/>
+              <eLiterals name="Rough" value="5"/>
+              <eLiterals name="VeryRough" value="6"/>
+              <eLiterals name="High" value="7"/>
+              <eLiterals name="VeryHigh" value="8"/>
+              <eLiterals name="Phenomenal" value="9"/>
+              <eLiterals name="Undefined" value="10"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="WaveHeight">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="#//sf/seesea/model/core/physx/LengthUnit"/>
+            </eClassifiers>
+          </eSubpackages>
+          <eSubpackages name="data" nsURI="data" nsPrefix="data">
+            <eClassifiers xsi:type="ecore:EClass" name="Series" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="measurement"
+                  upperBound="-1" eType="#//sf/seesea/model/core/physx/Measurement"
+                  containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Instruments" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//sf/seesea/model/core/geo/MeasuredPosition3D"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="waterTemperature"
+                  eType="#//sf/seesea/model/core/physx/Temperature" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="headingAndVelocity"
+                  eType="#//sf/seesea/model/core/physx/ShipMovementVector" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="satellitesVisible"
+                  eType="#//sf/seesea/model/core/physx/SatellitesVisible" containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="windVector" eType="#//sf/seesea/model/core/weather/WindMeasurement"
+                  containment="true"/>
+            </eClassifiers>
+          </eSubpackages>
+          <eSubpackages name="diagramInterchange" nsURI="diagramInterchange" nsPrefix="diagramInterchange">
+            <eClassifiers xsi:type="ecore:EClass" name="GraphicalNode" eSuperTypes="#//sf/seesea/model/core/diagramInterchange/GraphicalElement">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="represents" eType="#//sf/seesea/model/core/ModelObject"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="GraphicalEdge" eSuperTypes="#//sf/seesea/model/core/diagramInterchange/GraphicalElement"/>
+            <eClassifiers xsi:type="ecore:EClass" name="GraphicalContainer" eSuperTypes="#//sf/seesea/model/core/diagramInterchange/GraphicalElement">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+                  eType="#//sf/seesea/model/core/diagramInterchange/GraphicalElement"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="#//sf/seesea/model/core/diagramInterchange/GraphicalContainer"/>
+            <eClassifiers xsi:type="ecore:EClass" name="GraphicalElement"/>
+          </eSubpackages>
+        </eSubpackages>
+      </eSubpackages>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

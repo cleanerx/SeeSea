@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmi:id="_e6e88foSEd-K_4L9biubnw" type="EcoreTools" measurementUnit="Pixel">
+  <children xmi:type="notation:Node" xmi:id="_fIXn8PoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIaEMPoSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIaEMfoSEd-K_4L9biubnw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_fIarRPoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/Temperature/value"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIarRfoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIbSUPoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/Temperature/unit"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIbSUfoSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIaEMvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIaEM_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIaENPoSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIarQPoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIarQfoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIarQvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIarQ_oSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIXn8foSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/Temperature"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIXn8voSEd-K_4L9biubnw" x="316" y="191"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIbSUvoSEd-K_4L9biubnw" type="1005">
+    <children xmi:type="notation:Node" xmi:id="_fIb5YPoSEd-K_4L9biubnw" type="4010"/>
+    <children xmi:type="notation:Node" xmi:id="_fIcgcPoSEd-K_4L9biubnw" type="5008">
+      <children xmi:type="notation:Node" xmi:id="_fIcgdPoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/TemperatureUnit/CELSIUS"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIcgdfoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIcgdvoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/TemperatureUnit/FAHRENHEIT"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIcgd_oSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIdHgPoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/TemperatureUnit/KELVIN"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIdHgfoSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIcgcfoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIcgcvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIcgc_oSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIbSU_oSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EEnum" href="X.ecore#//sf/seesea/model/core/physx/TemperatureUnit"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIbSVPoSEd-K_4L9biubnw"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIdHgvoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIdHhfoSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIdHhvoSEd-K_4L9biubnw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_fIdulPoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/Speed/speed"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIdulfoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIdulvoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/Speed/speedUnit"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIdul_oSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIdHh_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIdHiPoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIdHifoSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIdukPoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIdukfoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIdukvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIduk_oSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIdHg_oSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/Speed"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIdHhPoSEd-K_4L9biubnw" x="561" y="191"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIdumPoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIeVoPoSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIeVofoSEd-K_4L9biubnw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_fIeVqfoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/Heading/degrees"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIeVqvoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIe8sPoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/Heading/headingType"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIe8sfoSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIeVovoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIeVo_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIeVpPoSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIeVpfoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIeVpvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIeVp_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIeVqPoSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIdumfoSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/Heading"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIdumvoSEd-K_4L9biubnw" x="808" y="191"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIe8svoSEd-K_4L9biubnw" type="1005">
+    <children xmi:type="notation:Node" xmi:id="_fIfjwPoSEd-K_4L9biubnw" type="4010"/>
+    <children xmi:type="notation:Node" xmi:id="_fIfjwfoSEd-K_4L9biubnw" type="5008">
+      <children xmi:type="notation:Node" xmi:id="_fIfjxfoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HeadingType/True"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIfjxvoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIfjx_oSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HeadingType/Unknown"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIfjyPoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIfjyfoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HeadingType/Magnetic"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIfjyvoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIgK0PoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HeadingType/COG"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIgK0foSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIgK0voSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HeadingType/Relative"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIgK0_oSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIfjwvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIfjw_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIfjxPoSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIe8s_oSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EEnum" href="X.ecore#//sf/seesea/model/core/physx/HeadingType"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIe8tPoSEd-K_4L9biubnw" x="198"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIgK1PoSEd-K_4L9biubnw" type="1005">
+    <children xmi:type="notation:Node" xmi:id="_fIgx4PoSEd-K_4L9biubnw" type="4010"/>
+    <children xmi:type="notation:Node" xmi:id="_fIgx4foSEd-K_4L9biubnw" type="5008">
+      <children xmi:type="notation:Node" xmi:id="_fIgx5foSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/SpeedUnit/K"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIgx5voSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIgx5_oSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/SpeedUnit/M"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIgx6PoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIgx6foSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/SpeedUnit/N"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIgx6voSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIgx6_oSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/SpeedUnit/Unknown"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIgx7PoSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIgx4voSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIgx4_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIgx5PoSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIgK1foSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EEnum" href="X.ecore#//sf/seesea/model/core/physx/SpeedUnit"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIgK1voSEd-K_4L9biubnw" x="396"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIhY8PoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIhY8_oSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIhY9PoSEd-K_4L9biubnw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_fIiAAPoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/Measurement/time"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIiAAfoSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIhY9foSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIhY9voSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIhY9_oSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIhY-PoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIhY-foSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIhY-voSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIhY-_oSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIhY8foSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/Measurement"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIhY8voSEd-K_4L9biubnw" x="594"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIiAAvoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIiABfoSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIiABvoSEd-K_4L9biubnw" type="5001">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIiAB_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIiACPoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIiACfoSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIiACvoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIiAC_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIiADPoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIiADfoSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIiAA_oSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/ShipMovementVector"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIiABPoSEd-K_4L9biubnw" x="565" y="322"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIinEPoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIinE_oSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIinFPoSEd-K_4L9biubnw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_fIjOIPoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/RelativeWind/bowOrientation"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIjOIfoSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIinFfoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIinFvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIinF_oSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIinGPoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIinGfoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIinGvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIinG_oSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIinEfoSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/RelativeWind"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIinEvoSEd-K_4L9biubnw" x="793" y="322"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIjOIvoSEd-K_4L9biubnw" type="1005">
+    <children xmi:type="notation:Node" xmi:id="_fIjOJfoSEd-K_4L9biubnw" type="4010"/>
+    <children xmi:type="notation:Node" xmi:id="_fIjOJvoSEd-K_4L9biubnw" type="5008">
+      <children xmi:type="notation:Node" xmi:id="_fIj1MPoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HandOrientation/unknown"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIj1MfoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIj1MvoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HandOrientation/left"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIj1M_oSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIj1NPoSEd-K_4L9biubnw" type="2006">
+        <element xmi:type="ecore:EEnumLiteral" href="X.ecore#//sf/seesea/model/core/physx/HandOrientation/right"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIj1NfoSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIjOJ_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIjOKPoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIjOKfoSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIjOI_oSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EEnum" href="X.ecore#//sf/seesea/model/core/physx/HandOrientation"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIjOJPoSEd-K_4L9biubnw" x="821"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIj1NvoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIkcQPoSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIkcQfoSEd-K_4L9biubnw" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_fIkcSfoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/SatelliteInfo/id"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIkcSvoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIkcS_oSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/SatelliteInfo/elevation"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIkcTPoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIlDUPoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/SatelliteInfo/azimuth"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIlDUfoSEd-K_4L9biubnw"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_fIlDUvoSEd-K_4L9biubnw" type="2001">
+        <element xmi:type="ecore:EAttribute" href="X.ecore#//sf/seesea/model/core/physx/SatelliteInfo/signalStrength"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_fIlDU_oSEd-K_4L9biubnw"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIkcQvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIkcQ_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIkcRPoSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIkcRfoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIkcRvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIkcR_oSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIkcSPoSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIj1N_oSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/SatelliteInfo"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIj1OPoSEd-K_4L9biubnw" x="1067"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_fIlDVPoSEd-K_4L9biubnw" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_fIlDV_oSEd-K_4L9biubnw" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_fIlqYPoSEd-K_4L9biubnw" type="5001">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIlqYfoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIlqYvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIlqY_oSEd-K_4L9biubnw"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIlqZPoSEd-K_4L9biubnw" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_fIlqZfoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_fIlqZvoSEd-K_4L9biubnw"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_fIlqZ_oSEd-K_4L9biubnw"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_fIlDVfoSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="X.ecore#//sf/seesea/model/core/physx/SatellitesVisible"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fIlDVvoSEd-K_4L9biubnw" x="1089" y="191"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_e6e88voSEd-K_4L9biubnw"/>
+  <element xmi:type="ecore:EPackage" href="X.ecore#//sf/seesea/model/core/physx"/>
+  <edges xmi:type="notation:Edge" xmi:id="_fImRcPoSEd-K_4L9biubnw" type="3003" source="_fIXn8PoSEd-K_4L9biubnw" target="_fIhY8PoSEd-K_4L9biubnw">
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fImRcfoSEd-K_4L9biubnw" routing="Rectilinear" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fImRcvoSEd-K_4L9biubnw" fontName="Sans"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fImRc_oSEd-K_4L9biubnw" points="[0, 0, -216, 138]$[0, -30, -216, 108]$[216, -30, 0, 108]$[216, -138, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKJwoPoSEd-K_4L9biubnw" id="(0.4972972972972973,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKJwofoSEd-K_4L9biubnw" id="(0.25,1.0)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_fIm4gPoSEd-K_4L9biubnw" type="3003" source="_fIdHgvoSEd-K_4L9biubnw" target="_fIhY8PoSEd-K_4L9biubnw">
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fIm4gfoSEd-K_4L9biubnw" routing="Rectilinear" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fIm4gvoSEd-K_4L9biubnw" fontName="Sans"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fIm4g_oSEd-K_4L9biubnw" points="[0, 0, 0, 138]$[0, -138, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKHUYPoSEd-K_4L9biubnw" id="(0.49732620320855614,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKH7cPoSEd-K_4L9biubnw" id="(0.5,1.0)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_fIm4hPoSEd-K_4L9biubnw" type="3003" source="_fIdumPoSEd-K_4L9biubnw" target="_fIhY8PoSEd-K_4L9biubnw">
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fIm4hfoSEd-K_4L9biubnw" routing="Rectilinear" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fIm4hvoSEd-K_4L9biubnw" fontName="Sans"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fIm4h_oSEd-K_4L9biubnw" points="[0, 0, 234, 138]$[0, -30, 234, 108]$[-234, -30, 0, 108]$[-234, -138, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKMM4PoSEd-K_4L9biubnw" id="(0.497737556561086,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKMz8PoSEd-K_4L9biubnw" id="(0.75,1.0)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_fIotsPoSEd-K_4L9biubnw" type="3002" source="_fIiAAvoSEd-K_4L9biubnw" target="_fIdHgvoSEd-K_4L9biubnw">
+    <children xmi:type="notation:Node" xmi:id="_fIottPoSEd-K_4L9biubnw" type="4011">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_fIottfoSEd-K_4L9biubnw" x="-10" y="-10"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIottvoSEd-K_4L9biubnw" type="4012">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_fIott_oSEd-K_4L9biubnw" x="10" y="10"/>
+    </children>
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fIotsfoSEd-K_4L9biubnw" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fIotsvoSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10"/>
+    <element xmi:type="ecore:EReference" href="X.ecore#//sf/seesea/model/core/physx/ShipMovementVector/speed"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fIots_oSEd-K_4L9biubnw" points="[0, 0, 0, 60]$[0, -60, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKKXsPoSEd-K_4L9biubnw" id="(0.5,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKKXsfoSEd-K_4L9biubnw" id="(0.47058823529411764,1.0)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_fIotuPoSEd-K_4L9biubnw" type="3003" source="_fIinEPoSEd-K_4L9biubnw" target="_fIdumPoSEd-K_4L9biubnw">
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fIotufoSEd-K_4L9biubnw" routing="Rectilinear" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fIotuvoSEd-K_4L9biubnw" fontName="Sans"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fIotu_oSEd-K_4L9biubnw" points="[0, 0, 0, 60]$[0, -60, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKMz8foSEd-K_4L9biubnw" id="(0.4789272030651341,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKNbAPoSEd-K_4L9biubnw" id="(0.497737556561086,1.0)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_fIpUwPoSEd-K_4L9biubnw" type="3003" source="_fIinEPoSEd-K_4L9biubnw" target="_fIdHgvoSEd-K_4L9biubnw">
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fIpUwfoSEd-K_4L9biubnw" routing="Rectilinear" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fIpUwvoSEd-K_4L9biubnw" fontName="Sans"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fIpUw_oSEd-K_4L9biubnw" points="[0, 0, 157, 60]$[0, -30, 157, 30]$[-157, -30, 0, 30]$[-157, -60, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKOCEPoSEd-K_4L9biubnw" id="(0.23754789272030652,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKOCEfoSEd-K_4L9biubnw" id="(0.732620320855615,1.0)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_fIpUxPoSEd-K_4L9biubnw" type="3002" source="_fIlDVPoSEd-K_4L9biubnw" target="_fIj1NvoSEd-K_4L9biubnw">
+    <children xmi:type="notation:Node" xmi:id="_fIpUyPoSEd-K_4L9biubnw" type="4011">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_fIpUyfoSEd-K_4L9biubnw" x="-10" y="-10"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_fIpUyvoSEd-K_4L9biubnw" type="4012">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_fIpUy_oSEd-K_4L9biubnw" x="10" y="10"/>
+    </children>
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_fIpUxfoSEd-K_4L9biubnw" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_fIpUxvoSEd-K_4L9biubnw" fontColor="4210752" fontName="Sans" fontHeight="10"/>
+    <element xmi:type="ecore:EReference" href="X.ecore#//sf/seesea/model/core/physx/SatellitesVisible/satelliteInfo"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_fIpUx_oSEd-K_4L9biubnw" points="[0, 0, 0, 84]$[0, -84, 0, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKIigPoSEd-K_4L9biubnw" id="(0.49606299212598426,0.0)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_fKIigfoSEd-K_4L9biubnw" id="(0.5,1.0)"/>
+  </edges>
+</notation:Diagram>
