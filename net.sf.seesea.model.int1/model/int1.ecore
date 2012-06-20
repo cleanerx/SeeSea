@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="net"
+    nsURI="net" nsPrefix="net">
+  <eSubpackages name="sf" nsURI="sf" nsPrefix="sf">
+    <eSubpackages name="seesea" nsURI="seesea" nsPrefix="seesea">
+      <eSubpackages name="model" nsURI="model" nsPrefix="model">
+        <eSubpackages name="int1" nsURI="int1" nsPrefix="int1">
+          <eSubpackages name="buoysandbeacons" nsURI="buoysandbeacons" nsPrefix="buoysandbeacons">
+            <eClassifiers xsi:type="ecore:EClass" name="AbstractCommonBuoyBeacon"
+                abstract="true" eSuperTypes="#//sf/seesea/model/int1/lights/LightCharacter #//sf/seesea/model/int1/base/AbstractSeamark ../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/NamedPosition">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" unique="false"
+                  upperBound="-1" eType="#//sf/seesea/model/int1/lights/Color"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="colorType" eType="#//sf/seesea/model/int1/lights/Orientation"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="reflecting" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="radarreflector"
+                  eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//sf/seesea/model/int1/buoysandbeacons/BuoyType"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="topmark" eType="#//sf/seesea/model/int1/buoysandbeacons/Topmark"
+                  containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Buoy" eSuperTypes="#//sf/seesea/model/int1/buoysandbeacons/AbstractCommonBuoyBeacon">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="designation"
+                  eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="shape" eType="#//sf/seesea/model/int1/buoysandbeacons/Shape"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="BuoyType">
+              <eLiterals name="Unknown"/>
+              <eLiterals name="CardinalSouth" value="1"/>
+              <eLiterals name="CardinalEast" value="2"/>
+              <eLiterals name="CardinalWest" value="3"/>
+              <eLiterals name="LateralSquare" value="4"/>
+              <eLiterals name="LateralTriangle" value="5"/>
+              <eLiterals name="SafeWater" value="6"/>
+              <eLiterals name="IsolatedDanger" value="7"/>
+              <eLiterals name="Special" value="8"/>
+              <eLiterals name="NewWreck" value="9"/>
+              <eLiterals name="CardinalNorth" value="10"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="Shape">
+              <eLiterals name="Unknown" literal="UNKNOWN"/>
+              <eLiterals name="Conical" value="1"/>
+              <eLiterals name="Cylindrical" value="2"/>
+              <eLiterals name="Spherical" value="3"/>
+              <eLiterals name="Pillar" value="4"/>
+              <eLiterals name="Spar" value="5"/>
+              <eLiterals name="Barrel" value="6"/>
+              <eLiterals name="Super" value="7"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Beacon" eSuperTypes="#//sf/seesea/model/int1/buoysandbeacons/AbstractCommonBuoyBeacon">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="onSubmergedRock"
+                  eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="SpecialBuoy" eSuperTypes="#//sf/seesea/model/int1/buoysandbeacons/Buoy">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="purpose" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="private" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="seasonal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="TopmarkType">
+              <eLiterals name="Unknown"/>
+              <eLiterals name="Cylinder" value="1"/>
+              <eLiterals name="ConeUp" value="2"/>
+              <eLiterals name="ConeDown" value="3"/>
+              <eLiterals name="XCross" value="4"/>
+              <eLiterals name="Ball" value="5"/>
+              <eLiterals name="UprightCross" value="6"/>
+              <eLiterals name="Rhombus" value="7"/>
+              <eLiterals name="Flag" value="8"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Topmark" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="topmarkParts"
+                  upperBound="-1" eType="#//sf/seesea/model/int1/buoysandbeacons/TopmarkType"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="topmarkColor"
+                  eType="#//sf/seesea/model/int1/lights/Color"/>
+            </eClassifiers>
+          </eSubpackages>
+          <eSubpackages name="lights" nsURI="lights" nsPrefix="lights">
+            <eClassifiers xsi:type="ecore:EEnum" name="PhaseCharacteristic">
+              <eLiterals name="Unknown" literal="UNKNOWN"/>
+              <eLiterals name="Fixed" value="1"/>
+              <eLiterals name="Occulting" value="2" literal="Occulting"/>
+              <eLiterals name="Isophase" value="3"/>
+              <eLiterals name="Flash" value="4"/>
+              <eLiterals name="LongFlash" value="5"/>
+              <eLiterals name="Quick" value="6"/>
+              <eLiterals name="InterruptedQuick" value="7"/>
+              <eLiterals name="VeryQuick" value="8"/>
+              <eLiterals name="InterruptedVeryQuick" value="9" literal=""/>
+              <eLiterals name="UltraQuick" value="10"/>
+              <eLiterals name="InterruptedUltraQuick" value="11"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="Color">
+              <eLiterals name="Unknown" literal="UNKNOWN"/>
+              <eLiterals name="red" value="1"/>
+              <eLiterals name="green" value="2"/>
+              <eLiterals name="yellow" value="3"/>
+              <eLiterals name="white" value="4"/>
+              <eLiterals name="black" value="5" literal="black"/>
+              <eLiterals name="orange" value="6"/>
+              <eLiterals name="blue" value="7"/>
+              <eLiterals name="violet" value="8"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="LightCharacter">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="lightcolor" upperBound="-1"
+                  eType="#//sf/seesea/model/int1/lights/Color"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="phaseCharacteristic"
+                  eType="#//sf/seesea/model/int1/lights/PhaseCharacteristic"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" upperBound="-1"
+                  eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="Orientation">
+              <eLiterals name="vertical"/>
+              <eLiterals name="horizontal" value="1"/>
+              <eLiterals name="diagonal" value="2"/>
+            </eClassifiers>
+          </eSubpackages>
+          <eSubpackages name="base" nsURI="base" nsPrefix="base">
+            <eClassifiers xsi:type="ecore:EClass" name="AbstractSeamark" abstract="true"
+                eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/GeoPosition"/>
+            <eClassifiers xsi:type="ecore:EClass" name="MarineChart" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/Chart ../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/osm/World">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="seamarks" upperBound="-1"
+                  eType="#//sf/seesea/model/int1/base/AbstractSeamark" containment="true"/>
+            </eClassifiers>
+          </eSubpackages>
+          <eSubpackages name="natureofseabed" nsURI="natureofseabed" nsPrefix="natureofseabed">
+            <eClassifiers xsi:type="ecore:EEnum" name="SeabedType">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="Sand" value="1"/>
+              <eLiterals name="Mud" value="2"/>
+              <eLiterals name="Clay" value="3"/>
+              <eLiterals name="Silt" value="4"/>
+              <eLiterals name="Stones" value="5"/>
+              <eLiterals name="Gravel" value="6"/>
+              <eLiterals name="Pebbles" value="7"/>
+              <eLiterals name="Cobbles" value="8"/>
+              <eLiterals name="Rock" value="9"/>
+              <eLiterals name="Coral" value="10"/>
+              <eLiterals name="Shells" value="11"/>
+              <eLiterals name="Weed" value="12"/>
+              <eLiterals name="Sandwaves" value="13"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="SpringInSeabed" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/ModelObject"/>
+            <eClassifiers xsi:type="ecore:EEnum" name="QualifyingSeabedNature">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="Fine" value="1"/>
+              <eLiterals name="Medium" value="2"/>
+              <eLiterals name="Coarse" value="3"/>
+              <eLiterals name="Broken" value="4"/>
+              <eLiterals name="Sticky" value="5"/>
+              <eLiterals name="Soft" value="6"/>
+              <eLiterals name="Stiff" value="7"/>
+              <eLiterals name="Volcanic" value="8"/>
+              <eLiterals name="Calcareous" value="9"/>
+              <eLiterals name="Hard" value="10"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="NatureOfSeabed" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="seabedType" lowerBound="1"
+                  eType="#//sf/seesea/model/int1/natureofseabed/SeabedType"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="seabedNature"
+                  eType="#//sf/seesea/model/int1/natureofseabed/QualifyingSeabedNature"/>
+            </eClassifiers>
+          </eSubpackages>
+          <eSubpackages name="tracksandroutes" nsURI="tracksandroutes" nsPrefix="tracksandroutes">
+            <eClassifiers xsi:type="ecore:EClass" name="AbstractSeaWayArtefact" abstract="true"
+                eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/ModelObject"/>
+            <eClassifiers xsi:type="ecore:EClass" name="TrafficSeparationScheme" eSuperTypes="#//sf/seesea/model/int1/tracksandroutes/AbstractSeaWay">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="trafficSeparations"
+                  upperBound="-1" eType="#//sf/seesea/model/int1/tracksandroutes/TrafficSeparation"
+                  containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="trafficDirection"
+                  eType="#//sf/seesea/model/int1/tracksandroutes/TrafficDirection"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="TrafficSeparation" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/ChartArea #//sf/seesea/model/int1/tracksandroutes/AbstractSeaWayArtefact">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="borderType" eType="#//sf/seesea/model/int1/tracksandroutes/BorderType"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="isNaturallyDivided"
+                  eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="BorderType">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="Inner" value="1"/>
+              <eLiterals name="Outer" value="2"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EEnum" name="TrafficDirection">
+              <eLiterals name="Undefined"/>
+              <eLiterals name="RightSide" value="1"/>
+              <eLiterals name="LeftSide" value="2"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="DeepWaterRoute" eSuperTypes="#//sf/seesea/model/int1/tracksandroutes/AbstractSeaWay">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="trafficDirection"
+                  eType="#//sf/seesea/model/int1/tracksandroutes/TrafficDirection"/>
+              <eStructuralFeatures xsi:type="ecore:EReference" name="routeArea" lowerBound="1"
+                  eType="ecore:EClass ../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/ChartArea"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="RoundAbout" eSuperTypes="#//sf/seesea/model/int1/tracksandroutes/AbstractSeaWayArtefact">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="attachedSeaWays"
+                  upperBound="-1" eType="#//sf/seesea/model/int1/tracksandroutes/AbstractSeaWayArtefact"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="AreaToBeAvoided" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/ChartArea #//sf/seesea/model/int1/tracksandroutes/AbstractSeaWayArtefact"/>
+            <eClassifiers xsi:type="ecore:EClass" name="SeawaysContainer" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EReference" name="seaways" eType="#//sf/seesea/model/int1/tracksandroutes/AbstractSeaWayArtefact"
+                  containment="true"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="InshoreTrafficZone" eSuperTypes="../../net.sf.seesea.model.core/model/X.ecore#//sf/seesea/model/core/geo/ChartArea #//sf/seesea/model/int1/tracksandroutes/AbstractSeaWayArtefact"/>
+            <eClassifiers xsi:type="ecore:EClass" name="AbstractSeaWay" abstract="true"
+                eSuperTypes="#//sf/seesea/model/int1/tracksandroutes/AbstractSeaWayArtefact"/>
+          </eSubpackages>
+        </eSubpackages>
+      </eSubpackages>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>
