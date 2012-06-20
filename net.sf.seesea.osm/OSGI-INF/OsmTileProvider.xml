@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" configuration-policy="require" modified="updateConfiguration" name="net.sf.seesea.osm.tileprovider">
+   <implementation class="net.sf.seesea.osm.map.OpenStreetMapTileProvider"/>
+   <service>
+      <provide interface="net.sf.seesea.tileservice.ITileProvider"/>
+   </service>
+</scr:component>

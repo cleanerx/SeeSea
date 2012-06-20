@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Navigation
+Bundle-SymbolicName: net.sf.seesea.services.navigation;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.services.navigation.NavigationServicesActivator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ net.sf.seesea.model.core
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: net.sf.seesea.services.navigation,
+ net.sf.seesea.services.navigation.listener,
+ net.sf.seesea.services.navigation.provider
