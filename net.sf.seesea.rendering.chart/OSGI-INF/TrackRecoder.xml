@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" name="net.sf.seesea.nmea.rendering.trackrecorder">
+   <implementation class="net.sf.seesea.rendering.chart.listeners.TrackRecorder"/>
+   <service>
+      <provide interface="net.sf.seesea.services.navigation.listener.IPositionListener"/>
+   </service>
+   <reference bind="bindModel" cardinality="1..1" interface="net.sf.seesea.model.util.IModel" name="IModel" policy="dynamic" unbind="unbindModel"/>
+   <reference bind="bindEditingDomainProvider" cardinality="1..1" interface="org.eclipse.emf.edit.domain.IEditingDomainProvider" name="IEditingDomainProvider" policy="dynamic" unbind="unbindEditingDomainProvider"/>
+</scr:component>
