@@ -145,6 +145,4 @@ public class NMEAWizard extends Wizard {
 		return true;
 	}
 	
-	
-	
 }

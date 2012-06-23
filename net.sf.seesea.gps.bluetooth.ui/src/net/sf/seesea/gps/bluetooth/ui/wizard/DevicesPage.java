@@ -41,6 +41,7 @@ import net.sf.seesea.gps.bluetooth.ui.BluetoothDeviceLabelProvider;
 import net.sf.seesea.gps.bluetooth.ui.BluetoothDiscoveryListener;
 import net.sf.seesea.gps.bluetooth.ui.GPSBluetoothUIActivator;
 import net.sf.seesea.lib.IValidatingPage;
+import net.sf.seesea.provider.navigation.nmea.ui.NMEAWizard;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
@@ -53,6 +54,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 
 public class DevicesPage extends WizardPage implements IValidatingPage {
@@ -83,6 +86,30 @@ public class DevicesPage extends WizardPage implements IValidatingPage {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				getContainer().updateButtons();
+			}
+		});
+		tableViewer.getControl().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				IStatus status = validatePage();
+				if(!status.isOK()) {
+					setErrorMessage(status.getMessage());
+					return;
+				}
+				((NMEAWizard) getWizard()).getContainer().showPage(getNextPage());
 			}
 		});
 	}

@@ -36,6 +36,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import net.sf.seesea.lib.IValidatingPage;
+import net.sf.seesea.provider.navigation.nmea.ui.NMEAWizard;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -45,6 +46,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.qbang.rxtx.ComPortLabelProvider;
 
@@ -80,6 +83,30 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 		} else {
 			tableViewer.setSelection(new StructuredSelection(getPorts().get(0)));
 		}
+		tableViewer.getControl().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				IStatus status = validatePage();
+				if(!status.isOK()) {
+					setErrorMessage(status.getMessage());
+					return;
+				}
+				((NMEAWizard) getWizard()).getContainer().showPage(getNextPage());
+			}
+		});
 		
 	}
 	

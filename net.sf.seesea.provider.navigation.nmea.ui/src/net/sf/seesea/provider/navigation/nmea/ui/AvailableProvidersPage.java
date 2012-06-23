@@ -38,6 +38,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -73,6 +75,32 @@ public class AvailableProvidersPage extends WizardPage {
 		Object[] services = providerServiceTracker.getServices();
 		providersTableViewer.setInput(services);
 		setControl(providersTableViewer.getControl());
+		providersTableViewer.getControl().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				IStructuredSelection selection =  (IStructuredSelection) providersTableViewer.getSelection();
+				
+				if(selection.isEmpty()) {
+					((NMEAWizard) getWizard()).setConnector(null);
+				} else {
+					((NMEAWizard) getWizard()).setConnector((INMEAConnector) selection.getFirstElement());
+					((NMEAWizard) getWizard()).getContainer().showPage(getNextPage());
+				}
+			}
+		});
 		
 		providersTableViewer.addSelectionChangedListener(new ProviderChangedListener());
 	}
