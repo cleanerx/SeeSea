@@ -5,12 +5,12 @@ All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
-    * Redistributions of source code must retain the above copyright
+ * Redistributions of source code must retain the above copyright
       notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
+ * Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-    * Neither the name of the <organization> nor the
+ * Neither the name of the <organization> nor the
       names of its contributors may be used to endorse or promote products
       derived from this software without specific prior written permission.
 
@@ -35,6 +35,7 @@ import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.State;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -47,45 +48,67 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public class ToggleLogRawDataHandler extends AbstractHandler {
 
 	public ToggleLogRawDataHandler() {
-		
-		BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle().getBundleContext();
-		ServiceTracker serviceTracker = new ServiceTracker(bundleContext, INMEAReader.class.getName(), new ServiceTrackerCustomizer() {
 
-			@Override
-			public Object addingService(ServiceReference reference) {
+		BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle()
+				.getBundleContext();
+		ServiceTracker serviceTracker = new ServiceTracker(bundleContext,
+				INMEAReader.class.getName(), new ServiceTrackerCustomizer() {
 
-				ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-				Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
-				State state = command.getState(RegistryToggleState.STATE_ID);
-				state.setValue(true);
-				
-				return null;
-			}
+					@Override
+					public Object addingService(ServiceReference reference) {
+						Display.getDefault().asyncExec(new Runnable() {
 
-			@Override
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-				
-			}
+							@Override
+							public void run() {
+								ICommandService commandService = (ICommandService) PlatformUI
+										.getWorkbench().getService(
+												ICommandService.class);
+								Command command = commandService
+										.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
+								State state = command
+										.getState(RegistryToggleState.STATE_ID);
+								state.setValue(true);
 
-			@Override
-			public void removedService(ServiceReference reference,
-					Object service) {
-				ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-				Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
-				State state = command.getState(RegistryToggleState.STATE_ID);
-				state.setValue(false);
-				
-				
-			}
-		});
+							}
+						});
+
+						return null;
+					}
+
+					@Override
+					public void modifiedService(ServiceReference reference,
+							Object service) {
+
+					}
+
+					@Override
+					public void removedService(ServiceReference reference,
+							Object service) {
+						Display.getDefault().asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+								ICommandService commandService = (ICommandService) PlatformUI
+										.getWorkbench().getService(
+												ICommandService.class);
+								Command command = commandService
+										.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
+								State state = command
+										.getState(RegistryToggleState.STATE_ID);
+								state.setValue(false);
+
+							}
+						});
+
+					}
+				});
 		serviceTracker.open();
 	}
-	
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		return HandlerUtil.toggleCommandState(event.getCommand());
-//		return null;
+		// return null;
 	}
 
 }

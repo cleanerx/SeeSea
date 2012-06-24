@@ -42,8 +42,11 @@ import net.sf.seesea.provider.navigation.nmea.ui.providers.NMEADataContentProvid
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.State;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -63,7 +66,7 @@ public class NMEARawDataLoggerView extends ViewPart implements NMEAEventListener
 
 	private ServiceTracker serviceTracker;
 	private final List<String> messages;
-	private ListViewer listViewer;
+	private TableViewer listViewer;
 
 	private long lastUpdate = System.currentTimeMillis();
 	
@@ -79,9 +82,11 @@ public class NMEARawDataLoggerView extends ViewPart implements NMEAEventListener
 	 */
 	@Override
 	public void createPartControl(Composite arg0) {
-		listViewer = new ListViewer(arg0, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		listViewer = new TableViewer(arg0, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		listViewer.setContentProvider(new NMEADataContentProvider());
-		listViewer.setLabelProvider(new LabelProvider());
+		TableViewerColumn column = new TableViewerColumn(listViewer, SWT.NONE);
+		column.getColumn().setWidth(400);
+		column.setLabelProvider(new NMEAColumnLabelProvider());
 
 		// hmm service listener
 		final BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle().getBundleContext();
