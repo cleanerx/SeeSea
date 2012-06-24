@@ -65,6 +65,8 @@ public class NMEARawDataLoggerView extends ViewPart implements NMEAEventListener
 	private final List<String> messages;
 	private ListViewer listViewer;
 
+	private long lastUpdate = System.currentTimeMillis();
+	
 	/**
 	 * 
 	 */
@@ -151,7 +153,10 @@ public class NMEARawDataLoggerView extends ViewPart implements NMEAEventListener
 					
 					@Override
 					public void run() {
-						listViewer.refresh(true);
+						// limit update rate in case of many events
+						if(System.currentTimeMillis() - lastUpdate > 1000) {
+							listViewer.refresh(true);
+						}
 					}
 				});
 			}
