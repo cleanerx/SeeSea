@@ -156,6 +156,7 @@ public class NMEARawDataLoggerView extends ViewPart implements NMEAEventListener
 						// limit update rate in case of many events
 						if(System.currentTimeMillis() - lastUpdate > 1000) {
 							listViewer.refresh(true);
+							lastUpdate = System.currentTimeMillis();
 						}
 					}
 				});
