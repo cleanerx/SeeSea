@@ -32,64 +32,83 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
 
-public class NMEA0183TrackSimulator implements Runnable {
+public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 
-	private final List<InputStream> inputStream;
+	private final List<InputStream> inputStreams;
+	private List<NMEAEventListener> nmeaEventListeners;
 
 	public NMEA0183TrackSimulator(List<InputStream> fileInputStream) {
-		inputStream = fileInputStream;
+		inputStreams = fileInputStream;
+		nmeaEventListeners = new ArrayList<NMEAEventListener>(2);
 	}
 
 	public void run() {
-		NMEA0183Parser parser = null;
 		try {
 			String currentLine = ""; //$NON-NLS-1$
 
 			BundleContext bundleContext = NMEA0183Activator.getDefault()
 					.getBundle().getBundleContext();
-			ServiceReference<ComponentFactory> serviceReference = bundleContext
-					.getServiceReference(ComponentFactory.class);
-			ComponentFactory componentFactory = bundleContext
-					.getService(serviceReference);
-			Properties properties = new Properties();
-			// properties.put(configuration, arg1)
-			ComponentInstance instance = componentFactory
-					.newInstance(properties);
-			parser = (NMEA0183Parser) instance.getInstance();
-
-			for (InputStream stream : inputStream) {
+			ServiceRegistration<INMEAReader> serviceRegistration = bundleContext.registerService(INMEAReader.class, this, null);
+			
+			for (InputStream stream : inputStreams) {
 				InputStreamReader inputStreamReader = new InputStreamReader(stream);
 				BufferedReader in = new BufferedReader(inputStreamReader);
 				currentLine = ""; //$NON-NLS-1$
 				while (currentLine != null) {
 					currentLine = in.readLine();
 					if (currentLine != null) {
-						parser.receiveNMEAEvent(new NMEAEvent(currentLine));
+						NMEAEvent nmeaEvent = new NMEAEvent(currentLine);
+						try {
+							for (NMEAEventListener eventListener : nmeaEventListeners) {
+								eventListener.receiveNMEAEvent(nmeaEvent);
+							}
+						} catch (NMEAProcessingException e) {
+							Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
+						}
 						Thread.sleep(10);
 					}
 				}
 			}
-			parser.disable();
-			instance.dispose();
 		} catch (IOException e) {
 			Logger.getLogger(NMEA0183TrackSimulator.class).debug("IO Exception while simulate track", e); //$NON-NLS-1$
 		 } catch (InterruptedException e) {
-			 if(parser != null) {
-				 parser.disable();
-			 }
 			 Logger.getLogger(NMEA0183TrackSimulator.class).debug("Simulator interrupted", e); //$NON-NLS-1$
 		 }
 
 		// return track;
+	}
+
+	/**
+	 * 
+	 * @param nmeaEventListener
+	 */
+	public void addNMEAEventListener(NMEAEventListener nmeaEventListener) {
+		nmeaEventListeners.add(nmeaEventListener);
+	}
+
+	/**
+	 * 
+	 * @param nmeaEventListener
+	 */
+	public void removeNMEAEventListener(NMEAEventListener nmeaEventListener) {
+		nmeaEventListeners.remove(nmeaEventListener);
+	}
+
+	@Override
+	public void close() throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

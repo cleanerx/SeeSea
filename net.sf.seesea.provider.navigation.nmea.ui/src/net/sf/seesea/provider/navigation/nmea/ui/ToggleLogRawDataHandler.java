@@ -28,52 +28,64 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.ui;
 
+import net.sf.seesea.provider.navigation.nmea.INMEAReader;
+
 import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.State;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.handlers.RegistryToggleState;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class ToggleLogRawDataHandler extends AbstractHandler {
 
 	public ToggleLogRawDataHandler() {
 		
-//		BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle().getBundleContext();
-//		ServiceTracker serviceTracker = new ServiceTracker(bundleContext, NMEAReader.class.getName(), new ServiceTrackerCustomizer() {
-//
-//			@Override
-//			public Object addingService(ServiceReference reference) {
-//
-//				ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-//				Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
-//				State state = command.getState(RegistryToggleState.STATE_ID);
-//				state.setValue(true);
-//				
-//				return null;
-//			}
-//
-//			@Override
-//			public void modifiedService(ServiceReference reference,
-//					Object service) {
-//				
-//			}
-//
-//			@Override
-//			public void removedService(ServiceReference reference,
-//					Object service) {
-//				ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-//				Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
-//				State state = command.getState(RegistryToggleState.STATE_ID);
-//				state.setValue(false);
-//				
-//				
-//			}
-//		});
-//		serviceTracker.open();
+		BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle().getBundleContext();
+		ServiceTracker serviceTracker = new ServiceTracker(bundleContext, INMEAReader.class.getName(), new ServiceTrackerCustomizer() {
+
+			@Override
+			public Object addingService(ServiceReference reference) {
+
+				ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+				Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
+				State state = command.getState(RegistryToggleState.STATE_ID);
+				state.setValue(true);
+				
+				return null;
+			}
+
+			@Override
+			public void modifiedService(ServiceReference reference,
+					Object service) {
+				
+			}
+
+			@Override
+			public void removedService(ServiceReference reference,
+					Object service) {
+				ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+				Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
+				State state = command.getState(RegistryToggleState.STATE_ID);
+				state.setValue(false);
+				
+				
+			}
+		});
+		serviceTracker.open();
 	}
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-//		return HandlerUtil.toggleCommandState(event.getCommand());
-		return null;
+		return HandlerUtil.toggleCommandState(event.getCommand());
+//		return null;
 	}
 
 }

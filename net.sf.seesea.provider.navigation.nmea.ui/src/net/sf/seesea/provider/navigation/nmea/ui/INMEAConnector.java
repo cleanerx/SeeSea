@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.provider.navigation.nmea.ui;
 
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -67,17 +66,17 @@ public interface INMEAConnector {
 	 */
 	void addPageListeners(WizardDialog wizardDialog);
 	
-	/**
-	 * 
-	 * @return
-	 */
-	Set<String> getConnectedDevices();
+//	/**
+//	 * 
+//	 * @return
+//	 */
+//	Set<String> getConnectedDevices();
 	
-	/**
-	 * 
-	 * @param device
-	 */
-	void disconnect(String device);
+//	/**
+//	 * 
+//	 * @param device
+//	 */
+//	void disconnect(String device);
 
 	/**
 	 * @return

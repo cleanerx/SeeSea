@@ -45,14 +45,14 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * 
  */
-public class NMEAWizardHandler extends AbstractHandler {
+public class NMEAConnectWizardHandler extends AbstractHandler {
 	
 	private final ServiceTracker nmeaConnectorTracker;
 
 	/**
 	 * 
 	 */
-	public NMEAWizardHandler() {
+	public NMEAConnectWizardHandler() {
 		nmeaConnectorTracker = new ServiceTracker(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class.getName(), null);
 		nmeaConnectorTracker.open();
 	}
@@ -63,7 +63,7 @@ public class NMEAWizardHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		NMEAWizard nmeaWizard = new NMEAWizard();
-		nmeaWizard.setWindowTitle(Messages.getString("NMEAWizardHandler.connect")); //$NON-NLS-1$
+		nmeaWizard.setWindowTitle(Messages.getString("NMEAConnectWizardHandler.connect")); //$NON-NLS-1$
 		nmeaWizard.addPage(new AvailableProvidersPage());
 		for(Object object : nmeaConnectorTracker.getServices()) {
 			if(object instanceof INMEAConnector) {
@@ -71,17 +71,18 @@ public class NMEAWizardHandler extends AbstractHandler {
 				nmeaWizard.addWizardPages(connector.getContributedPages());
 			}
 		}
-		ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-		Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
-		State state = command.getState(RegistryToggleState.STATE_ID);
-		state.setValue(false);
+//		ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+//		Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
+//		State state = command.getState(RegistryToggleState.STATE_ID);
+//		state.setValue(false);
 
 		ValidatingWizardDialog wizardDialog = new ValidatingWizardDialog(HandlerUtil.getActiveShell(event), nmeaWizard);
 		if(wizardDialog.open() == Dialog.OK) {
-			return nmeaWizard.getConnector();
-		} 
+			return Dialog.OK;
+		} else {
+			return Dialog.CANCEL;
+		}
 		
-		return null;
 	}
 
 }

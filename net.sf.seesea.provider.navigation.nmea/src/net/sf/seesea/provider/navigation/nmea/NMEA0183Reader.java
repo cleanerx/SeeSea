@@ -29,28 +29,45 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.provider.navigation.nmea;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import org.apache.log4j.Logger;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+
+import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
 /**
  * A reader that processes nmea input streams
  */
-public class NMEA0183Reader extends InputStreamReader {
+public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Callable<Void>{
 
+	private static final String PROVIDER_NAME = "providerName"; //$NON-NLS-1$
 	private final List<NMEAEventListener> nmeaEventListeners;
-	private final ServiceRegistration serviceRegistration;
+	private final INMEAStreamProvider streamProvider;
+	private ServiceRegistration<?> serviceRegistration;
+	private Thread processingThread;
 
 	/**
 	 * @param in
+	 * @param streamproviderName 
+	 * @throws IOException 
 	 */
-	public NMEA0183Reader(InputStream in) {
-		super(in);
+	public NMEA0183Reader(INMEAStreamProvider nmeaStreamProvider) throws IOException {
+		super(nmeaStreamProvider.getInputStream());
+		streamProvider = nmeaStreamProvider;
 		nmeaEventListeners = new ArrayList<NMEAEventListener>(1);
-		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(NMEA0183Reader.class.getName(), this, null);
+		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(INMEAReader.class.getName(), this, null);
+
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		properties.put(PROVIDER_NAME, nmeaStreamProvider.getName());
+//		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(NMEA0183Reader.class.getName(), this, properties);
 	}
 	
 	/**
@@ -69,15 +86,33 @@ public class NMEA0183Reader extends InputStreamReader {
 		nmeaEventListeners.remove(nmeaEventListener);
 	}
 
+	public void close() throws IOException {
+		if(processingThread != null) {
+			processingThread.interrupt();
+		}
+		if(serviceRegistration != null) {
+			serviceRegistration.unregister();
+			serviceRegistration = null;
+		}
+		super.close();
+		try {
+			streamProvider.close();
+		} catch (IOException e) {
+			Logger.getLogger(getClass()).error("Failed to close input stream", e);
+		}
+	}
+	
 	/**
 	 * 
 	 * @throws IOException
 	 * @throws NMEAProcessingException 
 	 */
-	public void readLine() throws IOException, NMEAProcessingException {
-		StringBuffer stringBuffer = null;
-		for (int i = read(); i != -1 ;) {
-			switch (i) {
+	public Void call() throws Exception {
+		processingThread = Thread.currentThread();
+		try {
+			StringBuffer stringBuffer = null;
+			for (int i = read(); i != -1 ;) {
+				switch (i) {
 				case '\n':
 					if(stringBuffer != null) {
 						stringBuffer.append((char) i);
@@ -99,17 +134,33 @@ public class NMEA0183Reader extends InputStreamReader {
 					}
 					i = read();
 					break;
+				}
+//				if(Thread.interrupted()) {
+////					unregisterService();
+//					return null;
+//				}
 			}
-			if(Thread.interrupted()) {
-				unregisterService();
-				return;
+		} catch (Exception e) {
+			// exception during processing
+			if(!processingThread.interrupted()) {
+				Logger.getLogger(getClass()).error("Exception while reading input stream", e); //$NON-NLS-1$
+				BundleContext bundleContext = NMEA0183Activator.getDefault().getBundle().getBundleContext();
+				Collection<ServiceReference<INMEAReaderFailureNotifier>> serviceReferences = bundleContext.getServiceReferences(INMEAReaderFailureNotifier.class, null);
+				if(serviceReferences != null) {
+					for (ServiceReference<INMEAReaderFailureNotifier> serviceReference : serviceReferences) {
+						INMEAReaderFailureNotifier failureNotifier = bundleContext.getService(serviceReference);
+						failureNotifier.notify(streamProvider, e);
+						bundleContext.ungetService(serviceReference);
+					}
+				}
+			}
+			try {
+				close();
+			} catch (IOException e2) {
+				Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
 			}
 		}
+		return null;
 	}
 	
-	public void unregisterService() {
-		serviceRegistration.unregister();
-	}
-
-
 }

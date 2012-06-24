@@ -97,8 +97,8 @@ IWindDataProvider, IShipMovementVectorProvider {
 		heartbeatThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				try {
 				while (true) {
-					try {
 						synchronized (heartbeatSync) {
 							for (Iterator<Class<?>> iterator = sensorHeartbeats
 									.keySet().iterator(); iterator.hasNext();) {
@@ -112,9 +112,9 @@ IWindDataProvider, IShipMovementVectorProvider {
 							}
 						}
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						Logger.getRootLogger().info("Heartbeat thread sucessfully interrupted");
 					}
+				} catch (InterruptedException e) {
+					Logger.getRootLogger().info("Heartbeat thread sucessfully interrupted");
 				}
 			}
 
@@ -234,6 +234,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 
 	@Override
 	public synchronized void detachShipMovementListener(ISpeedVectorListener listener) {
+		listener.providerDisabled(getProviderName());
 		_speedVectorListeners.remove(listener);
 	}
 
@@ -244,6 +245,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 
 	@Override
 	public synchronized void detachWindListener(IWindListener listener) {
+		listener.providerDisabled(getProviderName());
 		_windListeners.remove(listener);
 	}
 
@@ -254,6 +256,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 
 	@Override
 	public synchronized void detachWaterTemperatureListener(IWaterTemperatureListener listener) {
+		listener.providerDisabled(getProviderName());
 		_waterTemperatureListeners.remove(listener);
 	}
 
@@ -262,6 +265,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 	}
 
 	public synchronized void detachPositionListener(IPositionListener positionListener) {
+		positionListener.providerDisabled(getProviderName());
 		_positionListeners.remove(positionListener);
 	}
 
@@ -272,6 +276,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 
 	public synchronized void detachTrackMadeGoodGroundSpeedListener(
 			ITrackMadeGoodGroundSpeedListener trackMadeGoodGroundSpeedListener) {
+		trackMadeGoodGroundSpeedListener.providerDisabled(getProviderName());
 				_trackMadeGoodListeners.remove(trackMadeGoodGroundSpeedListener);
 			}
 
@@ -280,6 +285,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 	}
 
 	public synchronized void detachRelativeWindSpeedListener(IRelativeWindSpeedListener relativeWindSpeedListener) {
+		relativeWindSpeedListener.providerDisabled(getProviderName());
 		_relativeWindSpeedListeners.remove(relativeWindSpeedListener);
 	}
 
@@ -288,6 +294,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 	}
 
 	public synchronized void detachSatelliteInfoListener(ISatelliteInfoListener satelliteInfoListener) {
+		satelliteInfoListener.providerDisabled(getProviderName());
 		_satelliteInfoListeners.remove(satelliteInfoListener);
 	}
 
@@ -296,6 +303,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 	}
 
 	public synchronized void detachDepthListener(IDepthListener depthListener) {
+		depthListener.providerDisabled(getProviderName());
 		_depthListeners.remove(depthListener);
 	}
 
@@ -304,6 +312,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 	}
 
 	public synchronized void detachTimeListener(ITimeListener depthListener) {
+		depthListener.providerDisabled(getProviderName());
 		_timeListeners.remove(depthListener);
 	}
 

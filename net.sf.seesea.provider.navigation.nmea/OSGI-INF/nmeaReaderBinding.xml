@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.provider.navigation.nmeaReader">
-   <implementation class="net.sf.seesea.provider.navigation.nmea.NMEAParserFactory"/>
-   <reference bind="bind" cardinality="1..1" interface="org.osgi.service.component.ComponentFactory" name="ComponentFactory" policy="dynamic" target="(component.factory=net.sf.seesea.provider.navigation.nmea.dataProviders)" unbind="unbind"/>
-   <reference bind="bind" cardinality="1..n" interface="net.sf.seesea.services.navigation.provider.INMEAStreamProvider" name="INMEAStreamProvider" policy="dynamic" unbind="unbind"/>
-</scr:component>

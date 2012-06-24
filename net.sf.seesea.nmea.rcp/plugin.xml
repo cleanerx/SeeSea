@@ -100,9 +100,9 @@
             id="net.sf.seesea.nmea.rcp.log.toggle"
             name="%ToggleLogging">
          <state
-               class="org.eclipse.ui.handlers.RegistryToggleState:false"
-               id="org.eclipse.ui.commands.toggleState">
-         </state>
+         class="org.eclipse.ui.handlers.RegistryToggleState:false"
+         id="org.eclipse.ui.commands.toggleState">
+   </state>
       </command>
       <command
             defaultHandler="net.sf.seesea.nmea.rcp.handler.UploadDataHandler"

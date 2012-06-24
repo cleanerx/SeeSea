@@ -26,7 +26,11 @@
  */
 
 package net.sf.seesea.nmea.rcp.handler;
-import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
+
+import java.io.IOException;
+
+import net.sf.seesea.nmea.rcp.NMEARCPActivator;
+import net.sf.seesea.provider.navigation.nmea.INMEAReader;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
@@ -37,149 +41,70 @@ import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.State;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.handlers.RegistryToggleState;
-import org.osgi.framework.ServiceEvent;
-import org.osgi.framework.ServiceListener;
-
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 public class ToggleLogEnablementHandler extends AbstractHandler {
-
-	private final class ActionEnablementListener implements
-			ServiceListener {
-		@Override
-		public void serviceChanged(ServiceEvent event) {
-			ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-			Command command = service.getCommand("net.sf.seesea.nmea.rcp.log.toggle");
-			State state = command.getState(RegistryToggleState.STATE_ID);
-//			try {
-//				HandlerUtil.toggleCommandState(command);
-//			} catch (ExecutionException e) {
-//				Logger.getLogger(getClass()).error("Failed to toggle state", e);
-//			}
-			if(ServiceEvent.REGISTERED == event.getType()) {
-				state.setValue(true);
-//				enable = true;
-			} else if(ServiceEvent.UNREGISTERING == event.getType()) {
-				state.setValue(false);
-//				enable = false;
-			}
-			
-		}
-	}
-
-	private INMEAConnector connector;
-	
-	private boolean enable;
-
-	private ActionEnablementListener actionEnablementListener;
-	
-	public ToggleLogEnablementHandler() {
-//		enable = false;
-//		BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
-//		String filter = "(objectClass=" + NMEAReader.class.getName() + ")" ; //$NON-NLS-1$ //$NON-NLS-2$
-//		try {
-//			actionEnablementListener = new ActionEnablementListener();
-//			bundleContext.addServiceListener(actionEnablementListener, filter);
-//		} catch (InvalidSyntaxException e) {
-////			Logger.get
-//			e.printStackTrace();
-//		}
-	}
-
-//	@Override
-	public void init(IWorkbenchWindow window) {
-		// nothing to do
-	}
-	
-//	@Override
-//	public void run(IAction action) {
-//		IWorkbench workbench = PlatformUI.getWorkbench();
-//		IHandlerService handlerService = (IHandlerService) workbench.getService(IHandlerService.class);
-//		
-//		if(!enable) {
-//			try {
-//				Object returnedObject = handlerService.executeCommand("net.sf.seesea.provider.navigation.nmea.ui.connect", null); //$NON-NLS-1$i
-//				if(returnedObject instanceof INMEAConnector) {
-//					connector = (INMEAConnector) returnedObject;
-////					enable = true;
-//				} else {
-////					enable = false;
-//				}
-//			} catch (ExecutionException e) {
-////				enable = false;
-//				Logger.getRootLogger().error("Failed to execute command", e); //$NON-NLS-1$
-//			} catch (NotDefinedException e) {
-////				enable = false;
-//				Logger.getRootLogger().error("Failed to execute command", e); //$NON-NLS-1$
-//			} catch (NotEnabledException e) {
-////				enable = false;
-//				Logger.getRootLogger().error("Failed to execute command", e); //$NON-NLS-1$
-//			} catch (NotHandledException e) {
-////				enable = false;
-//				Logger.getRootLogger().error("Failed to execute command", e); //$NON-NLS-1$
-//			}
-//		} else {
-//			connector.disconnect(null);
-////			enable = false;
-//		}
-//		action.setChecked(enable);
-//		if(enable) {
-//			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-//			IWorkspaceRoot root = workspace.getRoot();
-//			IProject project = root.getProject("NMEALogging"); //$NON-NLS-1$
-//			IFolder folder = project.getFolder("logs"); //$NON-NLS-1$
-////			MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.getString("ToggleLogEnablementActionDelegate.logDirectory"), Messages.getString("ToggleLogEnablementActionDelegate.logMessage") + folder.getLocationURI().toString()); //$NON-NLS-1$ //$NON-NLS-2$
-//		}
-//	}
-
-	@Override
-	public void dispose() {
-//		BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
-//		bundleContext.removeServiceListener(actionEnablementListener);
-		super.dispose();
-	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbench workbench = PlatformUI.getWorkbench();
-		IHandlerService handlerService = (IHandlerService) workbench.getService(IHandlerService.class);
+		IHandlerService handlerService = (IHandlerService) workbench
+				.getService(IHandlerService.class);
 		Command command = event.getCommand();
-//		ICommandService commandService = (ICommandService) workbench.getService(ICommandService.class);
-//		Command command = commandService.getCommand("net.sf.seesea.provider.navigation.nmea.ui.connect");
+		// always toggle back until the service is available
+		HandlerUtil.toggleCommandState(command);
 		State state = command.getState(RegistryToggleState.STATE_ID);
-		if(connector == null) {
+		if ((Boolean) state.getValue()) {
 			try {
-//				HandlerUtil.toggleCommandState(command);
-//				state.setValue(true);
-//				state.setValue(false);
-				Object returnedObject = handlerService.executeCommand("net.sf.seesea.provider.navigation.nmea.ui.connect", null);
-//				state.setValue(false);
-				if(returnedObject instanceof INMEAConnector) {
-					connector = (INMEAConnector) returnedObject;
-//					state.setValue(true);
-				} else {
-					state.setValue(true);
-//					Logger.getLogger(getClass()).error("Command did not return a connector");
+				Object returnedObject = handlerService.executeCommand(
+						"net.sf.seesea.provider.navigation.nmea.ui.connect", //$NON-NLS-1$
+						null);
+				if (returnedObject.equals(Dialog.CANCEL)) {
+					// revoke pressed state
+					HandlerUtil.toggleCommandState(command);
 				}
 			} catch (NotDefinedException e) {
 				state.setValue(false);
-				Logger.getLogger(getClass()).error("Failed to execute command", e);
+				Logger.getLogger(getClass()).error("Failed to execute command",
+						e);
 			} catch (NotEnabledException e) {
 				state.setValue(false);
-				Logger.getLogger(getClass()).error("Failed to execute command", e);
+				Logger.getLogger(getClass()).error("Failed to execute command",
+						e);
 			} catch (NotHandledException e) {
 				state.setValue(false);
-				Logger.getLogger(getClass()).error("Failed to execute command", e);
-			} 
-		} else {
-//			state.setValue(false);
-			connector.disconnect(null);
-			connector = null;
+				Logger.getLogger(getClass()).error("Failed to execute command",
+						e);
+			}
+		} else if (!(Boolean) state.getValue()) {
+			BundleContext bundleContext = NMEARCPActivator.getDefault()
+					.getBundle().getBundleContext();
+			ServiceReference<INMEAReader> serviceReference = bundleContext
+					.getServiceReference(INMEAReader.class);
+			if (serviceReference != null) {
+				INMEAReader reader = bundleContext.getService(serviceReference);
+				try {
+					reader.close();
+				} catch (IOException e) {
+					Logger.getLogger(getClass()).error(
+							"Failed to close reader", e);
+				}
+				if ((Boolean) state.getValue()) {
+					HandlerUtil.toggleCommandState(command);
+				}
+			} else {
+
+				if ((Boolean) state.getValue()) {
+					HandlerUtil.toggleCommandState(command);
+				}
+			}
 		}
 		return null;
 	}

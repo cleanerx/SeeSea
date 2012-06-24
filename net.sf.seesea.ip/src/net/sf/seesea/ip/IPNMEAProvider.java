@@ -120,25 +120,20 @@ public class IPNMEAProvider implements INMEAConnector {
 		// nothing to do
 	}
 
-	@Override
-	public Set<String> getConnectedDevices() {
-		return null;
-	}
-
-	@Override
-	public void disconnect(String device) {
-		if(serviceRegistration != null) {
-			ServiceReference<INMEAStreamProvider> reference = serviceRegistration.getReference();
-			INMEAStreamProvider streamProvider = IPActivator.getContext().getService(reference);
-			serviceRegistration.unregister();
-			try {
-				streamProvider.close();
-			} catch (IOException e) {
-				Logger.getLogger(getClass()).error("Failed to close NMEAStreamProvider", e); //$NON-NLS-1$
-			}
-			serviceRegistration = null;
-		}
-	}
+//	@Override
+//	public void disconnect(String device) {
+//		if(serviceRegistration != null) {
+//			ServiceReference<INMEAStreamProvider> reference = serviceRegistration.getReference();
+//			INMEAStreamProvider streamProvider = IPActivator.getContext().getService(reference);
+//			serviceRegistration.unregister();
+//			try {
+//				streamProvider.close();
+//			} catch (IOException e) {
+//				Logger.getLogger(getClass()).error("Failed to close NMEAStreamProvider", e); //$NON-NLS-1$
+//			}
+//			serviceRegistration = null;
+//		}
+//	}
 
 	/* (non-Javadoc)
 	 * @see net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector#performFinish()
@@ -148,7 +143,7 @@ public class IPNMEAProvider implements INMEAConnector {
 		try {
 			getFinishCallable().call();
 		} catch (Exception e) {
-			disconnect("NoName"); //$NON-NLS-1$
+//			disconnect("NoName"); //$NON-NLS-1$
 			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("IPNMEAProvider.connectionFail"), Messages.getString("IPNMEAProvider.fail") + e.getLocalizedMessage());  //$NON-NLS-1$ //$NON-NLS-2$
 			Logger.getLogger(getClass()).error("Failed to connect to device", e); //$NON-NLS-1$
 			return false;

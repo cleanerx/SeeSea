@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.sf.seesea.provider.navigation.nmea.INMEAReader;
 import net.sf.seesea.provider.navigation.nmea.NMEA0183Reader;
 import net.sf.seesea.provider.navigation.nmea.NMEAEvent;
 import net.sf.seesea.provider.navigation.nmea.NMEAEventListener;
@@ -76,19 +77,19 @@ public class NMEARawDataLoggerView extends ViewPart implements NMEAEventListener
 	 */
 	@Override
 	public void createPartControl(Composite arg0) {
-		listViewer = new ListViewer(arg0, SWT.BORDER | SWT.V_SCROLL);
+		listViewer = new ListViewer(arg0, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		listViewer.setContentProvider(new NMEADataContentProvider());
 		listViewer.setLabelProvider(new LabelProvider());
 
 		// hmm service listener
 		final BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle().getBundleContext();
 		
-		serviceTracker = new ServiceTracker(bundleContext, NMEA0183Reader.class.getName(), new ServiceTrackerCustomizer() {
+		serviceTracker = new ServiceTracker(bundleContext, INMEAReader.class.getName(), new ServiceTrackerCustomizer() {
 			
 			@Override
 			public void removedService(ServiceReference serviceReference, Object arg1) {
-				if(arg1 instanceof NMEA0183Reader) {
-					NMEA0183Reader nmeaReader = (NMEA0183Reader) arg1;
+				if(arg1 instanceof INMEAReader) {
+					INMEAReader nmeaReader = (INMEAReader) arg1;
 					nmeaReader.removeNMEAEventListener(NMEARawDataLoggerView.this);
 				}
 			}
@@ -101,7 +102,7 @@ public class NMEARawDataLoggerView extends ViewPart implements NMEAEventListener
 			
 			@Override
 			public Object addingService(ServiceReference serviceReference) {
-				NMEA0183Reader nmeaReader = (NMEA0183Reader) bundleContext.getService(serviceReference);
+				INMEAReader nmeaReader = (INMEAReader) bundleContext.getService(serviceReference);
 				nmeaReader.addNMEAEventListener(NMEARawDataLoggerView.this);
 				return nmeaReader;
 			}

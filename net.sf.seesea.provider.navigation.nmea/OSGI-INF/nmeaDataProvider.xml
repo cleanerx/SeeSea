@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" factory="net.sf.seesea.provider.navigation.nmea.dataProviders" name="net.sf.seesea.provider.navigation.nmea">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" name="net.sf.seesea.provider.navigation.nmea">
    <implementation class="net.sf.seesea.provider.navigation.nmea.NMEA0183Parser"/>
-   <property name="provider" type="String" value="NMEA"/>
+   <property name="provider" type="String" value="NMEA0183"/>
+   <reference bind="bindReader" cardinality="1..n" interface="net.sf.seesea.provider.navigation.nmea.INMEAReader" name="INMEAReader" policy="dynamic" unbind="unbindReader"/>
    <reference bind="attachPositionListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IPositionListener" name="IPositionListener" policy="dynamic" unbind="detachPositionListener"/>
    <reference bind="attachWindListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IWindListener" name="IWindListener" policy="dynamic" unbind="detachWindListener"/>
    <reference bind="attachShipMovementListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ISpeedVectorListener" name="ISpeedVectorListener" policy="dynamic" unbind="detachShipMovementListener"/>

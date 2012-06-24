@@ -31,13 +31,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import net.sf.seesea.gps.bluetooth.BluetoothInputStreamProvider;
 import net.sf.seesea.gps.bluetooth.ui.wizard.BluetoothDiscoveryPageChangeListener;
 import net.sf.seesea.gps.bluetooth.ui.wizard.DevicesPage;
+import net.sf.seesea.provider.navigation.nmea.NMEA0183Reader;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
-import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -46,7 +49,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * 
@@ -54,8 +56,6 @@ import org.osgi.framework.ServiceRegistration;
 public class BluetoothConnector implements INMEAConnector {
 
 	private final List<IWizardPage> wizardPages;
-
-	private ServiceRegistration serviceRegistration;
 
 	private BluetoothInputStreamProvider bluetoothInputStreamProvider;
 	
@@ -102,37 +102,39 @@ public class BluetoothConnector implements INMEAConnector {
 		wizardDialog.addPageChangingListener(new BluetoothDiscoveryPageChangeListener());
 	}
 
-	@Override
-	public Set<String> getConnectedDevices() {
-		return null;
-	}
-
-	@Override
-	public void disconnect(String device) {
-		try {
-			bluetoothInputStreamProvider.close();
-		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("Failed to disconnect to device", e); //$NON-NLS-1$
-		}
-		serviceRegistration.unregister();
-	}
-
 	/* (non-Javadoc)
 	 * @see net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
+		NMEA0183Reader reader = null;
 		try {
 			DevicesPage iWizardPage = (DevicesPage) wizardPages.get(0);
 			BundleContext bundleContext = GPSBluetoothUIActivator.getDefault().getBundle().getBundleContext();
 			bluetoothInputStreamProvider = new BluetoothInputStreamProvider(iWizardPage.getServiceRecord());
-			serviceRegistration = bundleContext.registerService(INMEAStreamProvider.class.getName(), bluetoothInputStreamProvider, null);
+			reader = new NMEA0183Reader(bluetoothInputStreamProvider);
+			// Trigger reading
+			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
+			ExecutorService es = Executors.newSingleThreadExecutor ();
+			Future<Void> submit = (Future<Void>) es.submit (futureTask);
 		} catch (Exception e) {
-			disconnect("NoName"); //$NON-NLS-1$
-			MessageDialog.openError(Display.getDefault().getActiveShell(), net.sf.seesea.gps.bluetooth.ui.Messages.getString("BluetoothConnector.failed"), net.sf.seesea.gps.bluetooth.ui.Messages.getString("BluetoothConnector.failMessage") + e.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			if(reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e2) {
+					Logger.getLogger(getClass()).error("Failed to close input stream", e2); //$NON-NLS-1$
+				}
+			}
+			if(bluetoothInputStreamProvider != null) {
+				try {
+					bluetoothInputStreamProvider.close();
+				} catch (IOException e2) {
+					Logger.getLogger(getClass()).error("Failed to close input stream", e2); //$NON-NLS-1$
+				}
+			}
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "", "" + e.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			Logger.getLogger(getClass()).error("Failed to connect to device", e); //$NON-NLS-1$
-			return false;
-		}
+			return true;		}
 		return true;
 	}
 	

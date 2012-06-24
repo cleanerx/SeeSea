@@ -34,7 +34,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
+import net.sf.seesea.provider.navigation.nmea.NMEA0183Reader;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
@@ -56,9 +61,9 @@ public class SerialNMEAProvider implements INMEAConnector {
 
 	private final List<IWizardPage> wizardPages;
 
-	private ServiceRegistration<INMEAStreamProvider> serviceRegistration;
-
 	private SerialPort commPort;
+
+	private SerialInputStreamProvider serialInputStreamProvider;
 
 	/**
 	 * 
@@ -94,36 +99,14 @@ public class SerialNMEAProvider implements INMEAConnector {
 		return wizardPages;
 	}
 	
-	public Callable<Object> getFinishCallable() {
-		return new Callable<Object>() {
-
-			@Override
-			public Object call() throws Exception {
-				SelectComPortPage wizardPage = (SelectComPortPage) wizardPages.get(0);
-				CommPortIdentifier commPortIdentifier = (CommPortIdentifier) wizardPage.getCommPort();
-				commPort = (SerialPort) commPortIdentifier.open(getClass().getName(), 2000);
-				
-				ComPortSetupPage comPortSetupPage = (ComPortSetupPage) wizardPages.get(1);
-				commPort.setSerialPortParams(comPortSetupPage.getBaudRate(), SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-				commPort.enableReceiveTimeout(comPortSetupPage.getTimeout());
-				serviceRegistration = RXTXActivator.getDefault().getBundle().getBundleContext().registerService(INMEAStreamProvider.class, new SerialInputStreamProvider(commPort), null);
-				return null;
-			}
-		};
-	}
-
 	/* (non-Javadoc)
 	 * @see net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector#performCancel()
 	 */
 	@Override
 	public boolean performCancel() {
-		if(serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-		
-		if(commPort != null) {
-			commPort.close();
-		}
+//		if(commPort != null) {
+//			commPort.close();
+//		}
 		return true;
 	}
 
@@ -132,41 +115,55 @@ public class SerialNMEAProvider implements INMEAConnector {
 		// nothing to do
 	}
 
-	@Override
-	public Set<String> getConnectedDevices() {
-		return null;
-	}
-
-	@Override
-	public void disconnect(String device) {
-		if(serviceRegistration != null) {
-			ServiceReference<INMEAStreamProvider> reference = serviceRegistration.getReference();
-			INMEAStreamProvider streamProvider = RXTXActivator.getDefault().getBundle().getBundleContext().getService(reference);
-			serviceRegistration.unregister();
-			try {
-				streamProvider.close();
-			} catch (IOException e) {
-				Logger.getLogger(getClass()).error("Failed to close NMEAStreamProvider", e); //$NON-NLS-1$
-			}
-			serviceRegistration = null;
-		}
-	}
+//	@Override
+//	public void disconnect(String device) {
+//		try {
+//			serialInputStreamProvider.close();
+//		} catch (IOException e) {
+//			Logger.getLogger(getClass()).error("Failed to close NMEAStreamProvider", e); //$NON-NLS-1$
+//		}
+//	}
 
 	/* (non-Javadoc)
 	 * @see net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
+		NMEA0183Reader reader = null;
 		try {
-			getFinishCallable().call();
+			SelectComPortPage wizardPage = (SelectComPortPage) wizardPages.get(0);
+			CommPortIdentifier commPortIdentifier = (CommPortIdentifier) wizardPage.getCommPort();
+			commPort = (SerialPort) commPortIdentifier.open(getClass().getName(), 2000);
+			
+			ComPortSetupPage comPortSetupPage = (ComPortSetupPage) wizardPages.get(1);
+			commPort.setSerialPortParams(comPortSetupPage.getBaudRate(), SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+			commPort.enableReceiveTimeout(comPortSetupPage.getTimeout());
+			
+			serialInputStreamProvider = new SerialInputStreamProvider(commPort);
+			reader = new NMEA0183Reader(serialInputStreamProvider);
+			 FutureTask<Void> futureTask = new FutureTask<Void>(reader);
+			 ExecutorService es = Executors.newSingleThreadExecutor ();
+			 Future<Void> submit = (Future<Void>) es.submit (futureTask);
+			return true;
 		} catch (Exception e) {
-			disconnect("NoName"); //$NON-NLS-1$
+			if(reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e2) {
+					Logger.getLogger(getClass()).error("Failed to close input stream", e2); //$NON-NLS-1$
+				}
+			}
+			if(serialInputStreamProvider != null) {
+				try {
+					serialInputStreamProvider.close();
+				} catch (IOException e2) {
+					Logger.getLogger(getClass()).error("Failed to close input stream", e2); //$NON-NLS-1$
+				}
+			}
 			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("SerialNMEAProvider.connectFailure"), Messages.getString("SerialNMEAProvider.message") + e.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			Logger.getLogger(getClass()).error("Failed to connect to device", e); //$NON-NLS-1$
-			return false;
+			return true;
 		}
-
-		return true;
 	}
 
 	

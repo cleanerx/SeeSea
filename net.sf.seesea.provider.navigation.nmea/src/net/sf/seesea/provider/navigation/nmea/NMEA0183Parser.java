@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -87,12 +88,29 @@ public class NMEA0183Parser extends NMEAParser implements
 	private final Set<SatelliteInfo> satelliteDataCache;
 	private int satelliteMessageCounter;
 
+	private List<INMEAReader> _nmeaReaders = Collections
+			.synchronizedList(new ArrayList<INMEAReader>(1));
+
+	
 	/**
 	 * 
 	 */
 	public NMEA0183Parser() {
 		satelliteDataCache = new HashSet<SatelliteInfo>();
 		satelliteMessageCounter = 0;
+	}
+	
+	public synchronized void bindReader(INMEAReader reader) {
+		_nmeaReaders.add(reader);
+		reader.addNMEAEventListener(this);
+	}
+
+	public synchronized void unbindReader(INMEAReader reader) {
+		if(_nmeaReaders.size() == 1) {
+			heartbeatThread.interrupt();
+		}
+		reader.removeNMEAEventListener(this);
+		_nmeaReaders.remove(reader);
 	}
 
 	/**

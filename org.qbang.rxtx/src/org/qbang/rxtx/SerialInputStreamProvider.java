@@ -57,7 +57,7 @@ public class SerialInputStreamProvider implements INMEAStreamProvider {
 
 	@Override
 	public String getName() {
-		return serialPort.getName();
+		return "Serial Provider - " + serialPort.getName();
 	}
 
 	@Override

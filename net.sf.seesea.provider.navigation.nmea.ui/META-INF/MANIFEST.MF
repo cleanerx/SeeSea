@@ -13,4 +13,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.provider.navigation.nmea.ui
 Bundle-Localization: plugin
-Service-Component: OSGI-INF/statuslinemonitor.xml
+Service-Component: OSGI-INF/statuslinemonitor.xml, OSGI-INF/NMEAReaderFailedDialog.xml
