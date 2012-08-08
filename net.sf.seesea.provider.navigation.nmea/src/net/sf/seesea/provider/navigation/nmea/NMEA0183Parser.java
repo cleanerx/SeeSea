@@ -135,6 +135,8 @@ public class NMEA0183Parser extends NMEAParser implements
 						lastIndex = i + 1;
 					}
 				}
+				nmeaListContent.add(rawContent.substring(rawContent.lastIndexOf(',') + 1));
+
 				String[] nmeaContent = new String[nmeaListContent.size()];
 				nmeaContent = nmeaListContent.toArray(nmeaContent);
 				
