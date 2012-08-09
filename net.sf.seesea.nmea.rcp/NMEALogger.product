@@ -30,7 +30,7 @@ Apache Software Foundation http://apache.org/
    </configIni>
 
    <launcherArgs>
-      <programArgs>-clean -data @user.home</programArgs>
+      <programArgs>-clean -data @user.home -configuration @user.home/NMEALogging</programArgs>
       <vmArgs>-Xmx256M</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
