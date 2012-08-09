@@ -67,6 +67,7 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 
 		Hashtable<String, String> properties = new Hashtable<String, String>();
 		properties.put(PROVIDER_NAME, nmeaStreamProvider.getName());
+		Logger.getLogger(getClass()).info("Start reading from device"); //$NON-NLS-1$
 //		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(NMEA0183Reader.class.getName(), this, properties);
 	}
 	

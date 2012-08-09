@@ -62,7 +62,7 @@ public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
 	private static final int INTERVAL_UNIT = Calendar.MINUTE;
 
 	/** registered services */
-	private final Set<NMEA0183Reader> nmeaReaders;
+	private final Set<INMEAReader> nmeaReaders;
 
 	private static final String PREFIX = "NMEA_"; //$NON-NLS-1$
 	private String loggingDirectory;
@@ -78,7 +78,7 @@ public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
 	 * 
 	 */
 	public NMEA0183DataLogger() {
-		nmeaReaders = Collections.synchronizedSet(new HashSet<NMEA0183Reader>());
+		nmeaReaders = Collections.synchronizedSet(new HashSet<INMEAReader>());
 	}
 
 	/**
@@ -128,12 +128,12 @@ public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
 		this._configAdmin = null;
 	}
 
-	public synchronized void bindReader(NMEA0183Reader nmeaReader) {
+	public synchronized void bindReader(INMEAReader nmeaReader) {
 		nmeaReaders.add(nmeaReader);
 		nmeaReader.addNMEAEventListener(this);
 	}
 
-	public synchronized void unbindReader(NMEA0183Reader nmeaReader) {
+	public synchronized void unbindReader(INMEAReader nmeaReader) {
 		nmeaReaders.remove(nmeaReader);
 		nmeaReader.removeNMEAEventListener(this);
 		if (nmeaReaders.isEmpty()) {
