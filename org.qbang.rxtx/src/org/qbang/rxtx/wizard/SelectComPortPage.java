@@ -31,6 +31,7 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.ParallelPort;
 import gnu.io.PortInUseException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -38,8 +39,12 @@ import java.util.List;
 import net.sf.seesea.lib.IValidatingPage;
 import net.sf.seesea.provider.navigation.nmea.ui.NMEAWizard;
 
+import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.DialogSettings;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -50,6 +55,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.qbang.rxtx.ComPortLabelProvider;
+import org.qbang.rxtx.RXTXActivator;
 
 /**
  * 
@@ -73,15 +79,26 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 	 */
 	@Override
 	public void createControl(Composite parent) {
+		IDialogSettings settings = getWizard().getDialogSettings();
+		   
 		tableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new ComPortLabelProvider());
-		tableViewer.setInput(getPorts());
+		List<CommPortIdentifier> ports = getPorts();
+		tableViewer.setInput(ports);
 		setControl(tableViewer.getControl());
 		if(getPorts().isEmpty()) {
 			setErrorMessage(Messages.getString("SelectComPortPage.noComPorts")); //$NON-NLS-1$
 		} else {
-			tableViewer.setSelection(new StructuredSelection(getPorts().get(0)));
+			if(settings.get("lastComPort") != null) { //$NON-NLS-1$
+				for (CommPortIdentifier comm : ports) {
+					if(comm.getName().equals(settings.get("lastComPort"))) { //$NON-NLS-1$
+						tableViewer.setSelection(new StructuredSelection(comm));
+					}
+				}
+			} else {
+				tableViewer.setSelection(new StructuredSelection(getPorts().get(0)));
+			}
 		}
 		tableViewer.getControl().addMouseListener(new MouseListener() {
 			
@@ -142,6 +159,8 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 				} else {
 					commPort.close();
 					commPortIdentifier = portIdentifier;
+					IDialogSettings settings = getWizard().getDialogSettings();
+					settings.put("lastComPort", commPortIdentifier.getName()); //$NON-NLS-1$
 					return new Status(IStatus.OK, "org.qbang.rxtx", Messages.getString("SelectComPortPage.sucessfulConnection")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			} catch (PortInUseException e) {

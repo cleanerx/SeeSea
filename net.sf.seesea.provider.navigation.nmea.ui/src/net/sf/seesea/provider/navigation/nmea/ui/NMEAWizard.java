@@ -28,8 +28,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.ui;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -41,6 +47,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class NMEAWizard extends Wizard {
 
+	private static final String DIALOG_SETTING_FILE = "nmeaDialog.xml"; //$NON-NLS-1$
 	private INMEAConnector currentConnector  ;
 	private final ServiceTracker availableConnectorsTracker;
 	
@@ -48,6 +55,20 @@ public class NMEAWizard extends Wizard {
 	 * 
 	 */
 	public NMEAWizard() {
+		DialogSettings dialogSettings = new DialogSettings("nmeaDialog"); //$NON-NLS-1$
+	    try {
+	      // loads existing settings if any.
+	    	 IPath path = NMEAUIActivator.getDefault().getStateLocation();
+	    	 String filename = path.append(DIALOG_SETTING_FILE).toOSString();
+	    	 File file = new File(filename);
+	    	 if(file.exists()) {
+	    		 dialogSettings.load(filename);
+	    	 }
+	    } catch (IOException e) {
+	    	Logger.getLogger(getClass()).error("Failed to load dialog settings", e); //$NON-NLS-1$
+	    }    
+	    
+	    setDialogSettings(dialogSettings);
 		setForcePreviousAndNextButtons(true);
 		availableConnectorsTracker = new ServiceTracker(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class.getName(), null);
 		availableConnectorsTracker.open();
@@ -71,7 +92,16 @@ public class NMEAWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		return currentConnector.performFinish();
+		boolean performFinish = currentConnector.performFinish();
+		try {
+			IPath path = NMEAUIActivator.getDefault().getStateLocation();
+			String filename = path.append(DIALOG_SETTING_FILE).toOSString();
+			getDialogSettings().save(filename);
+
+		} catch (IOException e) {
+			Logger.getLogger(getClass()).error("Failed to save dialog settings", e); //$NON-NLS-1$
+		}
+		return performFinish;
 	}
 
 	

@@ -31,12 +31,17 @@ import gnu.io.CommPortIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -74,22 +79,40 @@ public class ComPortSetupPage extends WizardPage {
 		Label baud = new Label(composite, SWT.NONE);
 		baud.setText(Messages.getString("ComPortSetupPage.bitrate")); //$NON-NLS-1$
 		baud.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true, 1, 1));
-
+		IDialogSettings settings = getWizard().getDialogSettings();
 		
 		bitCombo = new ComboViewer(composite);
 		List<Integer> bitrates = new ArrayList<Integer>();
-//		bitrates.add(1200);
-//		bitrates.add(2400);
+		bitrates.add(1200);
+		bitrates.add(2400);
 		bitrates.add(4800);
-//		bitrates.add(9600);
-//		bitrates.add(19200);
+		bitrates.add(9600);
+		bitrates.add(19200);
 		bitrates.add(38400);
-//		bitrates.add(57600);
+		bitrates.add(57600);
+		bitrates.add(115200);
 		bitCombo.setContentProvider(new ArrayContentProvider());
 		bitCombo.setInput(bitrates);
 		// FIXME: from preferences
-		bitCombo.setSelection(new StructuredSelection(4800));
+		try {
+			int lastBitrate = settings.getInt("bitrate"); //$NON-NLS-1$
+			bitCombo.setSelection(new StructuredSelection(lastBitrate));
+			_baudRate = lastBitrate;
+		} catch (NumberFormatException e) {
+			bitCombo.setSelection(new StructuredSelection(4800));
+			_baudRate = 4800;
+		}
 		bitCombo.getCombo().setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, true, 1, 1));
+		bitCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+			
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				IDialogSettings dialogSettings = getWizard().getDialogSettings();
+				Integer value = (Integer) ((IStructuredSelection) bitCombo.getSelection()).getFirstElement();
+				dialogSettings.put("bitrate", value);
+				_baudRate =  value;
+			}
+		});
 		composite.pack();
 		
 		setControl(composite);
@@ -101,11 +124,28 @@ public class ComPortSetupPage extends WizardPage {
 		lblTimeout.setText(Messages.getString("ComPortSetupPage.lblTimeout.text")); //$NON-NLS-1$
 		
 		spinner = new Spinner(composite, SWT.BORDER);
+		spinner.setMinimum(0);
 		spinner.setMaximum(Integer.MAX_VALUE);
-		spinner.setSelection(3600);
+		try {
+			int timeout = settings.getInt("timeout"); //$NON-NLS-1$
+			spinner.setSelection(timeout < 1 ? 3600 : timeout);
+			_timeout = timeout;
+		} catch (NumberFormatException e) {
+			spinner.setSelection(3600);
+			_timeout = 3600;
+		}
 		GridData gd_spinner = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_spinner.widthHint = 100;
 		spinner.setLayoutData(gd_spinner);
+		spinner.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				IDialogSettings dialogSettings = getWizard().getDialogSettings();
+				dialogSettings.put("timeout", ((Spinner)e.getSource()).getSelection());
+				_timeout = ((Spinner)e.getSource()).getSelection();
+			}
+		});
 	}
 
 	@Override
@@ -114,10 +154,6 @@ public class ComPortSetupPage extends WizardPage {
 		if(commPort == null) {
 			return false;
 		}
-		_baudRate =  (Integer) ((IStructuredSelection) bitCombo.getSelection()).getFirstElement();
-		_timeout = spinner.getSelection();
-		
-		
 		return super.isPageComplete();
 	}
 

@@ -44,6 +44,7 @@ import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;

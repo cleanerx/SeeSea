@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardPage;
@@ -41,6 +42,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -48,6 +50,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class AvailableProvidersPage extends WizardPage {
 
+	private static final String LAST_PROVIDER = "lastProvider"; //$NON-NLS-1$
 	private final ServiceTracker providerServiceTracker;
 	private TableViewer providersTableViewer;
 
@@ -74,6 +77,8 @@ public class AvailableProvidersPage extends WizardPage {
 		providersTableViewer.setSorter(new ViewerSorter(Collator.getInstance()));
 		Object[] services = providerServiceTracker.getServices();
 		providersTableViewer.setInput(services);
+		String lastProvider = getDialogSettings().get(LAST_PROVIDER);
+		
 		setControl(providersTableViewer.getControl());
 		providersTableViewer.getControl().addMouseListener(new MouseListener() {
 			
@@ -92,17 +97,31 @@ public class AvailableProvidersPage extends WizardPage {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				IStructuredSelection selection =  (IStructuredSelection) providersTableViewer.getSelection();
-				
 				if(selection.isEmpty()) {
 					((NMEAWizard) getWizard()).setConnector(null);
+					getDialogSettings().put(LAST_PROVIDER, ""); //$NON-NLS-1$
 				} else {
 					((NMEAWizard) getWizard()).setConnector((INMEAConnector) selection.getFirstElement());
 					((NMEAWizard) getWizard()).getContainer().showPage(getNextPage());
+					getDialogSettings().put(LAST_PROVIDER, ((INMEAConnector) selection.getFirstElement()).getStreamProviderName());
 				}
 			}
 		});
 		
 		providersTableViewer.addSelectionChangedListener(new ProviderChangedListener());
+		for (final Object service : services) {
+			if(((INMEAConnector)service).getStreamProviderName().equals(lastProvider)) {
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						providersTableViewer.setSelection(new StructuredSelection(service));
+					}
+				});
+				break;
+			}
+		}
+
 	}
 
 	@Override
@@ -119,9 +138,11 @@ public class AvailableProvidersPage extends WizardPage {
 		public void selectionChanged(SelectionChangedEvent event) {
 			if(event.getSelection().isEmpty()) {
 				((NMEAWizard) getWizard()).setConnector(null);
+				getDialogSettings().put(LAST_PROVIDER, ""); //$NON-NLS-1$
 			} else {
 				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 				((NMEAWizard) getWizard()).setConnector((INMEAConnector) selection.getFirstElement());
+				getDialogSettings().put(LAST_PROVIDER, ((INMEAConnector) selection.getFirstElement()).getStreamProviderName());
 			}
 			
 		}
