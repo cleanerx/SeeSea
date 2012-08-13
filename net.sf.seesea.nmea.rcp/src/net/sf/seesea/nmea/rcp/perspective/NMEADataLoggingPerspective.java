@@ -57,13 +57,6 @@ public class NMEADataLoggingPerspective implements IPerspectiveFactory {
 	    IFolderLayout topLeft = layout.createFolder("topLeft", IPageLayout.BOTTOM, 0.8f, editorArea); //$NON-NLS-1$
 	    topLeft.addView("net.sf.seesea.provider.navigation.nmea.log.view"); //$NON-NLS-1$
 
-//		World world = OsmFactory.eINSTANCE.createWorld();
-//		world.setZoomLevel(9);
-//		GeoPosition geoPosition = GeoFactory.eINSTANCE.createGeoPosition();
-//		geoPosition.setLatitude(GeoParser.parseLatitude(8.4));
-//		geoPosition.setLongitude(GeoParser.parseLongitude(49.0));
-//		world.setMapCenterPosition(geoPosition);
-	    
 		try {
 			if(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage() != null) {
 				BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext(); 
