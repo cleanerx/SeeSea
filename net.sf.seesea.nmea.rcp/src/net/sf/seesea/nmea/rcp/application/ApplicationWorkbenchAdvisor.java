@@ -27,6 +27,8 @@
 package net.sf.seesea.nmea.rcp.application;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URLDecoder;
 import java.util.Properties;
 
 import net.sf.seesea.nmea.rcp.NMEARCPActivator;
@@ -51,7 +53,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-	private static final String NMEA_LOGGING = "NMEALogging"; //$NON-NLS-1$
+	private static final String NMEA_LOGGING = "NMEA Logging"; //$NON-NLS-1$
 	private static final String PERSPECTIVE_ID = "net.sf.seesea.nmea.perspective"; //$NON-NLS-1$
 
 	@Override
@@ -106,7 +108,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				Properties properties = new Properties();
 				properties.put("rotateFileName", true); //$NON-NLS-1$
 				properties.put("loggingDirectory", logFolder.getLocationURI().toURL().toString()); //$NON-NLS-1$
-				properties.put("cacheDirectory", cacheFolder.getLocationURI().toURL().getFile()); //$NON-NLS-1$
+				properties.put("cacheDirectory", URLDecoder.decode(cacheFolder.getLocationURI().toURL().toString())); //$NON-NLS-1$
 				configuration.update(properties);
 			}
 		} catch (IOException e) {
