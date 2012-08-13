@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -92,11 +93,11 @@ public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
 			loggingDirectory = (String) properties.get("loggingDirectory"); //$NON-NLS-1$
 			rotateFileName = (Boolean) properties.get("rotateFileName"); //$NON-NLS-1$
 			URL url = new URL(loggingDirectory);
-			File directory = new File(url.getFile());
+			File directory = new File(URLDecoder.decode(url.getFile())); //$NON-NLS-1$
 			if(!directory.exists()) {
 				directory.mkdirs();
 			}
-			File file = new File(url.getFile(), getRotateFileName());
+			File file = new File(URLDecoder.decode(url.getFile()), getRotateFileName());
 			FileOutputStream fileOutputStream = new FileOutputStream(file);
 			gzipOutputStream = new GZIPOutputStream(fileOutputStream);
 			nextLogRotationcalendar = Calendar.getInstance();
