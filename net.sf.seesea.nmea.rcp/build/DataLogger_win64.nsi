@@ -120,7 +120,7 @@ section "install"
     setOutPath $INSTDIR
     # Files added here should be removed by the uninstaller (see section "uninstall")
 #    file "NMEALogger.exe"
-    file /r "/var/lib/hudson/jobs/DataLoggerSingle/lastSuccessful/archive/buckminster.output/net.sf.seesea.nmea.datalogger.site_1.0.0-eclipse.feature/nmeaDataLoggger.win32.win32.x86_64/*.*"
+    file /r "/var/lib/hudson/jobs/DataLoggerSingleSF/lastSuccessful/archive/buckminster.output/net.sf.seesea.nmea.datalogger.site_1.0.0-eclipse.feature/nmeaDataLoggger.win32.win32.x86_64/*.*"
     file "../icons/OpenSeaMapLogo.ico"
     
     # Add any other files for the install directory (license files, app data, etc) here
