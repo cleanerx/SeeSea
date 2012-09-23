@@ -40,6 +40,9 @@ public class NMEAMessageValidator {
 	 * @return
 	 */
 	protected boolean removeValidChecksum(String nmeaMessageContent) {
+		if(!nmeaMessageContent.startsWith("$")) { //$NON-NLS-1$
+			return false;
+		}
 		try {
 			String rawContent = nmeaMessageContent.substring(1,
 					nmeaMessageContent.length());
