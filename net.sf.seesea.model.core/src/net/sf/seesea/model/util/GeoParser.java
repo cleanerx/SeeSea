@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -68,7 +68,7 @@ public class GeoParser {
 		decDegree = (decDegree - latitude.getDegree()) * 60;
 		latitude.setMinute((int) Math.floor(decDegree));
 		decDegree = (decDegree - latitude.getMinute()) * 60;
-		latitude.setSecond((int) Math.floor(decDegree));
+		latitude.setSecond(decDegree);
 	}
 	
 	/**
