@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,7 @@ import net.sf.seesea.provider.navigation.nmea.ui.NMEAWizard;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -74,6 +75,8 @@ public class DevicesPage extends WizardPage implements IValidatingPage {
 	 */
 	@Override
 	public void createControl(Composite parent) {
+		IDialogSettings settings = getWizard().getDialogSettings();
+
 		tableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new BluetoothDeviceLabelProvider());
