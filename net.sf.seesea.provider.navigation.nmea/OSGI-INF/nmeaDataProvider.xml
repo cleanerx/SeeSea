@@ -13,4 +13,6 @@
    <reference bind="attachDepthListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IDepthListener" name="IDepthListener" policy="dynamic" unbind="detachDepthListener"/>
    <reference bind="attachTimeListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITimeListener" name="ITimeListener" policy="dynamic" unbind="detachTimeListener"/>
    <reference bind="attachSpeedListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ISpeedListener" name="ISpeedListener" policy="dynamic" unbind="detachSpeedListener"/>
+   <reference bind="attachTripLogListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITripLogListener" name="ITripLogListener" policy="dynamic" unbind="detachTripLogListener"/>
+   <reference bind="attachLogListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITotalLogListener" name="ITotalLogListener" policy="dynamic" unbind="detachLogListener"/>
 </scr:component>

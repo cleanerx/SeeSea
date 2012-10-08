@@ -354,11 +354,11 @@ IWindDataProvider, IShipMovementVectorProvider {
 		_timeListeners.remove(depthListener);
 	}
 
-	public synchronized void attachTotalLogListener(ITotalLogListener listener) {
+	public synchronized void attachLogListener(ITotalLogListener listener) {
 		_totalLogListeners.add(listener);
 	}
 
-	public synchronized void detachTotalLogListener(ITotalLogListener listener) {
+	public synchronized void detachLogListener(ITotalLogListener listener) {
 		listener.providerDisabled(getProviderName());
 		_totalLogListeners.remove(listener);
 	}
