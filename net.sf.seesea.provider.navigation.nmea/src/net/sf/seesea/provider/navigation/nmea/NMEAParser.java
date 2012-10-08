@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -35,16 +35,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.seesea.model.core.geo.Depth;
-import net.sf.seesea.model.core.weather.WindMeasurement;
 import net.sf.seesea.services.navigation.listener.IDataListener;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
 import net.sf.seesea.services.navigation.listener.IRelativeWindSpeedListener;
 import net.sf.seesea.services.navigation.listener.ISatelliteInfoListener;
-import net.sf.seesea.services.navigation.listener.ISpeedVectorListener;
+import net.sf.seesea.services.navigation.listener.IHeadingListener;
+import net.sf.seesea.services.navigation.listener.ISpeedListener;
 import net.sf.seesea.services.navigation.listener.ITimeListener;
+import net.sf.seesea.services.navigation.listener.ITotalLogListener;
 import net.sf.seesea.services.navigation.listener.ITrackMadeGoodGroundSpeedListener;
+import net.sf.seesea.services.navigation.listener.ITripLogListener;
 import net.sf.seesea.services.navigation.listener.IWaterTemperatureListener;
 import net.sf.seesea.services.navigation.listener.IWindListener;
 import net.sf.seesea.services.navigation.provider.IPositionProvider;
@@ -59,13 +60,16 @@ IWindDataProvider, IShipMovementVectorProvider {
 
 	protected final List<IPositionListener> _positionListeners;
 	protected final List<IWindListener> _windListeners;
-	protected final List<ISpeedVectorListener> _speedVectorListeners;
+	protected final List<IHeadingListener> _headingListeners;
+	protected final List<ISpeedListener> _speedListeners;
 	protected final List<IWaterTemperatureListener> _waterTemperatureListeners;
 	protected final List<ITrackMadeGoodGroundSpeedListener> _trackMadeGoodListeners;
 	protected final List<IRelativeWindSpeedListener> _relativeWindSpeedListeners;
 	protected final List<ISatelliteInfoListener> _satelliteInfoListeners;
 	protected final List<IDepthListener> _depthListeners;
 	protected final List<ITimeListener> _timeListeners;
+	protected final List<ITotalLogListener> _totalLogListeners; 
+	protected final List<ITripLogListener> _tripLogListeners; 
 	protected final Map<Class<?>, Long> sensorHeartbeats;
 	protected final Thread heartbeatThread;
 	protected final Object heartbeatSync;
@@ -76,8 +80,10 @@ IWindDataProvider, IShipMovementVectorProvider {
 				.synchronizedList(new ArrayList<IPositionListener>(2));
 		_windListeners = Collections
 				.synchronizedList(new ArrayList<IWindListener>(1));
-		_speedVectorListeners = Collections
-				.synchronizedList(new ArrayList<ISpeedVectorListener>(1));
+		_headingListeners = Collections
+				.synchronizedList(new ArrayList<IHeadingListener>(1));
+		_speedListeners = Collections
+				.synchronizedList(new ArrayList<ISpeedListener>(1));
 		_waterTemperatureListeners = Collections
 				.synchronizedList(new ArrayList<IWaterTemperatureListener>(1));
 		_trackMadeGoodListeners = Collections
@@ -91,6 +97,10 @@ IWindDataProvider, IShipMovementVectorProvider {
 				.synchronizedList(new ArrayList<IDepthListener>(1));
 		_timeListeners = Collections
 				.synchronizedList(new ArrayList<ITimeListener>(1));
+		_totalLogListeners = Collections
+				.synchronizedList(new ArrayList<ITotalLogListener>(1));
+		_tripLogListeners = Collections
+				.synchronizedList(new ArrayList<ITripLogListener>(1));
 		// activeReaders = new HashMap<INMEAStreamProvider, Thread>();
 		sensorHeartbeats = new HashMap<Class<?>, Long>();
 		heartbeatSync = new Object();
@@ -114,7 +124,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 						Thread.sleep(1000);
 					}
 				} catch (InterruptedException e) {
-					Logger.getRootLogger().info("Heartbeat thread sucessfully interrupted");
+					Logger.getRootLogger().info("Heartbeat thread sucessfully interrupted"); //$NON-NLS-1$
 				}
 			}
 
@@ -131,9 +141,12 @@ IWindDataProvider, IShipMovementVectorProvider {
 					for (IDepthListener listener : _depthListeners) {
 						listener.providerDisabled(getProviderName());
 					}
-				} else if (dataListener
-						.isAssignableFrom(ISpeedVectorListener.class)) {
-					for (ISpeedVectorListener listener : _speedVectorListeners) {
+				} else if (dataListener.isAssignableFrom(IHeadingListener.class)) {
+					for (IHeadingListener listener : _headingListeners) {
+						listener.providerDisabled(getProviderName());
+					}
+				} else if (dataListener.isAssignableFrom(ISpeedListener.class)) {
+					for (IHeadingListener listener : _headingListeners) {
 						listener.providerDisabled(getProviderName());
 					}
 				} else if (dataListener
@@ -146,23 +159,26 @@ IWindDataProvider, IShipMovementVectorProvider {
 					for (IWaterTemperatureListener listener : _waterTemperatureListeners) {
 						listener.providerDisabled(getProviderName());
 					}
-				} else if (dataListener
-						.isAssignableFrom(ITrackMadeGoodGroundSpeedListener.class)) {
-					for (ITrackMadeGoodGroundSpeedListener listener : _trackMadeGoodListeners) {
-						listener.providerDisabled(getProviderName());
-					}
-				} else if (dataListener
-						.isAssignableFrom(IRelativeWindSpeedListener.class)) {
-					for (ITrackMadeGoodGroundSpeedListener listener : _trackMadeGoodListeners) {
-						listener.providerDisabled(getProviderName());
-					}
+//				} else if (dataListener
+//						.isAssignableFrom(ITrackMadeGoodGroundSpeedListener.class)) {
+//					for (ITrackMadeGoodGroundSpeedListener listener : _trackMadeGoodListeners) {
+//						listener.providerDisabled(getProviderName());
+//					}
 				} else if (dataListener
 						.isAssignableFrom(IRelativeWindSpeedListener.class)) {
-					for (ITrackMadeGoodGroundSpeedListener listener : _trackMadeGoodListeners) {
+					for (IRelativeWindSpeedListener listener : _relativeWindSpeedListeners) {
 						listener.providerDisabled(getProviderName());
 					}
 				} else if (dataListener.isAssignableFrom(ISatelliteInfoListener.class)) {
 					for (ISatelliteInfoListener listener : _satelliteInfoListeners) {
+						listener.providerDisabled(getProviderName());
+					}
+				} else if (dataListener.isAssignableFrom(ITotalLogListener.class)) {
+					for (ITotalLogListener listener : _totalLogListeners) {
+						listener.providerDisabled(getProviderName());
+					}
+				} else if (dataListener.isAssignableFrom(ITripLogListener.class)) {
+					for (ITripLogListener listener : _tripLogListeners) {
 						listener.providerDisabled(getProviderName());
 					}
 				}
@@ -187,8 +203,13 @@ IWindDataProvider, IShipMovementVectorProvider {
 							listener.providerEnabled(getProviderName());
 						}
 					} else if (dataListener
-							.isAssignableFrom(ISpeedVectorListener.class)) {
-						for (ISpeedVectorListener listener : _speedVectorListeners) {
+							.isAssignableFrom(IHeadingListener.class)) {
+						for (IHeadingListener listener : _headingListeners) {
+							listener.providerEnabled(getProviderName());
+						}
+					} else if (dataListener
+							.isAssignableFrom(ISpeedListener.class)) {
+						for (ISpeedListener listener : _speedListeners) {
 							listener.providerEnabled(getProviderName());
 						}
 					} else if (dataListener
@@ -201,13 +222,21 @@ IWindDataProvider, IShipMovementVectorProvider {
 						for (ITimeListener listener : _timeListeners) {
 							listener.providerEnabled(getProviderName());
 						}
-					} else if (dataListener
-							.isAssignableFrom(ITrackMadeGoodGroundSpeedListener.class)) {
-						for (ITrackMadeGoodGroundSpeedListener listener : _trackMadeGoodListeners) {
+//					} else if (dataListener
+//							.isAssignableFrom(ITrackMadeGoodGroundSpeedListener.class)) {
+//						for (ITrackMadeGoodGroundSpeedListener listener : _trackMadeGoodListeners) {
+//							listener.providerEnabled(getProviderName());
+//						}
+					} else if (dataListener.isAssignableFrom(IRelativeWindSpeedListener.class)) {
+						for (IRelativeWindSpeedListener listener : _relativeWindSpeedListeners) {
 							listener.providerEnabled(getProviderName());
 						}
-					} else if (dataListener.isAssignableFrom(IRelativeWindSpeedListener.class)) {
-						for (ITrackMadeGoodGroundSpeedListener listener : _trackMadeGoodListeners) {
+					} else if (dataListener.isAssignableFrom(ITotalLogListener.class)) {
+						for (ITotalLogListener listener : _totalLogListeners) {
+							listener.providerEnabled(getProviderName());
+						}
+					} else if (dataListener.isAssignableFrom(ITripLogListener.class)) {
+						for (ITripLogListener listener : _tripLogListeners) {
 							listener.providerEnabled(getProviderName());
 						}
 	//				} else if (dataListener
@@ -228,14 +257,23 @@ IWindDataProvider, IShipMovementVectorProvider {
 
 
 	@Override
-	public synchronized void attachShipMovementListener(ISpeedVectorListener listener) {
-		_speedVectorListeners.add(listener);
+	public synchronized void attachShipMovementListener(IHeadingListener listener) {
+		_headingListeners.add(listener);
 	}
 
 	@Override
-	public synchronized void detachShipMovementListener(ISpeedVectorListener listener) {
+	public synchronized void detachShipMovementListener(IHeadingListener listener) {
 		listener.providerDisabled(getProviderName());
-		_speedVectorListeners.remove(listener);
+		_headingListeners.remove(listener);
+	}
+
+	public synchronized void attachSpeedListener(ISpeedListener listener) {
+		_speedListeners.add(listener);
+	}
+
+	public synchronized void detachSpeedListener(ISpeedListener listener) {
+		listener.providerDisabled(getProviderName());
+		_speedListeners.remove(listener);
 	}
 
 	@Override
@@ -276,7 +314,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 
 	public synchronized void detachTrackMadeGoodGroundSpeedListener(
 			ITrackMadeGoodGroundSpeedListener trackMadeGoodGroundSpeedListener) {
-		trackMadeGoodGroundSpeedListener.providerDisabled(getProviderName());
+//		trackMadeGoodGroundSpeedListener.providerDisabled(getProviderName());
 				_trackMadeGoodListeners.remove(trackMadeGoodGroundSpeedListener);
 			}
 
@@ -316,24 +354,24 @@ IWindDataProvider, IShipMovementVectorProvider {
 		_timeListeners.remove(depthListener);
 	}
 
+	public synchronized void attachTotalLogListener(ITotalLogListener listener) {
+		_totalLogListeners.add(listener);
+	}
+
+	public synchronized void detachTotalLogListener(ITotalLogListener listener) {
+		listener.providerDisabled(getProviderName());
+		_totalLogListeners.remove(listener);
+	}
+
+	public synchronized void attachTripLogListener(ITripLogListener listener) {
+		_tripLogListeners.add(listener);
+	}
+
+	public synchronized void detachTripLogListener(ITripLogListener listener) {
+		listener.providerDisabled(getProviderName());
+		_tripLogListeners.remove(listener);
+	}
+
 	protected abstract String getProviderName();
-
-	protected void notifyWind(WindMeasurement windMeasurement) {
-		synchronized (_windListeners) {
-			for (IWindListener listener : _windListeners) {
-				heartbeat(IWindListener.class);
-				listener.notify(windMeasurement);
-			}
-		}
-	}
-
-	protected void notifyDepthMeasurement(Depth depth) {
-		synchronized (_depthListeners) {
-			for (IDepthListener listener : _depthListeners) {
-				heartbeat(IDepthListener.class);
-				listener.notify(depth);
-			}
-		}
-	}
 
 }

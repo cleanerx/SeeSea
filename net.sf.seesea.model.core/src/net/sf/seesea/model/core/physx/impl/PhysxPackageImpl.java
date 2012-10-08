@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.model.core.physx.impl;
 
-import java.util.Map;
 import net.sf.seesea.model.core.CorePackage;
 import net.sf.seesea.model.core.data.DataPackage;
 import net.sf.seesea.model.core.data.impl.DataPackageImpl;
@@ -41,20 +40,21 @@ import net.sf.seesea.model.core.geo.impl.GeoPackageImpl;
 import net.sf.seesea.model.core.geo.osm.OsmPackage;
 import net.sf.seesea.model.core.geo.osm.impl.OsmPackageImpl;
 import net.sf.seesea.model.core.impl.CorePackageImpl;
+import net.sf.seesea.model.core.physx.CompositeMeasurement;
+import net.sf.seesea.model.core.physx.Distance;
+import net.sf.seesea.model.core.physx.DistanceType;
 import net.sf.seesea.model.core.physx.HandOrientation;
 import net.sf.seesea.model.core.physx.Heading;
 import net.sf.seesea.model.core.physx.HeadingType;
 import net.sf.seesea.model.core.physx.LengthUnit;
-import net.sf.seesea.model.core.physx.Length;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.core.physx.PhysxFactory;
 import net.sf.seesea.model.core.physx.PhysxPackage;
+import net.sf.seesea.model.core.physx.RelativeSpeed;
 import net.sf.seesea.model.core.physx.RelativeWind;
 import net.sf.seesea.model.core.physx.SatelliteInfo;
 import net.sf.seesea.model.core.physx.SatellitesVisible;
-import net.sf.seesea.model.core.physx.ShipMovementVector;
 import net.sf.seesea.model.core.physx.Speed;
-import net.sf.seesea.model.core.physx.SpeedMap;
 import net.sf.seesea.model.core.physx.SpeedType;
 import net.sf.seesea.model.core.physx.SpeedUnit;
 import net.sf.seesea.model.core.physx.Temperature;
@@ -110,13 +110,6 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass shipMovementVectorEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass relativeWindEClass = null;
 
 	/**
@@ -138,28 +131,28 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass heading2DegreesEntryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass speedType2SpeedEntryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass speedMapEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass timeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass distanceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass compositeMeasurementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass relativeSpeedEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -202,6 +195,13 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * @generated
 	 */
 	private EEnum speedTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum distanceTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -379,7 +379,7 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getMeasurement_Time() {
+	public EAttribute getMeasurement_SensorID() {
 		return (EAttribute)measurementEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -388,8 +388,8 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getShipMovementVector() {
-		return shipMovementVectorEClass;
+	public EAttribute getMeasurement_Time() {
+		return (EAttribute)measurementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -397,8 +397,8 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getShipMovementVector_Headings() {
-		return (EReference)shipMovementVectorEClass.getEStructuralFeatures().get(0);
+	public EAttribute getMeasurement_Timezone() {
+		return (EAttribute)measurementEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -406,8 +406,8 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getShipMovementVector_Speeds() {
-		return (EReference)shipMovementVectorEClass.getEStructuralFeatures().get(1);
+	public EAttribute getMeasurement_Valid() {
+		return (EAttribute)measurementEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -496,69 +496,6 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getHeading2DegreesEntry() {
-		return heading2DegreesEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getHeading2DegreesEntry_Key() {
-		return (EAttribute)heading2DegreesEntryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getHeading2DegreesEntry_Value() {
-		return (EAttribute)heading2DegreesEntryEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getSpeedType2SpeedEntry() {
-		return speedType2SpeedEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSpeedType2SpeedEntry_Key() {
-		return (EAttribute)speedType2SpeedEntryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSpeedType2SpeedEntry_Value() {
-		return (EReference)speedType2SpeedEntryEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getSpeedMap() {
-		return speedMapEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getTime() {
 		return timeEClass;
 	}
@@ -568,8 +505,8 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTime_Date() {
-		return (EAttribute)timeEClass.getEStructuralFeatures().get(0);
+	public EClass getDistance() {
+		return distanceEClass;
 	}
 
 	/**
@@ -577,8 +514,71 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getTime_Timezone() {
-		return (EAttribute)timeEClass.getEStructuralFeatures().get(1);
+	public EAttribute getDistance_Value() {
+		return (EAttribute)distanceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDistance_Unit() {
+		return (EAttribute)distanceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDistance_DistanceType() {
+		return (EAttribute)distanceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCompositeMeasurement() {
+		return compositeMeasurementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCompositeMeasurement_Measurements() {
+		return (EReference)compositeMeasurementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getRelativeSpeed() {
+		return relativeSpeedEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRelativeSpeed_Key() {
+		return (EAttribute)relativeSpeedEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRelativeSpeed_Value() {
+		return (EReference)relativeSpeedEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -640,6 +640,15 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getDistanceType() {
+		return distanceTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PhysxFactory getPhysxFactory() {
 		return (PhysxFactory)getEFactoryInstance();
 	}
@@ -676,11 +685,10 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		createEAttribute(headingEClass, HEADING__HEADING_TYPE);
 
 		measurementEClass = createEClass(MEASUREMENT);
+		createEAttribute(measurementEClass, MEASUREMENT__SENSOR_ID);
 		createEAttribute(measurementEClass, MEASUREMENT__TIME);
-
-		shipMovementVectorEClass = createEClass(SHIP_MOVEMENT_VECTOR);
-		createEReference(shipMovementVectorEClass, SHIP_MOVEMENT_VECTOR__HEADINGS);
-		createEReference(shipMovementVectorEClass, SHIP_MOVEMENT_VECTOR__SPEEDS);
+		createEAttribute(measurementEClass, MEASUREMENT__TIMEZONE);
+		createEAttribute(measurementEClass, MEASUREMENT__VALID);
 
 		relativeWindEClass = createEClass(RELATIVE_WIND);
 		createEAttribute(relativeWindEClass, RELATIVE_WIND__BOW_ORIENTATION);
@@ -694,19 +702,19 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		satellitesVisibleEClass = createEClass(SATELLITES_VISIBLE);
 		createEReference(satellitesVisibleEClass, SATELLITES_VISIBLE__SATELLITE_INFO);
 
-		heading2DegreesEntryEClass = createEClass(HEADING2_DEGREES_ENTRY);
-		createEAttribute(heading2DegreesEntryEClass, HEADING2_DEGREES_ENTRY__KEY);
-		createEAttribute(heading2DegreesEntryEClass, HEADING2_DEGREES_ENTRY__VALUE);
-
-		speedType2SpeedEntryEClass = createEClass(SPEED_TYPE2_SPEED_ENTRY);
-		createEAttribute(speedType2SpeedEntryEClass, SPEED_TYPE2_SPEED_ENTRY__KEY);
-		createEReference(speedType2SpeedEntryEClass, SPEED_TYPE2_SPEED_ENTRY__VALUE);
-
-		speedMapEClass = createEClass(SPEED_MAP);
-
 		timeEClass = createEClass(TIME);
-		createEAttribute(timeEClass, TIME__DATE);
-		createEAttribute(timeEClass, TIME__TIMEZONE);
+
+		distanceEClass = createEClass(DISTANCE);
+		createEAttribute(distanceEClass, DISTANCE__VALUE);
+		createEAttribute(distanceEClass, DISTANCE__UNIT);
+		createEAttribute(distanceEClass, DISTANCE__DISTANCE_TYPE);
+
+		compositeMeasurementEClass = createEClass(COMPOSITE_MEASUREMENT);
+		createEReference(compositeMeasurementEClass, COMPOSITE_MEASUREMENT__MEASUREMENTS);
+
+		relativeSpeedEClass = createEClass(RELATIVE_SPEED);
+		createEAttribute(relativeSpeedEClass, RELATIVE_SPEED__KEY);
+		createEReference(relativeSpeedEClass, RELATIVE_SPEED__VALUE);
 
 		// Create enums
 		temperatureUnitEEnum = createEEnum(TEMPERATURE_UNIT);
@@ -715,6 +723,7 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		handOrientationEEnum = createEEnum(HAND_ORIENTATION);
 		lengthUnitEEnum = createEEnum(LENGTH_UNIT);
 		speedTypeEEnum = createEEnum(SPEED_TYPE);
+		distanceTypeEEnum = createEEnum(DISTANCE_TYPE);
 	}
 
 	/**
@@ -754,6 +763,12 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		measurementEClass.getESuperTypes().add(theCorePackage.getModelObject());
 		relativeWindEClass.getESuperTypes().add(this.getHeading());
 		relativeWindEClass.getESuperTypes().add(this.getSpeed());
+		satelliteInfoEClass.getESuperTypes().add(this.getMeasurement());
+		satellitesVisibleEClass.getESuperTypes().add(this.getMeasurement());
+		timeEClass.getESuperTypes().add(this.getMeasurement());
+		distanceEClass.getESuperTypes().add(this.getMeasurement());
+		compositeMeasurementEClass.getESuperTypes().add(this.getMeasurement());
+		relativeSpeedEClass.getESuperTypes().add(this.getMeasurement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(temperatureEClass, Temperature.class, "Temperature", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -769,11 +784,10 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		initEAttribute(getHeading_HeadingType(), this.getHeadingType(), "headingType", null, 0, 1, Heading.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(measurementEClass, Measurement.class, "Measurement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMeasurement_SensorID(), ecorePackage.getEString(), "sensorID", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMeasurement_Time(), ecorePackage.getEDate(), "time", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(shipMovementVectorEClass, ShipMovementVector.class, "ShipMovementVector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getShipMovementVector_Headings(), this.getHeading2DegreesEntry(), null, "headings", null, 0, -1, ShipMovementVector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getShipMovementVector_Speeds(), this.getSpeedType2SpeedEntry(), null, "speeds", null, 0, -1, ShipMovementVector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasurement_Timezone(), ecorePackage.getEString(), "timezone", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMeasurement_Valid(), ecorePackage.getEBoolean(), "valid", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(relativeWindEClass, RelativeWind.class, "RelativeWind", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRelativeWind_BowOrientation(), this.getHandOrientation(), "bowOrientation", null, 0, 1, RelativeWind.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -787,19 +801,19 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		initEClass(satellitesVisibleEClass, SatellitesVisible.class, "SatellitesVisible", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSatellitesVisible_SatelliteInfo(), this.getSatelliteInfo(), null, "satelliteInfo", null, 0, -1, SatellitesVisible.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(heading2DegreesEntryEClass, Map.Entry.class, "Heading2DegreesEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getHeading2DegreesEntry_Key(), this.getHeadingType(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getHeading2DegreesEntry_Value(), ecorePackage.getEDoubleObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(speedType2SpeedEntryEClass, Map.Entry.class, "SpeedType2SpeedEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSpeedType2SpeedEntry_Key(), this.getSpeedType(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpeedType2SpeedEntry_Value(), this.getSpeed(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(speedMapEClass, SpeedMap.class, "SpeedMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
 		initEClass(timeEClass, Time.class, "Time", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTime_Date(), ecorePackage.getEDate(), "date", null, 0, 1, Time.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTime_Timezone(), ecorePackage.getEString(), "timezone", null, 0, 1, Time.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(distanceEClass, Distance.class, "Distance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDistance_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDistance_Unit(), this.getLengthUnit(), "unit", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDistance_DistanceType(), this.getDistanceType(), "distanceType", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(compositeMeasurementEClass, CompositeMeasurement.class, "CompositeMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCompositeMeasurement_Measurements(), this.getMeasurement(), null, "measurements", null, 0, -1, CompositeMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(relativeSpeedEClass, RelativeSpeed.class, "RelativeSpeed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRelativeSpeed_Key(), this.getSpeedType(), "key", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRelativeSpeed_Value(), this.getSpeed(), null, "value", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(temperatureUnitEEnum, TemperatureUnit.class, "TemperatureUnit");
@@ -837,6 +851,11 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		addEEnumLiteral(speedTypeEEnum, SpeedType.UNKNOWN);
 		addEEnumLiteral(speedTypeEEnum, SpeedType.COG);
 		addEEnumLiteral(speedTypeEEnum, SpeedType.SPEEDTHOUGHWATER);
+
+		initEEnum(distanceTypeEEnum, DistanceType.class, "DistanceType");
+		addEEnumLiteral(distanceTypeEEnum, DistanceType.UNKNOWN);
+		addEEnumLiteral(distanceTypeEEnum, DistanceType.TRIP);
+		addEEnumLiteral(distanceTypeEEnum, DistanceType.TOTAL);
 	}
 
 } //PhysxPackageImpl

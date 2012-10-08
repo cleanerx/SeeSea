@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -95,6 +95,15 @@ public interface WeatherPackage extends EPackage {
 	int WIND_MEASUREMENT = 0;
 
 	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WIND_MEASUREMENT__SENSOR_ID = PhysxPackage.MEASUREMENT__SENSOR_ID;
+
+	/**
 	 * The feature id for the '<em><b>Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -102,6 +111,24 @@ public interface WeatherPackage extends EPackage {
 	 * @ordered
 	 */
 	int WIND_MEASUREMENT__TIME = PhysxPackage.MEASUREMENT__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WIND_MEASUREMENT__TIMEZONE = PhysxPackage.MEASUREMENT__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WIND_MEASUREMENT__VALID = PhysxPackage.MEASUREMENT__VALID;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -159,6 +186,15 @@ public interface WeatherPackage extends EPackage {
 	int BAROMETRIC_PRESSURE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BAROMETRIC_PRESSURE__SENSOR_ID = PhysxPackage.MEASUREMENT__SENSOR_ID;
+
+	/**
 	 * The feature id for the '<em><b>Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -166,6 +202,24 @@ public interface WeatherPackage extends EPackage {
 	 * @ordered
 	 */
 	int BAROMETRIC_PRESSURE__TIME = PhysxPackage.MEASUREMENT__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BAROMETRIC_PRESSURE__TIMEZONE = PhysxPackage.MEASUREMENT__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BAROMETRIC_PRESSURE__VALID = PhysxPackage.MEASUREMENT__VALID;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -205,6 +259,15 @@ public interface WeatherPackage extends EPackage {
 	int CLOUD_MEASUREMENT = 2;
 
 	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLOUD_MEASUREMENT__SENSOR_ID = PhysxPackage.MEASUREMENT__SENSOR_ID;
+
+	/**
 	 * The feature id for the '<em><b>Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -212,6 +275,24 @@ public interface WeatherPackage extends EPackage {
 	 * @ordered
 	 */
 	int CLOUD_MEASUREMENT__TIME = PhysxPackage.MEASUREMENT__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLOUD_MEASUREMENT__TIMEZONE = PhysxPackage.MEASUREMENT__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CLOUD_MEASUREMENT__VALID = PhysxPackage.MEASUREMENT__VALID;
 
 	/**
 	 * The feature id for the '<em><b>Cloud Coverage</b></em>' attribute.
@@ -251,6 +332,15 @@ public interface WeatherPackage extends EPackage {
 	int VISIBILITY = 3;
 
 	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIBILITY__SENSOR_ID = PhysxPackage.MEASUREMENT__SENSOR_ID;
+
+	/**
 	 * The feature id for the '<em><b>Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -258,6 +348,24 @@ public interface WeatherPackage extends EPackage {
 	 * @ordered
 	 */
 	int VISIBILITY__TIME = PhysxPackage.MEASUREMENT__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIBILITY__TIMEZONE = PhysxPackage.MEASUREMENT__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VISIBILITY__VALID = PhysxPackage.MEASUREMENT__VALID;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.

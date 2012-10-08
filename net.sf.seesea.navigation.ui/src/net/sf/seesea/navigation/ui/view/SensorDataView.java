@@ -39,16 +39,22 @@ import net.sf.seesea.navigation.ui.figures.GraphFigure;
 import net.sf.seesea.navigation.ui.figures.InstrumentContainerFigure;
 import net.sf.seesea.navigation.ui.figures.SingleLinedFigure;
 import net.sf.seesea.navigation.ui.listener.DepthFigureListener;
+import net.sf.seesea.navigation.ui.listener.LogFigureListener;
 import net.sf.seesea.navigation.ui.listener.PositionFigureListener;
+import net.sf.seesea.navigation.ui.listener.RelativeSpeedListener;
 import net.sf.seesea.navigation.ui.listener.SateliteQualityFigureListener;
-import net.sf.seesea.navigation.ui.listener.ShipMovementListener;
+import net.sf.seesea.navigation.ui.listener.HeadingListener;
 import net.sf.seesea.navigation.ui.listener.TimeFigureListener;
 import net.sf.seesea.navigation.ui.listener.WindSpeedFigureListener;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
+import net.sf.seesea.services.navigation.listener.IRelativeWindSpeedListener;
 import net.sf.seesea.services.navigation.listener.ISatelliteInfoListener;
-import net.sf.seesea.services.navigation.listener.ISpeedVectorListener;
+import net.sf.seesea.services.navigation.listener.IHeadingListener;
+import net.sf.seesea.services.navigation.listener.ISpeedListener;
 import net.sf.seesea.services.navigation.listener.ITimeListener;
+import net.sf.seesea.services.navigation.listener.ITotalLogListener;
+import net.sf.seesea.services.navigation.listener.ITripLogListener;
 import net.sf.seesea.services.navigation.listener.IWindListener;
 
 import org.eclipse.draw2d.FigureCanvas;
@@ -74,6 +80,9 @@ public class SensorDataView extends ViewPart {
 	private ServiceRegistration<?> sateliteRegistration;
 	private LocalResourceManager resourceManager;
 	private ServiceRegistration<?> timeRegistration;
+	private ServiceRegistration<?> tripRegistration;
+	private ServiceRegistration<?> totalTripRegistration;
+	private ServiceRegistration<?> speedListenerRegistration;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -152,7 +161,18 @@ public class SensorDataView extends ViewPart {
 
 		BarFigure barFigure = new BarFigure(resourceManager);
 		barFigure.setFontSize(fontSize);
-//		List<Double> heights = new ArrayList<Double>();
+
+		DescriptiveInstrumentFigure tripFigure = new DescriptiveInstrumentFigure();
+		tripFigure.setDescription(Messages.getString("SensorDataView.0")); //$NON-NLS-1$
+		tripFigure.setValue("---.- nm"); //$NON-NLS-1$
+		tripFigure.setFontSize(fontSize);
+
+		DescriptiveInstrumentFigure totalTripFigure = new DescriptiveInstrumentFigure();
+		totalTripFigure.setDescription(Messages.getString("SensorDataView.2")); //$NON-NLS-1$
+		totalTripFigure.setValue("---.- nm"); //$NON-NLS-1$
+		totalTripFigure.setFontSize(fontSize);
+
+		//		List<Double> heights = new ArrayList<Double>();
 //		for(int i = 0 ; i < 24; i++) {
 //			heights.add(Math.random() * 99.0);
 //		}
@@ -172,6 +192,8 @@ public class SensorDataView extends ViewPart {
 		instrumentContainerFigure.getChildArea().add(windSpeed);
 		instrumentContainerFigure.getChildArea().add(windDirection);
 		instrumentContainerFigure.getChildArea().add(barFigure);
+		instrumentContainerFigure.getChildArea().add(tripFigure);
+		instrumentContainerFigure.getChildArea().add(totalTripFigure);
 //		instrumentContainerFigure.getChildArea().add(compassFigure);
 		cog.getParent().getLayoutManager().setConstraint(cog, 2.0);
 		sog.getParent().getLayoutManager().setConstraint(sog, 2.0);
@@ -189,9 +211,12 @@ public class SensorDataView extends ViewPart {
 //		timeUpdateThread = new Thread(new TimeUpdater(timeFigure, timeFigureUTC, dateFigure));
 //		timeUpdateThread.start();
 		
-		ShipMovementListener shipMovementListener = new ShipMovementListener(cog, sog, mgk, fdw);
-		shipMovementRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ISpeedVectorListener.class.getName(), shipMovementListener, null);
-		
+		HeadingListener shipMovementListener = new HeadingListener(cog, mgk);
+		shipMovementRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IHeadingListener.class.getName(), shipMovementListener, null);
+
+		RelativeSpeedListener speedListener = new RelativeSpeedListener(sog, fdw);
+		speedListenerRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ISpeedListener.class.getName(), speedListener, null);
+
 		DepthFigureListener depthFigureListener = new DepthFigureListener(graphFigure);
 		depthRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class.getName(), depthFigureListener, null);
 		
@@ -203,6 +228,12 @@ public class SensorDataView extends ViewPart {
 		
 		TimeFigureListener timeListener = new TimeFigureListener(timeFigure, timeFigureUTC, dateFigure);
 		timeRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ITimeListener.class.getName(), timeListener, null);
+		
+		LogFigureListener logFigureListener = new LogFigureListener(totalTripFigure);
+		tripRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ITotalLogListener.class.getName(), logFigureListener, null);
+
+		LogFigureListener tripFigureListener = new LogFigureListener(tripFigure);
+		totalTripRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ITripLogListener.class.getName(), tripFigureListener, null);
 	}
 
 	/* (non-Javadoc)
@@ -217,11 +248,14 @@ public class SensorDataView extends ViewPart {
 	public void dispose() {
 		positionRegistration.unregister();
 		shipMovementRegistration.unregister();
+		speedListenerRegistration.unregister();
 		depthRegistration.unregister();
 		windRegistration.unregister();
 		sateliteRegistration.unregister();
 		timeRegistration.unregister();
 		timeUpdateThread.interrupt();
+		tripRegistration.unregister();
+		totalTripRegistration.unregister();
 		resourceManager.dispose();
 		super.dispose();
 	}

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -77,15 +77,6 @@ public interface PhysxFactory extends EFactory {
 	Heading createHeading();
 
 	/**
-	 * Returns a new object of class '<em>Ship Movement Vector</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Ship Movement Vector</em>'.
-	 * @generated
-	 */
-	ShipMovementVector createShipMovementVector();
-
-	/**
 	 * Returns a new object of class '<em>Relative Wind</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -113,15 +104,6 @@ public interface PhysxFactory extends EFactory {
 	SatellitesVisible createSatellitesVisible();
 
 	/**
-	 * Returns a new object of class '<em>Speed Map</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Speed Map</em>'.
-	 * @generated
-	 */
-	SpeedMap createSpeedMap();
-
-	/**
 	 * Returns a new object of class '<em>Time</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -129,6 +111,33 @@ public interface PhysxFactory extends EFactory {
 	 * @generated
 	 */
 	Time createTime();
+
+	/**
+	 * Returns a new object of class '<em>Distance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Distance</em>'.
+	 * @generated
+	 */
+	Distance createDistance();
+
+	/**
+	 * Returns a new object of class '<em>Composite Measurement</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Composite Measurement</em>'.
+	 * @generated
+	 */
+	CompositeMeasurement createCompositeMeasurement();
+
+	/**
+	 * Returns a new object of class '<em>Relative Speed</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Relative Speed</em>'.
+	 * @generated
+	 */
+	RelativeSpeed createRelativeSpeed();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,11 +29,10 @@ package net.sf.seesea.rendering.chart.editpart;
 import net.sf.seesea.model.core.geo.GeoPackage;
 import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.osm.World;
-import net.sf.seesea.model.core.physx.HeadingType;
-import net.sf.seesea.model.core.physx.ShipMovementVector;
+import net.sf.seesea.model.core.physx.Heading;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.figures.ShipFigure;
-import net.sf.seesea.services.navigation.listener.ISpeedVectorListener;
+import net.sf.seesea.services.navigation.listener.IHeadingListener;
 import net.sf.seesea.tileservice.ITileProvider;
 import net.sf.seesea.tileservice.projections.IMapProjection;
 
@@ -49,9 +48,9 @@ import org.osgi.framework.ServiceRegistration;
 /**
  * 
  */
-public class ShipPositionEditPart extends TransactionalEditPart  implements Adapter, ISpeedVectorListener {
+public class ShipPositionEditPart extends TransactionalEditPart  implements Adapter, IHeadingListener {
 
-	private ServiceRegistration<ISpeedVectorListener> serviceRegistration;
+	private ServiceRegistration<IHeadingListener> serviceRegistration;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
@@ -75,7 +74,7 @@ public class ShipPositionEditPart extends TransactionalEditPart  implements Adap
 		super.activate();
 		((GeoPosition) getModel()).eContainer().eAdapters().add(this);
 		((GeoPosition) getModel()).eAdapters().add(this);
-		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(ISpeedVectorListener.class, this, null);
+		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IHeadingListener.class, this, null);
 	}
 
 	@Override
@@ -148,9 +147,11 @@ public class ShipPositionEditPart extends TransactionalEditPart  implements Adap
 		
 	}
 
-	public void notify(ShipMovementVector sensorData) {
+	public void notify(Heading sensorData, String source) {
 		// FIXME: handle different positions
-		Double cog = sensorData.getHeadings().get(HeadingType.COG);
+//		if(sensorData)
+//		
+//		Double cog = sensorData.getHeadings().get(HeadingType.COG);
 //		System.out.println(cog);
 //		((ShipFigure)getFigure()).setCOGOrientation(cog);
 //		sensorData.getHeadings().get(HeadingType.COG);

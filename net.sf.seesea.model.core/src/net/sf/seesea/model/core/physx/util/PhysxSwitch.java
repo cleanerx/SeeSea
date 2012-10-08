@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -129,12 +129,6 @@ public class PhysxSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PhysxPackage.SHIP_MOVEMENT_VECTOR: {
-				ShipMovementVector shipMovementVector = (ShipMovementVector)theEObject;
-				T result = caseShipMovementVector(shipMovementVector);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case PhysxPackage.RELATIVE_WIND: {
 				RelativeWind relativeWind = (RelativeWind)theEObject;
 				T result = caseRelativeWind(relativeWind);
@@ -148,36 +142,48 @@ public class PhysxSwitch<T> extends Switch<T> {
 			case PhysxPackage.SATELLITE_INFO: {
 				SatelliteInfo satelliteInfo = (SatelliteInfo)theEObject;
 				T result = caseSatelliteInfo(satelliteInfo);
+				if (result == null) result = caseMeasurement(satelliteInfo);
+				if (result == null) result = caseModelObject(satelliteInfo);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case PhysxPackage.SATELLITES_VISIBLE: {
 				SatellitesVisible satellitesVisible = (SatellitesVisible)theEObject;
 				T result = caseSatellitesVisible(satellitesVisible);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PhysxPackage.HEADING2_DEGREES_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<HeadingType, Double> heading2DegreesEntry = (Map.Entry<HeadingType, Double>)theEObject;
-				T result = caseHeading2DegreesEntry(heading2DegreesEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PhysxPackage.SPEED_TYPE2_SPEED_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<SpeedType, Speed> speedType2SpeedEntry = (Map.Entry<SpeedType, Speed>)theEObject;
-				T result = caseSpeedType2SpeedEntry(speedType2SpeedEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PhysxPackage.SPEED_MAP: {
-				SpeedMap speedMap = (SpeedMap)theEObject;
-				T result = caseSpeedMap(speedMap);
+				if (result == null) result = caseMeasurement(satellitesVisible);
+				if (result == null) result = caseModelObject(satellitesVisible);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case PhysxPackage.TIME: {
 				Time time = (Time)theEObject;
 				T result = caseTime(time);
+				if (result == null) result = caseMeasurement(time);
+				if (result == null) result = caseModelObject(time);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PhysxPackage.DISTANCE: {
+				Distance distance = (Distance)theEObject;
+				T result = caseDistance(distance);
+				if (result == null) result = caseMeasurement(distance);
+				if (result == null) result = caseModelObject(distance);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PhysxPackage.COMPOSITE_MEASUREMENT: {
+				CompositeMeasurement compositeMeasurement = (CompositeMeasurement)theEObject;
+				T result = caseCompositeMeasurement(compositeMeasurement);
+				if (result == null) result = caseMeasurement(compositeMeasurement);
+				if (result == null) result = caseModelObject(compositeMeasurement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PhysxPackage.RELATIVE_SPEED: {
+				RelativeSpeed relativeSpeed = (RelativeSpeed)theEObject;
+				T result = caseRelativeSpeed(relativeSpeed);
+				if (result == null) result = caseMeasurement(relativeSpeed);
+				if (result == null) result = caseModelObject(relativeSpeed);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -246,21 +252,6 @@ public class PhysxSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Ship Movement Vector</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Ship Movement Vector</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseShipMovementVector(ShipMovementVector object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Relative Wind</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -306,51 +297,6 @@ public class PhysxSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Heading2 Degrees Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Heading2 Degrees Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseHeading2DegreesEntry(Map.Entry<HeadingType, Double> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Speed Type2 Speed Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Speed Type2 Speed Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSpeedType2SpeedEntry(Map.Entry<SpeedType, Speed> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Speed Map</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Speed Map</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSpeedMap(SpeedMap object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Time</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -362,6 +308,51 @@ public class PhysxSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTime(Time object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Distance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Distance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDistance(Distance object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Composite Measurement</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Composite Measurement</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCompositeMeasurement(CompositeMeasurement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Relative Speed</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Relative Speed</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRelativeSpeed(RelativeSpeed object) {
 		return null;
 	}
 

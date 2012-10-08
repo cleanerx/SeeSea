@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -97,7 +97,7 @@ public class TrackRecorder implements IPositionListener {
 
 	}
 
-	public void notify(MeasuredPosition3D sensorData) {
+	public void notify(MeasuredPosition3D sensorData, String source) {
 		World world = _model.loadModel();
 		List<Track> routes = world.getTracksContainer().getTracks();
 		Track currentTrack = routes.get(routes.size() - 1);

@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -47,10 +47,14 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 
 	private final List<InputStream> inputStreams;
 	private List<NMEAEventListener> nmeaEventListeners;
+	private boolean _paused;
+	private boolean _stopped;
 
 	public NMEA0183TrackSimulator(List<InputStream> fileInputStream) {
 		inputStreams = fileInputStream;
 		nmeaEventListeners = new ArrayList<NMEAEventListener>(2);
+		_paused = false;
+		_stopped = false;
 	}
 
 	public void run() {
@@ -67,8 +71,15 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 				currentLine = ""; //$NON-NLS-1$
 				while (currentLine != null) {
 					currentLine = in.readLine();
+					while(_paused && !_stopped) {
+						Thread.sleep(1000);
+					}
+					if(_stopped) {
+						serviceRegistration.unregister();
+						return;
+					}
 					if (currentLine != null) {
-						NMEAEvent nmeaEvent = new NMEAEvent(currentLine);
+						NMEAEvent nmeaEvent = new NMEAEvent(currentLine, null);
 						try {
 							for (NMEAEventListener eventListener : nmeaEventListeners) {
 								eventListener.receiveNMEAEvent(nmeaEvent);
@@ -76,7 +87,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 						} catch (NMEAProcessingException e) {
 							Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
 						}
-						Thread.sleep(10);
+//						Thread.sleep(10);
 					}
 				}
 			}
@@ -108,7 +119,25 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 	@Override
 	public void close() throws IOException {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
+	public void pause() {
+		_paused = true;
+	}
+	
+	public void resume() {
+		_paused = false;
+	}
+	
+	public void stop() {
+		_stopped = true;
+	}
+	
+//	public static NMEA0183TrackSimulator getInstance() {
+//		if(_instance ==  null) {
+//			_instance = new NM
+//		}
+//		return this;
+//	}
+	
 }

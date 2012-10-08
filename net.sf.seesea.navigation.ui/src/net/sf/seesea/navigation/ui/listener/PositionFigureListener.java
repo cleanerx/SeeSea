@@ -53,7 +53,7 @@ public class PositionFigureListener extends InvalidatingFigureListener<MeasuredP
 	 * @see net.sf.seesea.services.navigation.listener.IDataListener#notify(java.lang.Object)
 	 */
 	@Override
-	public void notify(final MeasuredPosition3D sensorData) {
+	public void notify(final MeasuredPosition3D sensorData, String source) {
 		
 		Display.getDefault().asyncExec(new Runnable() {
 			

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -211,7 +211,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getInstruments_HeadingAndVelocity() {
+	public EReference getInstruments_SatellitesVisible() {
 		return (EReference)instrumentsEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -220,17 +220,8 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getInstruments_SatellitesVisible() {
-		return (EReference)instrumentsEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getInstruments_WindVector() {
-		return (EReference)instrumentsEClass.getEStructuralFeatures().get(4);
+		return (EReference)instrumentsEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -267,7 +258,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		instrumentsEClass = createEClass(INSTRUMENTS);
 		createEReference(instrumentsEClass, INSTRUMENTS__POSITION);
 		createEReference(instrumentsEClass, INSTRUMENTS__WATER_TEMPERATURE);
-		createEReference(instrumentsEClass, INSTRUMENTS__HEADING_AND_VELOCITY);
 		createEReference(instrumentsEClass, INSTRUMENTS__SATELLITES_VISIBLE);
 		createEReference(instrumentsEClass, INSTRUMENTS__WIND_VECTOR);
 	}
@@ -316,7 +306,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		initEClass(instrumentsEClass, Instruments.class, "Instruments", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getInstruments_Position(), theGeoPackage.getMeasuredPosition3D(), null, "position", null, 0, 1, Instruments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInstruments_WaterTemperature(), thePhysxPackage.getTemperature(), null, "waterTemperature", null, 0, 1, Instruments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getInstruments_HeadingAndVelocity(), thePhysxPackage.getShipMovementVector(), null, "headingAndVelocity", null, 0, 1, Instruments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInstruments_SatellitesVisible(), thePhysxPackage.getSatellitesVisible(), null, "satellitesVisible", null, 0, 1, Instruments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInstruments_WindVector(), theWeatherPackage.getWindMeasurement(), null, "windVector", null, 0, 1, Instruments.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}

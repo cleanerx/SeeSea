@@ -28,30 +28,23 @@ package net.sf.seesea.navigation.ui.listener;
 
 import java.text.DecimalFormat;
 
-import net.sf.seesea.model.core.physx.HeadingType;
-import net.sf.seesea.model.core.physx.ShipMovementVector;
+import net.sf.seesea.model.core.physx.RelativeSpeed;
 import net.sf.seesea.model.core.physx.Speed;
 import net.sf.seesea.model.core.physx.SpeedType;
 import net.sf.seesea.model.core.physx.SpeedUnit;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
-import net.sf.seesea.services.navigation.listener.ISpeedVectorListener;
+import net.sf.seesea.services.navigation.listener.ISpeedListener;
 
 import org.eclipse.swt.widgets.Display;
 
 /**
  * 
  */
-public class ShipMovementListener extends InvalidatingFigureListener<ShipMovementVector> implements ISpeedVectorListener {
+public class RelativeSpeedListener extends InvalidatingFigureListener<RelativeSpeed> implements ISpeedListener {
 	
-	private final DescriptiveInstrumentFigure _courseOverGround;
-
-	private final DecimalFormat degreeDecimalFormat;
-
 	private final DescriptiveInstrumentFigure speedOverGround;
 
 	private final DecimalFormat speedDecimalFormat;
-
-	private final DescriptiveInstrumentFigure mgk;
 
 	private final DescriptiveInstrumentFigure fdw;
 
@@ -61,13 +54,10 @@ public class ShipMovementListener extends InvalidatingFigureListener<ShipMovemen
 	 * @param fdw 
 	 * @param mgk 
 	 */
-	public ShipMovementListener(DescriptiveInstrumentFigure courseOverGround, DescriptiveInstrumentFigure sog, DescriptiveInstrumentFigure mgk, DescriptiveInstrumentFigure fdw) {
-		super(courseOverGround, sog, fdw, mgk);
-		_courseOverGround = courseOverGround;
+	public RelativeSpeedListener(DescriptiveInstrumentFigure sog, DescriptiveInstrumentFigure fdw) {
+		super(sog, fdw);
 		speedOverGround = sog;
 		this.fdw = fdw;
-		this.mgk = mgk;
-		degreeDecimalFormat = new DecimalFormat("000"); //$NON-NLS-1$
 		speedDecimalFormat = new DecimalFormat("##0.0"); //$NON-NLS-1$
 	}
 
@@ -75,36 +65,26 @@ public class ShipMovementListener extends InvalidatingFigureListener<ShipMovemen
 	 * @see net.sf.seesea.services.navigation.listener.IDataListener#notify(java.lang.Object)
 	 */
 	@Override
-	public void notify(final ShipMovementVector sensorData) {
+	public void notify(final RelativeSpeed sensorData, String source) {
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
 			public void run() {
-				Double cog = sensorData.getHeadings().get(HeadingType.COG);
-				if(cog != null) {
-					_courseOverGround.setValue(degreeDecimalFormat.format(cog) + "\u00B0"); //$NON-NLS-1$
-					_courseOverGround.repaint();
-				}
-				Double mgkValue = sensorData.getHeadings().get(HeadingType.MAGNETIC);
-				if(mgk != null && mgkValue != null) {
-					mgk.setValue(degreeDecimalFormat.format(mgkValue) + "\u00B0"); //$NON-NLS-1$
-					mgk.repaint();
-				}
 				String speedUnit = ""; //$NON-NLS-1$
-				if(!sensorData.getSpeeds().isEmpty()) {
-					Speed speed = sensorData.getSpeeds().get(SpeedType.COG);
-					if(speed != null) {
-						if(SpeedUnit.N.equals(speed.getSpeedUnit())) {
+				if(SpeedType.COG.equals(sensorData.getKey())) {
+					if(sensorData.getValue() != null) {
+						if(SpeedUnit.N.equals(sensorData.getValue().getSpeedUnit())) {
 							speedUnit = "kn"; //$NON-NLS-1$
-						} else if(SpeedUnit.K.equals(speed.getSpeedUnit())) {
+						} else if(SpeedUnit.K.equals(sensorData.getValue().getSpeedUnit())) {
 							speedUnit = "km/h"; //$NON-NLS-1$
-						} else if(SpeedUnit.M.equals(speed.getSpeedUnit())) {
+						} else if(SpeedUnit.M.equals(sensorData.getValue().getSpeedUnit())) {
 							speedUnit = "m/h"; //$NON-NLS-1$
 						} 
-						speedOverGround.setValue(speedDecimalFormat.format(speed.getSpeed()) + speedUnit);
+						speedOverGround.setValue(speedDecimalFormat.format(sensorData.getValue().getSpeed()) + speedUnit);
 						speedOverGround.repaint();
 					}
-					speed = sensorData.getSpeeds().get(SpeedType.SPEEDTHOUGHWATER);
+				} else if(SpeedType.SPEEDTHOUGHWATER.equals(sensorData.getKey())) {
+					Speed speed = sensorData.getValue();
 					if(speed != null) {
 						if(SpeedUnit.N.equals(speed.getSpeedUnit())) {
 							speedUnit = "kn"; //$NON-NLS-1$

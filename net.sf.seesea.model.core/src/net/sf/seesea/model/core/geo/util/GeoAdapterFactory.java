@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,7 @@ import net.sf.seesea.model.core.geo.*;
 
 import net.sf.seesea.model.core.geo.osm.Area;
 import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.model.core.physx.Time;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 

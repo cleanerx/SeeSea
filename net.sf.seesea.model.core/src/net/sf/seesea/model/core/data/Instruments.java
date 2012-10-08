@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,6 @@ import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.GeoPosition3D;
 
 import net.sf.seesea.model.core.physx.SatellitesVisible;
-import net.sf.seesea.model.core.physx.ShipMovementVector;
 import net.sf.seesea.model.core.physx.Temperature;
 
 import net.sf.seesea.model.core.weather.WindMeasurement;
@@ -51,7 +50,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getPosition <em>Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getWaterTemperature <em>Water Temperature</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.data.Instruments#getHeadingAndVelocity <em>Heading And Velocity</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getSatellitesVisible <em>Satellites Visible</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getWindVector <em>Wind Vector</em>}</li>
  * </ul>
@@ -113,32 +111,6 @@ public interface Instruments extends ModelObject {
 	 * @generated
 	 */
 	void setWaterTemperature(Temperature value);
-
-	/**
-	 * Returns the value of the '<em><b>Heading And Velocity</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Heading And Velocity</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Heading And Velocity</em>' containment reference.
-	 * @see #setHeadingAndVelocity(ShipMovementVector)
-	 * @see net.sf.seesea.model.core.data.DataPackage#getInstruments_HeadingAndVelocity()
-	 * @model containment="true"
-	 * @generated
-	 */
-	ShipMovementVector getHeadingAndVelocity();
-
-	/**
-	 * Sets the value of the '{@link net.sf.seesea.model.core.data.Instruments#getHeadingAndVelocity <em>Heading And Velocity</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Heading And Velocity</em>' containment reference.
-	 * @see #getHeadingAndVelocity()
-	 * @generated
-	 */
-	void setHeadingAndVelocity(ShipMovementVector value);
 
 	/**
 	 * Returns the value of the '<em><b>Satellites Visible</b></em>' containment reference.

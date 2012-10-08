@@ -57,7 +57,7 @@ public class WindSpeedFigureListener extends InvalidatingFigureListener<WindMeas
 	}
 
 	@Override
-	public void notify(final WindMeasurement sensorData) {
+	public void notify(final WindMeasurement sensorData, String source) {
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

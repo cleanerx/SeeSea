@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class SatellitesVisibleImpl extends EObjectImpl implements SatellitesVisible {
+public class SatellitesVisibleImpl extends MeasurementImpl implements SatellitesVisible {
 	/**
 	 * The cached value of the '{@link #getSatelliteInfo() <em>Satellite Info</em>}' containment reference list.
 	 * <!-- begin-user-doc -->

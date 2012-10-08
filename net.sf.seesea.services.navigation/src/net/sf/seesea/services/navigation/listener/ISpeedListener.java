@@ -26,18 +26,13 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.services.navigation.provider;
+package net.sf.seesea.services.navigation.listener;
 
-import net.sf.seesea.services.navigation.listener.IHeadingListener;
+import net.sf.seesea.model.core.physx.RelativeSpeed;
 
 /**
  * 
  */
-public interface IShipMovementVectorProvider extends IDataProvider {
-
-	public void attachShipMovementListener(IHeadingListener listener);
-
-	public void detachShipMovementListener(IHeadingListener listener);
-
+public interface ISpeedListener extends IDataListener<RelativeSpeed> {
 	
 }

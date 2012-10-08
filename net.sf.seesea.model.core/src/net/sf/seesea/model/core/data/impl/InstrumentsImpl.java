@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,6 @@ import net.sf.seesea.model.core.geo.GeoPosition3D;
 
 import net.sf.seesea.model.core.impl.ModelObjectImpl;
 import net.sf.seesea.model.core.physx.SatellitesVisible;
-import net.sf.seesea.model.core.physx.ShipMovementVector;
 import net.sf.seesea.model.core.physx.Temperature;
 
 import net.sf.seesea.model.core.weather.WindMeasurement;
@@ -60,7 +59,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.data.impl.InstrumentsImpl#getPosition <em>Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.impl.InstrumentsImpl#getWaterTemperature <em>Water Temperature</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.data.impl.InstrumentsImpl#getHeadingAndVelocity <em>Heading And Velocity</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.impl.InstrumentsImpl#getSatellitesVisible <em>Satellites Visible</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.impl.InstrumentsImpl#getWindVector <em>Wind Vector</em>}</li>
  * </ul>
@@ -88,16 +86,6 @@ public class InstrumentsImpl extends ModelObjectImpl implements Instruments {
 	 * @ordered
 	 */
 	protected Temperature waterTemperature;
-
-	/**
-	 * The cached value of the '{@link #getHeadingAndVelocity() <em>Heading And Velocity</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getHeadingAndVelocity()
-	 * @generated
-	 * @ordered
-	 */
-	protected ShipMovementVector headingAndVelocity;
 
 	/**
 	 * The cached value of the '{@link #getSatellitesVisible() <em>Satellites Visible</em>}' containment reference.
@@ -224,49 +212,6 @@ public class InstrumentsImpl extends ModelObjectImpl implements Instruments {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ShipMovementVector getHeadingAndVelocity() {
-		return headingAndVelocity;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetHeadingAndVelocity(ShipMovementVector newHeadingAndVelocity, NotificationChain msgs) {
-		ShipMovementVector oldHeadingAndVelocity = headingAndVelocity;
-		headingAndVelocity = newHeadingAndVelocity;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY, oldHeadingAndVelocity, newHeadingAndVelocity);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setHeadingAndVelocity(ShipMovementVector newHeadingAndVelocity) {
-		if (newHeadingAndVelocity != headingAndVelocity) {
-			NotificationChain msgs = null;
-			if (headingAndVelocity != null)
-				msgs = ((InternalEObject)headingAndVelocity).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY, null, msgs);
-			if (newHeadingAndVelocity != null)
-				msgs = ((InternalEObject)newHeadingAndVelocity).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY, null, msgs);
-			msgs = basicSetHeadingAndVelocity(newHeadingAndVelocity, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY, newHeadingAndVelocity, newHeadingAndVelocity));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public SatellitesVisible getSatellitesVisible() {
 		return satellitesVisible;
 	}
@@ -358,8 +303,6 @@ public class InstrumentsImpl extends ModelObjectImpl implements Instruments {
 		switch (featureID) {
 			case DataPackage.INSTRUMENTS__WATER_TEMPERATURE:
 				return basicSetWaterTemperature(null, msgs);
-			case DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY:
-				return basicSetHeadingAndVelocity(null, msgs);
 			case DataPackage.INSTRUMENTS__SATELLITES_VISIBLE:
 				return basicSetSatellitesVisible(null, msgs);
 			case DataPackage.INSTRUMENTS__WIND_VECTOR:
@@ -381,8 +324,6 @@ public class InstrumentsImpl extends ModelObjectImpl implements Instruments {
 				return basicGetPosition();
 			case DataPackage.INSTRUMENTS__WATER_TEMPERATURE:
 				return getWaterTemperature();
-			case DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY:
-				return getHeadingAndVelocity();
 			case DataPackage.INSTRUMENTS__SATELLITES_VISIBLE:
 				return getSatellitesVisible();
 			case DataPackage.INSTRUMENTS__WIND_VECTOR:
@@ -404,9 +345,6 @@ public class InstrumentsImpl extends ModelObjectImpl implements Instruments {
 				return;
 			case DataPackage.INSTRUMENTS__WATER_TEMPERATURE:
 				setWaterTemperature((Temperature)newValue);
-				return;
-			case DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY:
-				setHeadingAndVelocity((ShipMovementVector)newValue);
 				return;
 			case DataPackage.INSTRUMENTS__SATELLITES_VISIBLE:
 				setSatellitesVisible((SatellitesVisible)newValue);
@@ -432,9 +370,6 @@ public class InstrumentsImpl extends ModelObjectImpl implements Instruments {
 			case DataPackage.INSTRUMENTS__WATER_TEMPERATURE:
 				setWaterTemperature((Temperature)null);
 				return;
-			case DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY:
-				setHeadingAndVelocity((ShipMovementVector)null);
-				return;
 			case DataPackage.INSTRUMENTS__SATELLITES_VISIBLE:
 				setSatellitesVisible((SatellitesVisible)null);
 				return;
@@ -457,8 +392,6 @@ public class InstrumentsImpl extends ModelObjectImpl implements Instruments {
 				return position != null;
 			case DataPackage.INSTRUMENTS__WATER_TEMPERATURE:
 				return waterTemperature != null;
-			case DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY:
-				return headingAndVelocity != null;
 			case DataPackage.INSTRUMENTS__SATELLITES_VISIBLE:
 				return satellitesVisible != null;
 			case DataPackage.INSTRUMENTS__WIND_VECTOR:

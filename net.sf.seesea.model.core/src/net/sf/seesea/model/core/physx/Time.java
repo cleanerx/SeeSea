@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@ package net.sf.seesea.model.core.physx;
 
 import java.util.Date;
 
+import net.sf.seesea.model.core.ModelObject;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -39,69 +40,11 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Time</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * <ul>
- *   <li>{@link net.sf.seesea.model.core.physx.Time#getDate <em>Date</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.physx.Time#getTimezone <em>Timezone</em>}</li>
- * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.physx.PhysxPackage#getTime()
  * @model
  * @generated
  */
-public interface Time extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Date</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Date</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Date</em>' attribute.
-	 * @see #setDate(Date)
-	 * @see net.sf.seesea.model.core.physx.PhysxPackage#getTime_Date()
-	 * @model
-	 * @generated
-	 */
-	Date getDate();
-
-	/**
-	 * Sets the value of the '{@link net.sf.seesea.model.core.physx.Time#getDate <em>Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Date</em>' attribute.
-	 * @see #getDate()
-	 * @generated
-	 */
-	void setDate(Date value);
-
-	/**
-	 * Returns the value of the '<em><b>Timezone</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Timezone</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Timezone</em>' attribute.
-	 * @see #setTimezone(String)
-	 * @see net.sf.seesea.model.core.physx.PhysxPackage#getTime_Timezone()
-	 * @model
-	 * @generated
-	 */
-	String getTimezone();
-
-	/**
-	 * Sets the value of the '{@link net.sf.seesea.model.core.physx.Time#getTimezone <em>Timezone</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Timezone</em>' attribute.
-	 * @see #getTimezone()
-	 * @generated
-	 */
-	void setTimezone(String value);
+public interface Time extends Measurement {
 
 } // Time

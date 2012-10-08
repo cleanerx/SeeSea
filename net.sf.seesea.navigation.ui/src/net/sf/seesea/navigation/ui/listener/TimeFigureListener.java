@@ -54,20 +54,20 @@ public class TimeFigureListener extends InvalidatingFigureListener<Time> impleme
 	}
 
 	@Override
-	public void notify(final Time time) {
+	public void notify(final Time time, String source) {
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
 			public void run() {
 				dateFormatGmt.setTimeZone(TimeZone.getDefault());
-				timeFigure.setTime(dateFormatGmt.format(time.getDate()));
+				timeFigure.setTime(dateFormatGmt.format(time.getTime()));
 				timeFigure.repaint();
 				
 				dateFormatGmt.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
-				timeFigureUTC.setTime(dateFormatGmt.format(time.getDate()));
+				timeFigureUTC.setTime(dateFormatGmt.format(time.getTime()));
 				timeFigureUTC.repaint();
 				
-				String currentDate = dateFormat.format(time.getDate());
+				String currentDate = dateFormat.format(time.getTime());
 				if(!currentDate.equals(dateFigure.getTime())) {
 					dateFigure.setTime(currentDate);
 					dateFigure.repaint();

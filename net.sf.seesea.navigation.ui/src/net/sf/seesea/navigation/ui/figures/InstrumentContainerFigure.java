@@ -59,7 +59,7 @@ public InstrumentContainerFigure() {
     setMinimumSize(minSize);
     setPreferredSize(minSize);
     setForegroundColor(ColorConstants.white);
-    setBounds(new Rectangle(0,0,300,500));
+    setBounds(new Rectangle(0,0,280,700));
 //    GridLayout gridLayout = new GridLayout(2, true);
 //    gridLayout.verticalSpacing = 5;
     

@@ -26,6 +26,7 @@
  */
 package org.qbang.rxtx;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -69,4 +70,8 @@ public class RXTXActivator extends AbstractUIPlugin  {
 		return plugin;
 	}
 
+	@Override
+	protected void initializeDefaultPreferences(IPreferenceStore store) {
+		store.setValue("manualPorts",false);
+	}
 }

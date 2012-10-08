@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,10 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link net.sf.seesea.model.core.physx.Measurement#getSensorID <em>Sensor ID</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Measurement#getTime <em>Time</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.physx.Measurement#getTimezone <em>Timezone</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.physx.Measurement#isValid <em>Valid</em>}</li>
  * </ul>
  * </p>
  *
@@ -51,6 +54,32 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface Measurement extends ModelObject {
+
+	/**
+	 * Returns the value of the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sensor ID</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sensor ID</em>' attribute.
+	 * @see #setSensorID(String)
+	 * @see net.sf.seesea.model.core.physx.PhysxPackage#getMeasurement_SensorID()
+	 * @model
+	 * @generated
+	 */
+	String getSensorID();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.physx.Measurement#getSensorID <em>Sensor ID</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sensor ID</em>' attribute.
+	 * @see #getSensorID()
+	 * @generated
+	 */
+	void setSensorID(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Time</b></em>' attribute.
@@ -77,4 +106,56 @@ public interface Measurement extends ModelObject {
 	 * @generated
 	 */
 	void setTime(Date value);
+
+	/**
+	 * Returns the value of the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Timezone</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Timezone</em>' attribute.
+	 * @see #setTimezone(String)
+	 * @see net.sf.seesea.model.core.physx.PhysxPackage#getMeasurement_Timezone()
+	 * @model
+	 * @generated
+	 */
+	String getTimezone();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.physx.Measurement#getTimezone <em>Timezone</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Timezone</em>' attribute.
+	 * @see #getTimezone()
+	 * @generated
+	 */
+	void setTimezone(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Valid</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Valid</em>' attribute.
+	 * @see #setValid(boolean)
+	 * @see net.sf.seesea.model.core.physx.PhysxPackage#getMeasurement_Valid()
+	 * @model
+	 * @generated
+	 */
+	boolean isValid();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.physx.Measurement#isValid <em>Valid</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Valid</em>' attribute.
+	 * @see #isValid()
+	 * @generated
+	 */
+	void setValid(boolean value);
 } // Measurement

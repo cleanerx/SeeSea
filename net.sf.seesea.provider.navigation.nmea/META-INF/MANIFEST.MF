@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.osgi.services;bundle-version="3.2.100",
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.provider.navigation.nmea,
+ net.sf.seesea.provider.navigation.nmea.v183,
  net.sf.seesea.provider.navigation.nmea.v2000,
  net.sf.seesea.provider.navigation.nmea.v2000.datadictionary,
  net.sf.seesea.provider.navigation.nmea.v2000.pgn

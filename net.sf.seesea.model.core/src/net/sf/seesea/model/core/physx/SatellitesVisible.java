@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface SatellitesVisible extends EObject {
+public interface SatellitesVisible extends Measurement {
 	/**
 	 * Returns the value of the '<em><b>Satellite Info</b></em>' containment reference list.
 	 * The list contents are of type {@link net.sf.seesea.model.core.physx.SatelliteInfo}.

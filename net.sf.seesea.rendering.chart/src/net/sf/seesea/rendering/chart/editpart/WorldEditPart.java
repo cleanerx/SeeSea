@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -293,7 +293,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		/* (non-Javadoc)
 		 * @see net.sf.seesea.services.navigation.listener.IDataListener#notify(java.lang.Object)
 		 */
-		public void notify(final MeasuredPosition3D sensorData) {
+		public void notify(final MeasuredPosition3D sensorData, String source) {
 			
 			if(System.currentTimeMillis() - lastUpdate > 1000) {
 				Display.getDefault().asyncExec(new Runnable() {
@@ -307,19 +307,21 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 							
 							BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
 							ServiceReference<ITileProvider> serviceReference = bundleContext.getServiceReference(ITileProvider.class);
-							ITileProvider tileProvider =  (ITileProvider) bundleContext.getService(serviceReference);
-							org.eclipse.swt.graphics.Point tileSize = tileProvider.getTileSize();
-							if(zoomInOnFirstPosition) {
-								scalableZoomableRootEditPart.setZoom(tileProvider.getMaxZoomLevel());
-								zoomInOnFirstPosition = false;
-							}
-							int zoom = scalableZoomableRootEditPart.getZoom();
+							if(serviceReference != null) {
+								ITileProvider tileProvider =  (ITileProvider) bundleContext.getService(serviceReference);
+								org.eclipse.swt.graphics.Point tileSize = tileProvider.getTileSize();
+								if(zoomInOnFirstPosition) {
+									scalableZoomableRootEditPart.setZoom(tileProvider.getMaxZoomLevel());
+									zoomInOnFirstPosition = false;
+								}
+								int zoom = scalableZoomableRootEditPart.getZoom();
 //						org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(scrollingPosition.x, scrollingPosition.y);
-							org.eclipse.swt.graphics.Point point = tileProvider.getProjection().project(getWorld().getMapCenterPosition(), (1<< zoom) *  tileSize.x);
-							Rectangle clientArea = ((MapLayer)getFigure()).getPaintBounds();
-							int x = point.x - clientArea.width / 2;
-							int y = point.y - clientArea.height / 2;
-							((GeospatialGraphicalViewer)getViewer()).setScrollingPosition(new org.eclipse.draw2d.geometry.Point(x, y));
+								org.eclipse.swt.graphics.Point point = tileProvider.getProjection().project(getWorld().getMapCenterPosition(), (1<< zoom) *  tileSize.x);
+								Rectangle clientArea = ((MapLayer)getFigure()).getPaintBounds();
+								int x = point.x - clientArea.width / 2;
+								int y = point.y - clientArea.height / 2;
+								((GeospatialGraphicalViewer)getViewer()).setScrollingPosition(new org.eclipse.draw2d.geometry.Point(x, y));
+							}
 						} catch (ExecutionException e) {
 							Logger.getLogger(WorldEditPart.class).error("Failed to set position", e); //$NON-NLS-1$
 						}

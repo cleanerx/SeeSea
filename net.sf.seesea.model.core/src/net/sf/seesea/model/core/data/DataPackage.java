@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -141,22 +141,13 @@ public interface DataPackage extends EPackage {
 	int INSTRUMENTS__WATER_TEMPERATURE = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Heading And Velocity</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INSTRUMENTS__HEADING_AND_VELOCITY = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Satellites Visible</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INSTRUMENTS__SATELLITES_VISIBLE = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 3;
+	int INSTRUMENTS__SATELLITES_VISIBLE = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Wind Vector</b></em>' containment reference.
@@ -165,7 +156,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INSTRUMENTS__WIND_VECTOR = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 4;
+	int INSTRUMENTS__WIND_VECTOR = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Instruments</em>' class.
@@ -174,7 +165,7 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INSTRUMENTS_FEATURE_COUNT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 5;
+	int INSTRUMENTS_FEATURE_COUNT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 4;
 
 
 	/**
@@ -229,17 +220,6 @@ public interface DataPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getInstruments_WaterTemperature();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link net.sf.seesea.model.core.data.Instruments#getHeadingAndVelocity <em>Heading And Velocity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Heading And Velocity</em>'.
-	 * @see net.sf.seesea.model.core.data.Instruments#getHeadingAndVelocity()
-	 * @see #getInstruments()
-	 * @generated
-	 */
-	EReference getInstruments_HeadingAndVelocity();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link net.sf.seesea.model.core.data.Instruments#getSatellitesVisible <em>Satellites Visible</em>}'.
@@ -328,14 +308,6 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EReference INSTRUMENTS__WATER_TEMPERATURE = eINSTANCE.getInstruments_WaterTemperature();
-
-		/**
-		 * The meta object literal for the '<em><b>Heading And Velocity</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INSTRUMENTS__HEADING_AND_VELOCITY = eINSTANCE.getInstruments_HeadingAndVelocity();
 
 		/**
 		 * The meta object literal for the '<em><b>Satellites Visible</b></em>' containment reference feature.

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -89,14 +89,13 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 			case PhysxPackage.TEMPERATURE: return createTemperature();
 			case PhysxPackage.SPEED: return createSpeed();
 			case PhysxPackage.HEADING: return createHeading();
-			case PhysxPackage.SHIP_MOVEMENT_VECTOR: return createShipMovementVector();
 			case PhysxPackage.RELATIVE_WIND: return createRelativeWind();
 			case PhysxPackage.SATELLITE_INFO: return createSatelliteInfo();
 			case PhysxPackage.SATELLITES_VISIBLE: return createSatellitesVisible();
-			case PhysxPackage.HEADING2_DEGREES_ENTRY: return (EObject)createHeading2DegreesEntry();
-			case PhysxPackage.SPEED_TYPE2_SPEED_ENTRY: return (EObject)createSpeedType2SpeedEntry();
-			case PhysxPackage.SPEED_MAP: return createSpeedMap();
 			case PhysxPackage.TIME: return createTime();
+			case PhysxPackage.DISTANCE: return createDistance();
+			case PhysxPackage.COMPOSITE_MEASUREMENT: return createCompositeMeasurement();
+			case PhysxPackage.RELATIVE_SPEED: return createRelativeSpeed();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -122,6 +121,8 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 				return createLengthUnitFromString(eDataType, initialValue);
 			case PhysxPackage.SPEED_TYPE:
 				return createSpeedTypeFromString(eDataType, initialValue);
+			case PhysxPackage.DISTANCE_TYPE:
+				return createDistanceTypeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -147,6 +148,8 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 				return convertLengthUnitToString(eDataType, instanceValue);
 			case PhysxPackage.SPEED_TYPE:
 				return convertSpeedTypeToString(eDataType, instanceValue);
+			case PhysxPackage.DISTANCE_TYPE:
+				return convertDistanceTypeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -187,16 +190,6 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ShipMovementVector createShipMovementVector() {
-		ShipMovementVectorImpl shipMovementVector = new ShipMovementVectorImpl();
-		return shipMovementVector;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public RelativeWind createRelativeWind() {
 		RelativeWindImpl relativeWind = new RelativeWindImpl();
 		return relativeWind;
@@ -227,39 +220,39 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<HeadingType, Double> createHeading2DegreesEntry() {
-		Heading2DegreesEntryImpl heading2DegreesEntry = new Heading2DegreesEntryImpl();
-		return heading2DegreesEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Map.Entry<SpeedType, Speed> createSpeedType2SpeedEntry() {
-		SpeedType2SpeedEntryImpl speedType2SpeedEntry = new SpeedType2SpeedEntryImpl();
-		return speedType2SpeedEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpeedMap createSpeedMap() {
-		SpeedMapImpl speedMap = new SpeedMapImpl();
-		return speedMap;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Time createTime() {
 		TimeImpl time = new TimeImpl();
 		return time;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Distance createDistance() {
+		DistanceImpl distance = new DistanceImpl();
+		return distance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CompositeMeasurement createCompositeMeasurement() {
+		CompositeMeasurementImpl compositeMeasurement = new CompositeMeasurementImpl();
+		return compositeMeasurement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RelativeSpeed createRelativeSpeed() {
+		RelativeSpeedImpl relativeSpeed = new RelativeSpeedImpl();
+		return relativeSpeed;
 	}
 
 	/**
@@ -379,6 +372,26 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 * @generated
 	 */
 	public String convertSpeedTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DistanceType createDistanceTypeFromString(EDataType eDataType, String initialValue) {
+		DistanceType result = DistanceType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertDistanceTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

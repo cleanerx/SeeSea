@@ -128,7 +128,9 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 	}
 	
 	private List<CommPortIdentifier> getPorts() {
+		boolean manualPorts = RXTXActivator.getDefault().getPreferenceStore().getBoolean("manualPorts"); //$NON-NLS-1$
 		List<CommPortIdentifier> cports = new ArrayList<CommPortIdentifier>();
+		
 		Enumeration<?> ports = CommPortIdentifier.getPortIdentifiers();
 		while (ports.hasMoreElements()) {
 			CommPortIdentifier portId = (CommPortIdentifier)ports.nextElement();

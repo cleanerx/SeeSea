@@ -54,7 +54,7 @@ public class SateliteQualityFigureListener extends InvalidatingFigureListener<Sa
 	 * @see net.sf.seesea.services.navigation.listener.IDataListener#notify(java.lang.Object)
 	 */
 	@Override
-	public void notify(final SatellitesVisible sensorData) {
+	public void notify(final SatellitesVisible sensorData, String source) {
 		
 		Display.getDefault().asyncExec(new Runnable() {
 			

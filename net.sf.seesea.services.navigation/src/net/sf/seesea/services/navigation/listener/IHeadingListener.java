@@ -28,11 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.services.navigation.listener;
 
-import net.sf.seesea.model.core.physx.ShipMovementVector;
+import net.sf.seesea.model.core.physx.Heading;
 
 /**
  * 
  */
-public interface ISpeedVectorListener extends IDataListener<ShipMovementVector> {
+public interface IHeadingListener extends IDataListener<Heading> {
 	
 }

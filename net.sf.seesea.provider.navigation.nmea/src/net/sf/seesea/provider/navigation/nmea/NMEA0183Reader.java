@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -63,10 +63,11 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 		super(nmeaStreamProvider.getInputStream());
 		streamProvider = nmeaStreamProvider;
 		nmeaEventListeners = new ArrayList<NMEAEventListener>(1);
-		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(INMEAReader.class.getName(), this, null);
-
-		Hashtable<String, String> properties = new Hashtable<String, String>();
+		Hashtable<String, Object> properties = new Hashtable<String, Object>();
+		properties.put("hardware", true); //$NON-NLS-1$
 		properties.put(PROVIDER_NAME, nmeaStreamProvider.getName());
+		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(INMEAReader.class.getName(), this, properties);
+
 		Logger.getLogger(getClass()).info("Start reading from device"); //$NON-NLS-1$
 //		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(NMEA0183Reader.class.getName(), this, properties);
 	}
@@ -117,7 +118,7 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 				case '\n':
 					if(stringBuffer != null) {
 						stringBuffer.append((char) i);
-						NMEAEvent nmeaEvent = new NMEAEvent(stringBuffer.toString());
+						NMEAEvent nmeaEvent = new NMEAEvent(stringBuffer.toString(), streamProvider.getName());
 						for (NMEAEventListener nmeaEventListener : nmeaEventListeners) {
 							nmeaEventListener.receiveNMEAEvent(nmeaEvent);
 						}

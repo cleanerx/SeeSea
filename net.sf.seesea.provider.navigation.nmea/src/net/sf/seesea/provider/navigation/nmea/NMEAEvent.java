@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -39,8 +39,9 @@ public class NMEAEvent {
 	/**
 	 * 
 	 * @param nmeaMessageContent
+	 * @param streamProviderName TODO
 	 */
-	public NMEAEvent(String nmeaMessageContent) {
+	public NMEAEvent(String nmeaMessageContent, String streamProviderName) {
 		this.nmeaMessageContent = nmeaMessageContent;
 	}
 

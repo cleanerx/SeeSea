@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -628,6 +628,15 @@ public interface GeoPackage extends EPackage {
 	int MEASURED_POSITION3_D = 13;
 
 	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POSITION3_D__SENSOR_ID = PhysxPackage.MEASUREMENT__SENSOR_ID;
+
+	/**
 	 * The feature id for the '<em><b>Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -635,6 +644,24 @@ public interface GeoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MEASURED_POSITION3_D__TIME = PhysxPackage.MEASUREMENT__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POSITION3_D__TIMEZONE = PhysxPackage.MEASUREMENT__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POSITION3_D__VALID = PhysxPackage.MEASUREMENT__VALID;
 
 	/**
 	 * The feature id for the '<em><b>Longitude</b></em>' containment reference.
@@ -907,6 +934,15 @@ public interface GeoPackage extends EPackage {
 	int DEPTH = 20;
 
 	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPTH__SENSOR_ID = PhysxPackage.MEASUREMENT__SENSOR_ID;
+
+	/**
 	 * The feature id for the '<em><b>Time</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -914,6 +950,24 @@ public interface GeoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DEPTH__TIME = PhysxPackage.MEASUREMENT__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPTH__TIMEZONE = PhysxPackage.MEASUREMENT__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DEPTH__VALID = PhysxPackage.MEASUREMENT__VALID;
 
 	/**
 	 * The feature id for the '<em><b>Measurement Position</b></em>' attribute.

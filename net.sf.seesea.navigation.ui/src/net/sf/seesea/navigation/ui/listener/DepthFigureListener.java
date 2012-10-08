@@ -46,7 +46,7 @@ public class DepthFigureListener extends InvalidatingFigureListener<Depth> imple
 	}
 	
 	@Override
-	public void notify(final Depth sensorData) {
+	public void notify(final Depth sensorData, String source) {
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

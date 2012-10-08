@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -114,10 +114,6 @@ public class PhysxAdapterFactory extends AdapterFactoryImpl {
 				return createMeasurementAdapter();
 			}
 			@Override
-			public Adapter caseShipMovementVector(ShipMovementVector object) {
-				return createShipMovementVectorAdapter();
-			}
-			@Override
 			public Adapter caseRelativeWind(RelativeWind object) {
 				return createRelativeWindAdapter();
 			}
@@ -130,20 +126,20 @@ public class PhysxAdapterFactory extends AdapterFactoryImpl {
 				return createSatellitesVisibleAdapter();
 			}
 			@Override
-			public Adapter caseHeading2DegreesEntry(Map.Entry<HeadingType, Double> object) {
-				return createHeading2DegreesEntryAdapter();
-			}
-			@Override
-			public Adapter caseSpeedType2SpeedEntry(Map.Entry<SpeedType, Speed> object) {
-				return createSpeedType2SpeedEntryAdapter();
-			}
-			@Override
-			public Adapter caseSpeedMap(SpeedMap object) {
-				return createSpeedMapAdapter();
-			}
-			@Override
 			public Adapter caseTime(Time object) {
 				return createTimeAdapter();
+			}
+			@Override
+			public Adapter caseDistance(Distance object) {
+				return createDistanceAdapter();
+			}
+			@Override
+			public Adapter caseCompositeMeasurement(CompositeMeasurement object) {
+				return createCompositeMeasurementAdapter();
+			}
+			@Override
+			public Adapter caseRelativeSpeed(RelativeSpeed object) {
+				return createRelativeSpeedAdapter();
 			}
 			@Override
 			public Adapter caseModelObject(ModelObject object) {
@@ -226,20 +222,6 @@ public class PhysxAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.ShipMovementVector <em>Ship Movement Vector</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see net.sf.seesea.model.core.physx.ShipMovementVector
-	 * @generated
-	 */
-	public Adapter createShipMovementVectorAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.RelativeWind <em>Relative Wind</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -282,48 +264,6 @@ public class PhysxAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Heading2 Degrees Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map.Entry
-	 * @generated
-	 */
-	public Adapter createHeading2DegreesEntryAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Speed Type2 Speed Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map.Entry
-	 * @generated
-	 */
-	public Adapter createSpeedType2SpeedEntryAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.SpeedMap <em>Speed Map</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see net.sf.seesea.model.core.physx.SpeedMap
-	 * @generated
-	 */
-	public Adapter createSpeedMapAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.Time <em>Time</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -334,6 +274,48 @@ public class PhysxAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTimeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.Distance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see net.sf.seesea.model.core.physx.Distance
+	 * @generated
+	 */
+	public Adapter createDistanceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.CompositeMeasurement <em>Composite Measurement</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see net.sf.seesea.model.core.physx.CompositeMeasurement
+	 * @generated
+	 */
+	public Adapter createCompositeMeasurementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.RelativeSpeed <em>Relative Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see net.sf.seesea.model.core.physx.RelativeSpeed
+	 * @generated
+	 */
+	public Adapter createRelativeSpeedAdapter() {
 		return null;
 	}
 

@@ -44,8 +44,9 @@ public interface IDataListener<SensorDataType> {
 	 * notifies this listener that sennsor data is present
 	 * 
 	 * @param sensorData
+	 * @param source the data source that contributed this information. This may be used by consumers to listen only to a restricted set of sensors
 	 */
-	public void notify(SensorDataType sensorData);
+	public void notify(SensorDataType sensorData, String source);
 
 	/**
 	 * 

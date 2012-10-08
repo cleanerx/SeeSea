@@ -10,11 +10,9 @@ import java.util.Locale;
 
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.model.core.geo.Depth;
-import net.sf.seesea.model.core.geo.GeoPosition3D;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.RelativeDepthMeasurementPosition;
 import net.sf.seesea.model.core.physx.Measurement;
-import net.sf.seesea.model.core.physx.ShipMovementVector;
 
 public class NMEA0183Writer implements IDataWriter {
 	
@@ -44,7 +42,9 @@ public class NMEA0183Writer implements IDataWriter {
 				StringBuffer message = new StringBuffer();
 				// $--RMC,hhmmss.ss,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,xxxx,x.x,a*hh<CR><LF>
 				MeasuredPosition3D position3d = (MeasuredPosition3D) measurement;
-				message.append("$IIGLL,");
+				message.append('$');
+				message.append(measurement.getSensorID());
+				message.append("GLL,"); //$NON-NLS-1$
 				double decDegree = position3d.getLatitude().getDecimalDegree();
 				boolean south = decDegree < 0;
 				decDegree = Math.signum(decDegree);
@@ -54,9 +54,9 @@ public class NMEA0183Writer implements IDataWriter {
 				decDegree = Math.abs(decDegree);
 				message.append(minuteFormat.format(decDegree));
 				if(south) {
-					message.append(",S,");
+					message.append(",S,"); //$NON-NLS-1$
 				} else {
-					message.append(",N,");
+					message.append(",N,"); //$NON-NLS-1$
 				}
 
 				decDegree = position3d.getLatitude().getDecimalDegree();
@@ -68,17 +68,21 @@ public class NMEA0183Writer implements IDataWriter {
 				decDegree = Math.abs(decDegree);
 				message.append(minuteFormat.format(decDegree));
 				if(west) {
-					message.append(",W,");
+					message.append(",W,"); //$NON-NLS-1$
 				} else {
-					message.append(",E,");
+					message.append(",E,"); //$NON-NLS-1$
 				}
 				message.append(simpleTimeFormat.format(position3d.getTime()));
-				message.append(",A,");
+				if(measurement.isValid()) {
+					message.append(",A,"); //$NON-NLS-1$
+				} else {
+					message.append(",V,"); //$NON-NLS-1$
+				}
 				message.append('*');
 				printWriter.append(getCheckSum(message.toString()));
-				printWriter.append("\r\n");
-			} else if(measurement instanceof ShipMovementVector) {
-				
+				printWriter.append("\r\n"); //$NON-NLS-1$
+//			} else if(measurement instanceof ShipMovementVector) {
+//				
 			} else if(measurement instanceof Depth) {
 				StringBuffer message = new StringBuffer();
 				// $--DBT,x.x,f,x.x,M,x.x,F*hh<CR><LF>
@@ -86,17 +90,18 @@ public class NMEA0183Writer implements IDataWriter {
 				// $--DBK,x.x,f,x.x,M,x.x,F*hh<CR><LF>
 				Depth depth = (Depth) measurement;
 				// FIXME: sensor id would be nice
-				message.append("$II");
+				message.append('$');
+				message.append(measurement.getSensorID());
 				RelativeDepthMeasurementPosition depthMeasurementPosition = depth.getMeasurementPosition();
 				switch (depthMeasurementPosition) {
 				case KEEL:
-					message.append("DBK,");
+					message.append("DBK,"); //$NON-NLS-1$
 					break;
 				case SURFACE:
-					message.append("DBS,");
+					message.append("DBS,"); //$NON-NLS-1$
 					break;
 				case TRANSDUCER:
-					message.append("DBS,");
+					message.append("DBS,"); //$NON-NLS-1$
 					break;
 				}
 				double depthValue = depth.getDepth();
@@ -111,6 +116,7 @@ public class NMEA0183Writer implements IDataWriter {
 				printWriter.append("\r\n");
 			}
 		}
+		printWriter.flush();
 	}
 
 	

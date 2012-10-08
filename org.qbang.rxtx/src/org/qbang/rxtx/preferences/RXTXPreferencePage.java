@@ -67,6 +67,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 
 public class RXTXPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
+	public static final String MANUAL_PORTS = "manualPorts";
 	private Table table;
 	private Text addPort;
 	private Set<String> comPorts;
@@ -83,7 +84,7 @@ public class RXTXPreferencePage extends PreferencePage implements
 		btnAutomaticallyScanSerial.setBounds(10, 10, 175, 16);
 		btnAutomaticallyScanSerial.setText("Automatically scan serial ports");
 
-		Boolean manualPorts = getPreferenceStore().getBoolean("manualPorts");
+		Boolean manualPorts = getPreferenceStore().getBoolean(MANUAL_PORTS);
 		btnAutomaticallyScanSerial.setSelection(!manualPorts);
 
 		final TableViewer tableViewer = new TableViewer(composite, SWT.BORDER);
@@ -145,8 +146,8 @@ public class RXTXPreferencePage extends PreferencePage implements
 		addPort.setEnabled(manualPorts);
 
 		final Button btnNewButton = new Button(composite, SWT.CENTER);
-		btnNewButton.setImage(ResourceManager.getPluginImage("org.eclipse.ui",
-				"/icons/full/obj16/add_obj.gif"));
+		btnNewButton.setImage(ResourceManager.getPluginImage("org.eclipse.ui", //$NON-NLS-1$
+				"/icons/full/obj16/add_obj.gif")); //$NON-NLS-1$
 		btnNewButton.setBounds(324, 185, 23, 23);
 		btnNewButton.setEnabled(manualPorts);
 
@@ -221,7 +222,7 @@ public class RXTXPreferencePage extends PreferencePage implements
 		} else {
 			System.setProperty("gnu.io.rxtx.SerialPorts", systemPorts);
 		}
-		getPreferenceStore().setValue("manualPorts",
+		getPreferenceStore().setValue(MANUAL_PORTS,
 				!btnAutomaticallyScanSerial.getSelection());
 
 		return super.performOk();

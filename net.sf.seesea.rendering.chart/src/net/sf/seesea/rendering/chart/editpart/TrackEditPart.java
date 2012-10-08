@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -104,7 +104,7 @@ public class TrackEditPart extends TransactionalEditPart implements Adapter {
 		/* (non-Javadoc)
 		 * @see net.sf.seesea.services.navigation.listener.IDataListener#notify(java.lang.Object)
 		 */
-		public void notify(final Depth sensorData) {
+		public void notify(final Depth sensorData, String source) {
 			Display.getDefault().asyncExec(new Runnable() {
 				
 				public void run() {
@@ -146,9 +146,11 @@ public class TrackEditPart extends TransactionalEditPart implements Adapter {
 			MeasuredPosition3D position3d = (MeasuredPosition3D) notification.getNewValue();
 			BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
 			ServiceReference serviceReference = bundleContext.getServiceReference(ITileProvider.class.getName());
-			IMapProjection service = ((ITileProvider)bundleContext.getService(serviceReference)).getProjection();
-			org.eclipse.swt.graphics.Point project = service.project(position3d,Integer.MAX_VALUE);
-			((TrackDataFigure)getFigure()).addRelativePoint(new Point(project.x, project.y));
+			if(serviceReference != null) {
+				IMapProjection service = ((ITileProvider)bundleContext.getService(serviceReference)).getProjection();
+				org.eclipse.swt.graphics.Point project = service.project(position3d,Integer.MAX_VALUE);
+				((TrackDataFigure)getFigure()).addRelativePoint(new Point(project.x, project.y));
+			}
 		}
 //		Display.getDefault().asyncExec(new Runnable() {
 //			
