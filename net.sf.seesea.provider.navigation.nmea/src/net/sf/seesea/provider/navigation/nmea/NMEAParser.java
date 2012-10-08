@@ -146,7 +146,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 						listener.providerDisabled(getProviderName());
 					}
 				} else if (dataListener.isAssignableFrom(ISpeedListener.class)) {
-					for (IHeadingListener listener : _headingListeners) {
+					for (ISpeedListener listener : _speedListeners) {
 						listener.providerDisabled(getProviderName());
 					}
 				} else if (dataListener
