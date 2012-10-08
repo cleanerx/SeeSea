@@ -1,48 +1,41 @@
 /**
- * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-    * Neither the name of the <organization> nor the
-      names of its contributors may be used to endorse or promote products
-      derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * </copyright>
- *
- * $Id$
+ * Copyright (c) 2010-2012, Jens KÃ¼bler
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
  */
 package net.sf.seesea.model.core.physx.provider;
 
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import net.sf.seesea.model.core.physx.PhysxPackage;
-
-import net.sf.seesea.model.core.provider.XEditPlugin;
+import net.sf.seesea.model.core.physx.RelativeSpeed;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -52,17 +45,16 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link java.util.Map.Entry} object.
+ * This is the item provider adapter for a {@link net.sf.seesea.model.core.physx.RelativeSpeed} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SpeedType2SpeedEntryItemProvider
-	extends ItemProviderAdapter
+public class RelativeSpeedItemProvider
+	extends MeasurementItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -75,7 +67,7 @@ public class SpeedType2SpeedEntryItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpeedType2SpeedEntryItemProvider(AdapterFactory adapterFactory) {
+	public RelativeSpeedItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -107,9 +99,9 @@ public class SpeedType2SpeedEntryItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SpeedType2SpeedEntry_key_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpeedType2SpeedEntry_key_feature", "_UI_SpeedType2SpeedEntry_type"),
-				 PhysxPackage.Literals.SPEED_TYPE2_SPEED_ENTRY__KEY,
+				 getString("_UI_RelativeSpeed_key_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RelativeSpeed_key_feature", "_UI_RelativeSpeed_type"),
+				 PhysxPackage.Literals.RELATIVE_SPEED__KEY,
 				 true,
 				 false,
 				 false,
@@ -129,9 +121,9 @@ public class SpeedType2SpeedEntryItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SpeedType2SpeedEntry_value_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpeedType2SpeedEntry_value_feature", "_UI_SpeedType2SpeedEntry_type"),
-				 PhysxPackage.Literals.SPEED_TYPE2_SPEED_ENTRY__VALUE,
+				 getString("_UI_RelativeSpeed_value_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RelativeSpeed_value_feature", "_UI_RelativeSpeed_type"),
+				 PhysxPackage.Literals.RELATIVE_SPEED__VALUE,
 				 true,
 				 false,
 				 true,
@@ -141,14 +133,14 @@ public class SpeedType2SpeedEntryItemProvider
 	}
 
 	/**
-	 * This returns SpeedType2SpeedEntry.gif.
+	 * This returns RelativeSpeed.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SpeedType2SpeedEntry"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/RelativeSpeed"));
 	}
 
 	/**
@@ -159,8 +151,10 @@ public class SpeedType2SpeedEntryItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Map.Entry<?, ?> speedType2SpeedEntry = (Map.Entry<?, ?>)object;
-		return "" + speedType2SpeedEntry.getKey() + " -> " + speedType2SpeedEntry.getValue();
+		String label = ((RelativeSpeed)object).getSensorID();
+		return label == null || label.length() == 0 ?
+			getString("_UI_RelativeSpeed_type") :
+			getString("_UI_RelativeSpeed_type") + " " + label;
 	}
 
 	/**
@@ -174,8 +168,8 @@ public class SpeedType2SpeedEntryItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Map.Entry.class)) {
-			case PhysxPackage.SPEED_TYPE2_SPEED_ENTRY__KEY:
+		switch (notification.getFeatureID(RelativeSpeed.class)) {
+			case PhysxPackage.RELATIVE_SPEED__KEY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -192,17 +186,6 @@ public class SpeedType2SpeedEntryItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return XEditPlugin.INSTANCE;
 	}
 
 }

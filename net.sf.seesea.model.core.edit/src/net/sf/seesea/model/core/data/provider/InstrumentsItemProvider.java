@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -134,7 +134,6 @@ public class InstrumentsItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(DataPackage.Literals.INSTRUMENTS__WATER_TEMPERATURE);
-			childrenFeatures.add(DataPackage.Literals.INSTRUMENTS__HEADING_AND_VELOCITY);
 			childrenFeatures.add(DataPackage.Literals.INSTRUMENTS__SATELLITES_VISIBLE);
 			childrenFeatures.add(DataPackage.Literals.INSTRUMENTS__WIND_VECTOR);
 		}
@@ -189,7 +188,6 @@ public class InstrumentsItemProvider
 
 		switch (notification.getFeatureID(Instruments.class)) {
 			case DataPackage.INSTRUMENTS__WATER_TEMPERATURE:
-			case DataPackage.INSTRUMENTS__HEADING_AND_VELOCITY:
 			case DataPackage.INSTRUMENTS__SATELLITES_VISIBLE:
 			case DataPackage.INSTRUMENTS__WIND_VECTOR:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -213,11 +211,6 @@ public class InstrumentsItemProvider
 			(createChildParameter
 				(DataPackage.Literals.INSTRUMENTS__WATER_TEMPERATURE,
 				 PhysxFactory.eINSTANCE.createTemperature()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(DataPackage.Literals.INSTRUMENTS__HEADING_AND_VELOCITY,
-				 PhysxFactory.eINSTANCE.createShipMovementVector()));
 
 		newChildDescriptors.add
 			(createChildParameter

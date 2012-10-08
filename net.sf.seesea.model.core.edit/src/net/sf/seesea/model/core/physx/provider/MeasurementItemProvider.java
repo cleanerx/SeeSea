@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -91,9 +91,34 @@ public class MeasurementItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addSensorIDPropertyDescriptor(object);
 			addTimePropertyDescriptor(object);
+			addTimezonePropertyDescriptor(object);
+			addValidPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Sensor ID feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSensorIDPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Measurement_sensorID_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Measurement_sensorID_feature", "_UI_Measurement_type"),
+				 PhysxPackage.Literals.MEASUREMENT__SENSOR_ID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -119,6 +144,50 @@ public class MeasurementItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Timezone feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTimezonePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Measurement_timezone_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Measurement_timezone_feature", "_UI_Measurement_type"),
+				 PhysxPackage.Literals.MEASUREMENT__TIMEZONE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Valid feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addValidPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Measurement_valid_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Measurement_valid_feature", "_UI_Measurement_type"),
+				 PhysxPackage.Literals.MEASUREMENT__VALID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -126,8 +195,7 @@ public class MeasurementItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((Measurement)object).getTime();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((Measurement)object).getSensorID();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Measurement_type") :
 			getString("_UI_Measurement_type") + " " + label;
@@ -145,7 +213,10 @@ public class MeasurementItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Measurement.class)) {
+			case PhysxPackage.MEASUREMENT__SENSOR_ID:
 			case PhysxPackage.MEASUREMENT__TIME:
+			case PhysxPackage.MEASUREMENT__TIMEZONE:
+			case PhysxPackage.MEASUREMENT__VALID:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

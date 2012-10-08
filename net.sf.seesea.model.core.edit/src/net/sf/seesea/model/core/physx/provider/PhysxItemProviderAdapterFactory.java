@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -169,29 +169,6 @@ public class PhysxItemProviderAdapterFactory extends PhysxAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.ShipMovementVector} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ShipMovementVectorItemProvider shipMovementVectorItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link net.sf.seesea.model.core.physx.ShipMovementVector}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createShipMovementVectorAdapter() {
-		if (shipMovementVectorItemProvider == null) {
-			shipMovementVectorItemProvider = new ShipMovementVectorItemProvider(this);
-		}
-
-		return shipMovementVectorItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.RelativeWind} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -261,75 +238,6 @@ public class PhysxItemProviderAdapterFactory extends PhysxAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected Heading2DegreesEntryItemProvider heading2DegreesEntryItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link java.util.Map.Entry}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createHeading2DegreesEntryAdapter() {
-		if (heading2DegreesEntryItemProvider == null) {
-			heading2DegreesEntryItemProvider = new Heading2DegreesEntryItemProvider(this);
-		}
-
-		return heading2DegreesEntryItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SpeedType2SpeedEntryItemProvider speedType2SpeedEntryItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link java.util.Map.Entry}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSpeedType2SpeedEntryAdapter() {
-		if (speedType2SpeedEntryItemProvider == null) {
-			speedType2SpeedEntryItemProvider = new SpeedType2SpeedEntryItemProvider(this);
-		}
-
-		return speedType2SpeedEntryItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.SpeedMap} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SpeedMapItemProvider speedMapItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link net.sf.seesea.model.core.physx.SpeedMap}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSpeedMapAdapter() {
-		if (speedMapItemProvider == null) {
-			speedMapItemProvider = new SpeedMapItemProvider(this);
-		}
-
-		return speedMapItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.Time} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -350,6 +258,75 @@ public class PhysxItemProviderAdapterFactory extends PhysxAdapterFactory impleme
 		}
 
 		return timeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.Distance} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DistanceItemProvider distanceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link net.sf.seesea.model.core.physx.Distance}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDistanceAdapter() {
+		if (distanceItemProvider == null) {
+			distanceItemProvider = new DistanceItemProvider(this);
+		}
+
+		return distanceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.CompositeMeasurement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CompositeMeasurementItemProvider compositeMeasurementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link net.sf.seesea.model.core.physx.CompositeMeasurement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCompositeMeasurementAdapter() {
+		if (compositeMeasurementItemProvider == null) {
+			compositeMeasurementItemProvider = new CompositeMeasurementItemProvider(this);
+		}
+
+		return compositeMeasurementItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.RelativeSpeed} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RelativeSpeedItemProvider relativeSpeedItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link net.sf.seesea.model.core.physx.RelativeSpeed}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRelativeSpeedAdapter() {
+		if (relativeSpeedItemProvider == null) {
+			relativeSpeedItemProvider = new RelativeSpeedItemProvider(this);
+		}
+
+		return relativeSpeedItemProvider;
 	}
 
 	/**
@@ -454,14 +431,13 @@ public class PhysxItemProviderAdapterFactory extends PhysxAdapterFactory impleme
 		if (temperatureItemProvider != null) temperatureItemProvider.dispose();
 		if (speedItemProvider != null) speedItemProvider.dispose();
 		if (headingItemProvider != null) headingItemProvider.dispose();
-		if (shipMovementVectorItemProvider != null) shipMovementVectorItemProvider.dispose();
 		if (relativeWindItemProvider != null) relativeWindItemProvider.dispose();
 		if (satelliteInfoItemProvider != null) satelliteInfoItemProvider.dispose();
 		if (satellitesVisibleItemProvider != null) satellitesVisibleItemProvider.dispose();
-		if (heading2DegreesEntryItemProvider != null) heading2DegreesEntryItemProvider.dispose();
-		if (speedType2SpeedEntryItemProvider != null) speedType2SpeedEntryItemProvider.dispose();
-		if (speedMapItemProvider != null) speedMapItemProvider.dispose();
 		if (timeItemProvider != null) timeItemProvider.dispose();
+		if (distanceItemProvider != null) distanceItemProvider.dispose();
+		if (compositeMeasurementItemProvider != null) compositeMeasurementItemProvider.dispose();
+		if (relativeSpeedItemProvider != null) relativeSpeedItemProvider.dispose();
 	}
 
 }

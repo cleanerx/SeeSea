@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -172,8 +172,7 @@ public class MeasuredPosition3DItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((MeasuredPosition3D)object).getTime();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((MeasuredPosition3D)object).getSensorID();
 		return label == null || label.length() == 0 ?
 			getString("_UI_MeasuredPosition3D_type") :
 			getString("_UI_MeasuredPosition3D_type") + " " + label;

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@ package net.sf.seesea.model.core.physx.provider;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.seesea.model.core.physx.PhysxFactory;
@@ -63,7 +64,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class SatellitesVisibleItemProvider
-	extends ItemProviderAdapter
+	extends MeasurementItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -144,7 +145,10 @@ public class SatellitesVisibleItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_SatellitesVisible_type");
+		String label = ((SatellitesVisible)object).getSensorID();
+		return label == null || label.length() == 0 ?
+			getString("_UI_SatellitesVisible_type") :
+			getString("_UI_SatellitesVisible_type") + " " + label;
 	}
 
 	/**
@@ -181,17 +185,6 @@ public class SatellitesVisibleItemProvider
 			(createChildParameter
 				(PhysxPackage.Literals.SATELLITES_VISIBLE__SATELLITE_INFO,
 				 PhysxFactory.eINSTANCE.createSatelliteInfo()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return XEditPlugin.INSTANCE;
 	}
 
 }

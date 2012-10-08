@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -161,8 +161,7 @@ public class CloudMeasurementItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((CloudMeasurement)object).getTime();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((CloudMeasurement)object).getSensorID();
 		return label == null || label.length() == 0 ?
 			getString("_UI_CloudMeasurement_type") :
 			getString("_UI_CloudMeasurement_type") + " " + label;

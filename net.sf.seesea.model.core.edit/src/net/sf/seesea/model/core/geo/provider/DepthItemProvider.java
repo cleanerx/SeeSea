@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -161,8 +161,7 @@ public class DepthItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((Depth)object).getTime();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((Depth)object).getSensorID();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Depth_type") :
 			getString("_UI_Depth_type") + " " + label;

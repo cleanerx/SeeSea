@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -212,6 +212,36 @@ public class SeriesItemProvider
 			(createChildParameter
 				(DataPackage.Literals.SERIES__MEASUREMENT,
 				 PhysxFactory.eINSTANCE.createRelativeWind()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 PhysxFactory.eINSTANCE.createSatelliteInfo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 PhysxFactory.eINSTANCE.createSatellitesVisible()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 PhysxFactory.eINSTANCE.createTime()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 PhysxFactory.eINSTANCE.createDistance()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 PhysxFactory.eINSTANCE.createCompositeMeasurement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 PhysxFactory.eINSTANCE.createRelativeSpeed()));
 
 		newChildDescriptors.add
 			(createChildParameter
