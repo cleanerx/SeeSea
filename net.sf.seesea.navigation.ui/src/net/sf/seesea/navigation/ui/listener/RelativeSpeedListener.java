@@ -46,18 +46,18 @@ public class RelativeSpeedListener extends InvalidatingFigureListener<RelativeSp
 
 	private final DecimalFormat speedDecimalFormat;
 
-	private final DescriptiveInstrumentFigure fdw;
+	private final SpeedType speedType;
 
 	/**
 	 * @param courseOverGround 
-	 * @param sog 
+	 * @param relativeSpeed 
 	 * @param fdw 
 	 * @param mgk 
 	 */
-	public RelativeSpeedListener(DescriptiveInstrumentFigure sog, DescriptiveInstrumentFigure fdw) {
-		super(sog, fdw);
-		speedOverGround = sog;
-		this.fdw = fdw;
+	public RelativeSpeedListener(DescriptiveInstrumentFigure relativeSpeed, SpeedType speedType) {
+		super(relativeSpeed);
+		speedOverGround = relativeSpeed;
+		this.speedType = speedType;
 		speedDecimalFormat = new DecimalFormat("##0.0"); //$NON-NLS-1$
 	}
 
@@ -71,7 +71,7 @@ public class RelativeSpeedListener extends InvalidatingFigureListener<RelativeSp
 			@Override
 			public void run() {
 				String speedUnit = ""; //$NON-NLS-1$
-				if(SpeedType.COG.equals(sensorData.getKey())) {
+				if(speedType.equals(sensorData.getKey())) {
 					if(sensorData.getValue() != null) {
 						if(SpeedUnit.N.equals(sensorData.getValue().getSpeedUnit())) {
 							speedUnit = "kn"; //$NON-NLS-1$
@@ -83,20 +83,6 @@ public class RelativeSpeedListener extends InvalidatingFigureListener<RelativeSp
 						speedOverGround.setValue(speedDecimalFormat.format(sensorData.getValue().getSpeed()) + speedUnit);
 						speedOverGround.repaint();
 					}
-				} else if(SpeedType.SPEEDTHOUGHWATER.equals(sensorData.getKey())) {
-					Speed speed = sensorData.getValue();
-					if(speed != null) {
-						if(SpeedUnit.N.equals(speed.getSpeedUnit())) {
-							speedUnit = "kn"; //$NON-NLS-1$
-						} else if(SpeedUnit.K.equals(speed.getSpeedUnit())) {
-							speedUnit = "km/h"; //$NON-NLS-1$
-						} else if(SpeedUnit.M.equals(speed.getSpeedUnit())) {
-							speedUnit = "m/h"; //$NON-NLS-1$
-						} 
-						fdw.setValue(speedDecimalFormat.format(speed.getSpeed()) + speedUnit);
-						fdw.repaint();
-					}
-					
 				}
 			}
 		});

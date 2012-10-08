@@ -40,22 +40,22 @@ import org.eclipse.swt.widgets.Display;
  */
 public class HeadingListener extends InvalidatingFigureListener<Heading> implements IHeadingListener {
 	
-	private final DescriptiveInstrumentFigure _courseOverGround;
-
 	private final DecimalFormat degreeDecimalFormat;
 
-	private final DescriptiveInstrumentFigure mgk;
+	private final DescriptiveInstrumentFigure heading;
+
+	private final HeadingType headingType;
 
 	/**
 	 * @param courseOverGround 
 	 * @param sog 
 	 * @param fdw 
-	 * @param mgk 
+	 * @param heading 
 	 */
-	public HeadingListener(DescriptiveInstrumentFigure courseOverGround, DescriptiveInstrumentFigure mgk) {
-		super(courseOverGround, mgk);
-		_courseOverGround = courseOverGround;
-		this.mgk = mgk;
+	public HeadingListener(DescriptiveInstrumentFigure heading, HeadingType headingType) {
+		super(heading);
+		this.heading = heading;
+		this.headingType = headingType;
 		degreeDecimalFormat = new DecimalFormat("000"); //$NON-NLS-1$
 	}
 
@@ -68,47 +68,13 @@ public class HeadingListener extends InvalidatingFigureListener<Heading> impleme
 			
 			@Override
 			public void run() {
-				if(HeadingType.COG.equals(sensorData.getHeadingType())) {
-					Double cog = sensorData.getDegrees();
-					if(cog != null) {
-						_courseOverGround.setValue(degreeDecimalFormat.format(cog) + "\u00B0"); //$NON-NLS-1$
-						_courseOverGround.repaint();
-					}
-				} else if(HeadingType.MAGNETIC.equals(sensorData.getHeadingType())) {
+				if(headingType.equals(sensorData.getHeadingType())) {
 					Double mgkValue = sensorData.getDegrees();
-					if(mgk != null && mgkValue != null) {
-						mgk.setValue(degreeDecimalFormat.format(mgkValue) + "\u00B0"); //$NON-NLS-1$
-						mgk.repaint();
+					if(heading != null && mgkValue != null) {
+						heading.setValue(degreeDecimalFormat.format(mgkValue) + "\u00B0"); //$NON-NLS-1$
+						heading.repaint();
 					}
 				}
-//				String speedUnit = ""; //$NON-NLS-1$
-//				if(!sensorData.getSpeeds().isEmpty()) {
-//					Speed speed = sensorData.getSpeeds().get(SpeedType.COG);
-//					if(speed != null) {
-//						if(SpeedUnit.N.equals(speed.getSpeedUnit())) {
-//							speedUnit = "kn"; //$NON-NLS-1$
-//						} else if(SpeedUnit.K.equals(speed.getSpeedUnit())) {
-//							speedUnit = "km/h"; //$NON-NLS-1$
-//						} else if(SpeedUnit.M.equals(speed.getSpeedUnit())) {
-//							speedUnit = "m/h"; //$NON-NLS-1$
-//						} 
-//						speedOverGround.setValue(speedDecimalFormat.format(speed.getSpeed()) + speedUnit);
-//						speedOverGround.repaint();
-//					}
-//					speed = sensorData.getSpeeds().get(SpeedType.SPEEDTHOUGHWATER);
-//					if(speed != null) {
-//						if(SpeedUnit.N.equals(speed.getSpeedUnit())) {
-//							speedUnit = "kn"; //$NON-NLS-1$
-//						} else if(SpeedUnit.K.equals(speed.getSpeedUnit())) {
-//							speedUnit = "km/h"; //$NON-NLS-1$
-//						} else if(SpeedUnit.M.equals(speed.getSpeedUnit())) {
-//							speedUnit = "m/h"; //$NON-NLS-1$
-//						} 
-//						fdw.setValue(speedDecimalFormat.format(speed.getSpeed()) + speedUnit);
-//						fdw.repaint();
-//					}
-//					
-//				}
 			}
 		});
 	}

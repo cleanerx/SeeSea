@@ -31,6 +31,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import net.sf.seesea.model.core.physx.HeadingType;
+import net.sf.seesea.model.core.physx.SpeedType;
 import net.sf.seesea.navigation.ui.NavigationUIActivator;
 import net.sf.seesea.navigation.ui.figures.BarFigure;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
@@ -39,18 +41,17 @@ import net.sf.seesea.navigation.ui.figures.GraphFigure;
 import net.sf.seesea.navigation.ui.figures.InstrumentContainerFigure;
 import net.sf.seesea.navigation.ui.figures.SingleLinedFigure;
 import net.sf.seesea.navigation.ui.listener.DepthFigureListener;
+import net.sf.seesea.navigation.ui.listener.HeadingListener;
 import net.sf.seesea.navigation.ui.listener.LogFigureListener;
 import net.sf.seesea.navigation.ui.listener.PositionFigureListener;
 import net.sf.seesea.navigation.ui.listener.RelativeSpeedListener;
 import net.sf.seesea.navigation.ui.listener.SateliteQualityFigureListener;
-import net.sf.seesea.navigation.ui.listener.HeadingListener;
 import net.sf.seesea.navigation.ui.listener.TimeFigureListener;
 import net.sf.seesea.navigation.ui.listener.WindSpeedFigureListener;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
-import net.sf.seesea.services.navigation.listener.IPositionListener;
-import net.sf.seesea.services.navigation.listener.IRelativeWindSpeedListener;
-import net.sf.seesea.services.navigation.listener.ISatelliteInfoListener;
 import net.sf.seesea.services.navigation.listener.IHeadingListener;
+import net.sf.seesea.services.navigation.listener.IPositionListener;
+import net.sf.seesea.services.navigation.listener.ISatelliteInfoListener;
 import net.sf.seesea.services.navigation.listener.ISpeedListener;
 import net.sf.seesea.services.navigation.listener.ITimeListener;
 import net.sf.seesea.services.navigation.listener.ITotalLogListener;
@@ -83,6 +84,8 @@ public class SensorDataView extends ViewPart {
 	private ServiceRegistration<?> tripRegistration;
 	private ServiceRegistration<?> totalTripRegistration;
 	private ServiceRegistration<?> speedListenerRegistration;
+	private ServiceRegistration<?> mgkRegistration;
+	private ServiceRegistration<?> fdwSpeedListenerRegistration;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -211,11 +214,17 @@ public class SensorDataView extends ViewPart {
 //		timeUpdateThread = new Thread(new TimeUpdater(timeFigure, timeFigureUTC, dateFigure));
 //		timeUpdateThread.start();
 		
-		HeadingListener shipMovementListener = new HeadingListener(cog, mgk);
+		HeadingListener shipMovementListener = new HeadingListener(cog, HeadingType.COG);
 		shipMovementRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IHeadingListener.class.getName(), shipMovementListener, null);
 
-		RelativeSpeedListener speedListener = new RelativeSpeedListener(sog, fdw);
+		HeadingListener mgkListener = new HeadingListener(mgk, HeadingType.MAGNETIC);
+		mgkRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IHeadingListener.class.getName(), mgkListener, null);
+
+		RelativeSpeedListener speedListener = new RelativeSpeedListener(sog, SpeedType.COG);
 		speedListenerRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ISpeedListener.class.getName(), speedListener, null);
+
+		RelativeSpeedListener fdwSpeedListener = new RelativeSpeedListener(fdw, SpeedType.SPEEDTHOUGHWATER);
+		fdwSpeedListenerRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ISpeedListener.class.getName(), fdwSpeedListener, null);
 
 		DepthFigureListener depthFigureListener = new DepthFigureListener(graphFigure);
 		depthRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class.getName(), depthFigureListener, null);
@@ -248,7 +257,9 @@ public class SensorDataView extends ViewPart {
 	public void dispose() {
 		positionRegistration.unregister();
 		shipMovementRegistration.unregister();
+		mgkRegistration.unregister();
 		speedListenerRegistration.unregister();
+		fdwSpeedListenerRegistration.unregister();
 		depthRegistration.unregister();
 		windRegistration.unregister();
 		sateliteRegistration.unregister();
