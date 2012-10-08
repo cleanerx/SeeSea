@@ -441,6 +441,8 @@ public class NMEA0183Reader implements IDataReader {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
 			geoPosition.setTime(simpleDateFormat.parse(nmeaContent[nmeaIndex]));
 			geoPosition.setTimezone("UTC");
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// no time supplied is valid
 		} catch (ParseException e) {
 			Logger.getRootLogger().error("Failed to parse", e); //$NON-NLS-1$
 		}
@@ -558,9 +560,13 @@ public class NMEA0183Reader implements IDataReader {
 			setSensorID(nmeaContent[0], geoPosition);
 			setTime(nmeaContent, geoPosition, 5);
 			
-			if("A".equals(nmeaContent[6])) { //$NON-NLS-1$
+			if(nmeaContent.length > 5) {
+				if("A".equals(nmeaContent[6])) { //$NON-NLS-1$
+					geoPosition.setValid(true);
+				} 
+			} else {
 				geoPosition.setValid(true);
-			} 
+			}
 			return geoPosition;
 		} catch (NumberFormatException e) {
 			return null;
@@ -584,26 +590,28 @@ public class NMEA0183Reader implements IDataReader {
 				measurement.getMeasurements().add(heading);
 			}
 
-			if (!nmeaContent[5].isEmpty()) {
-				Speed speed = PhysxFactory.eINSTANCE.createSpeed();
-				speed.setSpeed(Double.parseDouble(nmeaContent[5]));
-				speed.setSpeedUnit(SpeedUnit.N);
-				RelativeSpeed relativeSpeed = physxFactory.createRelativeSpeed();
-				relativeSpeed.setKey(SpeedType.SPEEDTHOUGHWATER);
-				relativeSpeed.setValue(speed);
-				setSensorID(nmeaContent[0], relativeSpeed);
-				measurement.getMeasurements().add(relativeSpeed);
-				return measurement;
-			} else if (!nmeaContent[7].isEmpty()) {
-				Speed speed = PhysxFactory.eINSTANCE.createSpeed();
-				speed.setSpeed(Double.parseDouble(nmeaContent[7]));
-				speed.setSpeedUnit(SpeedUnit.K);
-				RelativeSpeed relativeSpeed = physxFactory.createRelativeSpeed();
-				relativeSpeed.setKey(SpeedType.SPEEDTHOUGHWATER);
-				relativeSpeed.setValue(speed);
-				setSensorID(nmeaContent[0], relativeSpeed);
-				measurement.getMeasurements().add(relativeSpeed);
-				return measurement;
+			if(nmeaContent.length > 5) {
+				if (!nmeaContent[5].isEmpty()) {
+					Speed speed = PhysxFactory.eINSTANCE.createSpeed();
+					speed.setSpeed(Double.parseDouble(nmeaContent[5]));
+					speed.setSpeedUnit(SpeedUnit.N);
+					RelativeSpeed relativeSpeed = physxFactory.createRelativeSpeed();
+					relativeSpeed.setKey(SpeedType.SPEEDTHOUGHWATER);
+					relativeSpeed.setValue(speed);
+					setSensorID(nmeaContent[0], relativeSpeed);
+					measurement.getMeasurements().add(relativeSpeed);
+					return measurement;
+				} else if (!nmeaContent[7].isEmpty()) {
+					Speed speed = PhysxFactory.eINSTANCE.createSpeed();
+					speed.setSpeed(Double.parseDouble(nmeaContent[7]));
+					speed.setSpeedUnit(SpeedUnit.K);
+					RelativeSpeed relativeSpeed = physxFactory.createRelativeSpeed();
+					relativeSpeed.setKey(SpeedType.SPEEDTHOUGHWATER);
+					relativeSpeed.setValue(speed);
+					setSensorID(nmeaContent[0], relativeSpeed);
+					measurement.getMeasurements().add(relativeSpeed);
+					return measurement;
+				}
 			}
 			return null;
 	}
