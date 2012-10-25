@@ -104,6 +104,8 @@ public class NMEA0183Reader implements IDataReader {
 		String rawContent = removeValidChecksum(line);
 		if(rawContent != null) {
 			String[] nmeaContent = rawContent.split(","); //$NON-NLS-1$
+			try {
+				
 			NMEA0183MessageTypes messageType = NMEA0183MessageTypes.valueOf(nmeaContent[0].substring(2));
 			
 			if(processMessageTypes.contains(messageType)) {
@@ -137,7 +139,9 @@ public class NMEA0183Reader implements IDataReader {
 					break;
 				case RMC:
 					CompositeMeasurement rmc_Position = RMC_Position(nmeaContent);
-					results.add(rmc_Position);
+					if(rmc_Position != null) {
+						results.add(rmc_Position);
+					}
 					break;
 				case GSV:
 					SatellitesVisible gsv_SatelliteData = GSV_SatelliteData(nmeaContent);
@@ -157,6 +161,9 @@ public class NMEA0183Reader implements IDataReader {
 				case DBT:
 					results.add(DBT_DepthBelowTransducer(nmeaContent));
 					break;
+				case DPT:
+					results.add(DPT_DepthOfWater(nmeaContent));
+					break;
 				case VLW:
 					results.addAll(VLW_TotalTrip(nmeaContent));
 					break;
@@ -167,11 +174,28 @@ public class NMEA0183Reader implements IDataReader {
 					break;
 				}
 			}
+			} catch (IllegalArgumentException e) {
+				Logger.getLogger(getClass()).error("Unknown message " + e.getMessage());
+			}
 		}
 		return results;
 	}
 
 	
+	private Measurement DPT_DepthOfWater(String[] nmeaContent) {
+		if(nmeaContent.length > 1) {
+			Depth depth = GeoFactory.eINSTANCE.createDepth();
+			depth.setTime(Calendar.getInstance().getTime());
+			depth.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
+			if (!nmeaContent[1].isEmpty()) {
+				double depthInMeters = Double.parseDouble(nmeaContent[1]);
+				depth.setDepth(depthInMeters);
+			}
+			return depth;
+		}
+		return null;
+	}
+
 	/**
 	 * checks the checksum and additionally cuts off the checksum. This is not a sideffect free method
 	 * 
@@ -334,6 +358,9 @@ public class NMEA0183Reader implements IDataReader {
 	 * @return 
 	 */
 	private CompositeMeasurement RMC_Position(String[] nmeaContent) {
+		if(nmeaContent.length < 9) {
+			return null;
+		}
 		GeoFactory geoFactory = GeoFactory.eINSTANCE;
 		PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
 		CompositeMeasurement measurement = physxFactory.createCompositeMeasurement();
@@ -343,11 +370,18 @@ public class NMEA0183Reader implements IDataReader {
 		Heading heading = physxFactory.createHeading();
 
 		setTime(nmeaContent, geoPosition, 1);
-		Latitude latitude = parseLatitude(nmeaContent, 3);
-		Longitude longitude = parseLongitude(nmeaContent, 5);
-		geoPosition.setLatitude(latitude);
-		geoPosition.setLongitude(longitude);
-		
+		try {
+			Latitude latitude = parseLatitude(nmeaContent, 3);
+			Longitude longitude = parseLongitude(nmeaContent, 5);
+			geoPosition.setLatitude(latitude);
+			geoPosition.setLongitude(longitude);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			Logger.getLogger(NMEA0183Reader.class).error("Failed to analyze positon RMC " + e.getMessage());
+		} catch (StringIndexOutOfBoundsException e) {
+			Logger.getLogger(NMEA0183Reader.class).error("Failed to analyze positon RMC " + e.getMessage());
+			return null;
+		}
+
 		Time time = physxFactory.createTime();
 		Calendar calendar = Calendar.getInstance();
 		try {
@@ -413,13 +447,19 @@ public class NMEA0183Reader implements IDataReader {
 	private MeasuredPosition3D GGA_Position(String[] nmeaContent) {
 		MeasuredPosition3D geoPosition = GeoFactory.eINSTANCE
 				.createMeasuredPosition3D();
-		
+	try {
 		setTime(nmeaContent, geoPosition, 1);
 		Latitude latitude = parseLatitude(nmeaContent, 2);
 		Longitude longitude = parseLongitude(nmeaContent, 4);
-		
 		geoPosition.setLatitude(latitude);
 		geoPosition.setLongitude(longitude);
+	} catch (StringIndexOutOfBoundsException e) {
+		Logger.getLogger(NMEA0183Reader.class).error("Failed to analyze positon" + e.getMessage());
+		return null;
+	}
+
+		
+		
 		geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
 		
 		setSensorID(nmeaContent[0], geoPosition);
@@ -438,9 +478,11 @@ public class NMEA0183Reader implements IDataReader {
 	private void setTime(String[] nmeaContent, MeasuredPosition3D geoPosition,
 			int nmeaIndex) {
 		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
-			geoPosition.setTime(simpleDateFormat.parse(nmeaContent[nmeaIndex]));
-			geoPosition.setTimezone("UTC");
+			if(!nmeaContent[nmeaIndex].isEmpty()) {
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
+				geoPosition.setTime(simpleDateFormat.parse(nmeaContent[nmeaIndex]));
+				geoPosition.setTimezone("UTC");
+			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			// no time supplied is valid
 		} catch (ParseException e) {

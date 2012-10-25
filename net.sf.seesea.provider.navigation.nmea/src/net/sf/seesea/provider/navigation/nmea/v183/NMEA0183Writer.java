@@ -12,6 +12,7 @@ import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.RelativeDepthMeasurementPosition;
+import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Measurement;
 
 public class NMEA0183Writer implements IDataWriter {
@@ -33,11 +34,19 @@ public class NMEA0183Writer implements IDataWriter {
 		minuteFormat = new DecimalFormat("00.00000", new DecimalFormatSymbols(Locale.ENGLISH)); //$NON-NLS-1$
 
 	}
-
+	
 	@Override
 	public void write(Collection<Measurement> data) {
-		
 		for (Measurement measurement : data) {
+			write(measurement);
+		}
+	}
+
+	public void write(Measurement measurement) {
+		if(measurement instanceof CompositeMeasurement) {
+			CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
+			write(compositeMeasurement.getMeasurements());
+		} else
 			if(measurement instanceof MeasuredPosition3D) {
 				StringBuffer message = new StringBuffer();
 				// $--RMC,hhmmss.ss,A,llll.ll,a,yyyyy.yy,a,x.x,x.x,xxxx,x.x,a*hh<CR><LF>
@@ -115,10 +124,13 @@ public class NMEA0183Writer implements IDataWriter {
 				printWriter.append(getCheckSum(message.toString()));
 				printWriter.append("\r\n");
 			}
-		}
 		printWriter.flush();
 	}
 
+	@Override
+	public void closeOutput() {
+		printWriter.close();
+	};
 	
 	  /**
      * Trims the checksum off an NMEA message, then

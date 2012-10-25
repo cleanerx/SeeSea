@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -38,6 +38,6 @@ public enum NMEA0183MessageTypes {
 
 	AAM, ALM, APA, APB, ASD, BEC, BOD, BWC, BWR, BWW, DBK, DBS, DBT, DCN, DPT, DTM, FSI, GBS, GGA, GLC, GLL, GNS, GRS, GSA, GST, GSV, GTD, GXA, HDG, HDM, HDT, HSC, LCD, MSK, 
 	MTW // ("Water Temperature")
-	, MWV, OLN, OSD, ROO, RMA, RMB, RMC, ROT, RPM, RSA, RSD, RTE, SFI, STN, TLL, TRF, TTM, VBW, VDR, VHW, VLW, VPW, VTG, VWR, VWT, WCV, WNC, WPL, XDR, XTE, XTR, ZDA, ZFO, ZTG, MTA, MWD
+	, MWV, OLN, OSD, ROO, RMA, RMB, RMC, ROT, RPM, RSA, RSD, RTE, SFI, STN, TLL, TRF, TTM, VBW, VDR, VHW, VLW, VPW, VTG, VWR, VWT, WCV, WNC, WPL, XDR, XTE, XTR, ZDA, ZFO, ZTG, MTA, MWD, RME, RMZ,RMM
 
 }
