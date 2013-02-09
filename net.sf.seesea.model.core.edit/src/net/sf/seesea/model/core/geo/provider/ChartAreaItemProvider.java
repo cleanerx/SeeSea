@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -195,6 +195,11 @@ public class ChartAreaItemProvider
 			(createChildParameter
 				(GeoPackage.Literals.CHART_AREA__BOUNDS,
 				 GeoFactory.eINSTANCE.createMeasuredPosition3D()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(GeoPackage.Literals.CHART_AREA__BOUNDS,
+				 GeoFactory.eINSTANCE.createGNSSMeasuredPosition()));
 	}
 
 	/**

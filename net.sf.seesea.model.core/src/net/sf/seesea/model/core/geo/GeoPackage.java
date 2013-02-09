@@ -997,6 +997,115 @@ public interface GeoPackage extends EPackage {
 	int DEPTH_FEATURE_COUNT = PhysxPackage.MEASUREMENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl <em>GNSS Measured Position</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl
+	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getGNSSMeasuredPosition()
+	 * @generated
+	 */
+	int GNSS_MEASURED_POSITION = 21;
+
+	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__SENSOR_ID = MEASURED_POSITION3_D__SENSOR_ID;
+
+	/**
+	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__TIME = MEASURED_POSITION3_D__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__TIMEZONE = MEASURED_POSITION3_D__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__VALID = MEASURED_POSITION3_D__VALID;
+
+	/**
+	 * The feature id for the '<em><b>Longitude</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__LONGITUDE = MEASURED_POSITION3_D__LONGITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Latitude</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__LATITUDE = MEASURED_POSITION3_D__LATITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Altitude</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__ALTITUDE = MEASURED_POSITION3_D__ALTITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Hdop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__HDOP = MEASURED_POSITION3_D_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Vdop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__VDOP = MEASURED_POSITION3_D_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Pdop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__PDOP = MEASURED_POSITION3_D_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>GNSS Measured Position</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION_FEATURE_COUNT = MEASURED_POSITION3_D_FEATURE_COUNT + 3;
+
+	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1004,7 +1113,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 21;
+	int DIRECTION = 22;
 
 
 	/**
@@ -1015,7 +1124,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getLatitudeHemisphere()
 	 * @generated
 	 */
-	int LATITUDE_HEMISPHERE = 22;
+	int LATITUDE_HEMISPHERE = 23;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.LongitudeHemisphere <em>Longitude Hemisphere</em>}' enum.
@@ -1025,7 +1134,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getLongitudeHemisphere()
 	 * @generated
 	 */
-	int LONGITUDE_HEMISPHERE = 23;
+	int LONGITUDE_HEMISPHERE = 24;
 
 
 	/**
@@ -1036,7 +1145,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getRelativeDepthMeasurementPosition()
 	 * @generated
 	 */
-	int RELATIVE_DEPTH_MEASUREMENT_POSITION = 24;
+	int RELATIVE_DEPTH_MEASUREMENT_POSITION = 25;
 
 
 	/**
@@ -1302,6 +1411,49 @@ public interface GeoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDepth_Depth();
+
+	/**
+	 * Returns the meta object for class '{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition <em>GNSS Measured Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>GNSS Measured Position</em>'.
+	 * @see net.sf.seesea.model.core.geo.GNSSMeasuredPosition
+	 * @generated
+	 */
+	EClass getGNSSMeasuredPosition();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getHdop <em>Hdop</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hdop</em>'.
+	 * @see net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getHdop()
+	 * @see #getGNSSMeasuredPosition()
+	 * @generated
+	 */
+	EAttribute getGNSSMeasuredPosition_Hdop();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getVdop <em>Vdop</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vdop</em>'.
+	 * @see net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getVdop()
+	 * @see #getGNSSMeasuredPosition()
+	 * @generated
+	 */
+	EAttribute getGNSSMeasuredPosition_Vdop();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getPdop <em>Pdop</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pdop</em>'.
+	 * @see net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getPdop()
+	 * @see #getGNSSMeasuredPosition()
+	 * @generated
+	 */
+	EAttribute getGNSSMeasuredPosition_Pdop();
 
 	/**
 	 * Returns the meta object for enum '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}'.
@@ -1796,6 +1948,40 @@ public interface GeoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DEPTH__DEPTH = eINSTANCE.getDepth_Depth();
+
+		/**
+		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl <em>GNSS Measured Position</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl
+		 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getGNSSMeasuredPosition()
+		 * @generated
+		 */
+		EClass GNSS_MEASURED_POSITION = eINSTANCE.getGNSSMeasuredPosition();
+
+		/**
+		 * The meta object literal for the '<em><b>Hdop</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GNSS_MEASURED_POSITION__HDOP = eINSTANCE.getGNSSMeasuredPosition_Hdop();
+
+		/**
+		 * The meta object literal for the '<em><b>Vdop</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GNSS_MEASURED_POSITION__VDOP = eINSTANCE.getGNSSMeasuredPosition_Vdop();
+
+		/**
+		 * The meta object literal for the '<em><b>Pdop</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GNSS_MEASURED_POSITION__PDOP = eINSTANCE.getGNSSMeasuredPosition_Pdop();
 
 		/**
 		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}' enum.

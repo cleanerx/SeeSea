@@ -128,6 +128,11 @@
               <eLiterals name="Surface" value="2"/>
               <eLiterals name="Keel" value="3"/>
             </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="GNSSMeasuredPosition" eSuperTypes="#//sf/seesea/model/core/geo/MeasuredPosition3D">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="vdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="pdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            </eClassifiers>
             <eSubpackages name="osm" nsURI="osm" nsPrefix="osm">
               <eClassifiers xsi:type="ecore:EClass" name="Area" eSuperTypes="#//sf/seesea/model/core/geo/Chart #//sf/seesea/model/core/geo/NavigationCompound">
                 <eStructuralFeatures xsi:type="ecore:EAttribute" name="zoomLevel"

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -147,6 +147,15 @@ public interface GeoFactory extends EFactory {
 	 * @generated
 	 */
 	Depth createDepth();
+
+	/**
+	 * Returns a new object of class '<em>GNSS Measured Position</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>GNSS Measured Position</em>'.
+	 * @generated
+	 */
+	GNSSMeasuredPosition createGNSSMeasuredPosition();
 
 	/**
 	 * Returns a new object of class '<em>Chart Container</em>'.

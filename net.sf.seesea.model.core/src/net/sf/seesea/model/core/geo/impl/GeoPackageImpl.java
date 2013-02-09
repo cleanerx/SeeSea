@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,7 @@ import net.sf.seesea.model.core.geo.ChartWay;
 import net.sf.seesea.model.core.geo.Coordinate;
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.Direction;
+import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
 import net.sf.seesea.model.core.geo.GeoFactory;
 import net.sf.seesea.model.core.geo.GeoPackage;
 import net.sf.seesea.model.core.geo.GeoPosition;
@@ -171,6 +172,13 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * @generated
 	 */
 	private EClass depthEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass gnssMeasuredPositionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -581,6 +589,42 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getGNSSMeasuredPosition() {
+		return gnssMeasuredPositionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGNSSMeasuredPosition_Hdop() {
+		return (EAttribute)gnssMeasuredPositionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGNSSMeasuredPosition_Vdop() {
+		return (EAttribute)gnssMeasuredPositionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGNSSMeasuredPosition_Pdop() {
+		return (EAttribute)gnssMeasuredPositionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -886,6 +930,11 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		createEAttribute(depthEClass, DEPTH__MEASUREMENT_POSITION);
 		createEAttribute(depthEClass, DEPTH__DEPTH);
 
+		gnssMeasuredPositionEClass = createEClass(GNSS_MEASURED_POSITION);
+		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__HDOP);
+		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__VDOP);
+		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__PDOP);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
 		latitudeHemisphereEEnum = createEEnum(LATITUDE_HEMISPHERE);
@@ -952,6 +1001,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		chartWayEClass.getESuperTypes().add(theCorePackage.getModelObject());
 		navareaEClass.getESuperTypes().add(theOsmPackage.getArea());
 		depthEClass.getESuperTypes().add(thePhysxPackage.getMeasurement());
+		gnssMeasuredPositionEClass.getESuperTypes().add(this.getMeasuredPosition3D());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(geoPositionEClass, GeoPosition.class, "GeoPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1019,6 +1069,11 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		initEClass(depthEClass, Depth.class, "Depth", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDepth_MeasurementPosition(), this.getRelativeDepthMeasurementPosition(), "measurementPosition", null, 0, 1, Depth.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDepth_Depth(), ecorePackage.getEDouble(), "depth", null, 0, 1, Depth.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(gnssMeasuredPositionEClass, GNSSMeasuredPosition.class, "GNSSMeasuredPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGNSSMeasuredPosition_Hdop(), ecorePackage.getEDouble(), "hdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGNSSMeasuredPosition_Vdop(), ecorePackage.getEDouble(), "vdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGNSSMeasuredPosition_Pdop(), ecorePackage.getEDouble(), "pdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

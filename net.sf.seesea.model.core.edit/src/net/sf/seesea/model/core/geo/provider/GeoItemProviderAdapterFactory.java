@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -353,6 +353,29 @@ public class GeoItemProviderAdapterFactory extends GeoAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GNSSMeasuredPositionItemProvider gnssMeasuredPositionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGNSSMeasuredPositionAdapter() {
+		if (gnssMeasuredPositionItemProvider == null) {
+			gnssMeasuredPositionItemProvider = new GNSSMeasuredPositionItemProvider(this);
+		}
+
+		return gnssMeasuredPositionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.geo.ChartContainer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -702,6 +725,7 @@ public class GeoItemProviderAdapterFactory extends GeoAdapterFactory implements 
 		if (chartWayItemProvider != null) chartWayItemProvider.dispose();
 		if (navareaItemProvider != null) navareaItemProvider.dispose();
 		if (depthItemProvider != null) depthItemProvider.dispose();
+		if (gnssMeasuredPositionItemProvider != null) gnssMeasuredPositionItemProvider.dispose();
 	}
 
 }

@@ -11,13 +11,16 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import net.sf.seesea.data.io.IDataReader;
 import net.sf.seesea.model.core.geo.Depth;
+import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
 import net.sf.seesea.model.core.geo.GeoFactory;
 import net.sf.seesea.model.core.geo.Latitude;
 import net.sf.seesea.model.core.geo.Longitude;
@@ -61,10 +64,22 @@ public class NMEA0183Reader implements IDataReader {
 
 	private final Set<SatelliteInfo> satelliteDataCache;
 	private int satelliteMessageCounter;
+	private Map<NMEA0183MessageTypes, Set<String>> processMessageTypes2SensorIds;
+
+	public NMEA0183Reader(Map<NMEA0183MessageTypes, Set<String>> processMessageTypes2SensorIds) {
+		satelliteDataCache = new HashSet<SatelliteInfo>();
+		satelliteMessageCounter = 0;
+		this.processMessageTypes2SensorIds = processMessageTypes2SensorIds;
+	}
 	
 	public NMEA0183Reader() {
 		satelliteDataCache = new HashSet<SatelliteInfo>();
 		satelliteMessageCounter = 0;
+		this.processMessageTypes2SensorIds = new HashMap<NMEA0183MessageTypes, Set<String>>();
+		EnumSet<NMEA0183MessageTypes> allOf = EnumSet.<NMEA0183MessageTypes>allOf(NMEA0183MessageTypes.class);
+		for (NMEA0183MessageTypes nmea0183MessageTypes : allOf) {
+			processMessageTypes2SensorIds.put(nmea0183MessageTypes, Collections.<String>emptySet());
+		}
 	}
 	
 	public NMEA0183Reader(InputStream inputStream) {
@@ -83,70 +98,83 @@ public class NMEA0183Reader implements IDataReader {
 		return null;
 	}
 	
+//	/**
+//	 * 
+//	 * @param line raw nmea 0183 sentence line 
+//	 * @param results the list of measurements
+//	 * @return the given result list with the newly added measurements
+//	 */
+//	public List<Measurement> extractMeasurementsFromNMEA(String line, List<Measurement> results) {
+//		return extractMeasurementsFromNMEA(line, results);
+//	}
+//
 	/**
 	 * 
-	 * @param line raw nmea 0183 sentence line 
+	 * @param line raw nmea 0183 sentence line
 	 * @param results the list of measurements
 	 * @return the given result list with the newly added measurements
 	 */
 	public List<Measurement> extractMeasurementsFromNMEA(String line, List<Measurement> results) {
-		return extractMeasurementsFromNMEA(line, results,EnumSet.<NMEA0183MessageTypes>allOf(NMEA0183MessageTypes.class));
-	}
-
-	/**
-	 * 
-	 * @param line
-	 * @param results
-	 * @param processMessageTypes process only these kind of messages to speed up parsing process
-	 * @return
-	 */
-	public List<Measurement> extractMeasurementsFromNMEA(String line, List<Measurement> results, Set<NMEA0183MessageTypes> processMessageTypes) {
 		String rawContent = removeValidChecksum(line);
 		if(rawContent != null) {
 			String[] nmeaContent = rawContent.split(","); //$NON-NLS-1$
 			try {
 				
 			NMEA0183MessageTypes messageType = NMEA0183MessageTypes.valueOf(nmeaContent[0].substring(2));
-			
-			if(processMessageTypes.contains(messageType)) {
+			Measurement measurement = null;
+			if(processMessageTypes2SensorIds.keySet().contains(messageType)) {
 				switch (messageType) {
 				case MTW:
-					results.add(MTW_WaterTemperature(nmeaContent));
+					measurement = MTW_WaterTemperature(nmeaContent);
+					addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+							measurement, NMEA0183MessageTypes.MTW);
 					break;
 				case MWV:
-					results.add(MWV_WindMeasurement(nmeaContent));
+					measurement = MWV_WindMeasurement(nmeaContent);
+					addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+							measurement, NMEA0183MessageTypes.MWV);
 					break;
 				case VHW:
-					results.add(VHW_ShipVector(nmeaContent));
+					measurement = VHW_ShipVector(nmeaContent);
+					addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+							measurement, NMEA0183MessageTypes.VHW);
 					break;
 				case GLL:
-					MeasuredPosition3D gll_Position = GLL_Position(nmeaContent);
-					if(gll_Position != null) {
-						results.add(gll_Position);
+					measurement = GLL_Position(nmeaContent);
+					if(measurement != null) {
+						addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+								measurement, NMEA0183MessageTypes.GLL);
 					}
 					break;
 				case VTG:
-					results.add(VTG_TrackMadeGood(nmeaContent));
+					measurement = VTG_TrackMadeGood(nmeaContent);
+					addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+							measurement, NMEA0183MessageTypes.VTG);
 					break;
 				case VWR:
-					results.add(VWR_RelativeWindSpeedAndAngle(nmeaContent));
+					measurement = VWR_RelativeWindSpeedAndAngle(nmeaContent);
+					addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+							measurement, NMEA0183MessageTypes.VWR);
 					break;
 				case GGA:
-					MeasuredPosition3D gga_Position = GGA_Position(nmeaContent);
-					if(gga_Position != null) {
-						results.add(gga_Position);
+					measurement = GGA_Position(nmeaContent);
+					if(measurement != null) {
+						addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+								measurement, NMEA0183MessageTypes.GGA);
 					}
 					break;
 				case RMC:
-					CompositeMeasurement rmc_Position = RMC_Position(nmeaContent);
-					if(rmc_Position != null) {
-						results.add(rmc_Position);
+					measurement = RMC_Position(nmeaContent);
+					if(measurement != null) {
+						addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+								measurement, NMEA0183MessageTypes.RMC);
 					}
 					break;
 				case GSV:
-					SatellitesVisible gsv_SatelliteData = GSV_SatelliteData(nmeaContent);
-					if(gsv_SatelliteData != null) {
-						results.add(gsv_SatelliteData);
+					measurement = GSV_SatelliteData(nmeaContent);
+					if(measurement != null) {
+						addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+								measurement, NMEA0183MessageTypes.GSV);
 					}
 					break;
 				case GSA:
@@ -162,13 +190,18 @@ public class NMEA0183Reader implements IDataReader {
 					results.add(DBT_DepthBelowTransducer(nmeaContent));
 					break;
 				case DPT:
-					results.add(DPT_DepthOfWater(nmeaContent));
+					measurement = DPT_DepthOfWater(nmeaContent);
+					if(measurement != null) {
+						addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds, measurement, NMEA0183MessageTypes.DPT);
+					}
 					break;
 				case VLW:
 					results.addAll(VLW_TotalTrip(nmeaContent));
 					break;
 				case HDM:
-					results.add(HDM_HeadingCompass(nmeaContent));
+					measurement = HDM_HeadingCompass(nmeaContent);
+					addMeasurmentIfUnfiltered(results, processMessageTypes2SensorIds,
+							measurement, NMEA0183MessageTypes.HDM);
 					break;
 				default:
 					break;
@@ -181,19 +214,56 @@ public class NMEA0183Reader implements IDataReader {
 		return results;
 	}
 
+	private void addMeasurmentIfUnfiltered(
+			List<Measurement> results,
+			Map<NMEA0183MessageTypes, Set<String>> processMessageTypes2SensorIds,
+			Measurement measurement, NMEA0183MessageTypes filterType) {
+		Set<String> sensorIds = processMessageTypes2SensorIds.get(filterType);
+		if(sensorIds.isEmpty() || sensorIds.contains(measurement.getSensorID())) {
+			results.add(measurement);
+		}
+	}
+
 	
 	private Measurement DPT_DepthOfWater(String[] nmeaContent) {
+		PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
+		CompositeMeasurement measurement = physxFactory.createCompositeMeasurement();
 		if(nmeaContent.length > 1) {
-			Depth depth = GeoFactory.eINSTANCE.createDepth();
-			depth.setTime(Calendar.getInstance().getTime());
-			depth.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
+			Depth depthBelowTransducer = null;
 			if (!nmeaContent[1].isEmpty()) {
-				double depthInMeters = Double.parseDouble(nmeaContent[1]);
-				depth.setDepth(depthInMeters);
+				depthBelowTransducer = GeoFactory.eINSTANCE.createDepth();
+				setSensorID(nmeaContent[0], depthBelowTransducer);
+				try {
+					double depthInMeters = Double.parseDouble(nmeaContent[1]);
+					depthBelowTransducer.setDepth(depthInMeters);
+					depthBelowTransducer.setValid(true);
+					depthBelowTransducer.setMeasurementPosition(RelativeDepthMeasurementPosition.TRANSDUCER);
+					measurement.getMeasurements().add(depthBelowTransducer);
+				} catch (NumberFormatException e) {
+					// fail silently
+				}
 			}
-			return depth;
+			if (!nmeaContent[2].isEmpty() && depthBelowTransducer != null) {
+				try {
+					double offset = Double.parseDouble(nmeaContent[2]);
+					if(offset != 0.0) {
+						Depth depthBelowX = GeoFactory.eINSTANCE.createDepth();
+						depthBelowX.setDepth(depthBelowTransducer.getDepth() + offset);
+						depthBelowX.setValid(true);
+						if(offset < 0.0) {
+							depthBelowX.setMeasurementPosition(RelativeDepthMeasurementPosition.KEEL);
+						} else {
+							depthBelowX.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
+						}
+						setSensorID(nmeaContent[0], depthBelowX);
+						measurement.getMeasurements().add(depthBelowX);
+					}
+				} catch (NumberFormatException e) {
+					// fail silently
+				}
+			}
 		}
-		return null;
+		return measurement;
 	}
 
 	/**
@@ -371,10 +441,18 @@ public class NMEA0183Reader implements IDataReader {
 
 		setTime(nmeaContent, geoPosition, 1);
 		try {
-			Latitude latitude = parseLatitude(nmeaContent, 3);
-			Longitude longitude = parseLongitude(nmeaContent, 5);
-			geoPosition.setLatitude(latitude);
-			geoPosition.setLongitude(longitude);
+			if(!nmeaContent[3].isEmpty()) {
+				Latitude latitude = parseLatitude(nmeaContent, 3);
+				geoPosition.setLatitude(latitude);
+			}
+			if(!nmeaContent[5].isEmpty()) {
+				Longitude longitude = parseLongitude(nmeaContent, 5);
+				geoPosition.setLongitude(longitude);
+			}
+			if(geoPosition.getLatitude() != null && geoPosition.getLongitude() != null) {
+				measurement.getMeasurements().add(geoPosition);
+			}
+
 		} catch (ArrayIndexOutOfBoundsException e) {
 			Logger.getLogger(NMEA0183Reader.class).error("Failed to analyze positon RMC " + e.getMessage());
 		} catch (StringIndexOutOfBoundsException e) {
@@ -388,6 +466,7 @@ public class NMEA0183Reader implements IDataReader {
 			calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nmeaContent[1].substring(0, 2).trim()));
 			calendar.set(Calendar.MINUTE, Integer.parseInt(nmeaContent[1].substring(2, 4).trim()));
 			calendar.set(Calendar.SECOND, Integer.parseInt(nmeaContent[1].substring(4, 6).trim()));
+			calendar.set(Calendar.MILLISECOND, 0);
 			
 			calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nmeaContent[9].substring(0, 2).trim()));
 			calendar.set(Calendar.MONTH, Integer.parseInt(nmeaContent[9].substring(2, 4).trim()) - 1);
@@ -422,19 +501,20 @@ public class NMEA0183Reader implements IDataReader {
 		} catch (NumberFormatException e) {
 			// nothing to do. fail silently
 		}
-		measurement.getMeasurements().add(geoPosition);
 		measurement.getMeasurements().add(time);
 
 		setSensorID(nmeaContent[0], heading);
 		setSensorID(nmeaContent[0], relativeSpeed);
 		setSensorID(nmeaContent[0], geoPosition);
 		setSensorID(nmeaContent[0], time);
+		setSensorID(nmeaContent[0], measurement);
 
 		if("A".equals(nmeaContent[2].toUpperCase())) { //$NON-NLS-1$
 			heading.setValid(true);
 			relativeSpeed.setValid(true);
 			geoPosition.setValid(true);
 			time.setValid(true);
+			measurement.setValid(true);
 		} 
 		return measurement;
 	}
@@ -444,15 +524,26 @@ public class NMEA0183Reader implements IDataReader {
 	 * @param nmeaContent
 	 * @return 
 	 */
-	private MeasuredPosition3D GGA_Position(String[] nmeaContent) {
-		MeasuredPosition3D geoPosition = GeoFactory.eINSTANCE
-				.createMeasuredPosition3D();
+	private GNSSMeasuredPosition GGA_Position(String[] nmeaContent) {
+		GNSSMeasuredPosition geoPosition = GeoFactory.eINSTANCE
+				.createGNSSMeasuredPosition();
 	try {
 		setTime(nmeaContent, geoPosition, 1);
 		Latitude latitude = parseLatitude(nmeaContent, 2);
 		Longitude longitude = parseLongitude(nmeaContent, 4);
 		geoPosition.setLatitude(latitude);
 		geoPosition.setLongitude(longitude);
+		try {
+			geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
+		} catch (NumberFormatException e) {
+			// nothing to do
+		}
+		try {
+			geoPosition.setHdop(Double.parseDouble(nmeaContent[8]));
+		} catch (NumberFormatException e) {
+			// nothing to do
+		}
+		
 	} catch (StringIndexOutOfBoundsException e) {
 		Logger.getLogger(NMEA0183Reader.class).error("Failed to analyze positon" + e.getMessage());
 		return null;
@@ -481,7 +572,8 @@ public class NMEA0183Reader implements IDataReader {
 			if(!nmeaContent[nmeaIndex].isEmpty()) {
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
 				geoPosition.setTime(simpleDateFormat.parse(nmeaContent[nmeaIndex]));
-				geoPosition.setTimezone("UTC");
+				geoPosition.setTimezone("UTC"); //$NON-NLS-1$
+//				System.out.println(geoPosition.getTime().getTime());
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			// no time supplied is valid
@@ -576,9 +668,13 @@ public class NMEA0183Reader implements IDataReader {
 		return measurement;
 	}
 
-	private MeasuredPosition3D GLL_Position(String[] nmeaContent) {
+	private Measurement GLL_Position(String[] nmeaContent) {
 		try {
-			MeasuredPosition3D geoPosition = GeoFactory.eINSTANCE.createMeasuredPosition3D();
+			GeoFactory geoFactory = GeoFactory.eINSTANCE;
+			PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
+			CompositeMeasurement measurement = physxFactory.createCompositeMeasurement();
+			
+			MeasuredPosition3D geoPosition = geoFactory.createMeasuredPosition3D();
 			Latitude latitude = GeoFactory.eINSTANCE.createLatitude();
 			double lat = Double.parseDouble(nmeaContent[1]);
 			latitude.setDegree(Integer.parseInt(nmeaContent[1].substring(0, 2)));
@@ -600,8 +696,28 @@ public class NMEA0183Reader implements IDataReader {
 			}
 			geoPosition.setLongitude(longitude);
 			setSensorID(nmeaContent[0], geoPosition);
-			setTime(nmeaContent, geoPosition, 5);
+			measurement.getMeasurements().add(geoPosition);
 			
+			if(nmeaContent.length > 5 && !nmeaContent[5].isEmpty()) {
+				Time time = physxFactory.createTime();
+				Calendar calendar = Calendar.getInstance();
+				try {
+					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nmeaContent[5].substring(0, 2).trim()));
+					calendar.set(Calendar.MINUTE, Integer.parseInt(nmeaContent[5].substring(2, 4).trim()));
+					calendar.set(Calendar.SECOND, Integer.parseInt(nmeaContent[5].substring(4, 6).trim()));
+					
+					calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+					time.setTime(calendar.getTime());
+					time.setTimezone("UTC"); //$NON-NLS-1$
+					geoPosition.setTime(calendar.getTime());
+					geoPosition.setTimezone("UTC"); //$NON-NLS-1$
+				} catch (NumberFormatException e) {
+					// TODO: handle exception
+				}
+				measurement.getMeasurements().add(time);
+			}
+			setSensorID(nmeaContent[0], measurement);
+
 			if(nmeaContent.length > 5) {
 				if("A".equals(nmeaContent[6])) { //$NON-NLS-1$
 					geoPosition.setValid(true);
@@ -609,7 +725,8 @@ public class NMEA0183Reader implements IDataReader {
 			} else {
 				geoPosition.setValid(true);
 			}
-			return geoPosition;
+			
+			return measurement;
 		} catch (NumberFormatException e) {
 			return null;
 		}
@@ -624,13 +741,16 @@ public class NMEA0183Reader implements IDataReader {
 				heading.setHeadingType(HeadingType.TRUE);
 				heading.setDegrees(Double.parseDouble(nmeaContent[1]));
 				measurement.getMeasurements().add(heading);
+				setSensorID(nmeaContent[0], heading);
 			} 
 			if (!nmeaContent[3].isEmpty()) {
 				Heading heading = physxFactory.createHeading();
 				heading.setHeadingType(HeadingType.MAGNETIC);
 				heading.setDegrees(Double.parseDouble(nmeaContent[3]));
 				measurement.getMeasurements().add(heading);
+				setSensorID(nmeaContent[0], heading);
 			}
+			setSensorID(nmeaContent[0], measurement);
 
 			if(nmeaContent.length > 5) {
 				if (!nmeaContent[5].isEmpty()) {
@@ -655,7 +775,7 @@ public class NMEA0183Reader implements IDataReader {
 					return measurement;
 				}
 			}
-			return null;
+			return measurement;
 	}
 
 	private Temperature MTW_WaterTemperature(String[] nmeaContent) {
@@ -701,25 +821,25 @@ public class NMEA0183Reader implements IDataReader {
 
 	private Depth DBK_DepthBelowKeel(String[] nmeaContent) {
 		Depth depth = GeoFactory.eINSTANCE.createDepth();
-		depth.setTime(Calendar.getInstance().getTime());
 		depth.setMeasurementPosition(RelativeDepthMeasurementPosition.KEEL);
 		setDepthFromContent(nmeaContent, depth);
+		depth.setValid(true);
 		return depth;
 	}
 
 	private Depth DBS_DepthBelowSurface(String[] nmeaContent) {
 		Depth depth = GeoFactory.eINSTANCE.createDepth();
-		depth.setTime(Calendar.getInstance().getTime());
 		depth.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
 		setDepthFromContent(nmeaContent, depth);
+		depth.setValid(true);
 		return depth;
 	}
 
 	private Depth DBT_DepthBelowTransducer(String[] nmeaContent) {
 		Depth depth = GeoFactory.eINSTANCE.createDepth();
-		depth.setTime(Calendar.getInstance().getTime());
 		depth.setMeasurementPosition(RelativeDepthMeasurementPosition.TRANSDUCER);
 		setDepthFromContent(nmeaContent, depth);
+		depth.setValid(true);
 		return depth;
 	}
 

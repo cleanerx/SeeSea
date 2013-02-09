@@ -184,6 +184,10 @@ public class GeoAdapterFactory extends AdapterFactoryImpl {
 				return createDepthAdapter();
 			}
 			@Override
+			public Adapter caseGNSSMeasuredPosition(GNSSMeasuredPosition object) {
+				return createGNSSMeasuredPositionAdapter();
+			}
+			@Override
 			public Adapter caseModelObject(ModelObject object) {
 				return createModelObjectAdapter();
 			}
@@ -380,6 +384,20 @@ public class GeoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDepthAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition <em>GNSS Measured Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see net.sf.seesea.model.core.geo.GNSSMeasuredPosition
+	 * @generated
+	 */
+	public Adapter createGNSSMeasuredPositionAdapter() {
 		return null;
 	}
 

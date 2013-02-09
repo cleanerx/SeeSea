@@ -196,6 +196,11 @@ public class SeriesItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 GeoFactory.eINSTANCE.createGNSSMeasuredPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
 				 PhysxFactory.eINSTANCE.createTemperature()));
 
 		newChildDescriptors.add

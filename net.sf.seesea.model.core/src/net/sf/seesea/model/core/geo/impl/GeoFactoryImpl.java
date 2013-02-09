@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -106,6 +106,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 			case GeoPackage.CHART_WAY: return createChartWay();
 			case GeoPackage.NAVAREA: return createNavarea();
 			case GeoPackage.DEPTH: return createDepth();
+			case GeoPackage.GNSS_MEASURED_POSITION: return createGNSSMeasuredPosition();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -261,6 +262,16 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	public Depth createDepth() {
 		DepthImpl depth = new DepthImpl();
 		return depth;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GNSSMeasuredPosition createGNSSMeasuredPosition() {
+		GNSSMeasuredPositionImpl gnssMeasuredPosition = new GNSSMeasuredPositionImpl();
+		return gnssMeasuredPosition;
 	}
 
 	/**
