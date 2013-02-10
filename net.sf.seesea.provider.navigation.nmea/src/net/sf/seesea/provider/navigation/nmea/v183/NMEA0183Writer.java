@@ -118,15 +118,15 @@ public class NMEA0183Writer implements IDataWriter {
 				}
 				double depthValue = depth.getDepth();
 				message.append(singleDigitFormat.format(depthValue * 3.2808399));
-				message.append(",f,");
+				message.append(",f,"); //$NON-NLS-1$
 				message.append(singleDigitFormat.format(depthValue));
-				message.append(",M,");
+				message.append(",M,"); //$NON-NLS-1$
 				message.append(singleDigitFormat.format(depthValue * 0.546806649));
-				message.append(",F,");
+				message.append(",F,"); //$NON-NLS-1$
 				printWriter.append(message.toString());
 				printWriter.append('*');
 				printWriter.append(getCheckSum(message.toString()));
-				printWriter.append("\r\n");
+				printWriter.append("\r\n"); //$NON-NLS-1$
 			}
 		printWriter.flush();
 	}
