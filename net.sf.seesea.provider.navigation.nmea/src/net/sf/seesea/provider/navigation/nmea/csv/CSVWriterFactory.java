@@ -1,6 +1,5 @@
 package net.sf.seesea.provider.navigation.nmea.csv;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Map;
@@ -10,7 +9,9 @@ import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.IWriterFactory;
 import net.sf.seesea.data.io.WriterException;
 
-public class CommaSeparatedValuesWriter implements IWriterFactory {
+public class CSVWriterFactory implements IWriterFactory {
+
+	private long fileCounter = 1;
 
 	@Override
 	public IDataReader createReader() {
@@ -20,14 +21,15 @@ public class CommaSeparatedValuesWriter implements IWriterFactory {
 	@Override
 	public IDataWriter createWriter(Map<String, String> parameters)
 			throws WriterException {
-		File file = new File(parameters.get("filename")); //$NON-NLS-1$
-		System.out.println("Writing to file " + file.getAbsolutePath());
-		FileOutputStream outputStream;
 		try {
-			outputStream = new FileOutputStream(file);
+			FileOutputStream outputStream;
+			String fileprefix = parameters.get("fileprefix"); //$NON-NLS-1$
+			String filesuffix = parameters.get("filesuffix"); //$NON-NLS-1$
+			String filename = fileprefix + fileCounter++ + filesuffix;
+			outputStream = new FileOutputStream(filename);
 			return new CSVWriter(outputStream);
 		} catch (FileNotFoundException e) {
-			throw new WriterException("Could not find file", e);
+			throw new WriterException("Could not find file", e); //$NON-NLS-1$
 		}
 	}
 
