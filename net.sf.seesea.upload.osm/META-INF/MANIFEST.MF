@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Open Sea Map Upload Provider
+Bundle-SymbolicName: net.sf.seesea.upload.osm
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.upload.osm.OSMUploadActivator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.apache.commons.httpclient;bundle-version="3.1.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
