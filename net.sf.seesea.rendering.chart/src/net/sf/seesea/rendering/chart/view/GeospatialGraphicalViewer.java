@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,13 +26,18 @@
  */
 package net.sf.seesea.rendering.chart.view;
 
+import net.sf.seesea.rendering.chart.GestureDomainEventDispatcher;
+import net.sf.seesea.rendering.chart.GestureLightweightSystem;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.tileservice.ITileProvider;
 
+import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.gef.EditDomain;
+import org.eclipse.gef.ui.parts.DomainEventDispatcher;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -40,6 +45,9 @@ public class GeospatialGraphicalViewer extends ScrollingGraphicalViewer {
 	
 	private final ServiceTracker tileProviderServiceTracker;
 	private final ServiceTracker editingDomainServiceTracker;
+
+	private GestureDomainEventDispatcher eventDispatcher;
+
 
 	/**
 	 * 
@@ -89,4 +97,19 @@ public class GeospatialGraphicalViewer extends ScrollingGraphicalViewer {
 	}
 
 	
+	@Override
+	protected LightweightSystem createLightweightSystem() {
+		return new GestureLightweightSystem();
+	}
+
+	@Override
+	public void setEditDomain(EditDomain domain) {
+		super.setEditDomain(domain);
+		getLightweightSystem().setEventDispatcher(eventDispatcher = new GestureDomainEventDispatcher(domain, this));
+	}
+
+	@Override
+	protected DomainEventDispatcher getEventDispatcher() {
+		return eventDispatcher;
+	}
 }
