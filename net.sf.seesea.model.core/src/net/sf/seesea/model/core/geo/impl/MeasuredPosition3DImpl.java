@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -57,6 +57,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getLongitude <em>Longitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getLatitude <em>Latitude</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getPrecision <em>Precision</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getAltitude <em>Altitude</em>}</li>
  * </ul>
  * </p>
@@ -83,6 +84,26 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 	 * @ordered
 	 */
 	protected Latitude latitude;
+
+	/**
+	 * The default value of the '{@link #getPrecision() <em>Precision</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrecision()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PRECISION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPrecision() <em>Precision</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrecision()
+	 * @generated
+	 * @ordered
+	 */
+	protected int precision = PRECISION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getAltitude() <em>Altitude</em>}' attribute.
@@ -214,6 +235,27 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getPrecision() {
+		return precision;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPrecision(int newPrecision) {
+		int oldPrecision = precision;
+		precision = newPrecision;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.MEASURED_POSITION3_D__PRECISION, oldPrecision, precision));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public double getAltitude() {
 		return altitude;
 	}
@@ -258,6 +300,8 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 				return getLongitude();
 			case GeoPackage.MEASURED_POSITION3_D__LATITUDE:
 				return getLatitude();
+			case GeoPackage.MEASURED_POSITION3_D__PRECISION:
+				return getPrecision();
 			case GeoPackage.MEASURED_POSITION3_D__ALTITUDE:
 				return getAltitude();
 		}
@@ -277,6 +321,9 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 				return;
 			case GeoPackage.MEASURED_POSITION3_D__LATITUDE:
 				setLatitude((Latitude)newValue);
+				return;
+			case GeoPackage.MEASURED_POSITION3_D__PRECISION:
+				setPrecision((Integer)newValue);
 				return;
 			case GeoPackage.MEASURED_POSITION3_D__ALTITUDE:
 				setAltitude((Double)newValue);
@@ -299,6 +346,9 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 			case GeoPackage.MEASURED_POSITION3_D__LATITUDE:
 				setLatitude((Latitude)null);
 				return;
+			case GeoPackage.MEASURED_POSITION3_D__PRECISION:
+				setPrecision(PRECISION_EDEFAULT);
+				return;
 			case GeoPackage.MEASURED_POSITION3_D__ALTITUDE:
 				setAltitude(ALTITUDE_EDEFAULT);
 				return;
@@ -318,6 +368,8 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 				return longitude != null;
 			case GeoPackage.MEASURED_POSITION3_D__LATITUDE:
 				return latitude != null;
+			case GeoPackage.MEASURED_POSITION3_D__PRECISION:
+				return precision != PRECISION_EDEFAULT;
 			case GeoPackage.MEASURED_POSITION3_D__ALTITUDE:
 				return altitude != ALTITUDE_EDEFAULT;
 		}
@@ -335,6 +387,7 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 			switch (derivedFeatureID) {
 				case GeoPackage.MEASURED_POSITION3_D__LONGITUDE: return GeoPackage.GEO_POSITION__LONGITUDE;
 				case GeoPackage.MEASURED_POSITION3_D__LATITUDE: return GeoPackage.GEO_POSITION__LATITUDE;
+				case GeoPackage.MEASURED_POSITION3_D__PRECISION: return GeoPackage.GEO_POSITION__PRECISION;
 				default: return -1;
 			}
 		}
@@ -358,6 +411,7 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 			switch (baseFeatureID) {
 				case GeoPackage.GEO_POSITION__LONGITUDE: return GeoPackage.MEASURED_POSITION3_D__LONGITUDE;
 				case GeoPackage.GEO_POSITION__LATITUDE: return GeoPackage.MEASURED_POSITION3_D__LATITUDE;
+				case GeoPackage.GEO_POSITION__PRECISION: return GeoPackage.MEASURED_POSITION3_D__PRECISION;
 				default: return -1;
 			}
 		}
@@ -380,7 +434,9 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (altitude: ");
+		result.append(" (precision: ");
+		result.append(precision);
+		result.append(", altitude: ");
 		result.append(altitude);
 		result.append(')');
 		return result.toString();

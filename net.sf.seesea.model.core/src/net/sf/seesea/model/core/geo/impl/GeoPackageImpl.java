@@ -391,6 +391,15 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getGeoPosition_Precision() {
+		return (EAttribute)geoPositionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCoordinate() {
 		return coordinateEClass;
 	}
@@ -867,6 +876,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		geoPositionEClass = createEClass(GEO_POSITION);
 		createEReference(geoPositionEClass, GEO_POSITION__LONGITUDE);
 		createEReference(geoPositionEClass, GEO_POSITION__LATITUDE);
+		createEAttribute(geoPositionEClass, GEO_POSITION__PRECISION);
 
 		coordinateEClass = createEClass(COORDINATE);
 		createEAttribute(coordinateEClass, COORDINATE__DEGREE);
@@ -1007,6 +1017,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		initEClass(geoPositionEClass, GeoPosition.class, "GeoPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getGeoPosition_Longitude(), this.getLongitude(), null, "longitude", null, 0, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGeoPosition_Latitude(), this.getLatitude(), null, "latitude", null, 0, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGeoPosition_Precision(), ecorePackage.getEInt(), "precision", null, 0, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(coordinateEClass, Coordinate.class, "Coordinate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCoordinate_Degree(), ecorePackage.getEInt(), "degree", "0", 0, 1, Coordinate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.GeoPosition#getLongitude <em>Longitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.GeoPosition#getLatitude <em>Latitude</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.GeoPosition#getPrecision <em>Precision</em>}</li>
  * </ul>
  * </p>
  *
@@ -103,5 +104,31 @@ public interface GeoPosition extends ModelObject {
 	 * @generated
 	 */
 	void setLatitude(Latitude value);
+
+	/**
+	 * Returns the value of the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Precision</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Precision</em>' attribute.
+	 * @see #setPrecision(int)
+	 * @see net.sf.seesea.model.core.geo.GeoPackage#getGeoPosition_Precision()
+	 * @model
+	 * @generated
+	 */
+	int getPrecision();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.GeoPosition#getPrecision <em>Precision</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Precision</em>' attribute.
+	 * @see #getPrecision()
+	 * @generated
+	 */
+	void setPrecision(int value);
 
 } // GeoPosition

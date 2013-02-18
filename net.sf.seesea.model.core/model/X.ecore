@@ -20,6 +20,7 @@
                   containment="true"/>
               <eStructuralFeatures xsi:type="ecore:EReference" name="latitude" eType="#//sf/seesea/model/core/geo/Latitude"
                   containment="true"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
             </eClassifiers>
             <eClassifiers xsi:type="ecore:EClass" name="Coordinate" eSuperTypes="#//sf/seesea/model/core/ModelObject">
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="degree" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

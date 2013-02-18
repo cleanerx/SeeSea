@@ -116,13 +116,22 @@ public interface GeoPackage extends EPackage {
 	int GEO_POSITION__LATITUDE = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GEO_POSITION__PRECISION = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Position</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GEO_POSITION_FEATURE_COUNT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 2;
+	int GEO_POSITION_FEATURE_COUNT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.impl.CoordinateImpl <em>Coordinate</em>}' class.
@@ -355,6 +364,15 @@ public interface GeoPackage extends EPackage {
 	 * @ordered
 	 */
 	int NAMED_POSITION__LATITUDE = GEO_POSITION__LATITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_POSITION__PRECISION = GEO_POSITION__PRECISION;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -600,6 +618,15 @@ public interface GeoPackage extends EPackage {
 	int GEO_POSITION3_D__LATITUDE = GEO_POSITION__LATITUDE;
 
 	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GEO_POSITION3_D__PRECISION = GEO_POSITION__PRECISION;
+
+	/**
 	 * The feature id for the '<em><b>Altitude</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -682,13 +709,22 @@ public interface GeoPackage extends EPackage {
 	int MEASURED_POSITION3_D__LATITUDE = PhysxPackage.MEASUREMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEASURED_POSITION3_D__PRECISION = PhysxPackage.MEASUREMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Altitude</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MEASURED_POSITION3_D__ALTITUDE = PhysxPackage.MEASUREMENT_FEATURE_COUNT + 2;
+	int MEASURED_POSITION3_D__ALTITUDE = PhysxPackage.MEASUREMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Measured Position3 D</em>' class.
@@ -697,7 +733,7 @@ public interface GeoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEASURED_POSITION3_D_FEATURE_COUNT = PhysxPackage.MEASUREMENT_FEATURE_COUNT + 3;
+	int MEASURED_POSITION3_D_FEATURE_COUNT = PhysxPackage.MEASUREMENT_FEATURE_COUNT + 4;
 
 
 	/**
@@ -1061,6 +1097,15 @@ public interface GeoPackage extends EPackage {
 	int GNSS_MEASURED_POSITION__LATITUDE = MEASURED_POSITION3_D__LATITUDE;
 
 	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__PRECISION = MEASURED_POSITION3_D__PRECISION;
+
+	/**
 	 * The feature id for the '<em><b>Altitude</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1179,6 +1224,17 @@ public interface GeoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getGeoPosition_Latitude();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GeoPosition#getPrecision <em>Precision</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Precision</em>'.
+	 * @see net.sf.seesea.model.core.geo.GeoPosition#getPrecision()
+	 * @see #getGeoPosition()
+	 * @generated
+	 */
+	EAttribute getGeoPosition_Precision();
 
 	/**
 	 * Returns the meta object for class '{@link net.sf.seesea.model.core.geo.Coordinate <em>Coordinate</em>}'.
@@ -1752,6 +1808,14 @@ public interface GeoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference GEO_POSITION__LATITUDE = eINSTANCE.getGeoPosition_Latitude();
+
+		/**
+		 * The meta object literal for the '<em><b>Precision</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GEO_POSITION__PRECISION = eINSTANCE.getGeoPosition_Precision();
 
 		/**
 		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.impl.CoordinateImpl <em>Coordinate</em>}' class.

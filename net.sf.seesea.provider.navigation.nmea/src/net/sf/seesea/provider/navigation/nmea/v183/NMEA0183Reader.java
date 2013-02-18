@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import net.sf.seesea.data.io.IDataReader;
+import net.sf.seesea.model.core.geo.Coordinate;
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
 import net.sf.seesea.model.core.geo.GeoFactory;
@@ -441,16 +442,21 @@ public class NMEA0183Reader implements IDataReader {
 
 		setTime(nmeaContent, geoPosition, 1);
 		try {
+			PrecisionCoordinate precisionCoordinate = null;
+			PrecisionCoordinate precisionCoordinate2 = null;
 			if(!nmeaContent[3].isEmpty()) {
-				Latitude latitude = parseLatitude(nmeaContent, 3);
+				precisionCoordinate = parseLatitude(nmeaContent, 3);
+				Latitude latitude = (Latitude) precisionCoordinate.coordinate;
 				geoPosition.setLatitude(latitude);
 			}
 			if(!nmeaContent[5].isEmpty()) {
-				Longitude longitude = parseLongitude(nmeaContent, 5);
+				precisionCoordinate2 = parseLongitude(nmeaContent, 5);
+				Longitude longitude = (Longitude) precisionCoordinate2.coordinate; 
 				geoPosition.setLongitude(longitude);
 			}
 			if(geoPosition.getLatitude() != null && geoPosition.getLongitude() != null) {
 				measurement.getMeasurements().add(geoPosition);
+				geoPosition.setPrecision(Math.max(precisionCoordinate.precision, precisionCoordinate2.precision));
 			}
 
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -529,10 +535,14 @@ public class NMEA0183Reader implements IDataReader {
 				.createGNSSMeasuredPosition();
 	try {
 		setTime(nmeaContent, geoPosition, 1);
-		Latitude latitude = parseLatitude(nmeaContent, 2);
-		Longitude longitude = parseLongitude(nmeaContent, 4);
+		PrecisionCoordinate precisionCoordinate = parseLatitude(nmeaContent, 2);
+		Latitude latitude = (Latitude) precisionCoordinate.coordinate;
+		PrecisionCoordinate precisionCoordinate2 = parseLongitude(nmeaContent, 4);
+		Longitude longitude = (Longitude) precisionCoordinate2.coordinate; 
 		geoPosition.setLatitude(latitude);
 		geoPosition.setLongitude(longitude);
+		geoPosition.setPrecision(Math.max(precisionCoordinate.precision, precisionCoordinate2.precision));
+
 		try {
 			geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
 		} catch (NumberFormatException e) {
@@ -582,7 +592,7 @@ public class NMEA0183Reader implements IDataReader {
 		}
 	}
 
-	private Longitude parseLongitude(String[] nmeaContent, int nmeaStartIndex) {
+	private PrecisionCoordinate parseLongitude(String[] nmeaContent, int nmeaStartIndex) {
 		String degree;
 		String minute;
 		double secondValue;
@@ -599,10 +609,10 @@ public class NMEA0183Reader implements IDataReader {
 		if (WEST.equals(nmeaContent[nmeaStartIndex + 1])) {
 			longitude.setDegree(longitude.getDegree() * (-1));
 		}
-		return longitude;
+		return new PrecisionCoordinate(longitude, positions[1].length());
 	}
 
-	private Latitude parseLatitude(String[] nmeaContent, int i) {
+	private PrecisionCoordinate parseLatitude(String[] nmeaContent, int i) {
 		Latitude latitude = GeoFactory.eINSTANCE.createLatitude();
 
 		String[] positions = nmeaContent[i].split("\\."); //$NON-NLS-1$
@@ -616,7 +626,7 @@ public class NMEA0183Reader implements IDataReader {
 		if (SOUTH.equals(nmeaContent[i + 1])) {
 			latitude.setDegree(latitude.getDegree() * (-1));
 		}
-		return latitude;
+		return new PrecisionCoordinate(latitude, positions[1].length());
 	}
 
 	private RelativeWind VWR_RelativeWindSpeedAndAngle(String[] nmeaContent) {
@@ -675,26 +685,15 @@ public class NMEA0183Reader implements IDataReader {
 			CompositeMeasurement measurement = physxFactory.createCompositeMeasurement();
 			
 			MeasuredPosition3D geoPosition = geoFactory.createMeasuredPosition3D();
-			Latitude latitude = GeoFactory.eINSTANCE.createLatitude();
-			double lat = Double.parseDouble(nmeaContent[1]);
-			latitude.setDegree(Integer.parseInt(nmeaContent[1].substring(0, 2)));
-			latitude.setMinute(Integer.parseInt(nmeaContent[1].substring(2, 4)));
-			latitude.setSecond((lat - ((int) lat)) * 60);
+
+			PrecisionCoordinate precisionCoordinate = parseLatitude(nmeaContent, 1);
+			Latitude latitude = (Latitude) precisionCoordinate.coordinate;
+			PrecisionCoordinate precisionCoordinate2 = parseLongitude(nmeaContent, 3);
+			Longitude longitude = (Longitude) precisionCoordinate2.coordinate; 
 			geoPosition.setLatitude(latitude);
-			if (nmeaContent[2].equals(SOUTH)) {
-				latitude.setDegree(latitude.getDegree() * -1);
-			}
-			
-			Longitude longitude = GeoFactory.eINSTANCE.createLongitude();
-			double lon = Double.parseDouble(nmeaContent[3]);
-			longitude.setDegree(Integer.parseInt(nmeaContent[3].substring(0, 3)));
-			longitude.setMinute(Integer.parseInt(nmeaContent[3].substring(3, 5)));
-			longitude.setSecond((lon - ((int) lon)) * 60);
-			geoPosition.setLatitude(latitude);
-			if (nmeaContent[4].equals(WEST)) {
-				longitude.setDegree(longitude.getDegree() * -1);
-			}
 			geoPosition.setLongitude(longitude);
+			geoPosition.setPrecision(Math.max(precisionCoordinate.precision, precisionCoordinate2.precision));
+
 			setSensorID(nmeaContent[0], geoPosition);
 			measurement.getMeasurements().add(geoPosition);
 			
@@ -705,8 +704,9 @@ public class NMEA0183Reader implements IDataReader {
 					calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nmeaContent[5].substring(0, 2).trim()));
 					calendar.set(Calendar.MINUTE, Integer.parseInt(nmeaContent[5].substring(2, 4).trim()));
 					calendar.set(Calendar.SECOND, Integer.parseInt(nmeaContent[5].substring(4, 6).trim()));
-					
+					calendar.set(Calendar.MILLISECOND, 0);
 					calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+					
 					time.setTime(calendar.getTime());
 					time.setTimezone("UTC"); //$NON-NLS-1$
 					geoPosition.setTime(calendar.getTime());
@@ -861,5 +861,18 @@ public class NMEA0183Reader implements IDataReader {
 			depth.setDepth(depthInMeters);
 		}
 		setSensorID(nmeaContent[0], depth);
+	}
+	
+	private class PrecisionCoordinate {
+
+		public PrecisionCoordinate(Coordinate coordinate, int precision) {
+			super();
+			this.coordinate = coordinate;
+			this.precision = precision;
+		}
+
+		Coordinate coordinate;
+		
+		int precision;
 	}
 }

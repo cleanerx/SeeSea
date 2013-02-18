@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoPositionImpl#getLongitude <em>Longitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoPositionImpl#getLatitude <em>Latitude</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoPositionImpl#getPrecision <em>Precision</em>}</li>
  * </ul>
  * </p>
  *
@@ -81,6 +82,26 @@ public class GeoPositionImpl extends ModelObjectImpl implements GeoPosition {
 	 * @ordered
 	 */
 	protected Latitude latitude;
+
+	/**
+	 * The default value of the '{@link #getPrecision() <em>Precision</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrecision()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PRECISION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPrecision() <em>Precision</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrecision()
+	 * @generated
+	 * @ordered
+	 */
+	protected int precision = PRECISION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -192,6 +213,27 @@ public class GeoPositionImpl extends ModelObjectImpl implements GeoPosition {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getPrecision() {
+		return precision;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPrecision(int newPrecision) {
+		int oldPrecision = precision;
+		precision = newPrecision;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GEO_POSITION__PRECISION, oldPrecision, precision));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -215,6 +257,8 @@ public class GeoPositionImpl extends ModelObjectImpl implements GeoPosition {
 				return getLongitude();
 			case GeoPackage.GEO_POSITION__LATITUDE:
 				return getLatitude();
+			case GeoPackage.GEO_POSITION__PRECISION:
+				return getPrecision();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -232,6 +276,9 @@ public class GeoPositionImpl extends ModelObjectImpl implements GeoPosition {
 				return;
 			case GeoPackage.GEO_POSITION__LATITUDE:
 				setLatitude((Latitude)newValue);
+				return;
+			case GeoPackage.GEO_POSITION__PRECISION:
+				setPrecision((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -251,6 +298,9 @@ public class GeoPositionImpl extends ModelObjectImpl implements GeoPosition {
 			case GeoPackage.GEO_POSITION__LATITUDE:
 				setLatitude((Latitude)null);
 				return;
+			case GeoPackage.GEO_POSITION__PRECISION:
+				setPrecision(PRECISION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -267,8 +317,26 @@ public class GeoPositionImpl extends ModelObjectImpl implements GeoPosition {
 				return longitude != null;
 			case GeoPackage.GEO_POSITION__LATITUDE:
 				return latitude != null;
+			case GeoPackage.GEO_POSITION__PRECISION:
+				return precision != PRECISION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (precision: ");
+		result.append(precision);
+		result.append(')');
+		return result.toString();
 	}
 
 } //GeoPositionImpl

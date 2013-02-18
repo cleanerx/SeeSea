@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChangeNotifier;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -54,6 +55,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -108,6 +110,28 @@ public class GeoPositionItemProvider
 
 
 	/**
+	 * This adds a property descriptor for the Precision feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPrecisionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_GeoPosition_precision_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeoPosition_precision_feature", "_UI_GeoPosition_type"),
+				 GeoPackage.Literals.GEO_POSITION__PRECISION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -157,7 +181,8 @@ public class GeoPositionItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_GeoPosition_type");
+		GeoPosition geoPosition = (GeoPosition)object;
+		return getString("_UI_GeoPosition_type") + " " + geoPosition.getPrecision();
 	}
 
 	/**
@@ -172,6 +197,9 @@ public class GeoPositionItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(GeoPosition.class)) {
+			case GeoPackage.GEO_POSITION__PRECISION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case GeoPackage.GEO_POSITION__LONGITUDE:
 			case GeoPackage.GEO_POSITION__LATITUDE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));

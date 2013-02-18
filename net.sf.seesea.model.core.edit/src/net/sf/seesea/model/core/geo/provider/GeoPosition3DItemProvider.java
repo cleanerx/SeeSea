@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -132,7 +132,7 @@ public class GeoPosition3DItemProvider
 	@Override
 	public String getText(Object object) {
 		GeoPosition3D geoPosition3D = (GeoPosition3D)object;
-		return getString("_UI_GeoPosition3D_type") + " " + geoPosition3D.getAltitude();
+		return getString("_UI_GeoPosition3D_type") + " " + geoPosition3D.getPrecision();
 	}
 
 	/**
