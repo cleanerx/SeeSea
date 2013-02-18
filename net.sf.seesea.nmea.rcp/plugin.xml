@@ -80,7 +80,7 @@
                label="mainBar">
             <command
                   commandId="net.sf.seesea.nmea.rcp.log.toggle"
-                  icon="icons/control-power_16x16.png"
+                  icon="icons/Upload.png"
                   label="%ToggleLogging"
                   style="toggle">
             </command>
