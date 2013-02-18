@@ -80,13 +80,13 @@
                label="mainBar">
             <command
                   commandId="net.sf.seesea.nmea.rcp.log.toggle"
-                  icon="icons/Upload.png"
+                  icon="icons/Record.png"
                   label="%ToggleLogging"
                   style="toggle">
             </command>
             <command
                   commandId="net.sf.seesea.nmea.rcp.log.upload"
-                  icon="icons/Upload.png"
+                  icon="icons/Upload64.png"
                   label="%UploadData"
                   style="push">
             </command>
