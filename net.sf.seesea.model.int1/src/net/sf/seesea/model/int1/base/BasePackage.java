@@ -89,6 +89,15 @@ public interface BasePackage extends EPackage {
 	int ABSTRACT_SEAMARK__LATITUDE = GeoPackage.GEO_POSITION__LATITUDE;
 
 	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_SEAMARK__PRECISION = GeoPackage.GEO_POSITION__PRECISION;
+
+	/**
 	 * The number of structural features of the '<em>Abstract Seamark</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

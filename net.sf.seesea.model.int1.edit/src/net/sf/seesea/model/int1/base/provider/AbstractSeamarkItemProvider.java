@@ -1,6 +1,6 @@
 /**
 * <copyright>
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,6 +34,7 @@ import java.util.List;
 
 import net.sf.seesea.model.core.geo.provider.GeoPositionItemProvider;
 
+import net.sf.seesea.model.int1.base.AbstractSeamark;
 import net.sf.seesea.model.int1.buoysandbeacons.provider.Int1EditPlugin;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -95,7 +96,8 @@ public class AbstractSeamarkItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_AbstractSeamark_type");
+		AbstractSeamark abstractSeamark = (AbstractSeamark)object;
+		return getString("_UI_AbstractSeamark_type") + " " + abstractSeamark.getPrecision();
 	}
 
 	/**

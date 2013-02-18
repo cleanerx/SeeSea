@@ -1,6 +1,6 @@
 /**
  * <copyright>
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -92,6 +92,7 @@ public class AbstractCommonBuoyBeaconItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addPrecisionPropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
 			addPositionPropertyDescriptor(object);
 			addColorPropertyDescriptor(object);
@@ -102,6 +103,28 @@ public class AbstractCommonBuoyBeaconItemProvider
 			addTopmarkPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Precision feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPrecisionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_GeoPosition_precision_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeoPosition_precision_feature", "_UI_GeoPosition_type"),
+				 GeoPackage.Literals.GEO_POSITION__PRECISION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -337,6 +360,7 @@ public class AbstractCommonBuoyBeaconItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AbstractCommonBuoyBeacon.class)) {
+			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION:
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__NAME:
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__POSITION:
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__COLOR:

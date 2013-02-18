@@ -128,13 +128,22 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	int ABSTRACT_COMMON_BUOY_BEACON__LATITUDE = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_COMMON_BUOY_BEACON__PRECISION = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__NAME = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 2;
+	int ABSTRACT_COMMON_BUOY_BEACON__NAME = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Position</b></em>' attribute.
@@ -143,7 +152,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__POSITION = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 3;
+	int ABSTRACT_COMMON_BUOY_BEACON__POSITION = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Color</b></em>' attribute list.
@@ -152,7 +161,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__COLOR = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 4;
+	int ABSTRACT_COMMON_BUOY_BEACON__COLOR = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Color Type</b></em>' attribute.
@@ -161,7 +170,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__COLOR_TYPE = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 5;
+	int ABSTRACT_COMMON_BUOY_BEACON__COLOR_TYPE = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Reflecting</b></em>' attribute.
@@ -170,7 +179,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__REFLECTING = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 6;
+	int ABSTRACT_COMMON_BUOY_BEACON__REFLECTING = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Radarreflector</b></em>' attribute.
@@ -179,7 +188,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__RADARREFLECTOR = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 7;
+	int ABSTRACT_COMMON_BUOY_BEACON__RADARREFLECTOR = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -188,7 +197,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__TYPE = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 8;
+	int ABSTRACT_COMMON_BUOY_BEACON__TYPE = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Topmark</b></em>' containment reference.
@@ -197,7 +206,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON__TOPMARK = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 9;
+	int ABSTRACT_COMMON_BUOY_BEACON__TOPMARK = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Common Buoy Beacon</em>' class.
@@ -206,7 +215,7 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_COMMON_BUOY_BEACON_FEATURE_COUNT = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 10;
+	int ABSTRACT_COMMON_BUOY_BEACON_FEATURE_COUNT = LightsPackage.LIGHT_CHARACTER_FEATURE_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.int1.buoysandbeacons.impl.BuoyImpl <em>Buoy</em>}' class.
@@ -271,6 +280,15 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @ordered
 	 */
 	int BUOY__LATITUDE = ABSTRACT_COMMON_BUOY_BEACON__LATITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BUOY__PRECISION = ABSTRACT_COMMON_BUOY_BEACON__PRECISION;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -436,6 +454,15 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	int BEACON__LATITUDE = ABSTRACT_COMMON_BUOY_BEACON__LATITUDE;
 
 	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BEACON__PRECISION = ABSTRACT_COMMON_BUOY_BEACON__PRECISION;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -588,6 +615,15 @@ public interface BuoysandbeaconsPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPECIAL_BUOY__LATITUDE = BUOY__LATITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPECIAL_BUOY__PRECISION = BUOY__PRECISION;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.

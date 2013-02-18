@@ -43,6 +43,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <ul>
  *   <li>{@link net.sf.seesea.model.int1.buoysandbeacons.impl.AbstractCommonBuoyBeaconImpl#getLongitude <em>Longitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.buoysandbeacons.impl.AbstractCommonBuoyBeaconImpl#getLatitude <em>Latitude</em>}</li>
+ *   <li>{@link net.sf.seesea.model.int1.buoysandbeacons.impl.AbstractCommonBuoyBeaconImpl#getPrecision <em>Precision</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.buoysandbeacons.impl.AbstractCommonBuoyBeaconImpl#getName <em>Name</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.buoysandbeacons.impl.AbstractCommonBuoyBeaconImpl#getPosition <em>Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.buoysandbeacons.impl.AbstractCommonBuoyBeaconImpl#getColor <em>Color</em>}</li>
@@ -76,6 +77,26 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 	 * @ordered
 	 */
 	protected Latitude latitude;
+
+	/**
+	 * The default value of the '{@link #getPrecision() <em>Precision</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrecision()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PRECISION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPrecision() <em>Precision</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrecision()
+	 * @generated
+	 * @ordered
+	 */
+	protected int precision = PRECISION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -327,6 +348,27 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getPrecision() {
+		return precision;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPrecision(int newPrecision) {
+		int oldPrecision = precision;
+		precision = newPrecision;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION, oldPrecision, precision));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public String getName() {
 		return name;
 	}
@@ -533,6 +575,8 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 				return getLongitude();
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LATITUDE:
 				return getLatitude();
+			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION:
+				return getPrecision();
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__NAME:
 				return getName();
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__POSITION:
@@ -567,6 +611,9 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 				return;
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LATITUDE:
 				setLatitude((Latitude)newValue);
+				return;
+			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION:
+				setPrecision((Integer)newValue);
 				return;
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__NAME:
 				setName((String)newValue);
@@ -611,6 +658,9 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LATITUDE:
 				setLatitude((Latitude)null);
 				return;
+			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION:
+				setPrecision(PRECISION_EDEFAULT);
+				return;
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__NAME:
 				setName(NAME_EDEFAULT);
 				return;
@@ -651,6 +701,8 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 				return longitude != null;
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LATITUDE:
 				return latitude != null;
+			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION:
+				return precision != PRECISION_EDEFAULT;
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__POSITION:
@@ -687,6 +739,7 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 			switch (derivedFeatureID) {
 				case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LONGITUDE: return GeoPackage.GEO_POSITION__LONGITUDE;
 				case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LATITUDE: return GeoPackage.GEO_POSITION__LATITUDE;
+				case BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION: return GeoPackage.GEO_POSITION__PRECISION;
 				default: return -1;
 			}
 		}
@@ -725,6 +778,7 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 			switch (baseFeatureID) {
 				case GeoPackage.GEO_POSITION__LONGITUDE: return BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LONGITUDE;
 				case GeoPackage.GEO_POSITION__LATITUDE: return BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__LATITUDE;
+				case GeoPackage.GEO_POSITION__PRECISION: return BuoysandbeaconsPackage.ABSTRACT_COMMON_BUOY_BEACON__PRECISION;
 				default: return -1;
 			}
 		}
@@ -757,7 +811,9 @@ public abstract class AbstractCommonBuoyBeaconImpl extends LightCharacterImpl im
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
+		result.append(" (precision: ");
+		result.append(precision);
+		result.append(", name: ");
 		result.append(name);
 		result.append(", position: ");
 		result.append(position);
