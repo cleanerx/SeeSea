@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Upload
+Bundle-SymbolicName: net.sf.seesea.upload
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.upload.UploadActivator
+Require-Bundle: org.eclipse.core.runtime,
+ net.sf.seesea.lib;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Export-Package: net.sf.seesea.upload

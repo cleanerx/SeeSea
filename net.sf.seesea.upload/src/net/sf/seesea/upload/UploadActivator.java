@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens K�bler All rights reserved.
+ Copyright (c) 2010-2013, Jens Kübler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -24,32 +24,33 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.nmea.rcp.handler;
+package net.sf.seesea.upload;
 
-import net.sf.seesea.lib.ValidatingWizardDialog;
-import net.sf.seesea.nmea.rcp.wizard.UploadWizard;
-import net.sf.seesea.nmea.rcp.wizard.UsernamePasswordWizardPage;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.ui.handlers.HandlerUtil;
+public class UploadActivator implements BundleActivator {
 
-public class UploadDataHandler extends AbstractHandler {
+	private static BundleContext context;
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		UploadWizard uploadWizard = new UploadWizard();
-		uploadWizard.addPage(new UsernamePasswordWizardPage());
-		uploadWizard.setWindowTitle("Upload Data");
-		
-		ValidatingWizardDialog wizardDialog = new ValidatingWizardDialog(HandlerUtil.getActiveShell(event), uploadWizard);
-		if(wizardDialog.open() == Dialog.OK) {
-			return Dialog.OK;
-		} else {
-			return Dialog.CANCEL;
-		}
+	static BundleContext getContext() {
+		return context;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 */
+	public void start(BundleContext bundleContext) throws Exception {
+		UploadActivator.context = bundleContext;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 */
+	public void stop(BundleContext bundleContext) throws Exception {
+		UploadActivator.context = null;
 	}
 
 }

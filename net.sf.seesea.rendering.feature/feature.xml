@@ -64,6 +64,12 @@
          id="org.eclipse.emf.edit"
          version="0.0.0"/>
 
+   <requires>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.ui" version="3.5.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.7.0" match="compatible"/>
+   </requires>
+
    <plugin
          id="net.sf.seesea.osm"
          download-size="0"
@@ -164,6 +170,20 @@
 
    <plugin
          id="org.eclipse.jface.text"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.sf.seesea.upload"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.sf.seesea.upload.osm"
          download-size="0"
          install-size="0"
          version="0.0.0"
