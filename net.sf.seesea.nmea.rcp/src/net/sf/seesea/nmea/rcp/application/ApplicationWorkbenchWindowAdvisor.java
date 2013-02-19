@@ -66,7 +66,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 //        configurer.setInitialSize(new Point(2000, 2000));
         
         configurer.setTitle(MessageFormat.format(Messages.getString("ApplicationWorkbenchWindowAdvisor.title"), VERSION) ); //$NON-NLS-1$
-        configurer.setShowMenuBar(false);
+        configurer.setShowMenuBar(true);
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
         configurer.setShowPerspectiveBar(true);

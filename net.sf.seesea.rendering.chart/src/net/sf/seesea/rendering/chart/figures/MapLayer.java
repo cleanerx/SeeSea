@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,11 +28,14 @@ package net.sf.seesea.rendering.chart.figures;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.tileservice.IAsynchronouslyUpdateable;
 import net.sf.seesea.tileservice.ITileProvider;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.Graphics;
@@ -42,9 +45,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -68,68 +70,89 @@ public class MapLayer extends FreeformLayer {
 	protected void paintFigure(Graphics g) {
 		
 		BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
-		ServiceReference serviceReference = bundleContext.getServiceReference(ITileProvider.class.getName());
-		if(serviceReference == null) {
-			g.drawText("The tile provider is unavailable. Change the preferences to point to an appropriate URL", 10, 10);
-		} else {
-			ITileProvider tileProvider =  (ITileProvider) bundleContext.getService(serviceReference);
-			Point tileSize = new Point(tileProvider.getTileSize().x, tileProvider.getTileSize().y);
-			paintBounds = g.getClip(new Rectangle()).getCopy();
-			prevpaintBounds.add(0, paintBounds);
-			if(prevpaintBounds.size() > 10) {
-				prevpaintBounds.remove(10);
+		ServiceReference<?>[] serviceReferences;
+		try {
+			serviceReferences = bundleContext.getServiceReferences(ITileProvider.class.getName(), null);
+			SortedSet<ServiceReference<?>> xxx = new TreeSet<ServiceReference<?>>(new ServiceRankingComparator());
+			for (ServiceReference<?> serviceReference : serviceReferences) {
+				xxx.add(serviceReference);
 			}
-			int maxHeight = 0;
-			int maxWidth = 0;
-			for (Rectangle rectangle : prevpaintBounds) {
-				maxHeight = Math.max(rectangle.height, maxHeight);
-				maxWidth = Math.max(rectangle.width, maxWidth);
-			}
-			Point upperLeftCorner = new Point(mapPosition.x - (mapPosition.x % tileSize.y),
-					mapPosition.y - (mapPosition.y % tileSize.y));
-			int x0 = upperLeftCorner.x / tileSize.x;
-			int y0 = upperLeftCorner.y / tileSize.y;
-			int x1 = (int) Math.ceil((((double) upperLeftCorner.x) + paintBounds.width) / tileSize.x);
-			int y1 = (int) Math.ceil((((double) upperLeftCorner.y) + paintBounds.height) / tileSize.y);
-			
-			org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(mapPosition.x,
-					mapPosition.y);
-			org.eclipse.swt.graphics.Rectangle swtrectangle = new org.eclipse.swt.graphics.Rectangle(paintBounds.x, paintBounds.y, paintBounds.width, paintBounds.height);
-			
-			Dimension imageCount = getImageCount(tileProvider, swtrectangle, point);
-			ImageData tiles[][] = tileProvider.getTiles(point, imageCount.width, imageCount.height, zoomLevel, new IAsynchronouslyUpdateable() {
-				
-				// TODO: optimize the exact area
-				public void updateTilePresent() {
-					Display.getDefault().asyncExec(new Runnable() {
-						
-						public void run() {
-							// TODO Auto-generated method stub
-							repaint();
-						}
-					});
-				}
-			}, new NullProgressMonitor());
-			int dy = y0 * tileSize.y;
-			for (int y = y0; y <= y1; y++) {
-				int dx = x0 * tileSize.x;
-				for (int x = x0; x <= x1; x++) {
-					if (x - x0 < tiles.length && y - y0 < tiles[x - x0].length) {
-						Image image;
-						if(tiles[x - x0][y - y0] != null) {
-							image = new Image(Display.getDefault(), tiles[x - x0][y - y0]);
-							g.drawImage(image, x * tileSize.x, y * tileSize.y);
-							image.dispose();
-						} else {
-							image = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
-							g.drawImage(image, x * tileSize.x, y * tileSize.y);
-						}
+			if(serviceReferences == null) {
+				g.drawText("The tile provider is unavailable. Change the preferences to point to an appropriate URL", 10, 10);
+			} else {
+				List<ImagePosition> imagePositions = new ArrayList<MapLayer.ImagePosition>(20);
+				for (ServiceReference<?> serviceReference : xxx) {
+					ITileProvider tileProvider =  (ITileProvider) bundleContext.getService(serviceReference);
+					Point tileSize = new Point(tileProvider.getTileSize().x, tileProvider.getTileSize().y);
+					paintBounds = g.getClip(new Rectangle()).getCopy();
+					prevpaintBounds.add(0, paintBounds);
+					if(prevpaintBounds.size() > 10) {
+						prevpaintBounds.remove(10);
 					}
-					dx += tileSize.x;
+//					g.setAlpha(64);
+					int maxHeight = 0;
+					int maxWidth = 0;
+					for (Rectangle rectangle : prevpaintBounds) {
+						maxHeight = Math.max(rectangle.height, maxHeight);
+						maxWidth = Math.max(rectangle.width, maxWidth);
+					}
+					Point upperLeftCorner = new Point(mapPosition.x - (mapPosition.x % tileSize.y),
+							mapPosition.y - (mapPosition.y % tileSize.y));
+					int x0 = upperLeftCorner.x / tileSize.x;
+					int y0 = upperLeftCorner.y / tileSize.y;
+					int x1 = (int) Math.ceil((((double) upperLeftCorner.x) + paintBounds.width) / tileSize.x);
+					int y1 = (int) Math.ceil((((double) upperLeftCorner.y) + paintBounds.height) / tileSize.y);
+					
+					org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(mapPosition.x,
+							mapPosition.y);
+					org.eclipse.swt.graphics.Rectangle swtrectangle = new org.eclipse.swt.graphics.Rectangle(paintBounds.x, paintBounds.y, paintBounds.width, paintBounds.height);
+					
+					Dimension imageCount = getImageCount(tileProvider, swtrectangle, point);
+					ImageData tiles[][] = tileProvider.getTiles(point, imageCount.width, imageCount.height, zoomLevel, new IAsynchronouslyUpdateable() {
+						
+						// TODO: optimize the exact area
+						public void updateTilePresent() {
+							Display.getDefault().asyncExec(new Runnable() {
+								
+								public void run() {
+									// TODO Auto-generated method stub
+									repaint();
+								}
+							});
+						}
+					}, new NullProgressMonitor());
+					int dy = y0 * tileSize.y;
+					for (int y = y0; y <= y1; y++) {
+						int dx = x0 * tileSize.x;
+						for (int x = x0; x <= x1; x++) {
+							if (x - x0 < tiles.length && y - y0 < tiles[x - x0].length) {
+								if(tiles[x - x0][y - y0] != null) {
+									if(tiles[x - x0][y - y0] != null) {
+										ImageData data = tiles[x - x0][y - y0];
+										ImagePosition imagePosition = new ImagePosition();
+										imagePosition.image = new Image(Display.getDefault(), data);;
+										imagePosition.x = x * tileSize.x;
+										imagePosition.y = y * tileSize.y;
+										imagePositions.add(imagePosition);
+									}
+								} else {
+//									image = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
+//									g.drawImage(image, x * tileSize.x, y * tileSize.y);
+								}
+							}
+							dx += tileSize.x;
+						}
+						dy += tileSize.y;
+					}
+					bundleContext.ungetService(serviceReference);
 				}
-				dy += tileSize.y;
+				for (ImagePosition imagePosition : imagePositions) {
+					g.drawImage(imagePosition.image, imagePosition.x, imagePosition.y);
+					imagePosition.image.dispose();
+				}
 			}
-			bundleContext.ungetService(serviceReference);
+		} catch (InvalidSyntaxException e) {
+			Logger.getLogger(getClass()).error("Failed to set filter", e); //$NON-NLS-1$
 		}
 	}
 	
@@ -193,4 +216,13 @@ public class MapLayer extends FreeformLayer {
 		return new Dimension(requiredXTiles, requiredYTiles);
 	}
 	
+	private class ImagePosition {
+		
+		Image image;
+		
+		int x;
+		
+		int y;
+		
+	}
 }

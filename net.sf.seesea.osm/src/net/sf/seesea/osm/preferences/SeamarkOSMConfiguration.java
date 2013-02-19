@@ -26,6 +26,7 @@
  */
 package net.sf.seesea.osm.preferences;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -45,7 +46,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
  * @author jens
  *
  */
-public class OSMConfiguration {
+public class SeamarkOSMConfiguration {
 
 	private final class PreferenceChangeListener implements
 			IPropertyChangeListener {
@@ -55,11 +56,11 @@ public class OSMConfiguration {
 			String cacheDir = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.CACHE_DIRECTORY);
 			
 			try {
-				Configuration configuration = configAdmin.getConfiguration("net.sf.seesea.osm.tileprovider"); //$NON-NLS-1$
+				Configuration configuration = configAdmin.getConfiguration("net.sf.seesea.osm.tileprovider.seamark"); //$NON-NLS-1$
 				Dictionary properties = new Hashtable<String, Object>();
-				properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir);
-				properties.put(IOSMPreferences.TILE_SOURCE, tileSource);
-				properties.put(IOSMPreferences.OVERLAY, false);
+				properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir + File.separator + "seamarks");
+				properties.put(IOSMPreferences.TILE_SOURCE, "http://tiles.openseamap.org/seamark/");
+				properties.put(IOSMPreferences.OVERLAY, true);
 				configuration.update(properties);
 			} catch (IOException e) {
 				Logger.getLogger(getClass()).error("Failed to update configuration", e); //$NON-NLS-1$
@@ -75,11 +76,11 @@ public class OSMConfiguration {
 		String cacheDir = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.CACHE_DIRECTORY);
 		
 		try {
-			Configuration configuration = configAdmin.createFactoryConfiguration("net.sf.seesea.osm.tileprovider"); //$NON-NLS-1$
+			Configuration configuration = configAdmin.createFactoryConfiguration("net.sf.seesea.osm.tileprovider.seamark"); //$NON-NLS-1$
 			Dictionary properties = new Hashtable<String, Object>();
-			properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir);
-			properties.put(IOSMPreferences.TILE_SOURCE, tileSource);
-			properties.put(IOSMPreferences.OVERLAY, false);
+			properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir + File.separator + "seamarks"); //$NON-NLS-1$
+			properties.put(IOSMPreferences.TILE_SOURCE, "http://tiles.openseamap.org/seamark/"); //$NON-NLS-1$
+			properties.put(IOSMPreferences.OVERLAY, true);
 			configuration.update(properties);
 		} catch (IOException e) {
 			Logger.getLogger(getClass()).error("Failed to update configuration", e); //$NON-NLS-1$

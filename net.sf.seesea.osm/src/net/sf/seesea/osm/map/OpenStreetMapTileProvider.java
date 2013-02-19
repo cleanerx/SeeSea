@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,6 +27,7 @@
 package net.sf.seesea.osm.map;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -75,6 +76,8 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 
 	private OSMCacheProcessor osmCacheProcessor;
 
+	private Boolean overlay;
+
 	/**
 	 * @throws IOException 
 	 * 
@@ -92,6 +95,7 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 		
 		noImage = imageDescriptor.getImageData();
+		overlay = false;
 	}
 	
 	public void activate(Map properties) throws IOException {
@@ -100,17 +104,21 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 
 	private void setupTileCache(Map properties) {
 		try {
-		File cacheDirectory = new File((String) properties.get(IOSMPreferences.CACHE_DIRECTORY));
-		osmCacheProcessor = new OSMCacheProcessor(cacheDirectory); 
-		this.tileSources = new ArrayList<ITileSource>(3);
-		
-		String tileSource = (String) properties.get(IOSMPreferences.TILE_SOURCE); 
-		
-		URL server = new URL(tileSource);
-		// FIXME: what to do if this was specified wrong?
-		OpenStreetmapServerTileSource openStreetmapServerTileSource = new OpenStreetmapServerTileSource(server,0,18);
-		OpenStreetMapHardDiskTileSource openStreetMapHardDiskTileSource = new OpenStreetMapHardDiskTileSource(cacheDirectory, openStreetmapServerTileSource);
-		this.tileSources.add(openStreetMapHardDiskTileSource);
+		String cacheDir = (String) properties.get(IOSMPreferences.CACHE_DIRECTORY);
+		if(cacheDir != null) {
+			File cacheDirectory = new File(cacheDir);
+			osmCacheProcessor = new OSMCacheProcessor(cacheDirectory); 
+			this.tileSources = new ArrayList<ITileSource>(3);
+			overlay = (Boolean) properties.get(IOSMPreferences.OVERLAY);
+			
+			String tileSource = (String) properties.get(IOSMPreferences.TILE_SOURCE); 
+			
+			URL server = new URL(tileSource);
+			// FIXME: what to do if this was specified wrong?
+			OpenStreetmapServerTileSource openStreetmapServerTileSource = new OpenStreetmapServerTileSource(server,0,18);
+			OpenStreetMapHardDiskTileSource openStreetMapHardDiskTileSource = new OpenStreetMapHardDiskTileSource(cacheDirectory, openStreetmapServerTileSource);
+			this.tileSources.add(openStreetMapHardDiskTileSource);
+		}
 		} catch (MalformedURLException e) {
 			Logger.getLogger(getClass()).error("Failed to setup tile cache", e); //$NON-NLS-1$
 		}
@@ -157,7 +165,10 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 						GetTileRunnable tileRunnable = new GetTileRunnable(xTile, yTile, zoomLevel, imageData, i, j, updateable, progressMonitor);
 						tileRunnable.run();
 					} else {
-						imageData[i][j] = noImage;
+						// overlay image do not show noImage
+						if(!overlay) {
+							imageData[i][j] = noImage;
+						}
 						fixedThreadPool.submit(new GetTileRunnable(xTile, yTile, zoomLevel, imageData, i, j, updateable, progressMonitor));
 					}
 				}  else {
@@ -217,6 +228,8 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 					asynchronouslyUpdateable.updateTilePresent();
 				}
 //				_tileCache.put(tileLocation, imageData[i][j]);
+			} catch (FileNotFoundException e) {
+				// nothing to do
 			} catch (IOException e) {
 				Status status = new Status(IStatus.ERROR, OpenSeaMapActivator.PLUGIN_ID, IStatus.ERROR, "Failed to load image from server", e); //$NON-NLS-1$
 				OpenSeaMapActivator.getDefault().getLog().log(status);

@@ -4,4 +4,5 @@
    <service>
       <provide interface="net.sf.seesea.tileservice.ITileProvider"/>
    </service>
+   <property name="service.ranking" type="String" value="1000"/>
 </scr:component>
