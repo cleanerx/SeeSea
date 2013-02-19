@@ -264,7 +264,9 @@ public class SensorDataView extends ViewPart {
 		windRegistration.unregister();
 		sateliteRegistration.unregister();
 		timeRegistration.unregister();
-		timeUpdateThread.interrupt();
+		if(timeUpdateThread != null) {
+			timeUpdateThread.interrupt();
+		}
 		tripRegistration.unregister();
 		totalTripRegistration.unregister();
 		resourceManager.dispose();
