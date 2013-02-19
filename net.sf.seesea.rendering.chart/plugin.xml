@@ -12,7 +12,7 @@
          point="org.eclipse.ui.editors">
       <editor
             default="true"
-            name="Chart"
+            name="%editor.name"
             extensions="seesea"
             icon="res/icons/chart.png"
             class="net.sf.seesea.rendering.chart.editor.ChartEditor"
@@ -25,9 +25,9 @@
 		<editorContribution id="org.eclipse.ui.articles.action.contribution.editor" targetID="net.sf.seesea.ui.editor.map">
      <action
            class="net.sf.seesea.rendering.chart.action.FollowPositionActionDelegate"
-           icon="res/icons/position.png"
+           icon="res/icons/GeoPosition.png"
            id="net.sf.seesea.rendering.chart.action1"
-           label="Track Current Position"
+           label="%trackPosition.label"
            state="true"
            style="toggle"
            toolbarPath="Track Current Position">
