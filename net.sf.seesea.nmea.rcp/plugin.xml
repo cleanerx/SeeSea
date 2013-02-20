@@ -96,6 +96,12 @@
                   label="%command.label"
                   style="push">
             </command>
+            <command
+                  commandId="org.eclipse.ui.help.helpContents"
+                  icon="icons/Help64.png"
+                  label="Help"
+                  style="push">
+            </command>
          </toolbar>
       </menuContribution>
    </extension>
