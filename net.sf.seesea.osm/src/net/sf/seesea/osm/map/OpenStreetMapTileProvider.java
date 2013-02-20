@@ -33,8 +33,11 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -78,6 +81,8 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 
 	private Boolean overlay;
 
+	private Set<GetTileRunnable> queuedTileRequests;
+	
 	/**
 	 * @throws IOException 
 	 * 
@@ -89,13 +94,15 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 		Runtime runtime = Runtime.getRuntime();
 		// OSM policy states no more than 2 threads retrieving tiles
         int nrOfThreads = runtime.availableProcessors() > 1 ? 2 : 1;
-		fixedThreadPool = new ThreadPoolExecutor(nrOfThreads, 16, 1, TimeUnit.MINUTES, new BlockingLifoQueue<Runnable>());
+        // new BlockingLifoQueue<Runnable>()
+		fixedThreadPool = new ThreadPoolExecutor(nrOfThreads, 2, 2, TimeUnit.MINUTES, new BlockingLifoQueue<Runnable>());
 		
 		URL entry = OpenSeaMapActivator.getDefault().getBundle().getEntry("/res/chart.png"); //$NON-NLS-1$
 		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 		
 		noImage = imageDescriptor.getImageData();
 		overlay = false;
+		queuedTileRequests = Collections.synchronizedSet(new HashSet<OpenStreetMapTileProvider.GetTileRunnable>());
 	}
 	
 	public void activate(Map properties) throws IOException {
@@ -169,7 +176,10 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 						if(!overlay) {
 							imageData[i][j] = noImage;
 						}
-						fixedThreadPool.submit(new GetTileRunnable(xTile, yTile, zoomLevel, imageData, i, j, updateable, progressMonitor));
+						GetTileRunnable getTileRunnable = new GetTileRunnable(xTile, yTile, zoomLevel, imageData, i, j, updateable, progressMonitor);
+						if(queuedTileRequests.add(getTileRunnable)) {
+							fixedThreadPool.submit(getTileRunnable);
+						}
 					}
 				}  else {
 					imageData[i][j] = cachedTile;
@@ -227,6 +237,7 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 				if(asynchronouslyUpdateable != null) {
 					asynchronouslyUpdateable.updateTilePresent();
 				}
+				queuedTileRequests.remove(this);
 //				_tileCache.put(tileLocation, imageData[i][j]);
 			} catch (FileNotFoundException e) {
 				// nothing to do
@@ -236,6 +247,49 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 			}
 
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + getOuterType().hashCode();
+			result = prime * result + i;
+			result = prime * result + j;
+			result = prime * result + xTile;
+			result = prime * result + yTile;
+			result = prime * result + zoomLevel;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			GetTileRunnable other = (GetTileRunnable) obj;
+			if (!getOuterType().equals(other.getOuterType()))
+				return false;
+			if (i != other.i)
+				return false;
+			if (j != other.j)
+				return false;
+			if (xTile != other.xTile)
+				return false;
+			if (yTile != other.yTile)
+				return false;
+			if (zoomLevel != other.zoomLevel)
+				return false;
+			return true;
+		}
+
+		private OpenStreetMapTileProvider getOuterType() {
+			return OpenStreetMapTileProvider.this;
+		}
+		
+		
 	}
 
 	private class TileLocation {

@@ -52,6 +52,11 @@ public class InstrumentContainerFigure extends Figure {
 
   private static Dimension minSize = new Dimension(50, 30);
 
+private RGB grey;
+
+private RGB white;
+
+  
   /**
  * 
  */
@@ -67,10 +72,8 @@ public InstrumentContainerFigure() {
 //    layout.setMinorAlignment(ToolbarLayout.ALIGN_TOPLEFT);
     layout.setStretchMinorAxis(true);
     layout.setSpacing(3);
-//    FlowLayout layout = new FlowLayout();
-//    layout.
-//    DelegatingListLayout layout = new DelegatingListLayout(false, 5);
-//    FormLayout layout = new FormLayout();
+	grey = new RGB(211,211,211);
+	white = new RGB(255,255,255);
 
     setLayoutManager(layout);
     createChildAreaFigure();
@@ -95,8 +98,8 @@ public InstrumentContainerFigure() {
 		Rectangle copy = getBounds().getCopy();
 //		Color rgb = new Color(Display.getDefault(), new RGB(130,173,231));
 //		Color rgb2 = new Color(Display.getDefault(), new RGB(98,133,240));
-		Color rgb2 = new Color(Display.getDefault(), new RGB(211,211,211));
-		Color rgb = new Color(Display.getDefault(), new RGB(255,255,255));
+		Color rgb2 = new Color(Display.getDefault(), grey);
+		Color rgb = new Color(Display.getDefault(), white);
 		g.setForegroundColor(rgb);
 		g.setBackgroundColor(rgb2);
 		g.fillGradient(copy, true);

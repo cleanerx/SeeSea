@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.RGB;
  */
 public class ColorMap {
 	
+	private static final RGB violet = new RGB(116,63,175);
 	private static Map<net.sf.seesea.model.int1.lights.Color, org.eclipse.swt.graphics.Color> colorMap = new HashMap<net.sf.seesea.model.int1.lights.Color, org.eclipse.swt.graphics.Color>();
 
 	public static org.eclipse.swt.graphics.Color getColor(net.sf.seesea.model.int1.lights.Color color) {
@@ -48,7 +49,7 @@ public class ColorMap {
 			colorMap.put(Color.ORANGE, ColorConstants.orange);
 			colorMap.put(Color.BLUE, ColorConstants.blue);
 			colorMap.put(Color.BLACK, ColorConstants.black);
-			colorMap.put(Color.VIOLET, new org.eclipse.swt.graphics.Color(null, new RGB(116,63,175)));
+			colorMap.put(Color.VIOLET, new org.eclipse.swt.graphics.Color(null, violet));
 			colorMap.put(Color.WHITE, ColorConstants.white);
 			colorMap.put(Color.YELLOW, ColorConstants.yellow);
 		}

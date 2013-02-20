@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,9 +43,12 @@ import org.eclipse.swt.widgets.Display;
  */
 public class InstrumentContainerFigure extends Figure {
 
-  protected IFigure childArea;
+
+protected IFigure childArea;
 
   private static Dimension minSize = new Dimension(100, 40);
+
+private RGB color1;
 
   /**
  * 
@@ -56,6 +59,7 @@ public InstrumentContainerFigure() {
     setForegroundColor(ColorConstants.white);
     setLayoutManager(new DelegatingLayout());
     createChildAreaFigure();
+    color1 = new RGB(64,54,54);
 }
   
 	@Override
@@ -74,7 +78,7 @@ public InstrumentContainerFigure() {
 		Dimension prefSize2 = getPreferredSize();
 		Rectangle copy = new Rectangle(copyX.x + copyX.width - prefSize2.width, copyX.y + copyX.height - prefSize2.height, prefSize2.width, prefSize2.height);
 		
-		Color rgb = new Color(Display.getDefault(), new RGB(64,54,54));
+		Color rgb = new Color(Display.getDefault(), color1);
 		g.setBackgroundColor(rgb);
 		g.fillRectangle(copy);
 		rgb.dispose();

@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,104 +34,82 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-public final class BlockingLifoQueue<T> implements BlockingQueue<T>
-{
-  // we add and remove only from the end of the queue
-  private final BlockingDeque<T> deque; 
+public final class BlockingLifoQueue<T> extends LinkedBlockingDeque<T> implements BlockingQueue<T> {
+//	// we add and remove only from the end of the queue
+//	private final BlockingDeque<T> deque;
+//
+	public BlockingLifoQueue() {
+		super(1000);
+//		deque = new LinkedBlockingDeque<T>();
+	}
 
-  public BlockingLifoQueue()
-  { deque = new LinkedBlockingDeque<T>(); }
+	public boolean add(T e) {
+		addLast(e);
+		return true;
+	}
 
-  public boolean add(T e) {
-    deque.addLast(e);
-    return true;
-  }
+	public int drainTo(Collection<? super T> c) {
+		return drainTo(c);
+	}
 
-  public boolean contains(Object o)
-  { return deque.contains(o); }
+	public int drainTo(Collection<? super T> c, int maxElements) {
+		return drainTo(c, maxElements);
+	}
 
-  public int drainTo(Collection<? super T> c)
-  { return deque.drainTo(c); }
+	public boolean offer(T e) {
+		return offerLast(e);
+	}
 
-  public int drainTo(Collection<? super T> c, int maxElements)
-  { return deque.drainTo(c,maxElements); }
+	public boolean offer(T e, long timeout, TimeUnit unit)
+			throws InterruptedException {
+		return offerLast(e, timeout, unit);
+	}
 
-  public boolean offer(T e)
-  { return deque.offerLast(e); }
+	public T poll(long timeout, TimeUnit unit) throws InterruptedException {
+		return pollLast(timeout, unit);
+	}
 
-  public boolean offer(T e, long timeout, TimeUnit unit)
-      throws InterruptedException
-  { return deque.offerLast(e,timeout,unit); }
+	public void put(T e) throws InterruptedException {
+		putLast(e);
+	}
 
-  public T poll(long timeout, TimeUnit unit) throws InterruptedException
-  { return deque.pollLast(timeout, unit); }
+	public T take() throws InterruptedException {
+		return takeLast();
+	}
 
-  public void put(T e) throws InterruptedException
-  { deque.putLast(e); }
+	public T element() {
+		if (isEmpty()) {
+			throw new NoSuchElementException("empty stack");
+		}
 
-  public int remainingCapacity()
-  { return deque.size(); }
+		return pollLast();
+	}
 
-  public boolean remove(Object o)
-  { return deque.remove(o); }
+	public T peek() {
+		return peekLast();
+	}
 
-  public T take() throws InterruptedException
-  { return deque.takeLast(); }
+	public T poll() {
+		return pollLast();
+	}
 
-  public T element()
-  {
-    if (deque.isEmpty()) { 
-      throw new NoSuchElementException("empty stack");
-    }
+	public T remove() {
+		if (isEmpty()) {
+			throw new NoSuchElementException("empty stack");
+		}
 
-    return deque.pollLast();
-  }
+		return removeLast();
+	}
 
-  public T peek()
-  { return deque.peekLast(); }
+	public boolean addAll(Collection<? extends T> c) {
+		for (T e : c) {
+			addLast(e);
+		}
+		return true;
+	}
 
-  public T poll()
-  { return deque.peekLast(); }
+	public Iterator<T> iterator() {
+		return descendingIterator();
+	}
 
-  public T remove()
-  {
-    if (deque.isEmpty()) { 
-      throw new NoSuchElementException("empty stack");
-    }
-
-    return deque.pollLast();
-  }
-
-  public boolean addAll(Collection<? extends T> c)
-  { 
-    for (T e : c) { deque.add(e); }
-    return true;
-  }
-
-  public void clear()
-  { deque.clear();}
-
-  public boolean containsAll(Collection<?> c)
-  { return deque.containsAll(c); }
-
-  public boolean isEmpty()
-  {  return deque.isEmpty(); }
-
-  public Iterator<T> iterator()
-  { return deque.descendingIterator(); }
-
-  public boolean removeAll(Collection<?> c)
-  { return deque.removeAll(c); }
-
-  public boolean retainAll(Collection<?> c)
-  { return deque.retainAll(c); }
-
-  public int size()
-  { return deque.size(); }
-
-  public Object[] toArray()
-  { return deque.toArray(); }
-
-  public <T> T[] toArray(T[] a)
-  { return deque.toArray(a); }
 }

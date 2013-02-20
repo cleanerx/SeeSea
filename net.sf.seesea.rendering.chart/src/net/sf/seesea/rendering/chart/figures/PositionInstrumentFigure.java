@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,13 +45,15 @@ public class PositionInstrumentFigure extends FreeformLayer {
 	
 	private String positionLatitude; 
 
-	private String positionLongitude; 
+	private String positionLongitude;
+
+	private RGB rgb2; 
 
 	/**
 	 * 
 	 */
 	public PositionInstrumentFigure() {
-		return;
+		rgb2 = new RGB(255,227,181);
 	}
 	
 	@Override
@@ -68,7 +70,8 @@ public class PositionInstrumentFigure extends FreeformLayer {
 //		Rectangle copy = new Rectangle(copyX.x + copyX.width - prefSize2.width, copyX.y + copyX.height - prefSize2.height, prefSize2.width, prefSize2.height);
 		Rectangle copy = getBounds().getCopy();
 		
-		Color rgb = new Color(Display.getDefault(), new RGB(255,227,181));
+		
+		Color rgb = new Color(Display.getDefault(), rgb2);
 		g.setBackgroundColor(rgb);
 		g.setForegroundColor(ColorConstants.black);
 		g.fillRectangle(copy);

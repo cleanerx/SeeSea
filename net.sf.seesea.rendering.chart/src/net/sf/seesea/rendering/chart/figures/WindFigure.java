@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,6 +47,12 @@ public class WindFigure extends Figure {
 	private Double windSpeed;
 	
 	private Double windSpeedBeaufort;
+
+	private RGB rgb2;
+
+	public WindFigure() {
+		rgb2 = new RGB(255,227,181);
+	}
 	
 	@Override
 	protected void paintFigure(Graphics g) {
@@ -54,7 +60,7 @@ public class WindFigure extends Figure {
 		g.setAntialias(SWT.ON);
 
 		g.setForegroundColor(ColorConstants.black);
-		Color rgb = new Color(Display.getDefault(), new RGB(255,227,181));
+		Color rgb = new Color(Display.getDefault(), rgb2);
 		g.setBackgroundColor(rgb);
 
 		// background

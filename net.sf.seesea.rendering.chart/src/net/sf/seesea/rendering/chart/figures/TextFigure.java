@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,16 +38,19 @@ import org.eclipse.swt.widgets.Display;
 
 public class TextFigure extends GeoFigure {
 
+	private RGB rgb;
+
 	public TextFigure() {
 //		setOpaque(true);
 //		super(0,-10);
 //		setBounds(new Rectangle(5,5,200,200));
+		rgb = new RGB(248, 216, 4);
 	}
 	
 	@Override
 	protected void paintFigure(Graphics g) {
 		Rectangle r = getBounds().getCopy();
-		g.setBackgroundColor(new Color(Display.getDefault(), new RGB(248, 216, 4)));
+		g.setBackgroundColor(new Color(Display.getDefault(), rgb));
 		g.setForegroundColor(ColorConstants.black);
 		PointList pointList = new PointList();
 		pointList.addPoint(new Point(r.x + 5, r.y + 0));

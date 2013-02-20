@@ -67,10 +67,13 @@ public class NMEA0183Reader implements IDataReader {
 	private int satelliteMessageCounter;
 	private Map<NMEA0183MessageTypes, Set<String>> processMessageTypes2SensorIds;
 
+	private SimpleDateFormat simpleDateFormat;
+
 	public NMEA0183Reader(Map<NMEA0183MessageTypes, Set<String>> processMessageTypes2SensorIds) {
 		satelliteDataCache = new HashSet<SatelliteInfo>();
 		satelliteMessageCounter = 0;
 		this.processMessageTypes2SensorIds = processMessageTypes2SensorIds;
+		simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
 	}
 	
 	public NMEA0183Reader() {
@@ -81,11 +84,14 @@ public class NMEA0183Reader implements IDataReader {
 		for (NMEA0183MessageTypes nmea0183MessageTypes : allOf) {
 			processMessageTypes2SensorIds.put(nmea0183MessageTypes, Collections.<String>emptySet());
 		}
+		simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
+
 	}
 	
 	public NMEA0183Reader(InputStream inputStream) {
 		this();
 		bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+		simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
 	}
 	
 	@Override
@@ -229,6 +235,7 @@ public class NMEA0183Reader implements IDataReader {
 	private Measurement DPT_DepthOfWater(String[] nmeaContent) {
 		PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
 		CompositeMeasurement measurement = physxFactory.createCompositeMeasurement();
+		List<Measurement> measurements = measurement.getMeasurements();
 		if(nmeaContent.length > 1) {
 			Depth depthBelowTransducer = null;
 			if (!nmeaContent[1].isEmpty()) {
@@ -239,7 +246,7 @@ public class NMEA0183Reader implements IDataReader {
 					depthBelowTransducer.setDepth(depthInMeters);
 					depthBelowTransducer.setValid(true);
 					depthBelowTransducer.setMeasurementPosition(RelativeDepthMeasurementPosition.TRANSDUCER);
-					measurement.getMeasurements().add(depthBelowTransducer);
+					measurements.add(depthBelowTransducer);
 				} catch (NumberFormatException e) {
 					// fail silently
 				}
@@ -257,7 +264,7 @@ public class NMEA0183Reader implements IDataReader {
 							depthBelowX.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
 						}
 						setSensorID(nmeaContent[0], depthBelowX);
-						measurement.getMeasurements().add(depthBelowX);
+						measurements.add(depthBelowX);
 					}
 				} catch (NumberFormatException e) {
 					// fail silently
@@ -580,7 +587,6 @@ public class NMEA0183Reader implements IDataReader {
 			int nmeaIndex) {
 		try {
 			if(!nmeaContent[nmeaIndex].isEmpty()) {
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
 				geoPosition.setTime(simpleDateFormat.parse(nmeaContent[nmeaIndex]));
 				geoPosition.setTimezone("UTC"); //$NON-NLS-1$
 //				System.out.println(geoPosition.getTime().getTime());
@@ -735,19 +741,20 @@ public class NMEA0183Reader implements IDataReader {
 	private CompositeMeasurement VHW_ShipVector(String[] nmeaContent) {
 			PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
 			CompositeMeasurement measurement = physxFactory.createCompositeMeasurement();
+			List<Measurement> measurements = measurement.getMeasurements();
 		
 			if (!nmeaContent[1].isEmpty()) {
 				Heading heading = physxFactory.createHeading();
 				heading.setHeadingType(HeadingType.TRUE);
 				heading.setDegrees(Double.parseDouble(nmeaContent[1]));
-				measurement.getMeasurements().add(heading);
+				measurements.add(heading);
 				setSensorID(nmeaContent[0], heading);
 			} 
 			if (!nmeaContent[3].isEmpty()) {
 				Heading heading = physxFactory.createHeading();
 				heading.setHeadingType(HeadingType.MAGNETIC);
 				heading.setDegrees(Double.parseDouble(nmeaContent[3]));
-				measurement.getMeasurements().add(heading);
+				measurements.add(heading);
 				setSensorID(nmeaContent[0], heading);
 			}
 			setSensorID(nmeaContent[0], measurement);
@@ -761,7 +768,7 @@ public class NMEA0183Reader implements IDataReader {
 					relativeSpeed.setKey(SpeedType.SPEEDTHOUGHWATER);
 					relativeSpeed.setValue(speed);
 					setSensorID(nmeaContent[0], relativeSpeed);
-					measurement.getMeasurements().add(relativeSpeed);
+					measurements.add(relativeSpeed);
 					return measurement;
 				} else if (!nmeaContent[7].isEmpty()) {
 					Speed speed = PhysxFactory.eINSTANCE.createSpeed();
@@ -771,7 +778,7 @@ public class NMEA0183Reader implements IDataReader {
 					relativeSpeed.setKey(SpeedType.SPEEDTHOUGHWATER);
 					relativeSpeed.setValue(speed);
 					setSensorID(nmeaContent[0], relativeSpeed);
-					measurement.getMeasurements().add(relativeSpeed);
+					measurements.add(relativeSpeed);
 					return measurement;
 				}
 			}
