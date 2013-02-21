@@ -37,6 +37,7 @@ import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.osm.OsmFactory;
 import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.model.util.GeoParser;
+import net.sf.seesea.rendering.chart.GestureEditDomain;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.editpart.MouseWheelZoomHandler;
 import net.sf.seesea.rendering.chart.editpart.ScalableZoomableRootEditPart;
@@ -121,7 +122,7 @@ public class ChartEditor extends GraphicalEditorWithFlyoutPalette implements ISe
 //	private final ServiceTracker editingDomainServiceTracker;
 
 	public ChartEditor() {
-		setEditDomain(new DefaultEditDomain(this));
+		setEditDomain(new GestureEditDomain(this));
 		selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
 		editorSelection = StructuredSelection.EMPTY;
 //		editingDomainServiceTracker = new ServiceTracker(SeeSeaUIActivator.getDefault().getBundle().getBundleContext(), IEditingDomainProvider.class.getName(), null);

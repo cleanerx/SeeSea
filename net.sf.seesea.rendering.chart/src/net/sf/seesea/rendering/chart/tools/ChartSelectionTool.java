@@ -26,16 +26,20 @@
  */
 package net.sf.seesea.rendering.chart.tools;
 
+import net.sf.seesea.rendering.chart.IViewerGestureListener;
+
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.TargetingTool;
+import org.eclipse.swt.events.GestureEvent;
 
-public class ChartSelectionTool extends TargetingTool {
+public class ChartSelectionTool extends TargetingTool implements IViewerGestureListener {
 
 	public static final String MOVE_CHART = "Move Chart"; //$NON-NLS-1$
 
@@ -93,5 +97,19 @@ public class ChartSelectionTool extends TargetingTool {
 		return command.unwrap();
 	}
 
+	public void gesturePerformed(GestureEvent gestureEvent, EditPartViewer viewer) {
+//		if (getDragTracker() instanceof IViewerGestureListener) {
+//			((IViewerGestureListener) getDragTracker()).gesturePerformed(gestureEvent, viewer);
+//			gestureEvent.doit = false;
+//		}
+		if (isInState(STATE_INITIAL))
+			performViewerGesture(gestureEvent, viewer);
+	}
+
+	protected void performViewerGesture(GestureEvent gestureEvent, EditPartViewer viewer) {
+		IViewerGestureListener handler = (IViewerGestureListener) viewer.getProperty(IViewerGestureListener.KEY);
+		if (handler != null)
+			handler.gesturePerformed(gestureEvent, viewer);
+	}
 
 }

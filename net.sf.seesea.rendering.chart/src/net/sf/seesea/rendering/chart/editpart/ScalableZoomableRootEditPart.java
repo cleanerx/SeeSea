@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.seesea.rendering.chart.IViewerGestureListener;
+import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 
 import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.Viewport;
@@ -182,18 +183,50 @@ public class ScalableZoomableRootEditPart extends ScalableRootEditPart {
 		
 		public void gesturePerformed(GestureEvent gestureEvent, EditPartViewer viewer) {
 			Viewport viewport = (Viewport) host.getFigure();
+			Point rectangle = new Point(gestureEvent.x, gestureEvent.y).translate(viewport.getViewLocation());
 //			DiagramEditPart diagramEditPart = getContainerDiagramEditPart();
 			switch (gestureEvent.detail) {
 			case SWT.GESTURE_BEGIN:
-				initialScale = host.getZoomManager().getZoom();
-//				if(diagramEditPart != null)
-//					initialSpacing = diagramEditPart.getSpacing();
+				initialScale = host.getZoom();
 				break;
 			case SWT.GESTURE_MAGNIFY: {
-				if(initialScale == 0)
-					return;
-				Double zoom = initialScale * gestureEvent.magnification;
-				setZoom(zoom.intValue());
+//				System.out.println("i:" + initialScale);
+				Double zoom = initialScale + Math.log(gestureEvent.magnification) / Math.log(2);
+//				System.out.println("z:" + zoom);
+				int oldZoom = getZoom();
+//				System.out.println("o:" + oldZoom);
+				setZoom(zoom.intValue() );
+//				System.out.println(rectangle);
+				if(oldZoom != host.getZoom()) {
+					// magnifaction
+					if(oldZoom < host.getZoom()) {
+						// gesture events are relative to the figure frame.
+						int hextent = gestureEvent.x; 
+						int hvalue = (rectangle.x << (host.getZoom() - oldZoom)) - hextent; 
+						((GeospatialGraphicalViewer)viewer).getHorizontalRangeModel().setValue(hvalue );
+						int vextent = gestureEvent.y;
+						int vvalue = (rectangle.y << (host.getZoom() - oldZoom)) - vextent; 
+						((GeospatialGraphicalViewer)viewer).getVerticalRangeModel().setValue(vvalue );
+//						System.out.println(hvalue + ":" + vvalue);
+					} else {
+						// shrinking
+						// if many zoom changes occur at once, the rectangle needs to be scaled properly
+						int hvalue = rectangle.x / (1 << (oldZoom - host.getZoom())) - gestureEvent.x; 
+						((GeospatialGraphicalViewer)viewer).getHorizontalRangeModel().setValue(hvalue );
+						int vvalue = rectangle.y / (1 << (oldZoom - host.getZoom())) - gestureEvent.y; 
+						((GeospatialGraphicalViewer)viewer).getVerticalRangeModel().setValue(vvalue );
+//						System.out.println(hvalue + ":" + vvalue);
+					}
+//					int hextent = ((GeospatialGraphicalViewer)viewer).getHorizontalRangeModel().getExtent() / 2;
+//					int hvalue = (rectangle.x << 1) - hextent;
+//					((GeospatialGraphicalViewer)viewer).getHorizontalRangeModel().setValue(rectangle.x );
+//					((GeospatialGraphicalViewer)viewer).getHorizontalRangeModel().setValue(hvalue );
+//					int vextent = ((GeospatialGraphicalViewer)viewer).getVerticalRangeModel().getExtent() / 2;
+//					int vvalue = (rectangle.y << 1) - vextent; 
+//					((GeospatialGraphicalViewer)viewer).getVerticalRangeModel().setValue(vvalue );
+//					((GeospatialGraphicalViewer)viewer).getVerticalRangeModel().setValue(rectangle.y );
+//					System.out.println(hvalue + ":" + vvalue);
+				}
 //				if(zoom < host.getZoomManager().getMinZoom()) {
 //					if(diagramEditPart != null) {
 //						if(drillingHelper.drillUp(diagramEditPart.getModel())) {
@@ -231,10 +264,10 @@ public class ScalableZoomableRootEditPart extends ScalableRootEditPart {
 				break;
 			case SWT.GESTURE_PAN:
 				// only fired when not consumed by some parent scrollable as a FigureCanvas
-				Point viewLocation = viewport.getViewLocation();
-				viewLocation.translate(gestureEvent.xDirection, gestureEvent.yDirection);
-				viewport.setViewLocation(viewLocation);
-				gestureEvent.doit = false;
+//				Point viewLocation = viewport.getViewLocation();
+//				viewLocation.translate(gestureEvent.xDirection, gestureEvent.yDirection);
+//				viewport.setViewLocation(viewLocation);
+//				gestureEvent.doit = false;
 				break;
 			default:
 				gestureEvent.doit = true;
@@ -252,6 +285,19 @@ public class ScalableZoomableRootEditPart extends ScalableRootEditPart {
 //		}
 	}
 
+	@Override
+	public void activate() {
+		super.activate();
+		GestureListener gestureListener = new GestureListener();
+		gestureListener.initialize(this);
+		getViewer().setProperty(IViewerGestureListener.KEY, gestureListener);
+	}
+	
+	@Override
+	public void deactivate() {
+		getViewer().setProperty(IViewerGestureListener.KEY, null);
+		super.deactivate();
+	}
 
 	
 
