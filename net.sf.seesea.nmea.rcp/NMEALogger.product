@@ -37,7 +37,6 @@ Apache Software Foundation http://apache.org/
 
    <windowImages i16="/net.sf.seesea.nmea.rcp/icons/OpenSeaMapLogo_16.png" i32="/net.sf.seesea.nmea.rcp/icons/OpenSeaMapLogo_32.png" i48="/net.sf.seesea.nmea.rcp/icons/osm48x48.png" i64="/net.sf.seesea.nmea.rcp/icons/osm64x64.png" i128="/net.sf.seesea.nmea.rcp/icons/osm128x128.png"/>
 
-
    <launcher name="DataLogger">
       <solaris/>
       <win useIco="true">
@@ -55,7 +54,7 @@ Apache Software Foundation http://apache.org/
 
    <license>
         <text>
-   Copyright (c) 2011, Jens Kübler
+   Copyright (c) 2011-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
