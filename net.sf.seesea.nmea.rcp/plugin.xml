@@ -36,7 +36,7 @@
          </property>
          <property
                name="aboutText"
-               value="Data Logger&#x0A;&#x0A;Version: 1.0&#x0A;&#x0A;(c) Copyright Jens Kübler 2010, 2012.  All rights reserved.&#x0A;Visit http://seesea.sourceforge.net/&#x0A;&#x0A;This product is licensed as FreeBSD. &#x0A;This product includes RXTX which is licensed as LGPL&#x0A;This product includes Bluecove which is licensed as Apache License 2.0&#x0A;This product contains works under Creative Commons Share Alike 2.5&#x0A;This product is based on Eclipse which is licensed as EPL&#x0A;This product includes icons derived from Larry Ewing drawings&#x0A;&#x0A;Parts of the product that are licensed otherwise may not be listed here.&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://apache.org/">
+               value="Data Logger&#x0A;&#x0A;Version: 1.0&#x0A;&#x0A;(c) Copyright Jens Kübler 2010, 2012.  All rights reserved.&#x0A;Visit http://seesea.sourceforge.net/&#x0A;&#x0A;This product is licensed as FreeBSD. &#x0A;This product includes RXTX which is licensed as LGPL&#x0A;This product includes Bluecove which is licensed as Apache License 2.0&#x0A;This product contains works under Creative Commons Share Alike 2.5&#x0A;This product is based on Eclipse which is licensed as EPL&#x0A;This product includes icons derived from Larry Ewing drawings&#x0A;This products redistributes the Java Rutime Environment which is subject to the Oracle Binary Code License Agreement&#x0A;&#x0A;This product includes software developed by the&#x0A;Apache Software Foundation http://apache.org/">
          </property>
          <property
                name="aboutImage"
