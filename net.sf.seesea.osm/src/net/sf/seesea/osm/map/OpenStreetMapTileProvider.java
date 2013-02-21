@@ -105,11 +105,11 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 		queuedTileRequests = Collections.synchronizedSet(new HashSet<OpenStreetMapTileProvider.GetTileRunnable>());
 	}
 	
-	public void activate(Map properties) throws IOException {
+	public void activate(Map<?, ?> properties) throws IOException {
 		setupTileCache(properties);
 	}
 
-	private void setupTileCache(Map properties) {
+	private void setupTileCache(Map<?, ?> properties) {
 		try {
 		String cacheDir = (String) properties.get(IOSMPreferences.CACHE_DIRECTORY);
 		if(cacheDir != null) {
@@ -131,7 +131,7 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 		}
 	}
 	
-	public void updateConfiguration(Map properties) {
+	public void updateConfiguration(Map<?, ?> properties) {
 		setupTileCache(properties);
 	}
 	
@@ -244,6 +244,8 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 			} catch (IOException e) {
 				Status status = new Status(IStatus.ERROR, OpenSeaMapActivator.PLUGIN_ID, IStatus.ERROR, "Failed to load image from server", e); //$NON-NLS-1$
 				OpenSeaMapActivator.getDefault().getLog().log(status);
+			} finally {
+				queuedTileRequests.remove(this);
 			}
 
 		}
@@ -361,7 +363,11 @@ public class OpenStreetMapTileProvider implements ITileProvider {
 		return osmCacheProcessor;
 	}
 	
-	public void reconfigure(Map properties) {
+	/**
+	 * 
+	 * @param properties
+	 */
+	public void reconfigure(Map<?, ?> properties) {
 		return;
 	}
 

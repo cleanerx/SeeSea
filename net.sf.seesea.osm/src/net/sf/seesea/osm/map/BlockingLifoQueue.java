@@ -29,18 +29,18 @@ package net.sf.seesea.osm.map;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 public final class BlockingLifoQueue<T> extends LinkedBlockingDeque<T> implements BlockingQueue<T> {
-//	// we add and remove only from the end of the queue
-//	private final BlockingDeque<T> deque;
-//
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2018695356363650074L;
+
 	public BlockingLifoQueue() {
 		super(1000);
-//		deque = new LinkedBlockingDeque<T>();
 	}
 
 	public boolean add(T e) {
@@ -79,7 +79,7 @@ public final class BlockingLifoQueue<T> extends LinkedBlockingDeque<T> implement
 
 	public T element() {
 		if (isEmpty()) {
-			throw new NoSuchElementException("empty stack");
+			throw new NoSuchElementException("empty stack"); //$NON-NLS-1$
 		}
 
 		return pollLast();
@@ -95,7 +95,7 @@ public final class BlockingLifoQueue<T> extends LinkedBlockingDeque<T> implement
 
 	public T remove() {
 		if (isEmpty()) {
-			throw new NoSuchElementException("empty stack");
+			throw new NoSuchElementException("empty stack"); //$NON-NLS-1$
 		}
 
 		return removeLast();

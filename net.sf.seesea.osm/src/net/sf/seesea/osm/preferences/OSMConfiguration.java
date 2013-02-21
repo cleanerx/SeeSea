@@ -29,7 +29,6 @@ package net.sf.seesea.osm.preferences;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import net.sf.seesea.osm.OpenSeaMapActivator;
 
@@ -55,8 +54,8 @@ public class OSMConfiguration {
 			String cacheDir = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.CACHE_DIRECTORY);
 			
 			try {
-				Configuration configuration = configAdmin.getConfiguration("net.sf.seesea.osm.tileprovider"); //$NON-NLS-1$
-				Dictionary properties = new Hashtable<String, Object>();
+				Configuration configuration = _configAdmin.getConfiguration("net.sf.seesea.osm.tileprovider"); //$NON-NLS-1$
+				Dictionary<String, Object> properties = new Hashtable<String, Object>();
 				properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir);
 				properties.put(IOSMPreferences.TILE_SOURCE, tileSource);
 				properties.put(IOSMPreferences.OVERLAY, false);
@@ -67,16 +66,20 @@ public class OSMConfiguration {
 		}
 	}
 
-	private ConfigurationAdmin configAdmin;
+	private ConfigurationAdmin _configAdmin;
 	private PreferenceChangeListener preferenceChangeListener;
 	
+	/**
+	 * 
+	 * @param bundleContext
+	 */
 	public void activate(BundleContext bundleContext) {
 		String tileSource = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.TILE_SOURCE);
 		String cacheDir = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.CACHE_DIRECTORY);
 		
 		try {
-			Configuration configuration = configAdmin.createFactoryConfiguration("net.sf.seesea.osm.tileprovider"); //$NON-NLS-1$
-			Dictionary properties = new Hashtable<String, Object>();
+			Configuration configuration = _configAdmin.createFactoryConfiguration("net.sf.seesea.osm.tileprovider"); //$NON-NLS-1$
+			Dictionary<String, Object> properties = new Hashtable<String, Object>();
 			properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir);
 			properties.put(IOSMPreferences.TILE_SOURCE, tileSource);
 			properties.put(IOSMPreferences.OVERLAY, false);
@@ -89,16 +92,25 @@ public class OSMConfiguration {
 		OpenSeaMapActivator.getDefault().getPreferenceStore().addPropertyChangeListener(preferenceChangeListener);
 	}
 	
+	/**
+	 * 
+	 * @param bundleContext
+	 */
 	public void deactivate(BundleContext bundleContext) {
 		OpenSeaMapActivator.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceChangeListener);
 	}
 
+	
 	public synchronized void bindConfigAdmin(ConfigurationAdmin configAdmin) {
-		this.configAdmin = configAdmin;
+		this._configAdmin = configAdmin;
 	}
 
+	/**
+	 * 
+	 * @param configAdmin
+	 */
 	public synchronized void unbindConfigAdmin(ConfigurationAdmin configAdmin) {
-		this.configAdmin = null;
+		this._configAdmin = null;
 	}
 
 }

@@ -29,6 +29,7 @@ package net.sf.seesea.osm.preferences;
 public interface IOSMPreferences {
 
 	public static final String TILE_SOURCE = "tileSource"; //$NON-NLS-1$
+	
 	public static final String CACHE_DIRECTORY = "cacheDirectory"; //$NON-NLS-1$
 
 	public static final String OVERLAY = "overlay"; //$NON-NLS-1$

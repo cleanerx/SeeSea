@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,12 +26,24 @@
  */
 package net.sf.seesea.osm.preferences;
 
+import java.io.File;
+import java.io.IOException;
+
 import net.sf.seesea.osm.OpenSeaMapActivator;
 
+import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -54,13 +66,54 @@ public class OpenStreetMapPreferencePage extends FieldEditorPreferencePage imple
 
 	@Override
 	protected void createFieldEditors() {
-		tileSource = new StringFieldEditor(IOSMPreferences.TILE_SOURCE, "Tile source", getFieldEditorParent());
+		tileSource = new StringFieldEditor(IOSMPreferences.TILE_SOURCE, Messages.getString("OpenStreetMapPreferencePage.0"), getFieldEditorParent()); //$NON-NLS-1$
 		addField(tileSource);
 
-		cacheDirectory = new DirectoryFieldEditor(IOSMPreferences.CACHE_DIRECTORY, "Cache directory", getFieldEditorParent());
+		cacheDirectory = new DirectoryFieldEditor(IOSMPreferences.CACHE_DIRECTORY, Messages.getString("OpenStreetMapPreferencePage.1"), getFieldEditorParent()); //$NON-NLS-1$
 		addField(cacheDirectory);
-		
 	}
+	
+	@Override
+	protected Control createContents(Composite parent) {
+		Composite contents = (Composite) super.createContents(parent);
+		Button button = new Button(contents, SWT.PUSH);
+		button.setText(Messages.getString("OpenStreetMapPreferencePage.2")); //$NON-NLS-1$
+		button.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String directory = cacheDirectory.getStringValue();
+				if(!directory.isEmpty()) {
+					File file = new File(directory);
+					if(file.exists()) {
+						try {
+							delete(file);
+						} catch (IOException e1) {
+							MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("OpenStreetMapPreferencePage.3"), e1.getLocalizedMessage()); //$NON-NLS-1$
+							Logger.getLogger(getClass()).error("Failed to delete dir", e1); //$NON-NLS-1$
+						}
+					}
+					file.mkdirs();
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+		return contents;
+	}
+
+	private void delete(File f) throws IOException {
+		  if (f.isDirectory()) {
+		    for (File c : f.listFiles())
+		      delete(c);
+		  }
+		  if (!f.delete()) {
+			  Logger.getLogger(getClass()).error("Failed to delete file " +f); //$NON-NLS-1$
+		  }
+		}
 	
 	@Override
 	protected IPreferenceStore doGetPreferenceStore() {

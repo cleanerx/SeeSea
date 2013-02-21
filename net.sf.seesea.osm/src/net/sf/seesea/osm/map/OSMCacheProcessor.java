@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -71,7 +71,7 @@ public class OSMCacheProcessor implements ITileCacheProcessor {
 					TileDesription tileDesription = new TileDesription(i, j, zoomLevel);
 					failedTiles.add(tileDesription);
 					Logger logger = Logger.getLogger(OSMCacheProcessor.class);
-					logger.warn("Failed to retrieve tile " + tileDesription,  e);
+					logger.warn("Failed to retrieve tile " + tileDesription,  e); //$NON-NLS-1$
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,6 +25,8 @@
  * 
  */
 package net.sf.seesea.osm.map;
+
+import java.text.MessageFormat;
 
 public class TileDesription {
 	
@@ -68,8 +70,8 @@ public class TileDesription {
 
 	@Override
 	public String toString() {
-		return "TileDesription [x=" + x + ", y=" + y + ", zoomLevel="
-				+ zoomLevel + "]";
+		return MessageFormat.format("TileDesription [x={0}, y={1}, zoomLevel={2}]", //$NON-NLS-1$
+				x, y, zoomLevel);
 	}
 
 	

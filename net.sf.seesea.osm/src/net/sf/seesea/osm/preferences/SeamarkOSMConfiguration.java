@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import net.sf.seesea.osm.OpenSeaMapActivator;
 
@@ -50,16 +49,19 @@ public class SeamarkOSMConfiguration {
 
 	private final class PreferenceChangeListener implements
 			IPropertyChangeListener {
+		private static final String SEAMARKS_DIR = "seamarks"; //$NON-NLS-1$
+		private static final String HTTP_TILES_OPENSEAMAP_ORG_SEAMARK = "http://tiles.openseamap.org/seamark/"; //$NON-NLS-1$
+
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
-			String tileSource = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.TILE_SOURCE);
+//			String tileSource = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.TILE_SOURCE);
 			String cacheDir = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.CACHE_DIRECTORY);
 			
 			try {
-				Configuration configuration = configAdmin.getConfiguration("net.sf.seesea.osm.tileprovider.seamark"); //$NON-NLS-1$
-				Dictionary properties = new Hashtable<String, Object>();
-				properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir + File.separator + "seamarks");
-				properties.put(IOSMPreferences.TILE_SOURCE, "http://tiles.openseamap.org/seamark/");
+				Configuration configuration = _configAdmin.getConfiguration("net.sf.seesea.osm.tileprovider.seamark"); //$NON-NLS-1$
+				Dictionary<String, Object> properties = new Hashtable<String, Object>();
+				properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir + File.separator + SEAMARKS_DIR);
+				properties.put(IOSMPreferences.TILE_SOURCE, HTTP_TILES_OPENSEAMAP_ORG_SEAMARK);
 				properties.put(IOSMPreferences.OVERLAY, true);
 				configuration.update(properties);
 			} catch (IOException e) {
@@ -68,16 +70,20 @@ public class SeamarkOSMConfiguration {
 		}
 	}
 
-	private ConfigurationAdmin configAdmin;
+	private ConfigurationAdmin _configAdmin;
 	private PreferenceChangeListener preferenceChangeListener;
 	
+	/**
+	 * 
+	 * @param bundleContext
+	 */
 	public void activate(BundleContext bundleContext) {
-		String tileSource = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.TILE_SOURCE);
+//		String tileSource = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.TILE_SOURCE);
 		String cacheDir = OpenSeaMapActivator.getDefault().getPreferenceStore().getString(IOSMPreferences.CACHE_DIRECTORY);
 		
 		try {
-			Configuration configuration = configAdmin.createFactoryConfiguration("net.sf.seesea.osm.tileprovider.seamark"); //$NON-NLS-1$
-			Dictionary properties = new Hashtable<String, Object>();
+			Configuration configuration = _configAdmin.createFactoryConfiguration("net.sf.seesea.osm.tileprovider.seamark"); //$NON-NLS-1$
+			Dictionary<String, Object> properties = new Hashtable<String, Object>();
 			properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir + File.separator + "seamarks"); //$NON-NLS-1$
 			properties.put(IOSMPreferences.TILE_SOURCE, "http://tiles.openseamap.org/seamark/"); //$NON-NLS-1$
 			properties.put(IOSMPreferences.OVERLAY, true);
@@ -89,17 +95,29 @@ public class SeamarkOSMConfiguration {
 		preferenceChangeListener = new PreferenceChangeListener();
 		OpenSeaMapActivator.getDefault().getPreferenceStore().addPropertyChangeListener(preferenceChangeListener);
 	}
-	
+
+	/**
+	 * 
+	 * @param bundleContext
+	 */
 	public void deactivate(BundleContext bundleContext) {
 		OpenSeaMapActivator.getDefault().getPreferenceStore().removePropertyChangeListener(preferenceChangeListener);
 	}
 
+	/**
+	 * 
+	 * @param configAdmin
+	 */
 	public synchronized void bindConfigAdmin(ConfigurationAdmin configAdmin) {
-		this.configAdmin = configAdmin;
+		this._configAdmin = configAdmin;
 	}
 
+	/**
+	 * 
+	 * @param configAdmin
+	 */
 	public synchronized void unbindConfigAdmin(ConfigurationAdmin configAdmin) {
-		this.configAdmin = null;
+		this._configAdmin = null;
 	}
 
 }

@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -53,7 +53,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
-	private static final String NMEA_LOGGING = "NMEA Logging"; //$NON-NLS-1$
+	private static final String NMEA_LOGGING = "NMEALogging"; //$NON-NLS-1$
 	private static final String PERSPECTIVE_ID = "net.sf.seesea.nmea.perspective"; //$NON-NLS-1$
 
 	@Override
