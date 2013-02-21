@@ -20,7 +20,7 @@
 !define UPDATEURL "http://sourceforge.net/projects/seesea/files/" # "Product Updates" link
 !define ABOUTURL "http://http://seesea.sourceforge.net/" # "Publisher" link
 # This is the size (in kB) of all the files copied into "Program Files"
-!define INSTALLSIZE 28921
+!define INSTALLSIZE 160904
 !define VERSION "1.0"
 
 ; ################################################################
