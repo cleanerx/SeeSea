@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -31,15 +31,10 @@ package net.sf.seesea.provider.navigation.nmea.ui;
 import net.sf.seesea.lib.ValidatingWizardDialog;
 
 import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.State;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.jface.window.Window;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.handlers.RegistryToggleState;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -63,7 +58,7 @@ public class NMEAConnectWizardHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		NMEAWizard nmeaWizard = new NMEAWizard();
-		nmeaWizard.setWindowTitle(Messages.getString("NMEAConnectWizardHandler.connect")); //$NON-NLS-1$
+		nmeaWizard.setWindowTitle(Messages.getString("NMEAWizardHandler.connect")); //$NON-NLS-1$
 		nmeaWizard.addPage(new AvailableProvidersPage());
 		for(Object object : nmeaConnectorTracker.getServices()) {
 			if(object instanceof INMEAConnector) {
@@ -71,16 +66,11 @@ public class NMEAConnectWizardHandler extends AbstractHandler {
 				nmeaWizard.addWizardPages(connector.getContributedPages());
 			}
 		}
-//		ICommandService commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-//		Command command = commandService.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
-//		State state = command.getState(RegistryToggleState.STATE_ID);
-//		state.setValue(false);
-
 		ValidatingWizardDialog wizardDialog = new ValidatingWizardDialog(HandlerUtil.getActiveShell(event), nmeaWizard);
-		if(wizardDialog.open() == Dialog.OK) {
-			return Dialog.OK;
+		if(wizardDialog.open() == Window.OK) {
+			return Window.OK;
 		} else {
-			return Dialog.CANCEL;
+			return Window.CANCEL;
 		}
 		
 	}
