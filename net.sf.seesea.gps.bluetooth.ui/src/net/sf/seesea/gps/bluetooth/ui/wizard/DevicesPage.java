@@ -137,7 +137,7 @@ public class DevicesPage extends WizardPage implements IValidatingPage {
 			return new Status(IStatus.ERROR, GPSBluetoothUIActivator.PLUGIN_ID, Messages.getString("DevicesPage.noSelection")); //$NON-NLS-1$
 		} else {
 			RemoteDevice remoteDevice = (RemoteDevice) selection.getFirstElement();
-			UUID serviceUUID = new UUID(3); 
+			UUID serviceUUID = new UUID(0x1101); 
 	        UUID[] searchUuidSet = new UUID[] { serviceUUID };
 	        int[] attrIDs =  new int[] {
 	                0x0100 // Service name
@@ -148,10 +148,25 @@ public class DevicesPage extends WizardPage implements IValidatingPage {
 				wait();
 				if(bluetoothDiscoveryListener.getServiceRecords() == null || bluetoothDiscoveryListener.getServiceRecords().length == 0) {
 					return new Status(IStatus.ERROR, GPSBluetoothUIActivator.PLUGIN_ID, Messages.getString("DevicesPage.noRFCOMM")); //$NON-NLS-1$
-				} else if(bluetoothDiscoveryListener.getServiceRecords().length == 1) {
-					serviceRecord = bluetoothDiscoveryListener.getServiceRecords()[0];
-					_remoteDevice = remoteDevice;
+				} else {
+					for (ServiceRecord xserviceRecord : bluetoothDiscoveryListener.getServiceRecords()) {
+						for(int i : xserviceRecord.getAttributeIDs()) {
+							if(i == 0x100) {
+								serviceRecord = xserviceRecord;
+								_remoteDevice = remoteDevice;
+							}
+						}
+//						Logger.getLogger(getClass()).info("Found service " + serviceRecord );
+					}
+//					if(bluetoothDiscoveryListener.getServiceRecords().length == 1) {
 				}
+//					serviceRecord = bluetoothDiscoveryListener.getServiceRecords()[0];
+//					_remoteDevice = remoteDevice;
+//				} else {
+//					for (ServiceRecord serviceRecord : bluetoothDiscoveryListener.getServiceRecords()) {
+//						Logger.getLogger(getClass()).info("Found service " + serviceRecord );
+//					}
+//				}
 				
 			} catch (BluetoothStateException e) {
 				Logger.getRootLogger().error(e);
