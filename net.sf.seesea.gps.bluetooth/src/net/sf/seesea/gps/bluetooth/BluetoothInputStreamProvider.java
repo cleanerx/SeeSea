@@ -59,7 +59,7 @@ public class BluetoothInputStreamProvider implements INMEAStreamProvider {
 		if (url == null) {
 			return null;
 		}
-		connectionNotifier = (StreamConnection) Connector.open(url);
+		connectionNotifier = (StreamConnection) Connector.open(url,Connector.READ,true);
 		bluetoothInputStream = connectionNotifier.openInputStream();
 		return bluetoothInputStream;
 	}
