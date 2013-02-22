@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,6 +32,7 @@ import org.osgi.framework.BundleContext;
 
 public class RXTXActivator extends AbstractUIPlugin  {
 
+	private static final String GNU_IO_RXTX_SERIAL_PORTS = "gnu.io.rxtx.SerialPorts";
 	private static RXTXActivator plugin;
 
 	/*
@@ -44,14 +45,14 @@ public class RXTXActivator extends AbstractUIPlugin  {
 		plugin = this;
 		String ports = getPreferenceStore().getString("ports");
 		if (ports != null && !ports.isEmpty()) {
-			String content = ports.replaceAll("\\|", "\\,");
+			String content = ports.replaceAll("\\|", "\\,");  //$NON-NLS-1$//$NON-NLS-2$
 			if(!content.isEmpty()) {
-				System.setProperty("gnu.io.rxtx.SerialPorts", content);
+				System.setProperty(GNU_IO_RXTX_SERIAL_PORTS, content);
 			} else {
-				System.clearProperty("gnu.io.rxtx.SerialPorts");
+				System.clearProperty(GNU_IO_RXTX_SERIAL_PORTS);
 			}
 		} else {
-			System.clearProperty("gnu.io.rxtx.SerialPorts");
+			System.clearProperty(GNU_IO_RXTX_SERIAL_PORTS);
 		}
 
 	}

@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,23 +31,17 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.ParallelPort;
 import gnu.io.PortInUseException;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import net.sf.seesea.lib.IValidatingPage;
 import net.sf.seesea.provider.navigation.nmea.ui.NMEAWizard;
 
-import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -55,7 +49,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.qbang.rxtx.ComPortLabelProvider;
-import org.qbang.rxtx.RXTXActivator;
 
 /**
  * 
@@ -79,39 +72,25 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 	 */
 	@Override
 	public void createControl(Composite parent) {
-		IDialogSettings settings = getWizard().getDialogSettings();
 		   
 		tableViewer = new TableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new ComPortLabelProvider());
-		List<CommPortIdentifier> ports = getPorts();
-		tableViewer.setInput(ports);
+		List<Object> input = new ArrayList<Object>();
+		input.add(Messages.getString("SelectComPortPage.searchDevices"));  //$NON-NLS-1$
+
+		tableViewer.setInput(input);
 		setControl(tableViewer.getControl());
-		if(getPorts().isEmpty()) {
-			setErrorMessage(Messages.getString("SelectComPortPage.noComPorts")); //$NON-NLS-1$
-		} else {
-			if(settings.get("lastComPort") != null) { //$NON-NLS-1$
-				for (CommPortIdentifier comm : ports) {
-					if(comm.getName().equals(settings.get("lastComPort"))) { //$NON-NLS-1$
-						tableViewer.setSelection(new StructuredSelection(comm));
-					}
-				}
-			} else {
-				tableViewer.setSelection(new StructuredSelection(getPorts().get(0)));
-			}
-		}
 		tableViewer.getControl().addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseUp(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				// nothing to do 
 			}
 			
 			@Override
 			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				// nothing to do 
 			}
 			
 			@Override
@@ -127,29 +106,11 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 		
 	}
 	
-	private List<CommPortIdentifier> getPorts() {
-		boolean manualPorts = RXTXActivator.getDefault().getPreferenceStore().getBoolean("manualPorts"); //$NON-NLS-1$
-		List<CommPortIdentifier> cports = new ArrayList<CommPortIdentifier>();
-		
-		Enumeration<?> ports = CommPortIdentifier.getPortIdentifiers();
-		while (ports.hasMoreElements()) {
-			CommPortIdentifier portId = (CommPortIdentifier)ports.nextElement();
-			if(!portId.isCurrentlyOwned()) {
-				cports.add(portId);
-			}
-		}
-		return cports;
-	}
-
 	/* (non-Javadoc)
 	 * @see net.sf.seesea.provider.navigation.nmea.ui.IValidatingPage#getStatus()
 	 */
 	@Override
 	public IStatus validatePage() {
-//		if(getPorts().isEmpty()) {
-//			setErrorMessage("No COM Ports available. Probably other software is using the COM port.");
-//			return new Status(IStatus.ERROR, "org.qbang.rxtx", "No COM Ports available"); //$NON-NLS-1$
-//		}
 		IStructuredSelection structuredSelection = (IStructuredSelection) tableViewer.getSelection();
 		if(!structuredSelection.isEmpty()) {
 			CommPortIdentifier portIdentifier = (CommPortIdentifier) structuredSelection.getFirstElement();
@@ -180,6 +141,10 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 
 	public CommPortIdentifier getCommPort() {
 		return commPortIdentifier;
+	}
+	
+	public TableViewer getTableViewer() {
+		return tableViewer;
 	}
 	
 	

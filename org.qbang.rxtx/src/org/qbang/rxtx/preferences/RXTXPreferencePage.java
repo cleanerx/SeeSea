@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,48 +26,33 @@
  */
 package org.qbang.rxtx.preferences;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.wb.swt.ResourceManager;
 import org.qbang.rxtx.DeleteLabelProvider;
 import org.qbang.rxtx.RXTXActivator;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.wb.swt.ResourceManager;
-import org.eclipse.jface.viewers.TableViewerColumn;
 
 public class RXTXPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
-	public static final String MANUAL_PORTS = "manualPorts";
+	public static final String MANUAL_PORTS = "manualPorts"; //$NON-NLS-1$
 	private Table table;
 	private Text addPort;
 	private Set<String> comPorts;
@@ -82,7 +67,7 @@ public class RXTXPreferencePage extends PreferencePage implements
 
 		btnAutomaticallyScanSerial = new Button(composite, SWT.CHECK);
 		btnAutomaticallyScanSerial.setBounds(10, 10, 175, 16);
-		btnAutomaticallyScanSerial.setText("Automatically scan serial ports");
+		btnAutomaticallyScanSerial.setText(Messages.getString("RXTXPreferencePage.scan")); //$NON-NLS-1$
 
 		Boolean manualPorts = getPreferenceStore().getBoolean(MANUAL_PORTS);
 		btnAutomaticallyScanSerial.setSelection(!manualPorts);
@@ -109,9 +94,9 @@ public class RXTXPreferencePage extends PreferencePage implements
 		// tableViewerColumn.setLabelProvider(new DeleteLabelProvider());
 		comPorts = new TreeSet<String>();
 
-		String ports = getPreferenceStore().getString("ports");
+		String ports = getPreferenceStore().getString("ports"); //$NON-NLS-1$
 		if (ports != null && !ports.isEmpty()) {
-			String[] split = ports.split("\\|");
+			String[] split = ports.split("\\|"); //$NON-NLS-1$
 			for (String port : split) {
 				if (!port.isEmpty()) {
 					comPorts.add(port);
@@ -153,12 +138,12 @@ public class RXTXPreferencePage extends PreferencePage implements
 
 		Label lblManuallyConfiguredPorts = new Label(composite, SWT.NONE);
 		lblManuallyConfiguredPorts.setBounds(10, 38, 213, 13);
-		lblManuallyConfiguredPorts.setText("Manually Configured Ports");
+		lblManuallyConfiguredPorts.setText(Messages.getString("RXTXPreferencePage.manualports")); //$NON-NLS-1$
 
 		Label lblEnterYourPort = new Label(composite, SWT.WRAP);
 		lblEnterYourPort.setBounds(10, 214, 294, 34);
 		lblEnterYourPort
-				.setText("Enter your Port i.e. COM1 on Windows or /dev/ttyS0 on Linux");
+				.setText(Messages.getString("RXTXPreferencePage.enterPort")); //$NON-NLS-1$
 		btnNewButton.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -199,10 +184,8 @@ public class RXTXPreferencePage extends PreferencePage implements
 
 	@Override
 	public boolean performOk() {
-		String ports = "";
-		String systemPorts = "";
-		// Platform.getPreferencesService().setString("org.qbang.rxtx.preferences",
-		// "ports", "", null);
+		String ports = ""; //$NON-NLS-1$
+		String systemPorts = ""; //$NON-NLS-1$
 		if (comPorts != null) {
 			for (Iterator<String> iterator = comPorts.iterator(); iterator
 					.hasNext();) {
@@ -210,17 +193,17 @@ public class RXTXPreferencePage extends PreferencePage implements
 				ports += next.trim();
 				systemPorts += next.trim();
 				if (iterator.hasNext()) {
-					ports += "|";
-					systemPorts += ",";
+					ports += "|"; //$NON-NLS-1$
+					systemPorts += ","; //$NON-NLS-1$
 				}
 			}
-			getPreferenceStore().setValue("ports", ports);
+			getPreferenceStore().setValue("ports", ports); //$NON-NLS-1$
 		}
 
 		if (btnAutomaticallyScanSerial.getSelection() || systemPorts.isEmpty()) {
-			System.clearProperty("gnu.io.rxtx.SerialPorts");
+			System.clearProperty("gnu.io.rxtx.SerialPorts"); //$NON-NLS-1$
 		} else {
-			System.setProperty("gnu.io.rxtx.SerialPorts", systemPorts);
+			System.setProperty("gnu.io.rxtx.SerialPorts", systemPorts); //$NON-NLS-1$
 		}
 		getPreferenceStore().setValue(MANUAL_PORTS,
 				!btnAutomaticallyScanSerial.getSelection());
