@@ -69,7 +69,8 @@ public enum NMEA0183MessageTypes {
 	HDM, 
 	HDT, 
 	HSC, 
-	LCD, 
+	LCD,
+	LOR,
 	MSK, 
 	MTW, // ("Water Temperature")
 	MWV, 

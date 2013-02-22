@@ -215,7 +215,7 @@ public class NMEA0183Reader implements IDataReader {
 				}
 			}
 			} catch (IllegalArgumentException e) {
-				Logger.getLogger(getClass()).error("Unknown message " + e.getMessage());
+				Logger.getLogger(getClass()).error("Unknown message " + e.getMessage(), e);
 			}
 		}
 		return results;
@@ -543,12 +543,20 @@ public class NMEA0183Reader implements IDataReader {
 	try {
 		setTime(nmeaContent, geoPosition, 1);
 		PrecisionCoordinate precisionCoordinate = parseLatitude(nmeaContent, 2);
-		Latitude latitude = (Latitude) precisionCoordinate.coordinate;
+		if(precisionCoordinate != null) {
+			Latitude latitude = (Latitude) precisionCoordinate.coordinate;
+			geoPosition.setLatitude(latitude);
+		}
 		PrecisionCoordinate precisionCoordinate2 = parseLongitude(nmeaContent, 4);
-		Longitude longitude = (Longitude) precisionCoordinate2.coordinate; 
-		geoPosition.setLatitude(latitude);
-		geoPosition.setLongitude(longitude);
-		geoPosition.setPrecision(Math.max(precisionCoordinate.precision, precisionCoordinate2.precision));
+		if(precisionCoordinate2 != null) {
+			Longitude longitude = (Longitude) precisionCoordinate2.coordinate; 
+			geoPosition.setLongitude(longitude);
+		}
+		if(precisionCoordinate != null && precisionCoordinate2 != null) {
+			geoPosition.setPrecision(Math.max(precisionCoordinate.precision, precisionCoordinate2.precision));
+		} else {
+			return null;
+		}
 
 		try {
 			geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
@@ -567,8 +575,9 @@ public class NMEA0183Reader implements IDataReader {
 	}
 
 		
-		
-		geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
+		if(!nmeaContent[9].isEmpty()) {
+			geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
+		}
 		
 		setSensorID(nmeaContent[0], geoPosition);
 		try {
@@ -602,37 +611,57 @@ public class NMEA0183Reader implements IDataReader {
 		String degree;
 		String minute;
 		double secondValue;
-		Longitude longitude = GeoFactory.eINSTANCE.createLongitude();
-		String[] positions = nmeaContent[nmeaStartIndex].split("\\."); //$NON-NLS-1$
-		minute = positions[0].substring(positions[0].length() - 2, positions[0].length());
-		degree = positions[0].substring(0, positions[0].length() - 2);
-		longitude.setDegree(Integer.parseInt(degree.trim()));
-		longitude.setMinute(Integer.parseInt(minute));
-		secondValue = Double.parseDouble(positions[1]) * 6 / (Math.pow(10, positions[1].length() - 1));
-//		secondValue = (Double.parseDouble(nmeaContent[nmeaStartIndex]
-//				.substring(3)) - longitude.getMinute()) * 60;
-		longitude.setSecond(secondValue);
-		if (WEST.equals(nmeaContent[nmeaStartIndex + 1])) {
-			longitude.setDegree(longitude.getDegree() * (-1));
+		if(nmeaContent[nmeaStartIndex].isEmpty()) {
+			return null;
 		}
-		return new PrecisionCoordinate(longitude, positions[1].length());
+		String[] positions = nmeaContent[nmeaStartIndex].split("\\."); //$NON-NLS-1$
+		Longitude longitude = GeoFactory.eINSTANCE.createLongitude();
+		if(positions.length == 1) {
+			longitude.setDegree(Integer.parseInt(positions[0].trim()));
+			longitude.setMinute(0);
+			longitude.setSecond(0);
+			return new PrecisionCoordinate(longitude, 0);
+		} else {
+			minute = positions[0].substring(positions[0].length() - 2, positions[0].length());
+			degree = positions[0].substring(0, positions[0].length() - 2);
+			longitude.setDegree(Integer.parseInt(degree.trim()));
+			longitude.setMinute(Integer.parseInt(minute));
+			secondValue = Double.parseDouble(positions[1]) * 6 / (Math.pow(10, positions[1].length() - 1));
+//			secondValue = (Double.parseDouble(nmeaContent[nmeaStartIndex]
+//					.substring(3)) - longitude.getMinute()) * 60;
+			longitude.setSecond(secondValue);
+			if (WEST.equals(nmeaContent[nmeaStartIndex + 1])) {
+				longitude.setDegree(longitude.getDegree() * (-1));
+			}
+			return new PrecisionCoordinate(longitude, positions[1].length());
+		}
 	}
 
 	private PrecisionCoordinate parseLatitude(String[] nmeaContent, int i) {
 		Latitude latitude = GeoFactory.eINSTANCE.createLatitude();
 
-		String[] positions = nmeaContent[i].split("\\."); //$NON-NLS-1$
-		String minute = positions[0].substring(positions[0].length() - 2, positions[0].length());
-		String degree = positions[0].substring(0, positions[0].length() - 2);
-
-		latitude.setDegree(Integer.parseInt(degree.trim()));
-		latitude.setMinute(Integer.parseInt(minute));
-		double secondValue = Double.parseDouble(positions[1]) * 6 / (Math.pow(10, positions[1].length() - 1));
-		latitude.setSecond(secondValue);
-		if (SOUTH.equals(nmeaContent[i + 1])) {
-			latitude.setDegree(latitude.getDegree() * (-1));
+		if(nmeaContent[i].isEmpty()) {
+			return null;
 		}
-		return new PrecisionCoordinate(latitude, positions[1].length());
+		String[] positions = nmeaContent[i].split("\\."); //$NON-NLS-1$
+		if(positions.length == 1) {
+			latitude.setDegree(Integer.parseInt(positions[0].trim()));
+			latitude.setMinute(0);
+			latitude.setSecond(0);
+			return new PrecisionCoordinate(latitude, 0);
+		} else {
+			String minute = positions[0].substring(positions[0].length() - 2, positions[0].length());
+			String degree = positions[0].substring(0, positions[0].length() - 2);
+			
+			latitude.setDegree(Integer.parseInt(degree.trim()));
+			latitude.setMinute(Integer.parseInt(minute));
+			double secondValue = Double.parseDouble(positions[1]) * 6 / (Math.pow(10, positions[1].length() - 1));
+			latitude.setSecond(secondValue);
+			if (SOUTH.equals(nmeaContent[i + 1])) {
+				latitude.setDegree(latitude.getDegree() * (-1));
+			}
+			return new PrecisionCoordinate(latitude, positions[1].length());
+		}
 	}
 
 	private RelativeWind VWR_RelativeWindSpeedAndAngle(String[] nmeaContent) {
@@ -693,12 +722,20 @@ public class NMEA0183Reader implements IDataReader {
 			MeasuredPosition3D geoPosition = geoFactory.createMeasuredPosition3D();
 
 			PrecisionCoordinate precisionCoordinate = parseLatitude(nmeaContent, 1);
-			Latitude latitude = (Latitude) precisionCoordinate.coordinate;
+			if(precisionCoordinate != null) {
+				Latitude latitude = (Latitude) precisionCoordinate.coordinate;
+				geoPosition.setLatitude(latitude);
+			}
 			PrecisionCoordinate precisionCoordinate2 = parseLongitude(nmeaContent, 3);
-			Longitude longitude = (Longitude) precisionCoordinate2.coordinate; 
-			geoPosition.setLatitude(latitude);
-			geoPosition.setLongitude(longitude);
-			geoPosition.setPrecision(Math.max(precisionCoordinate.precision, precisionCoordinate2.precision));
+			if(precisionCoordinate2 != null) {
+				Longitude longitude = (Longitude) precisionCoordinate2.coordinate; 
+				geoPosition.setLongitude(longitude);
+			}
+			if(precisionCoordinate != null && precisionCoordinate2 != null) {
+				geoPosition.setPrecision(Math.max(precisionCoordinate.precision, precisionCoordinate2.precision));
+			} else {
+				return null;
+			}
 
 			setSensorID(nmeaContent[0], geoPosition);
 			measurement.getMeasurements().add(geoPosition);
