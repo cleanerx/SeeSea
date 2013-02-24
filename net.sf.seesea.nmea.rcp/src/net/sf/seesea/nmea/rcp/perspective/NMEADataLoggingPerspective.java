@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -51,10 +51,10 @@ public class NMEADataLoggingPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();
-		IFolderLayout topRight  = layout.createFolder("topRight", IPageLayout.LEFT, 0.2f, editorArea); //$NON-NLS-1$
+		IFolderLayout topRight  = layout.createFolder("topRight", IPageLayout.LEFT, 0.3f, editorArea); //$NON-NLS-1$
 		topRight.addView("net.sf.seesea.navigation.ui.sensorData"); //$NON-NLS-1$
 
-	    IFolderLayout topLeft = layout.createFolder("topLeft", IPageLayout.BOTTOM, 0.8f, editorArea); //$NON-NLS-1$
+	    IFolderLayout topLeft = layout.createFolder("topLeft", IPageLayout.BOTTOM, 0.7f, editorArea); //$NON-NLS-1$
 	    topLeft.addView("net.sf.seesea.provider.navigation.nmea.log.view"); //$NON-NLS-1$
 
 		try {
