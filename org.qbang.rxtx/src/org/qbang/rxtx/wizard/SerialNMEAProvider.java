@@ -37,8 +37,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
-import net.sf.seesea.provider.navigation.nmea.NMEA0183Reader;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
+import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -124,7 +124,7 @@ public class SerialNMEAProvider implements INMEAConnector {
 	 */
 	@Override
 	public boolean performFinish() {
-		NMEA0183Reader reader = null;
+		ThreadedSerialInputReader reader = null;
 		try {
 			SelectComPortPage wizardPage = (SelectComPortPage) wizardPages.get(0);
 			CommPortIdentifier commPortIdentifier = (CommPortIdentifier) wizardPage.getCommPort();
@@ -135,7 +135,7 @@ public class SerialNMEAProvider implements INMEAConnector {
 			commPort.enableReceiveTimeout(comPortSetupPage.getTimeout());
 			
 			serialInputStreamProvider = new SerialInputStreamProvider(commPort);
-			reader = new NMEA0183Reader(serialInputStreamProvider);
+			reader = new ThreadedSerialInputReader(serialInputStreamProvider);
 			 FutureTask<Void> futureTask = new FutureTask<Void>(reader);
 			 ExecutorService es = Executors.newSingleThreadExecutor ();
 			 Future<Void> submit = (Future<Void>) es.submit (futureTask);

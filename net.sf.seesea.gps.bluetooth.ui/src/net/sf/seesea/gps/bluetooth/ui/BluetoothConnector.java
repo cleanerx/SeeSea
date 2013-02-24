@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -39,8 +39,8 @@ import java.util.concurrent.FutureTask;
 import net.sf.seesea.gps.bluetooth.BluetoothInputStreamProvider;
 import net.sf.seesea.gps.bluetooth.ui.wizard.BluetoothDiscoveryPageChangeListener;
 import net.sf.seesea.gps.bluetooth.ui.wizard.DevicesPage;
-import net.sf.seesea.provider.navigation.nmea.NMEA0183Reader;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
+import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -107,12 +107,12 @@ public class BluetoothConnector implements INMEAConnector {
 	 */
 	@Override
 	public boolean performFinish() {
-		NMEA0183Reader reader = null;
+		ThreadedSerialInputReader reader = null;
 		try {
 			DevicesPage iWizardPage = (DevicesPage) wizardPages.get(0);
 			BundleContext bundleContext = GPSBluetoothUIActivator.getDefault().getBundle().getBundleContext();
 			bluetoothInputStreamProvider = new BluetoothInputStreamProvider(iWizardPage.getServiceRecord());
-			reader = new NMEA0183Reader(bluetoothInputStreamProvider);
+			reader = new ThreadedSerialInputReader(bluetoothInputStreamProvider);
 			// Trigger reading
 			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
 			ExecutorService es = Executors.newSingleThreadExecutor ();

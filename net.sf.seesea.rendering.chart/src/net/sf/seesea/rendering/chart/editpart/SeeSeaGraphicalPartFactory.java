@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,8 +32,10 @@ import net.sf.seesea.model.core.geo.Track;
 import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.model.int1.base.MarineChart;
 import net.sf.seesea.model.int1.buoysandbeacons.Buoy;
+import net.sf.seesea.rendering.chart.editor.AreaMarker;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.transaction.util.Adaptable;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
@@ -56,6 +58,10 @@ public class SeeSeaGraphicalPartFactory implements EditPartFactory {
 //			child = new ChartSymbolsEditPart();
 		} else if(model instanceof GeoPosition && ((EObject)model).eContainer() instanceof World) {
 			child = new ShipPositionEditPart();
+		} else if(model instanceof AISMessageTime) {
+			child = new AISEditPart();
+		} else if(model instanceof AreaMarker) {
+			child = new AreaOverlayEditPart();
 //		}
 //		    child = new WorldEditPart();
 //		} else if(model instanceof Diagram) {

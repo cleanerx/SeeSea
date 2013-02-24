@@ -29,26 +29,40 @@ package net.sf.seesea.rendering.chart.editpart;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.commands.SetPositionCommand;
 import net.sf.seesea.rendering.chart.commands.SetZoomLevelCommand;
+import net.sf.seesea.rendering.chart.editor.AreaMarker;
 import net.sf.seesea.rendering.chart.figures.MapLayer;
 import net.sf.seesea.rendering.chart.policies.SeeSeaDelegatingLayoutEditPolicy;
 import net.sf.seesea.rendering.chart.policies.WorldComponentEditPolicy;
 import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
 import net.sf.seesea.tileservice.ITileProvider;
+import nl.esi.metis.aisparser.AISMessage;
+import nl.esi.metis.aisparser.AISMessageClassBPositionReport;
+import nl.esi.metis.aisparser.AISMessagePositionReport;
+import nl.esi.metis.aisparser.HandleAISMessage;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -75,6 +89,17 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	private boolean zoomInOnFirstPosition;
 
 	private long lastUpdate;
+
+	private AISTracker aisTracker;
+
+	private ServiceRegistration<HandleAISMessage> serviceRegistration;
+	
+	private List<AreaMarker> areaMarkers;
+	
+	public WorldEditPart() {
+		aisTracker = new AISTracker();
+		areaMarkers = new ArrayList<AreaMarker>();
+	}
 	
 	@Override
 	protected IFigure createFigure() {
@@ -112,7 +137,9 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	protected List getModelChildren() {
 		List<Object> modelChildren = new ArrayList<Object>();
 		// show the target if we are tracking
+		modelChildren.addAll(aisTracker.getAISMessagePositionReport());
 		modelChildren.addAll(getWorld().getTracksContainer().getTracks());
+		modelChildren.addAll(areaMarkers);
 		if(trackPosition) {
 			modelChildren.add(getWorld().getMapCenterPosition());
 		}
@@ -209,17 +236,23 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().addPropertyChangeListener(propertyChangeListener);
 		((GeospatialGraphicalViewer)getViewer()).getVerticalRangeModel().addPropertyChangeListener(propertyChangeListener);
 
+		BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
+		serviceRegistration = bundleContext.registerService(HandleAISMessage.class, aisTracker, null);
+
 //		positionTrackerRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), new PositionListener(), null);
 		getWorld().getTracksContainer().eAdapters().add(this);
 		enablePositionTracking(true);
+		aisTracker.start();
 	}
 
 	@Override
 	public void deactivate() {
+		serviceRegistration.unregister();
 		super.deactivate();
 		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().removePropertyChangeListener(propertyChangeListener);
 		((GeospatialGraphicalViewer)getViewer()).getVerticalRangeModel().removePropertyChangeListener(propertyChangeListener);
 		disablePositionTracking();
+		aisTracker.dispose();
 //		getWorld().eAdapters().remove(this);
 //		positionTrackerRegistration.unregister();
 	}
@@ -347,6 +380,108 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 			zoomInOnFirstPosition = true;
 			
 		}
+	}
+	
+	private class AISTracker implements HandleAISMessage {
+
+		private static final int CLASS_A_POSITION_UPDATE_RATE = 10000; // 10 seconds
+		private static final int CLASS_A_ANCHOR_UPDATE_RATE = 3 * 60 * 1000; // 3 minutes
+
+		private static final int CLASS_B_POSITION_UPDATE_RATE = 3 * 60 * 1000; // 10 seconds
+
+		
+		private Map<Integer, AISMessageTime> shipIdentifications;
+		private Thread aisTrackerThread; 
+
+		public AISTracker() {
+			shipIdentifications = Collections.synchronizedMap(new HashMap<Integer, AISMessageTime>());
+		}
+
+		public void start() {
+			aisTrackerThread = new Thread(new Runnable() {
+				
+				public void run() {
+					try {
+					while(true) {
+						long currentTime = Calendar.getInstance().getTime().getTime();
+						synchronized (AISTracker.this) {
+							for (Iterator<Entry<Integer, AISMessageTime>> iterator = shipIdentifications.entrySet().iterator(); iterator.hasNext();) {
+								Entry<Integer, AISMessageTime> entry = iterator.next();
+								AISMessageTime aisMessageTime = entry.getValue();
+								AISMessage aisMessage = aisMessageTime.getPosition();
+								if(aisMessage instanceof AISMessagePositionReport) {
+									AISMessagePositionReport aisMessagePositionReport = (AISMessagePositionReport) aisMessage;
+									int navState = aisMessagePositionReport.getNavigationalStatus();
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_POSITION_UPDATE_RATE + 2000) && (navState == 0 || navState == 3 || navState == 4 || navState == 7 || navState == 8)) {
+										removePosition(iterator);
+									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 2000) && (navState == 1 || navState == 2 || navState == 5 || navState == 6)) {
+										removePosition(iterator);
+									}
+								} else if(aisMessage instanceof AISMessageClassBPositionReport) {
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 2000)) {
+										removePosition(iterator);
+									}
+								} else {
+//									System.out.println(aisMessage);
+									removePosition(iterator);
+								}
+							}
+						}
+							Thread.sleep(1000);
+					}
+					} catch (InterruptedException e) {
+						// nothing to do;
+					}
+				}
+
+				private void removePosition(
+						Iterator<Entry<Integer, AISMessageTime>> iterator) {
+					iterator.remove();
+					Display.getDefault().asyncExec(new Runnable() {
+						
+						public void run() {
+							refreshChildren();
+						}
+					});
+				}
+			});
+			aisTrackerThread.start();
+		}
+		
+		public void dispose() {
+			aisTrackerThread.interrupt();
+		}
+		
+		public void handleAISMessage(final AISMessage message) {
+			Display.getDefault().asyncExec(new Runnable() {
+
+				public void run() {
+					if(message instanceof AISMessage) {
+						AISMessage positionReport = (AISMessage) message;
+						long time = Calendar.getInstance().getTime().getTime();
+						shipIdentifications.put(positionReport.getUserID(), new AISMessageTime(positionReport, time));
+						refreshChildren();
+					}
+				}
+			});
+			
+		}
+		
+		public synchronized Collection<AISMessageTime> getAISMessagePositionReport() {
+			return shipIdentifications.values();
+		}
+	}
+
+//	public void addAreaMarker(AreaMarker areaMarker) {
+//		areaMarkers.add(areaMarker);
+//	}
+//	
+//	public void removeAreaMarker(AreaMarker areaMarker) {
+//		areaMarkers.remove(areaMarker);
+//	}
+	
+	public List<AreaMarker> getAreaMarkers() {
+		return areaMarkers;
 	}
 
 }

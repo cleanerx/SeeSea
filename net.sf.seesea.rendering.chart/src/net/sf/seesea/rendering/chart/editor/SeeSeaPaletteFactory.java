@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,6 +31,7 @@ package net.sf.seesea.rendering.chart.editor;
 import java.net.URL;
 
 import net.sf.seesea.model.core.provider.XEditPlugin;
+import net.sf.seesea.rendering.chart.tools.Cache2ToolEntry;
 import net.sf.seesea.rendering.chart.tools.CacheToolEntry;
 import net.sf.seesea.rendering.chart.tools.ChartSelectionToolEntry;
 
@@ -76,7 +77,10 @@ public class SeeSeaPaletteFactory {
 //		creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getRoute());
 		ToolEntry cacheToolEntry = new CacheToolEntry("Cache Area", "Caches the chosen area on hard disk");
 		navigationGroup.add(cacheToolEntry);
-		
+
+		ToolEntry cacheToolEntry2 = new Cache2ToolEntry("Cache Area2", "Caches the chosen area on hard disk");
+		navigationGroup.add(cacheToolEntry2);
+
 		return seeseaPalette;
 	}
 

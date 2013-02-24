@@ -1,6 +1,6 @@
 package net.sf.seesea.provider.navigation.nmea.ui;
 
-import net.sf.seesea.provider.navigation.nmea.INMEAReaderFailureNotifier;
+import net.sf.seesea.services.navigation.INMEAReaderFailureNotifier;
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
 import org.apache.log4j.Logger;

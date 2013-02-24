@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -35,8 +35,8 @@ public class NMEA2000Reader extends InputStreamReader {
 
 	public NMEA2000Reader(InputStream in) {
 		super(in);
-//		nmeaEventListeners = new ArrayList<NMEAEventListener>(1);
-//		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(NMEA0183Reader.class.getName(), this, null);
+//		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
+//		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(ThreadedSerialInputReader.class.getName(), this, null);
 	}
 	
 	public void readFrame(byte[] frameData) {

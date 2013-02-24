@@ -43,6 +43,9 @@ import net.sf.seesea.model.core.physx.Temperature;
 import net.sf.seesea.model.core.physx.Time;
 import net.sf.seesea.model.core.weather.WindMeasurement;
 import net.sf.seesea.provider.navigation.nmea.v183.NMEA0183Reader;
+import net.sf.seesea.services.navigation.INMEAReader;
+import net.sf.seesea.services.navigation.RawDataEventListener;
+import net.sf.seesea.services.navigation.RawDataEvent;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
 import net.sf.seesea.services.navigation.listener.IRelativeWindSpeedListener;
@@ -59,7 +62,7 @@ import net.sf.seesea.services.navigation.provider.IShipMovementVectorProvider;
 import net.sf.seesea.services.navigation.provider.IWaterTemperatureDataProvider;
 import net.sf.seesea.services.navigation.provider.IWindDataProvider;
 
-public class NMEA0183EventProcessor extends NMEAParser implements NMEAEventListener,
+public class NMEA0183EventProcessor extends NMEAParser implements RawDataEventListener,
 		IPositionProvider, IWaterTemperatureDataProvider, IWindDataProvider,
 		IShipMovementVectorProvider {
 
@@ -92,7 +95,7 @@ public class NMEA0183EventProcessor extends NMEAParser implements NMEAEventListe
 	 * 
 	 */
 	@Override
-	public void receiveNMEAEvent(NMEAEvent e) {
+	public void receiveRawDataEvent(RawDataEvent e) {
 		List<Measurement> measurements = nmea0183Reader
 				.extractMeasurementsFromNMEA(e.getNmeaMessageContent(),
 						new ArrayList<Measurement>(1));

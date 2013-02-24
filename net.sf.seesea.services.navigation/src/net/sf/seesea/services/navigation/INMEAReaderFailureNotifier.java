@@ -1,4 +1,4 @@
-package net.sf.seesea.provider.navigation.nmea;
+package net.sf.seesea.services.navigation;
 
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 

@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,7 +30,7 @@ package net.sf.seesea.nmea.rcp.handler;
 import java.io.IOException;
 
 import net.sf.seesea.nmea.rcp.NMEARCPActivator;
-import net.sf.seesea.provider.navigation.nmea.INMEAReader;
+import net.sf.seesea.services.navigation.INMEAReader;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;

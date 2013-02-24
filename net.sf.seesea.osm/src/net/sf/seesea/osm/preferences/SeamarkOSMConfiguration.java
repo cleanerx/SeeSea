@@ -50,7 +50,7 @@ public class SeamarkOSMConfiguration {
 	private final class PreferenceChangeListener implements
 			IPropertyChangeListener {
 		private static final String SEAMARKS_DIR = "seamarks"; //$NON-NLS-1$
-		private static final String HTTP_TILES_OPENSEAMAP_ORG_SEAMARK = "http://tiles.openseamap.org/seamark/"; //$NON-NLS-1$
+		private static final String HTTP_TILES_OPENSEAMAP_ORG_SEAMARK = "http://t1.openseamap.org/seamark/"; //$NON-NLS-1$
 
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
@@ -85,7 +85,7 @@ public class SeamarkOSMConfiguration {
 			Configuration configuration = _configAdmin.createFactoryConfiguration("net.sf.seesea.osm.tileprovider.seamark"); //$NON-NLS-1$
 			Dictionary<String, Object> properties = new Hashtable<String, Object>();
 			properties.put(IOSMPreferences.CACHE_DIRECTORY, cacheDir + File.separator + "seamarks"); //$NON-NLS-1$
-			properties.put(IOSMPreferences.TILE_SOURCE, "http://tiles.openseamap.org/seamark/"); //$NON-NLS-1$
+			properties.put(IOSMPreferences.TILE_SOURCE, "http://t1.openseamap.org/seamark/"); //$NON-NLS-1$
 			properties.put(IOSMPreferences.OVERLAY, true);
 			configuration.update(properties);
 		} catch (IOException e) {

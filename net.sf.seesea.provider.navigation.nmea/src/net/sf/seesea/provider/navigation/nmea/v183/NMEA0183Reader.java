@@ -105,16 +105,6 @@ public class NMEA0183Reader implements IDataReader {
 		return null;
 	}
 	
-//	/**
-//	 * 
-//	 * @param line raw nmea 0183 sentence line 
-//	 * @param results the list of measurements
-//	 * @return the given result list with the newly added measurements
-//	 */
-//	public List<Measurement> extractMeasurementsFromNMEA(String line, List<Measurement> results) {
-//		return extractMeasurementsFromNMEA(line, results);
-//	}
-//
 	/**
 	 * 
 	 * @param line raw nmea 0183 sentence line

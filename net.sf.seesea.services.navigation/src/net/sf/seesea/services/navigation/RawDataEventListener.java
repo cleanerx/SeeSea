@@ -26,29 +26,25 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.provider.navigation.nmea;
+package net.sf.seesea.services.navigation;
+
 
 /**
- * An NMEA event
+ * An event listener to receive {@link RawDataEvent}s
  * 
  */
-public class NMEAEvent {
-
-	private final String nmeaMessageContent;
-
+public interface RawDataEventListener {
+	
 	/**
 	 * 
-	 * @param nmeaMessageContent
-	 * @param streamProviderName TODO
+	 * @param e the event
+	 * @throws NMEAProcessingException 
 	 */
-	public NMEAEvent(String nmeaMessageContent, String streamProviderName) {
-		this.nmeaMessageContent = nmeaMessageContent;
-	}
+	public void receiveRawDataEvent(RawDataEvent e) throws NMEAProcessingException;
 
-	public String getNmeaMessageContent() {
-		return nmeaMessageContent;
-	}
+	/**
+	 * called when the listener shell be disabled 
+	 */
+	public void disable();
 	
-	
-
 }

@@ -1,6 +1,6 @@
 package net.sf.seesea.provider.navigation.nmea.ui;
 
-import net.sf.seesea.provider.navigation.nmea.NMEA0183Reader;
+import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.State;

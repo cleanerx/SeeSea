@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens K�bler All rights reserved.
+ Copyright (c) 2010-2013, Jens Kübler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -24,26 +24,34 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.rendering.chart.listeners;
+package net.sf.seesea.rendering.chart.editpart;
 
-import net.sf.seesea.model.core.geo.MeasuredPosition3D;
-import net.sf.seesea.services.navigation.listener.IPositionListener;
+import nl.esi.metis.aisparser.AISMessage;
 
-public class PositionTracker implements IPositionListener {
+/**
+ * 
+ *
+ */
+public class AISMessageTime {
 
-	public void providerEnabled(String providerID) {
-		// TODO Auto-generated method stub
+	private AISMessage position;
+	
+	private long utcTime;
 
+	public AISMessageTime(AISMessage position, long utcTime) {
+		super();
+		this.position = position;
+		this.utcTime = utcTime;
 	}
 
-	public void notify(MeasuredPosition3D sensorData, String source) {
-		// TODO Auto-generated method stub
-
+	public AISMessage getPosition() {
+		return position;
 	}
 
-	public void providerDisabled(String providerID) {
-		// TODO Auto-generated method stub
-
+	public long getUtcTime() {
+		return utcTime;
 	}
-
+	
+	
+	
 }

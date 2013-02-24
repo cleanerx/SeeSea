@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.projection.mercator.spherical">
+   <implementation class="net.sf.seesea.tileservice.projections.SphericalMercatorProjection"/>
+   <service>
+      <provide interface="net.sf.seesea.tileservice.projections.IMapProjection"/>
+   </service>
+</scr:component>

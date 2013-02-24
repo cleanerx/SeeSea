@@ -85,17 +85,17 @@ public class SphericalMercatorProjection implements IMapProjection {
 	@Override
 	public Point project(GeoPosition coordinate, int scale) {
 		net.sf.seesea.model.core.geo.Longitude longitude = coordinate.getLongitude();
-		Double x = longitude2Value(longitude, scale);
+		Double x = longitude2Value(longitude.getDecimalDegree(), scale);
 
 		net.sf.seesea.model.core.geo.Latitude latitude = coordinate.getLatitude();
-		Double y = latitude2Value(latitude, scale);
+		Double y = latitude2Value(latitude.getDecimalDegree(), scale);
 
 		return new Point(x.intValue(), y.intValue());
 	}
 
 	@Override
-	public double latitude2Value(net.sf.seesea.model.core.geo.Latitude latitude, int scale) {
-        return (int) Math.floor((1 - Math.log(Math.tan(Math.toRadians(latitude.getDecimalDegree())) + 1 / Math.cos(Math.toRadians(latitude.getDecimalDegree()))) / Math.PI) / 2 * scale);
+	public double latitude2Value(double latitude, int scale) {
+        return (int) Math.floor((1 - Math.log(Math.tan(Math.toRadians(latitude)) + 1 / Math.cos(Math.toRadians(latitude))) / Math.PI) / 2 * scale);
 //		double radians = Math.toRadians(latitude.getDegree());
 //		Double y = 1 - Math.log(Math.tan(Math.PI / 4 + radians / 2)) / Math.PI;
 //		y = y / 2 * (scale);
@@ -103,8 +103,8 @@ public class SphericalMercatorProjection implements IMapProjection {
 	}
 
 	@Override
-	public double longitude2Value(net.sf.seesea.model.core.geo.Longitude longitude, int scale) {
-		return (int) Math.floor((longitude.getDecimalDegree() + 180) / 360 * scale);
+	public double longitude2Value(double d, int scale) {
+		return (int) Math.floor((d + 180) / 360 * scale);
 	}
 
 

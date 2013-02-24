@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,7 +33,6 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.geometry.Transform;
@@ -60,20 +59,12 @@ public class ShipFigure extends Figure {
 		
 		graphics.setLineWidth(1);
 		Rectangle localBounds = getBounds().getCopy();
-		Rectangle cropped = localBounds.getCropped(new Insets(1, 1, 1, 1));
-//		graphics.drawArc(cropped, 0, 360);
-		Rectangle croppedInner = localBounds.getCropped(new Insets(7, 7, 7, 7));
-//		graphics.fillArc(localBounds.x + 4	, localBounds.y , 20, 60, 90, 180);
 		graphics.pushState();
 		Point center = localBounds.getCenter();
 		graphics.translate(center.x, center.y);
 		graphics.rotate((float)cogOrientation);
-		graphics.translate(-center.x, -center.y);
-		graphics.fillOval(center.x, center.y , 20, 50);
+		graphics.drawPolygon(new int[]{ -5, 5, 0, -7  ,  5, 5 });
 		graphics.popState();
-//		graphics.drawArc(croppedInner, 0, 360);
-//		graphics.drawLine(cropped.x, cropped.y + (cropped.height/2), cropped.x + cropped.width , cropped.y + (cropped.height/2) );
-//		graphics.drawLine(cropped.x + cropped.width / 2, cropped.y , cropped.x + cropped.width / 2 , cropped.y + cropped.height );
 
 	}
 
@@ -107,7 +98,7 @@ public class ShipFigure extends Figure {
 				miny = point.y();
 			}
 		}
-		System.out.println(Math.abs(maxx - minx) + ":" + Math.abs(maxy - miny));
+//		System.out.println(Math.abs(maxx - minx) + ":" + Math.abs(maxy - miny));
 		return new Dimension(Math.abs(maxx - minx), Math.abs(maxy - miny));
 //		System.out.println(minx + miny);
 //		return new Dimension(x.intValue(), y.intValue());

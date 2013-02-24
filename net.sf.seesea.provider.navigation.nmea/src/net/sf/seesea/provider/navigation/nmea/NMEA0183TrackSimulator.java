@@ -29,30 +29,35 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.provider.navigation.nmea;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+
+import net.sf.seesea.services.navigation.INMEAReader;
+import net.sf.seesea.services.navigation.RawDataEventListener;
+import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.services.navigation.RawDataEvent;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.component.ComponentFactory;
-import org.osgi.service.component.ComponentInstance;
 
 public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 
 	private final List<InputStream> inputStreams;
-	private List<NMEAEventListener> nmeaEventListeners;
+	private List<RawDataEventListener> nmeaEventListeners;
+	private List<RawDataEventListener> aisEventListeners;
+
 	private boolean _paused;
 	private boolean _stopped;
 
 	public NMEA0183TrackSimulator(List<InputStream> fileInputStream) {
 		inputStreams = fileInputStream;
-		nmeaEventListeners = new ArrayList<NMEAEventListener>(2);
+		nmeaEventListeners = new ArrayList<RawDataEventListener>(2);
+		aisEventListeners = new ArrayList<RawDataEventListener>(2);
 		_paused = false;
 		_stopped = false;
 	}
@@ -64,13 +69,16 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 			BundleContext bundleContext = NMEA0183Activator.getDefault()
 					.getBundle().getBundleContext();
 			ServiceRegistration<INMEAReader> serviceRegistration = bundleContext.registerService(INMEAReader.class, this, null);
-			
+//			AISParser aisParser = new AISParser(new AisMessageMultiplexer(), new DummyErrorHandler());
+			File file = new File(".");
 			for (InputStream stream : inputStreams) {
+				int lineNumber = 0;
 				InputStreamReader inputStreamReader = new InputStreamReader(stream);
 				BufferedReader in = new BufferedReader(inputStreamReader);
 				currentLine = ""; //$NON-NLS-1$
 				while (currentLine != null) {
 					currentLine = in.readLine();
+					lineNumber++;
 					while(_paused && !_stopped) {
 						Thread.sleep(1000);
 					}
@@ -79,15 +87,30 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 						return;
 					}
 					if (currentLine != null) {
-						NMEAEvent nmeaEvent = new NMEAEvent(currentLine, null);
-						try {
-							for (NMEAEventListener eventListener : nmeaEventListeners) {
-								eventListener.receiveNMEAEvent(nmeaEvent);
+						if(currentLine.startsWith("$")) {
+							RawDataEvent nmeaEvent = new RawDataEvent(currentLine, null);
+							try {
+								for (RawDataEventListener eventListener : nmeaEventListeners) {
+									eventListener.receiveRawDataEvent(nmeaEvent);
+								}
+							} catch (NMEAProcessingException e) {
+								Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
 							}
-						} catch (NMEAProcessingException e) {
-							Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
+							Thread.sleep(5);
+						} else if(currentLine.startsWith("!")) {
+							RawDataEvent nmeaEvent = new RawDataEvent(currentLine, null);
+							try {
+								for (RawDataEventListener eventListener : aisEventListeners) {
+									eventListener.receiveRawDataEvent(nmeaEvent);
+								}
+							} catch (NMEAProcessingException e) {
+								Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
+							}
+							Thread.sleep(5);
+							
+//							aisParser.handleSensorData(new FileSource(file, lineNumber, currentLine, Calendar.getInstance().getTime().getTime()), currentLine);
 						}
-						Thread.sleep(10);
+						
 					}
 				}
 			}
@@ -104,7 +127,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 	 * 
 	 * @param nmeaEventListener
 	 */
-	public void addNMEAEventListener(NMEAEventListener nmeaEventListener) {
+	public void addNMEAEventListener(RawDataEventListener nmeaEventListener) {
 		nmeaEventListeners.add(nmeaEventListener);
 	}
 
@@ -112,7 +135,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 	 * 
 	 * @param nmeaEventListener
 	 */
-	public void removeNMEAEventListener(NMEAEventListener nmeaEventListener) {
+	public void removeNMEAEventListener(RawDataEventListener nmeaEventListener) {
 		nmeaEventListeners.remove(nmeaEventListener);
 	}
 
@@ -132,12 +155,15 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 	public void stop() {
 		_stopped = true;
 	}
-	
-//	public static NMEA0183TrackSimulator getInstance() {
-//		if(_instance ==  null) {
-//			_instance = new NM
-//		}
-//		return this;
-//	}
+
+	@Override
+	public void addAISEventListener(RawDataEventListener nmeaEventListener) {
+		aisEventListeners.add(nmeaEventListener);
+	}
+
+	@Override
+	public void removeAISEventListener(RawDataEventListener nmeaEventListener) {
+		aisEventListeners.remove(nmeaEventListener);
+	}
 	
 }

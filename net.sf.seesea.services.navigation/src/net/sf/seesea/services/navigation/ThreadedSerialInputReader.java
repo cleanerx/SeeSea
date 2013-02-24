@@ -26,7 +26,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.provider.navigation.nmea;
+package net.sf.seesea.services.navigation;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,47 +36,59 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
+
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-
-import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * A reader that processes nmea input streams
  */
-public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Callable<Void>{
+public class ThreadedSerialInputReader extends InputStreamReader implements INMEAReader, Callable<Void>{
 
+	private static final String PROVIDER_TYPE = "provider"; //$NON-NLS-1$
+	
 	private static final String PROVIDER_NAME = "providerName"; //$NON-NLS-1$
-	private final List<NMEAEventListener> nmeaEventListeners;
+	
+	private final List<RawDataEventListener> nmeaEventListeners;
+	private List<RawDataEventListener> aisEventListeners;
+
 	private final INMEAStreamProvider streamProvider;
 	private ServiceRegistration<?> serviceRegistration;
 	private Thread processingThread;
+
 
 	/**
 	 * @param in
 	 * @param streamproviderName 
 	 * @throws IOException 
 	 */
-	public NMEA0183Reader(INMEAStreamProvider nmeaStreamProvider) throws IOException {
+	public ThreadedSerialInputReader(INMEAStreamProvider nmeaStreamProvider) throws IOException {
 		super(nmeaStreamProvider.getInputStream());
 		streamProvider = nmeaStreamProvider;
-		nmeaEventListeners = new ArrayList<NMEAEventListener>(1);
+		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
+		aisEventListeners = new ArrayList<RawDataEventListener>(1);
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 		properties.put("hardware", true); //$NON-NLS-1$
 		properties.put(PROVIDER_NAME, nmeaStreamProvider.getName());
-		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(INMEAReader.class.getName(), this, properties);
-
+		properties.put(PROVIDER_TYPE, "sensor");
+		if(NavigationServicesActivator.getDefault() != null) {
+			BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
+			serviceRegistration = bundleContext.registerService(INMEAReader.class.getName(), this, properties);
+//			new ProcessorsTracker(bundleContext);
+		}
+		
 		Logger.getLogger(getClass()).info("Start reading from device"); //$NON-NLS-1$
-//		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(NMEA0183Reader.class.getName(), this, properties);
 	}
 	
 	/**
 	 * 
 	 * @param nmeaEventListener
 	 */
-	public void addNMEAEventListener(NMEAEventListener nmeaEventListener) {
+	public void addNMEAEventListener(RawDataEventListener nmeaEventListener) {
 		nmeaEventListeners.add(nmeaEventListener);
 	}
 
@@ -84,9 +96,27 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 	 * 
 	 * @param nmeaEventListener
 	 */
-	public void removeNMEAEventListener(NMEAEventListener nmeaEventListener) {
+	public void removeNMEAEventListener(RawDataEventListener nmeaEventListener) {
 		nmeaEventListeners.remove(nmeaEventListener);
 	}
+
+	/**
+	 * 
+	 * @param nmeaEventListener
+	 */
+	public void addAISEventListener(RawDataEventListener nmeaEventListener) {
+		aisEventListeners.add(nmeaEventListener);
+	}
+
+	/**
+	 * 
+	 * @param nmeaEventListener
+	 */
+	public void removeAISEventListener(RawDataEventListener nmeaEventListener) {
+		aisEventListeners.remove(nmeaEventListener);
+	}
+
+	
 
 	public void close() throws IOException {
 		if(processingThread != null) {
@@ -100,7 +130,7 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 		try {
 			streamProvider.close();
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("Failed to close input stream", e);
+			Logger.getLogger(getClass()).error("Failed to close input stream", e); //$NON-NLS-1$
 		}
 	}
 	
@@ -118,14 +148,27 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 				case '\n':
 					if(stringBuffer != null) {
 						stringBuffer.append((char) i);
-						NMEAEvent nmeaEvent = new NMEAEvent(stringBuffer.toString(), streamProvider.getName());
-						for (NMEAEventListener nmeaEventListener : nmeaEventListeners) {
-							nmeaEventListener.receiveNMEAEvent(nmeaEvent);
+						String line = stringBuffer.toString();
+						if(line.startsWith("!")) { //$NON-NLS-1$
+							RawDataEvent nmeaEvent = new RawDataEvent(stringBuffer.toString(), streamProvider.getName());
+							for(RawDataEventListener aisEventListener : aisEventListeners) {
+								aisEventListener.receiveRawDataEvent(nmeaEvent);
+							}
+						} else if(line.startsWith("$")) { //$NON-NLS-1$
+							RawDataEvent nmeaEvent = new RawDataEvent(stringBuffer.toString(), streamProvider.getName());
+							for (RawDataEventListener nmeaEventListener : nmeaEventListeners) {
+								nmeaEventListener.receiveRawDataEvent(nmeaEvent);
+							}
 						}
 					}
 					i = read();
 					break;
 				case '$':
+					stringBuffer = new StringBuffer();
+					stringBuffer.append((char) i);
+					i = read();
+					break;
+				case '!':
 					stringBuffer = new StringBuffer();
 					stringBuffer.append((char) i);
 					i = read();
@@ -137,16 +180,13 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 					i = read();
 					break;
 				}
-//				if(Thread.interrupted()) {
-////					unregisterService();
-//					return null;
 //				}
 			}
 		} catch (Exception e) {
 			// exception during processing
 			if(!processingThread.interrupted()) {
 				Logger.getLogger(getClass()).error("Exception while reading input stream", e); //$NON-NLS-1$
-				BundleContext bundleContext = NMEA0183Activator.getDefault().getBundle().getBundleContext();
+				BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
 				Collection<ServiceReference<INMEAReaderFailureNotifier>> serviceReferences = bundleContext.getServiceReferences(INMEAReaderFailureNotifier.class, null);
 				if(serviceReferences != null) {
 					for (ServiceReference<INMEAReaderFailureNotifier> serviceReference : serviceReferences) {
@@ -165,4 +205,41 @@ public class NMEA0183Reader extends InputStreamReader implements INMEAReader, Ca
 		return null;
 	}
 	
+//	private class ProcessorsTracker extends ServiceTracker<RawDataEventListener,RawDataEventListener> {
+//
+//		private static final String NMEA = "nmea"; //$NON-NLS-1$
+//		private static final String AIS = "ais"; //$NON-NLS-1$
+//		private static final String TYPE = "type"; //$NON-NLS-1$
+//
+//		public ProcessorsTracker(BundleContext context) {
+//			super(context, RawDataEventListener.class, null);
+//		}
+//		
+//		@Override
+//		public RawDataEventListener addingService(
+//				ServiceReference<RawDataEventListener> reference) {
+//			RawDataEventListener listener = super.addingService(reference);
+//			if(reference.getProperty(TYPE).equals(AIS)) {
+//				aisEventListeners.add(listener);
+//			} else if(reference.getProperty(TYPE).equals(NMEA)) {
+//				nmeaEventListeners.add(listener);
+//			}
+//			return listener; 
+//		}
+//		
+//		@Override
+//		public void removedService(
+//				ServiceReference<RawDataEventListener> reference,
+//				RawDataEventListener service) {
+//			if(reference.getProperty(TYPE).equals(AIS)) {
+//				aisEventListeners.add(service);
+//			} else if(reference.getProperty(TYPE).equals(NMEA)) {
+//				nmeaEventListeners.add(service);
+//			}
+//			super.removedService(reference, service);
+//		}
+//		
+//	}
+
+
 }

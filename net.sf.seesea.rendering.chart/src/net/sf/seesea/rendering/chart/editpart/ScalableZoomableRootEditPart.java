@@ -59,7 +59,7 @@ public class ScalableZoomableRootEditPart extends ScalableRootEditPart {
 	 * 
 	 */
 	public ScalableZoomableRootEditPart() {
-		listeners = new ArrayList();
+		listeners = new ArrayList<ZoomListener>();
 	}
 	
 	/**
@@ -79,6 +79,10 @@ public class ScalableZoomableRootEditPart extends ScalableRootEditPart {
 		Iterator iter = listeners.iterator();
 		while (iter.hasNext())
 			((ZoomListener) iter.next()).zoomChanged(_zoom);
+	}
+	
+	public void removeZoomListener(ZoomListener zoomListener) {
+		listeners.remove(zoomListener);
 	}
 	
 	

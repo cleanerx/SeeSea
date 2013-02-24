@@ -17,7 +17,9 @@ Require-Bundle: org.eclipse.swt,
  org.eclipse.gmf.runtime.diagram.ui,
  net.sf.seesea.model.core.edit,
  net.sf.seesea.tileservice;bundle-version="1.0.0",
- org.apache.log4j
+ org.apache.log4j,
+ net.sf.seesea.navigation.ais;bundle-version="1.0.0",
+ org.apache.commons.httpclient;bundle-version="3.1.0"
 Bundle-Activator: net.sf.seesea.rendering.chart.SeeSeaUIActivator
 Bundle-ActivationPolicy: lazy
 Export-Package: net.sf.seesea.rendering.chart,

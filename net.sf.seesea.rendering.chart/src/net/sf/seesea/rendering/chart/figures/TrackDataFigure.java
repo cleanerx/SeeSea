@@ -69,6 +69,9 @@ public class TrackDataFigure extends PolylineConnection {
 	 */
 	public int addRelativePoint(Point point) {
 		synchronized (syncObject) {
+			if(_relativePoints.size() > 2000) {
+				_relativePoints.remove(0);
+			}
 			_relativePoints.add(point);
 			return _relativePoints.size() - 1;
 		}

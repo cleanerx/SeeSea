@@ -13,6 +13,14 @@
             id="net.sf.seesea.provider.navigation.nmea.ui.disconnect"
             name="Disconnect">
       </command>
+      <command
+            id="net.sf.seesea.provider.navigation.nmea.ui.startSimulation"
+            name="Start Simulation">
+      </command>
+      <command
+            id="net.sf.seesea.provider.navigation.nmea.ui.stopSimulation"
+            name="Stop Simulation">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -56,6 +64,22 @@
                icon="res/RawData.png"
                label="%toggleRaw"
                style="toggle">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <command
+               commandId="net.sf.seesea.provider.navigation.nmea.ui.startSimulation"
+               icon="res/RawData.png"
+               label="Start Simulation"
+               style="push">
+         </command>
+         <command
+               commandId="net.sf.seesea.provider.navigation.nmea.ui.stopSimulation"
+               icon="res/RawData.png"
+               label="Stop Simulation"
+               style="push">
          </command>
       </menuContribution>
    </extension>

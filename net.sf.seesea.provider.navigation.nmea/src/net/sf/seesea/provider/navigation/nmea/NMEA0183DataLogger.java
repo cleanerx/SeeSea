@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
+import net.sf.seesea.services.navigation.INMEAReader;
+import net.sf.seesea.services.navigation.RawDataEventListener;
+import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.services.navigation.RawDataEvent;
+
 import org.apache.log4j.Logger;
 import org.osgi.framework.Constants;
 import org.osgi.service.cm.Configuration;
@@ -56,7 +61,7 @@ import org.osgi.service.cm.ManagedService;
 /**
  * A logger for NMEA 0183 Data that logs into a gzipped file
  */
-public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
+public class NMEA0183DataLogger implements RawDataEventListener, ManagedService {
 
 	private static final int INTERVAL_VALUE = 5;
 
@@ -132,11 +137,13 @@ public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
 	public synchronized void bindReader(INMEAReader nmeaReader) {
 		nmeaReaders.add(nmeaReader);
 		nmeaReader.addNMEAEventListener(this);
+		nmeaReader.addAISEventListener(this);
 	}
 
 	public synchronized void unbindReader(INMEAReader nmeaReader) {
 		nmeaReaders.remove(nmeaReader);
 		nmeaReader.removeNMEAEventListener(this);
+		nmeaReader.removeAISEventListener(this);
 		if (nmeaReaders.isEmpty()) {
 			try {
 				gzipOutputStream.close();
@@ -152,10 +159,10 @@ public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
 	 * 
 	 * @see
 	 * net.sf.seesea.provider.navigation.nmea.NMEAEventListener#receiveNMEAEvent
-	 * (net.sf.seesea.provider.navigation.nmea.NMEAEvent)
+	 * (net.sf.seesea.provider.navigation.nmea.RawDataEvent)
 	 */
 	@Override
-	public void receiveNMEAEvent(NMEAEvent e) throws NMEAProcessingException {
+	public void receiveRawDataEvent(RawDataEvent e) throws NMEAProcessingException {
 		if (rotateFileName && nextLogRotationcalendar.before(Calendar.getInstance())) {
 			nextLogRotationcalendar = Calendar.getInstance();
 			nextLogRotationcalendar.add(INTERVAL_UNIT, INTERVAL_VALUE);
@@ -203,7 +210,7 @@ public class NMEA0183DataLogger implements NMEAEventListener, ManagedService {
 		Dictionary<String, Object> defaultConfig = new Hashtable<String, Object>();
 		defaultConfig.put("rotateFileName", true); //$NON-NLS-1$
 		defaultConfig.put("loggingDirectory", System.getProperty("user.home") + File.separator + "NMEALogging");  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-		defaultConfig.put(Constants.SERVICE_PID, NMEAEventListener.class.getName());
+		defaultConfig.put(Constants.SERVICE_PID, RawDataEventListener.class.getName());
 		return defaultConfig;
 	}
 

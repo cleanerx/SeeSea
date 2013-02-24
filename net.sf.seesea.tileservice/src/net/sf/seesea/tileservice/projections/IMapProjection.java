@@ -12,8 +12,8 @@ public interface IMapProjection {
 	
 	GeoPosition backproject(Point point, int scale);
 	
-	double longitude2Value(Longitude longitude, int scale);
+	double longitude2Value(double longitude, int scale);
 	
-	double latitude2Value(Latitude latitude, int scale); 
+	double latitude2Value(double latitude, int scale); 
 	
 }
