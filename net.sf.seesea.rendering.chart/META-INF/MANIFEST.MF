@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.swt,
  net.sf.seesea.model.core.edit,
  net.sf.seesea.tileservice;bundle-version="1.0.0",
  org.apache.log4j,
- net.sf.seesea.navigation.ais;bundle-version="1.0.0",
+ nl.esi.metis.aisparser,
  org.apache.commons.httpclient;bundle-version="3.1.0"
 Bundle-Activator: net.sf.seesea.rendering.chart.SeeSeaUIActivator
 Bundle-ActivationPolicy: lazy
