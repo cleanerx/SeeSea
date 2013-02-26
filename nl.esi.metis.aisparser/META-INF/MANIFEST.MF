@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ais
+Bundle-SymbolicName: nl.esi.metis.aisparser
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: lib/colt.jar,
+ .
+Export-Package: nl.esi.metis.aisparser,
+ nl.esi.metis.aisparser.annotations,
+ nl.esi.metis.aisparser.provenance
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0"
+Bundle-Activator: nl.esi.metis.aisparser.AISActivator
