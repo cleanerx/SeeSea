@@ -8,7 +8,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.apache.commons.httpclient;bundle-version="3.1.0",
  net.sf.seesea.lib;bundle-version="1.0.0",
- net.sf.seesea.upload;bundle-version="1.0.0"
+ net.sf.seesea.upload;bundle-version="1.0.0",
+ org.apache.commons.lang;bundle-version="2.4.0",
+ org.apache.commons.collections;bundle-version="3.2.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.upload.osm.api.v1
+Bundle-ClassPath: lib/json-lib-2.4-jdk15.jar,
+ lib/ezmorph-1.0.6.jar,
+ lib/commons-beanutils-1.8.3.jar,
+ .

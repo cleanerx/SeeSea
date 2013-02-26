@@ -29,6 +29,7 @@ package net.sf.seesea.upload.osm.api.v1;
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -45,18 +46,21 @@ public class OSMDataUpload implements IDataUpload {
 	private Authentication authentication;
 	private Track track;
 	private String sessionId;
+	private HttpClient httpClient;
 
 	public OSMDataUpload(String server) {
 		baseURL = server;
-		authentication = new Authentication(server);
-		track = new Track(baseURL);
+		httpClient = new HttpClient();
+		authentication = new Authentication(httpClient, server);
+		track = new Track(httpClient, baseURL);
 	}
-	
+
 	@Override
 	public IStatus login(String username, String password) {
 		IResultStatus<String> login = authentication.login(username, password);
 		sessionId = login.getResult();
-		return new Status(login.getSeverity(), login.getPlugin(), login.getMessage());
+		return new Status(login.getSeverity(), login.getPlugin(),
+				login.getMessage());
 	}
 
 	@Override
@@ -66,21 +70,25 @@ public class OSMDataUpload implements IDataUpload {
 
 	@Override
 	public IStatus upload(List<File> files, IProgressMonitor monitor) {
-		MultiStatus multiStatus = new MultiStatus(OSMUploadActivator.PLUGIN_ID, IStatus.OK, "File Upload", null);
+		MultiStatus multiStatus = new MultiStatus(OSMUploadActivator.PLUGIN_ID,
+				IStatus.OK, "File Upload", null);
 
-		if(sessionId != null) {
-			ResultStatus<Integer> newId = track.newId(sessionId);
-			if(newId.isOK()) {
-				for (File file : files) {
-					if(monitor.isCanceled()) {
+		if (sessionId != null) {
+			for (File file : files) {
+				ResultStatus<Integer> newId = track.newId(sessionId);
+				if (newId.isOK()) {
+					if (monitor.isCanceled()) {
 						break;
 					}
-					ResultStatus<Long> uploadStatus = track.upload(sessionId, newId.getResult(), file);
-					if(uploadStatus.isOK()) {
+					ResultStatus<Long> uploadStatus = track.upload(sessionId,
+							newId.getResult(), file, monitor);
+					if (uploadStatus.isOK()) {
 						Long uploadSize = uploadStatus.getResult();
 						long fileLength = file.length();
-						if(uploadSize != fileLength) {
-							multiStatus.add(new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "File length upload does not match"));
+						if (uploadSize != fileLength) {
+							multiStatus.add(new Status(IStatus.ERROR,
+									OSMUploadActivator.PLUGIN_ID,
+									"File length upload does not match"));
 						} else {
 							multiStatus.add(uploadStatus);
 						}

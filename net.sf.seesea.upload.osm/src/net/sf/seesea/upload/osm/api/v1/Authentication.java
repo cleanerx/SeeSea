@@ -29,17 +29,19 @@ package net.sf.seesea.upload.osm.api.v1;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 
+import net.sf.json.JSONObject;
 import net.sf.seesea.lib.IResultStatus;
 import net.sf.seesea.lib.ResultStatus;
 import net.sf.seesea.upload.osm.OSMUploadActivator;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -51,9 +53,12 @@ import org.eclipse.swt.graphics.ImageLoader;
  */
 public class Authentication {
 
+	private static final String SHA_1 = "SHA-1"; //$NON-NLS-1$
 	private final String baseURL;
+	private final HttpClient client;
 
-	public Authentication(String baseURL) {
+	public Authentication(HttpClient client , String baseURL) {
+		this.client = client;
 		this.baseURL = baseURL;
 	}
 	
@@ -62,37 +67,41 @@ public class Authentication {
 	 * @return
 	 * @throws IOException
 	 */
-	public ImageData[] captcha() throws IOException {
-		HttpClient client = new HttpClient();
-		GetMethod method = new GetMethod(baseURL + "/api1/auth/captcha"); //$NON-NLS-1$
+	public ImageData captcha() throws IOException {
+		PostMethod method = new PostMethod(baseURL + "/api1/auth/captcha"); //$NON-NLS-1$
 		int statusCode = client.executeMethod(method);
 		
-		if(statusCode == 999) {
-			throw new IOException("Server Side Error: Reason unknown");
+		if(statusCode == 200) {
+			ImageLoader imageLoader = new ImageLoader();
+			InputStream responseBodyAsStream = method.getResponseBodyAsStream();
+			if(responseBodyAsStream == null) {
+				throw new IOException("Failed to load captcha"); //$NON-NLS-1$
+			} 
+			
+			ImageData[] imageData = imageLoader.load(responseBodyAsStream);
+			method.releaseConnection();
+			
+			return imageData[0];
 		}
-		
-		ImageLoader imageLoader = new ImageLoader();
-		InputStream responseBodyAsStream = method.getResponseBodyAsStream();
-		if(responseBodyAsStream == null) {
-			throw new IOException("Failed to load captcha");
-		} 
-		ImageData[] imageData = imageLoader.load(responseBodyAsStream);
-		method.releaseConnection();
-
-		return imageData;
+		throw new IOException("Failed to contact server"); //$NON-NLS-1$
 	}
 	
 	public IStatus createAccount(String user, String password, String captcha) {
-		HttpClient client = new HttpClient();
-		GetMethod method = null;
-//		URLEncoder.encode(s, enc);
+		PostMethod method = null;
         try {
-        	MessageDigest cript = MessageDigest.getInstance("SHA-1");
-        	cript.reset();
-			cript.update(password.getBytes("utf8")); //$NON-NLS-1$
-			String shapassword = new String(cript.digest());
-			method = new GetMethod(MessageFormat.format("{0}/api1/auth/create=username={1}&password={2}&captcha={3}",baseURL, user, shapassword, captcha));  //$NON-NLS-1$
+        	String shapassword = encryptPassword(password);
+			method = new PostMethod(MessageFormat.format("{0}/api1/auth/create", baseURL)); //$NON-NLS-1$
+			
+			NameValuePair[] nameValuePairs = new NameValuePair[3];
+			nameValuePairs[0] = new NameValuePair("username",user); //$NON-NLS-1$
+			nameValuePairs[1] = new NameValuePair("password",shapassword); //$NON-NLS-1$
+			nameValuePairs[2] = new NameValuePair("captcha",captcha); //$NON-NLS-1$
+			method.addParameters(nameValuePairs);
+//			method.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			
 			int statusCode = client.executeMethod(method);
+			String responseBodyAsString = method.getResponseBodyAsString();
+			JSONObject jsonObject = JSONObject.fromObject(responseBodyAsString);
 			if(statusCode == 200) {
 				return new Status(IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK");
 			} else if(statusCode == 103) {
@@ -122,19 +131,21 @@ public class Authentication {
 	}
 	
 	public IResultStatus<String> login(String username, String password) {
-		HttpClient client = new HttpClient();
-		GetMethod method = null;
+		PostMethod method = null;
 		try {
-        	MessageDigest cript = MessageDigest.getInstance("SHA-1");
-        	cript.reset();
-			cript.update(password.getBytes("utf8")); //$NON-NLS-1$
-			String shapassword = new String(cript.digest());
-//			PostMethod postMethod = new PostMethod(MessageFormat.format("{0}/api1/auth/",baseURL)); //$NON-NLS-1$
-//			postMethod.set
-			method = new GetMethod(MessageFormat.format("{0}/api1/auth/login=username={1}&password={2}",baseURL, username, shapassword));  //$NON-NLS-1$
+        	String shapassword = encryptPassword(password);
+			method = new PostMethod(MessageFormat.format("{0}/api1/auth/login", baseURL)); //$NON-NLS-1$
+			
+			NameValuePair[] nameValuePairs = new NameValuePair[2];
+			nameValuePairs[0] = new NameValuePair("username",username); //$NON-NLS-1$
+			nameValuePairs[1] = new NameValuePair("password",shapassword); //$NON-NLS-1$
+			method.addParameters(nameValuePairs);
+
 			int statusCode = client.executeMethod(method);
+			String responseBodyAsString = method.getResponseBodyAsString();
+			JSONObject jsonObject = JSONObject.fromObject(responseBodyAsString);
 			if(statusCode == 200) {
-				String sessionId = method.getResponseBodyAsString(); 
+				String sessionId = (String) jsonObject.get("session_id"); //$NON-NLS-1$ 
 				return new ResultStatus<String>(sessionId,IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK");
 			} else if(statusCode == 103) {
 				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username exists");
@@ -153,20 +164,31 @@ public class Authentication {
 			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Failed to contact server.", e);
 		} catch (NoSuchAlgorithmException e) {
 			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "SHA 1 Encryption required in order to provide uploads");
-		} finally {
+		} catch (Throwable e) {
+			e.printStackTrace();
+			return null;
+		}finally {
 			if(method != null) {
 				method.releaseConnection();
 			}
 		}
 	}
 
+	private String encryptPassword(String password) throws NoSuchAlgorithmException,
+			UnsupportedEncodingException {
+		MessageDigest cript = MessageDigest.getInstance(SHA_1);
+		cript.reset();
+		cript.update(password.getBytes("utf8")); //$NON-NLS-1$
+		String shapassword = new BigInteger(1, cript.digest()).toString(16);
+		return shapassword;
+	}
+
 
 	public IResultStatus<String> logout(String sessionId) {
-		HttpClient client = new HttpClient();
-		GetMethod method = null;
+		PostMethod method = null;
 		try {
-			method = new GetMethod(MessageFormat.format("{0}/api1/auth/logout",baseURL));  //$NON-NLS-1$
-			method.addRequestHeader("Cookie", "sessionId=" + sessionId);
+			method = new PostMethod(MessageFormat.format("{0}/api1/auth/logout",baseURL));  //$NON-NLS-1$
+			method.addRequestHeader("Cookie", "sessionId=" + sessionId); //$NON-NLS-1$ //$NON-NLS-2$
 			int statusCode = client.executeMethod(method);
 			if(statusCode == 200) {
 				return new ResultStatus<String>(sessionId,IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK");
@@ -187,17 +209,11 @@ public class Authentication {
 	}
 
 	public IStatus changePassword(String sessionId, String oldpassword, String newpassword) {
-		HttpClient client = new HttpClient();
-		GetMethod method = null;
+		PostMethod method = null;
 		try {
-        	MessageDigest cript = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
-			cript.reset();
-			cript.update(oldpassword.getBytes("utf8")); //$NON-NLS-1$
-			String oldshapassword = new String(cript.digest());
-			cript.reset();
-			cript.update(oldpassword.getBytes("utf8")); //$NON-NLS-1$
-			String newshapassword = new String(cript.digest());
-			method = new GetMethod(MessageFormat.format("{0}/api1/auth/changepassword=old={1}&new={2}",baseURL, oldshapassword, newshapassword));  //$NON-NLS-1$
+			String oldshapassword = encryptPassword(oldpassword);
+			String newshapassword = encryptPassword(newpassword);
+			method = new PostMethod(MessageFormat.format("{0}/api1/auth/changepassword=old={1}&new={2}",baseURL, oldshapassword, newshapassword));  //$NON-NLS-1$
 			method.addRequestHeader("Cookie", "sessionId=" + sessionId);
 			
 			int statusCode = client.executeMethod(method);

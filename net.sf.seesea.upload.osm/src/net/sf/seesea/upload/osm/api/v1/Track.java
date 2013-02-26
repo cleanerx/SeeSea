@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+import net.sf.json.JSONObject;
 import net.sf.seesea.lib.ResultStatus;
 import net.sf.seesea.upload.osm.OSMUploadActivator;
 
@@ -41,27 +42,30 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 public class Track {
 
 	private final String baseURL;
+	private final HttpClient client;
 
-	public Track(String baseURL) {
+	public Track(HttpClient httpClient, String baseURL) {
+		this.client = httpClient;
 		this.baseURL = baseURL;
 	}
 
 	public ResultStatus<Integer> newId(String sessionId) {
-		HttpClient client = new HttpClient();
-		GetMethod method = null;
+		PostMethod method = null;
 		try {
-			method = new GetMethod(MessageFormat.format(
-					"{0}/api1/auth/newid", baseURL)); //$NON-NLS-1$
-			method.addRequestHeader("Cookie", "sessionId=" + sessionId);
+			method = new PostMethod(MessageFormat.format(
+					"{0}/api1/track/newid", baseURL)); //$NON-NLS-1$
+
 			int statusCode = client.executeMethod(method);
+			String responseBodyAsString = method.getResponseBodyAsString();
+			JSONObject fromObject = JSONObject.fromObject(responseBodyAsString);
 			if (statusCode == 200) {
-				int trackId = Integer
-						.parseInt(method.getResponseBodyAsString());
+				int trackId = fromObject.getInt("trackId"); //$NON-NLS-1$
 				return new ResultStatus<Integer>(trackId, IStatus.OK,
 						OSMUploadActivator.PLUGIN_ID, "OK");
 			} else if (statusCode == 201) {
@@ -91,42 +95,45 @@ public class Track {
 	}
 
 	public ResultStatus<Long> upload(String sessionId, Integer trackId,
-			File track) {
-		HttpClient client = new HttpClient();
+			File track, IProgressMonitor monitor) {
 		PostMethod method = null;
 		try {
 			method = new PostMethod(MessageFormat.format(
-					"{0}/api1/auth/logout", baseURL)); //$NON-NLS-1$
+					"{0}/api1/track/upload", baseURL)); //$NON-NLS-1$
 			method.addRequestHeader("Cookie", "sessionId=" + sessionId);
 			method.addRequestHeader("X-Track-Id", trackId.toString());
 			Part[] parts = { new FilePart("track", track) };
-			method.setRequestEntity(new MultipartRequestEntity(parts,
-					method.getParams()));
+			method.setRequestEntity(new MultipartRequestEntity(parts, method
+					.getParams()));
 			int statusCode = client.executeMethod(method);
+			JSONObject jsonObject = JSONObject.fromObject(method.getResponseBodyAsString());
 			if (statusCode == 200) {
-				long length = Long.parseLong(method.getResponseBodyAsString());
+				long length = jsonObject.getLong("length");
 				return new ResultStatus<Long>(length, IStatus.OK,
 						OSMUploadActivator.PLUGIN_ID, "OK");
-			} else if (statusCode == 202) {
-				return new ResultStatus<Long>(IStatus.ERROR,
-						OSMUploadActivator.PLUGIN_ID, "Invalid track id");
-			} else if (statusCode == 203) {
-				return new ResultStatus<Long>(IStatus.ERROR,
-						OSMUploadActivator.PLUGIN_ID, "Upload already done");
-			} else if (statusCode == 803) {
-				return new ResultStatus<Long>(IStatus.ERROR,
-						OSMUploadActivator.PLUGIN_ID,
-						"Header X-Track Id not set");
-			} else if (statusCode == 804) {
-				return new ResultStatus<Long>(IStatus.ERROR,
-						OSMUploadActivator.PLUGIN_ID,
-						"Missing filed name track");
-			} else if (statusCode == 999) {
-				return new ResultStatus<Long>(IStatus.ERROR,
-						OSMUploadActivator.PLUGIN_ID, "Server side error");
 			} else {
-				return new ResultStatus<Long>(IStatus.ERROR,
-						OSMUploadActivator.PLUGIN_ID, "Unknown Error");
+				int jsonCode = jsonObject.getInt("code");
+				if (jsonCode == 202) {
+					return new ResultStatus<Long>(IStatus.ERROR,
+							OSMUploadActivator.PLUGIN_ID, "Invalid track id");
+				} else if (jsonCode == 203) {
+					return new ResultStatus<Long>(IStatus.ERROR,
+							OSMUploadActivator.PLUGIN_ID, "Upload already done");
+				} else if (jsonCode == 803) {
+					return new ResultStatus<Long>(IStatus.ERROR,
+							OSMUploadActivator.PLUGIN_ID,
+							"Header X-Track Id not set");
+				} else if (jsonCode == 804) {
+					return new ResultStatus<Long>(IStatus.ERROR,
+							OSMUploadActivator.PLUGIN_ID,
+							"Missing filed name track");
+				} else if (jsonCode == 999) {
+					return new ResultStatus<Long>(IStatus.ERROR,
+							OSMUploadActivator.PLUGIN_ID, "Server side error");
+				} else {
+					return new ResultStatus<Long>(IStatus.ERROR,
+							OSMUploadActivator.PLUGIN_ID, "Unknown Error");
+				}
 			}
 		} catch (HttpException e) {
 			return new ResultStatus<Long>(IStatus.ERROR,
