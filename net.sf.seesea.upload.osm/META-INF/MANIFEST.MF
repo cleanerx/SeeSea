@@ -6,11 +6,11 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.upload.osm.OSMUploadActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.apache.commons.httpclient;bundle-version="3.1.0",
+ org.apache.commons.httpclient,
  net.sf.seesea.lib;bundle-version="1.0.0",
  net.sf.seesea.upload;bundle-version="1.0.0",
- org.apache.commons.lang;bundle-version="2.4.0",
- org.apache.commons.collections;bundle-version="3.2.0"
+ org.apache.commons.lang,
+ org.apache.commons.collections
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.upload.osm.api.v1
