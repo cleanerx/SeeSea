@@ -4,6 +4,7 @@
   <rm:locator pattern="^org\.apache\.log4j(\..+)?$" searchPathRef="default"/>
   <rm:locator pattern="^org\.eclipse(\..+)?$" searchPathRef="org.eclipse.platform"/>
   <rm:locator pattern="^net\.sf\.seesea(\..+)?$" searchPathRef="default"/>
+  <rm:locator pattern="^nl\.esi(\..+)?$" searchPathRef="default"/>
   <rm:locator pattern="^de\.kupzog\.ktable(\..+)?$" searchPathRef="default"/>
   <rm:locator pattern="^org\.qbang\.rxtx(\..+)?$" searchPathRef="default"/>
   <rm:searchPath name="org.eclipse.platform">
