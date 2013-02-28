@@ -28,14 +28,12 @@ package net.sf.seesea.nmea.rcp.application;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.Properties;
 
 import net.sf.seesea.nmea.rcp.NMEARCPActivator;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.internal.resources.ProjectDescription;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -44,8 +42,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
@@ -84,12 +80,26 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		super.preStartup();
 		System.setProperty("logDirectory", System.getProperty("user.home")); //$NON-NLS-1$ //$NON-NLS-2$
 		Logger.getRootLogger().info("Initializing Application"); //$NON-NLS-1$
-		Location loc = Platform.getInstanceLocation();
-
-
-//		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-//		IWorkspaceRoot root = workspace.getRoot();
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot root = workspace.getRoot();
 		try {
+			IProject project = root.getProject(NMEA_LOGGING);
+			if (!project.exists()) {
+				project.create(new NullProgressMonitor());
+			}
+			if (!project.isOpen()) {
+				project.open(null);
+			}
+
+			IFolder logFolder = project.getFolder("logs"); //$NON-NLS-1$
+			if (!logFolder.exists()) {
+				logFolder.create(IResource.NONE, true, null);
+			}
+			IFolder cacheFolder = project.getFolder("tilecache"); //$NON-NLS-1$
+			if (!cacheFolder.exists()) {
+				cacheFolder.create(IResource.NONE, true, null);
+			}
+
 			BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
 			ServiceReference<ConfigurationAdmin> serviceReference = (ServiceReference<ConfigurationAdmin>) bundleContext.getServiceReference(ConfigurationAdmin.class);
 			if(serviceReference != null) {
@@ -97,45 +107,14 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 				Configuration configuration = configurationAdmin.getConfiguration("net.sf.seesea.provider.navigation.nmea.datalogger"); //$NON-NLS-1$
 				Properties properties = new Properties();
 				properties.put("rotateFileName", true); //$NON-NLS-1$
-				properties.put("loggingDirectory", loc.getDataArea("log").toURI().toURL().toString()); //$NON-NLS-1$
-				properties.put("cacheDirectory", loc.getDataArea("cache").toURI().toURL().toString()); //$NON-NLS-1$
+				properties.put("loggingDirectory", logFolder.getLocationURI().toURL().toString()); //$NON-NLS-1$
+				properties.put("cacheDirectory", URLDecoder.decode(cacheFolder.getLocationURI().toURL().toString())); //$NON-NLS-1$
 				configuration.update(properties);
 			}
-
-			//			IProject project = root.getProject(NMEA_LOGGING);
-////			project.delete(true, new NullProgressMonitor());
-//			if (!project.exists()) {
-//				project.create(new ProjectDescription(), new NullProgressMonitor());
-//			}
-//			if (!project.isOpen()) {
-//				project.open(new NullProgressMonitor());
-//			}
-//
-//			IFolder logFolder = project.getFolder("logs"); //$NON-NLS-1$
-//			if (!logFolder.exists()) {
-//				logFolder.create(IResource.NONE, true, null);
-//			}
-//			IFolder cacheFolder = project.getFolder("tilecache"); //$NON-NLS-1$
-//			if (!cacheFolder.exists()) {
-//				cacheFolder.create(IResource.NONE, true, null);
-//			}
-//
-//			BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
-//			ServiceReference<ConfigurationAdmin> serviceReference = (ServiceReference<ConfigurationAdmin>) bundleContext.getServiceReference(ConfigurationAdmin.class);
-//			if(serviceReference != null) {
-//				ConfigurationAdmin configurationAdmin = bundleContext.getService(serviceReference);
-//				Configuration configuration = configurationAdmin.getConfiguration("net.sf.seesea.provider.navigation.nmea.datalogger"); //$NON-NLS-1$
-//				Properties properties = new Properties();
-//				properties.put("rotateFileName", true); //$NON-NLS-1$
-//				properties.put("loggingDirectory", logFolder.getLocationURI().toURL().toString()); //$NON-NLS-1$
-//				properties.put("cacheDirectory", URLDecoder.decode(cacheFolder.getLocationURI().toURL().toString())); //$NON-NLS-1$
-//				configuration.update(properties);
-//			}
 		} catch (IOException e) {
 			Logger.getRootLogger().error("Failed to create log folder", e); //$NON-NLS-1$
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (CoreException e) {
+			Logger.getRootLogger().error("Failed to create NMEA logging resource", e); //$NON-NLS-1$
 		}
 
 	}
