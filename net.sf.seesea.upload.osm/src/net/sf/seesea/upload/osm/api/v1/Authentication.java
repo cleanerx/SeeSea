@@ -101,19 +101,21 @@ public class Authentication {
 			
 			int statusCode = client.executeMethod(method);
 			String responseBodyAsString = method.getResponseBodyAsString();
-			JSONObject jsonObject = JSONObject.fromObject(responseBodyAsString);
 			if(statusCode == 200) {
-				return new Status(IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK");
-			} else if(statusCode == 103) {
-				return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username exists");
-			} else if(statusCode == 801) {
-				return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid Captcha");
-			} else if(statusCode == 802) {
-				return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid password");
-			} else if(statusCode == 999) {
-				return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
+				return new Status(IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK"); //$NON-NLS-1$
 			} else {
-				return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
+				JSONObject jsonObject = JSONObject.fromObject(responseBodyAsString);
+				int jsonCode = jsonObject.getInt("code"); //$NON-NLS-1$
+				if(jsonCode == 103) {
+					return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username exists");
+				} else if(jsonCode == 801) {
+					return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid Captcha");
+				} else if(jsonCode == 802) {
+					return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid password");
+				} else if(jsonCode == 999) {
+					return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
+				}
+			return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
 			}
 		} catch (UnsupportedEncodingException e1) {
 			return new Status(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "SHA 1 Encryption required in order to provide uploads");
@@ -143,20 +145,25 @@ public class Authentication {
 
 			int statusCode = client.executeMethod(method);
 			String responseBodyAsString = method.getResponseBodyAsString();
-			JSONObject jsonObject = JSONObject.fromObject(responseBodyAsString);
 			if(statusCode == 200) {
+				JSONObject jsonObject = JSONObject.fromObject(responseBodyAsString);
 				String sessionId = (String) jsonObject.get("session_id"); //$NON-NLS-1$ 
-				return new ResultStatus<String>(sessionId,IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK");
-			} else if(statusCode == 103) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username exists");
-			} else if(statusCode == 801) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid Captcha");
-			} else if(statusCode == 802) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid password");
-			} else if(statusCode == 999) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
+				return new ResultStatus<String>(sessionId,IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK"); //$NON-NLS-1$
 			} else {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
+				JSONObject jsonObject = JSONObject.fromObject(responseBodyAsString);
+				int jsonCode = jsonObject.getInt("code"); //$NON-NLS-1$
+				if(jsonCode == 103) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username exists");
+				} else if(jsonCode == 101) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username or password wrong");
+				} else if(jsonCode == 801) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid Captcha");
+				} else if(jsonCode == 802) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid password");
+				} else if(jsonCode == 999) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
+				}
+			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
 			}
 		} catch (HttpException e) {
 			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Failed to contact server.", e);
@@ -192,10 +199,13 @@ public class Authentication {
 			int statusCode = client.executeMethod(method);
 			if(statusCode == 200) {
 				return new ResultStatus<String>(sessionId,IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK");
-			} else if(statusCode == 999) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
 			} else {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
+				JSONObject jsonObject = JSONObject.fromObject(method.getResponseBodyAsString());
+				int jsonCode = jsonObject.getInt("code"); //$NON-NLS-1$
+				if(jsonCode == 999) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
+				} 
+			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
 			}
 		} catch (HttpException e) {
 			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Failed to contact server.", e);
@@ -214,20 +224,24 @@ public class Authentication {
 			String oldshapassword = encryptPassword(oldpassword);
 			String newshapassword = encryptPassword(newpassword);
 			method = new PostMethod(MessageFormat.format("{0}/api1/auth/changepassword=old={1}&new={2}",baseURL, oldshapassword, newshapassword));  //$NON-NLS-1$
-			method.addRequestHeader("Cookie", "sessionId=" + sessionId);
+			method.addRequestHeader("Cookie", "sessionId=" + sessionId); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			int statusCode = client.executeMethod(method);
 			if(statusCode == 200) {
-				return new ResultStatus<String>(sessionId,IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK");
-			} else if(statusCode == 101) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username or password wrong");
-			} else if(statusCode == 802) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid password");
-			} else if(statusCode == 999) {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
+				return new ResultStatus<String>(sessionId,IStatus.OK, OSMUploadActivator.PLUGIN_ID, "OK"); //$NON-NLS-1$
 			} else {
-				return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
-			}		} catch (HttpException e) {
+				JSONObject jsonObject = JSONObject.fromObject(method.getResponseBodyAsString());
+				int jsonCode = jsonObject.getInt("code"); //$NON-NLS-1$
+				if(jsonCode == 101) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Username or password wrong");
+				} else if(jsonCode == 802) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Invalid password");
+				} else if(jsonCode == 999) {
+					return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Server side error");
+				}
+			}
+			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Unknown Error");
+		} catch (HttpException e) {
 			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Failed to contact server.", e);
 		} catch (IOException e) {
 			return new ResultStatus<String>(IStatus.ERROR, OSMUploadActivator.PLUGIN_ID, "Failed to contact server.", e);

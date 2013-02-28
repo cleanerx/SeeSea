@@ -41,7 +41,7 @@ import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.State;
 import org.eclipse.core.commands.common.NotDefinedException;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -66,21 +66,21 @@ public class ToggleLogEnablementHandler extends AbstractHandler {
 				Object returnedObject = handlerService.executeCommand(
 						"net.sf.seesea.provider.navigation.nmea.ui.connect", //$NON-NLS-1$
 						null);
-				if (returnedObject.equals(Dialog.CANCEL)) {
+				if (returnedObject.equals(Window.CANCEL)) {
 					// revoke pressed state
 					HandlerUtil.toggleCommandState(command);
 				}
 			} catch (NotDefinedException e) {
 				state.setValue(false);
-				Logger.getLogger(getClass()).error("Failed to execute command",
+				Logger.getLogger(getClass()).error("Failed to execute command", //$NON-NLS-1$
 						e);
 			} catch (NotEnabledException e) {
 				state.setValue(false);
-				Logger.getLogger(getClass()).error("Failed to execute command",
+				Logger.getLogger(getClass()).error("Failed to execute command", //$NON-NLS-1$
 						e);
 			} catch (NotHandledException e) {
 				state.setValue(false);
-				Logger.getLogger(getClass()).error("Failed to execute command",
+				Logger.getLogger(getClass()).error("Failed to execute command", //$NON-NLS-1$
 						e);
 			}
 		} else if (!(Boolean) state.getValue()) {
@@ -94,7 +94,7 @@ public class ToggleLogEnablementHandler extends AbstractHandler {
 					reader.close();
 				} catch (IOException e) {
 					Logger.getLogger(getClass()).error(
-							"Failed to close reader", e);
+							"Failed to close reader", e); //$NON-NLS-1$
 				}
 				if ((Boolean) state.getValue()) {
 					HandlerUtil.toggleCommandState(command);

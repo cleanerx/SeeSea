@@ -27,4 +27,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.nmea.rcp
-Service-Component: OSGI-INF/ModelService.xml, OSGI-INF/TrackRecoder.xml
+Service-Component: OSGI-INF/ModelService.xml

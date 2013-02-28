@@ -24,32 +24,45 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.nmea.rcp.handler;
+package net.sf.seesea.nmea.rcp.preferences;
 
-import net.sf.seesea.lib.ValidatingWizardDialog;
-import net.sf.seesea.nmea.rcp.wizard.UploadWizard;
-import net.sf.seesea.nmea.rcp.wizard.UsernamePasswordWizardPage;
+import net.sf.seesea.nmea.rcp.NMEARCPActivator;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.window.Window;
-import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class UploadDataHandler extends AbstractHandler {
+public class UploadOSMPreferencePage extends FieldEditorPreferencePage implements
+		IWorkbenchPreferencePage {
+
+	public UploadOSMPreferencePage() {
+		IPreferenceStore store = NMEARCPActivator.getDefault().getPreferenceStore();
+		setPreferenceStore(store);
+	}
+	
+	private StringFieldEditor uploadServer;
+	private StringFieldEditor registerURL;
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		UploadWizard uploadWizard = new UploadWizard();
-		uploadWizard.addPage(new UsernamePasswordWizardPage());
-		uploadWizard.setWindowTitle(Messages.getString("UploadDataHandler.wizardTitle")); //$NON-NLS-1$
-		
-		ValidatingWizardDialog wizardDialog = new ValidatingWizardDialog(HandlerUtil.getActiveShell(event), uploadWizard);
-		if(wizardDialog.open() == Window.OK) {
-			return Window.OK;
-		} else {
-			return Window.CANCEL;
-		}
+	public void init(IWorkbench workbench) {
+		// Auto-generated method stub
+	}
+
+	@Override
+	protected void createFieldEditors() {
+		uploadServer = new StringFieldEditor(IUploadPreferences.UPLOAD_SERVER, "Upload Server", getFieldEditorParent()); 
+		addField(uploadServer);
+
+		registerURL = new StringFieldEditor(IUploadPreferences.REGISTER_URL, "Register URL", getFieldEditorParent());
+		addField(registerURL);
+	}
+	
+	@Override
+	protected IPreferenceStore doGetPreferenceStore() {
+		return NMEARCPActivator.getDefault().getPreferenceStore();
 	}
 
 }

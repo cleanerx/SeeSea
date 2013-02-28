@@ -27,6 +27,7 @@
 package net.sf.seesea.upload.osm.api.v1;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -71,24 +72,33 @@ public class OSMDataUpload implements IDataUpload {
 	@Override
 	public IStatus upload(List<File> files, IProgressMonitor monitor) {
 		MultiStatus multiStatus = new MultiStatus(OSMUploadActivator.PLUGIN_ID,
-				IStatus.OK, "File Upload", null);
+				IStatus.OK, Messages.getString("OSMDataUpload.fileUpload"), null); //$NON-NLS-1$
 
 		if (sessionId != null) {
+			int size = files.size();
+			int fileCounter = 0;
 			for (File file : files) {
+				fileCounter ++;
 				ResultStatus<Integer> newId = track.newId(sessionId);
 				if (newId.isOK()) {
 					if (monitor.isCanceled()) {
-						break;
+						return Status.CANCEL_STATUS;
 					}
-					ResultStatus<Long> uploadStatus = track.upload(sessionId,
+					monitor.subTask(MessageFormat.format("Uploading {0}({1}/{2})", file.getName(), //$NON-NLS-1$
+							fileCounter, size));
+					ResultStatus<Object> uploadStatus = track.upload(sessionId,
 							newId.getResult(), file, monitor);
+					monitor.worked(1);
+					
 					if (uploadStatus.isOK()) {
-						Long uploadSize = uploadStatus.getResult();
+						Long uploadSize = (Long) uploadStatus.getResult();
 						long fileLength = file.length();
 						if (uploadSize != fileLength) {
-							multiStatus.add(new Status(IStatus.ERROR,
+							multiStatus.add(new ResultStatus<Object>(file, IStatus.ERROR,
 									OSMUploadActivator.PLUGIN_ID,
-									"File length upload does not match"));
+									MessageFormat
+											.format(Messages.getString("OSMDataUpload.errorLength"), //$NON-NLS-1$
+													file.getName())));
 						} else {
 							multiStatus.add(uploadStatus);
 						}

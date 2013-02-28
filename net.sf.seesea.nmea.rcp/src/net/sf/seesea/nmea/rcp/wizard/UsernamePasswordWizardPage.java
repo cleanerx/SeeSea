@@ -1,6 +1,16 @@
 package net.sf.seesea.nmea.rcp.wizard;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.MessageFormat;
+
+import net.sf.seesea.nmea.rcp.NMEARCPActivator;
+import net.sf.seesea.nmea.rcp.preferences.IUploadPreferences;
+
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -12,10 +22,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 public class UsernamePasswordWizardPage extends WizardPage {
 
+	private static final String SAVE_PASSWORD = "savePassword"; //$NON-NLS-1$
+	
 	private Text usernameText;
 	private Text passwordText;
 	private String username;
@@ -23,10 +38,10 @@ public class UsernamePasswordWizardPage extends WizardPage {
 	private Button savePasswordButton;
 
 	public UsernamePasswordWizardPage() {
-		super("UserPass", "Login Open Sea Map Depth Server", null);
-		setMessage("Provide your Open Sea Map depth user name and password");
-		username = "";
-		password = "";
+		super("UserPass", Messages.getString("UsernamePasswordWizardPage.loginWizard"), ImageDescriptor.createFromURL(NMEARCPActivator.getDefault().getBundle().getEntry("/icons/Upload64.png"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setMessage(Messages.getString("UsernamePasswordWizardPage.loginDescription")); //$NON-NLS-1$
+		username = ""; //$NON-NLS-1$
+		password = ""; //$NON-NLS-1$
 	}
 
 	@Override
@@ -35,7 +50,7 @@ public class UsernamePasswordWizardPage extends WizardPage {
 		GridLayout layout = new GridLayout(2, false);
 		composite.setLayout(layout); 
 		Label usernameLabel = new Label(composite, SWT.NONE);
-		usernameLabel.setText("Username"); 
+		usernameLabel.setText(Messages.getString("UsernamePasswordWizardPage.usernameWizard"));  //$NON-NLS-1$
 		usernameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true, 1, 1));
 
 		IDialogSettings settings = getWizard().getDialogSettings();
@@ -58,7 +73,7 @@ public class UsernamePasswordWizardPage extends WizardPage {
 		}
 
 		Label passwordLabel = new Label(composite, SWT.NONE);
-		passwordLabel.setText("Password"); 
+		passwordLabel.setText(Messages.getString("UsernamePasswordWizardPage.passwordWizard"));  //$NON-NLS-1$
 		passwordLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true, 1, 1));
 
 		passwordText = new Text(composite, SWT.BORDER);
@@ -78,15 +93,43 @@ public class UsernamePasswordWizardPage extends WizardPage {
 		if(passwordPref != null) {
 			passwordText.setText(passwordPref);
 		}
+		IPreferenceStore preferenceStore = NMEARCPActivator.getDefault().getPreferenceStore();
+		String registerURL = preferenceStore.getString(IUploadPreferences.REGISTER_URL);
+		if(registerURL != null && !registerURL.isEmpty()) {
+			new Label(composite, SWT.NONE);
+			
+			Link lblRegisterAccount = new Link(composite, SWT.NONE);
+			
+			String registerText = Messages.getString("UsernamePasswordWizardPage.registerAccount"); //$NON-NLS-1$
+			lblRegisterAccount.setText(MessageFormat.format("<a href=\"{0}\">{1}</a>", registerURL, registerText)); //$NON-NLS-1$
+			lblRegisterAccount.addSelectionListener(new SelectionListener() {
+				
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+						PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(e.text));
+					} catch (PartInitException e1) {
+						Logger.getLogger(getClass()).error("Failed to open browser", e1); //$NON-NLS-1$
+					} catch (MalformedURLException e1) {
+						Logger.getLogger(getClass()).error("Failed to open browser", e1); //$NON-NLS-1$
+					}
+				}
+				
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					//
+				}
+			});
+		}
 		
 		Label savePasswordLabel = new Label(composite, SWT.NONE);
-		savePasswordLabel.setText("Save Password"); 
+		savePasswordLabel.setText(Messages.getString("UsernamePasswordWizardPage.savePassword"));  //$NON-NLS-1$
 		savePasswordLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, true, 1, 1));
 
 		savePasswordButton = new Button(composite, SWT.CHECK);
 		savePasswordButton.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, true, true, 1, 1));
 
-		boolean savePassowrd = settings.getBoolean("savePassword");
+		boolean savePassowrd = settings.getBoolean(SAVE_PASSWORD);
 		savePasswordButton.setSelection(savePassowrd);
 		savePasswordButton.addSelectionListener(new SelectionListener() {
 			
@@ -97,7 +140,7 @@ public class UsernamePasswordWizardPage extends WizardPage {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
+				//
 			}
 		});
 
@@ -115,12 +158,12 @@ public class UsernamePasswordWizardPage extends WizardPage {
 			IDialogSettings settings = getWizard().getDialogSettings();
 			settings.put("username", usernameText.getText()); //$NON-NLS-1$
 			if(savePasswordButton != null && savePasswordButton.getSelection()) {
-				settings.put("savePassword", savePasswordButton.getSelection()); //$NON-NLS-1$
+				settings.put(SAVE_PASSWORD, savePasswordButton.getSelection());
 				// FIXME: encryption
 				settings.put("password", passwordText.getText()); //$NON-NLS-1$
 			} else if(savePasswordButton != null) {
-				settings.put("savePassword", savePasswordButton.getSelection()); //$NON-NLS-1$
-				settings.put("password", ""); //$NON-NLS-1$
+				settings.put(SAVE_PASSWORD, savePasswordButton.getSelection());
+				settings.put("password", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 		} else {

@@ -24,32 +24,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.nmea.rcp.handler;
+package net.sf.seesea.nmea.rcp.preferences;
 
-import net.sf.seesea.lib.ValidatingWizardDialog;
-import net.sf.seesea.nmea.rcp.wizard.UploadWizard;
-import net.sf.seesea.nmea.rcp.wizard.UsernamePasswordWizardPage;
+import net.sf.seesea.nmea.rcp.NMEARCPActivator;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.window.Window;
-import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.jface.preference.IPreferenceStore;
 
-public class UploadDataHandler extends AbstractHandler {
+public class UploadOSMPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		UploadWizard uploadWizard = new UploadWizard();
-		uploadWizard.addPage(new UsernamePasswordWizardPage());
-		uploadWizard.setWindowTitle(Messages.getString("UploadDataHandler.wizardTitle")); //$NON-NLS-1$
-		
-		ValidatingWizardDialog wizardDialog = new ValidatingWizardDialog(HandlerUtil.getActiveShell(event), uploadWizard);
-		if(wizardDialog.open() == Window.OK) {
-			return Window.OK;
-		} else {
-			return Window.CANCEL;
-		}
+	public void initializeDefaultPreferences() {
+		IPreferenceStore preferenceStore = NMEARCPActivator.getDefault().getPreferenceStore();
+		String uploadServer = "http://testdepth.openseamap.org"; //$NON-NLS-1$
+		preferenceStore.setDefault(IUploadPreferences.UPLOAD_SERVER, uploadServer);
+		preferenceStore.setDefault(IUploadPreferences.REGISTER_URL, "http://testdepth.openseamap.org/#register"); //$NON-NLS-1$
+
 	}
 
 }
