@@ -66,18 +66,6 @@ public interface INMEAConnector {
 	 */
 	void addPageListeners(WizardDialog wizardDialog);
 	
-//	/**
-//	 * 
-//	 * @return
-//	 */
-//	Set<String> getConnectedDevices();
-	
-//	/**
-//	 * 
-//	 * @param device
-//	 */
-//	void disconnect(String device);
-
 	/**
 	 * @return
 	 */

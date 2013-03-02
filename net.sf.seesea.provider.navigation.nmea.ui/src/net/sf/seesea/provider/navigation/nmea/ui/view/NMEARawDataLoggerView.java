@@ -60,7 +60,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListener {
 
-	private ServiceTracker serviceTracker;
+	private ServiceTracker<INMEAReader,INMEAReader> serviceTracker;
 	private final List<String> messages;
 	private TableViewer listViewer;
 
@@ -87,10 +87,10 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 		// hmm service listener
 		final BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle().getBundleContext();
 		
-		serviceTracker = new ServiceTracker(bundleContext, INMEAReader.class.getName(), new ServiceTrackerCustomizer() {
+		serviceTracker = new ServiceTracker<INMEAReader,INMEAReader>(bundleContext, INMEAReader.class, new ServiceTrackerCustomizer<INMEAReader,INMEAReader>() {
 			
 			@Override
-			public void removedService(ServiceReference serviceReference, Object arg1) {
+			public void removedService(ServiceReference<INMEAReader> serviceReference, INMEAReader arg1) {
 				if(arg1 instanceof INMEAReader) {
 					INMEAReader nmeaReader = (INMEAReader) arg1;
 					nmeaReader.removeNMEAEventListener(NMEARawDataLoggerView.this);
@@ -98,13 +98,12 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 			}
 			
 			@Override
-			public void modifiedService(ServiceReference arg0, Object arg1) {
-				// TODO Auto-generated method stub
-				
+			public void modifiedService(ServiceReference<INMEAReader> reference, INMEAReader arg1) {
+				// 
 			}
 			
 			@Override
-			public Object addingService(ServiceReference serviceReference) {
+			public INMEAReader addingService(ServiceReference<INMEAReader> serviceReference) {
 				INMEAReader nmeaReader = (INMEAReader) bundleContext.getService(serviceReference);
 				nmeaReader.addNMEAEventListener(NMEARawDataLoggerView.this);
 				return nmeaReader;

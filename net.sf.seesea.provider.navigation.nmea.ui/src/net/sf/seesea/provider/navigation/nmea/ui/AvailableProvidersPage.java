@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -51,7 +51,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class AvailableProvidersPage extends WizardPage {
 
 	private static final String LAST_PROVIDER = "lastProvider"; //$NON-NLS-1$
-	private final ServiceTracker providerServiceTracker;
+	private final ServiceTracker<INMEAConnector,INMEAConnector> providerServiceTracker;
 	private TableViewer providersTableViewer;
 
 	/**
@@ -62,7 +62,7 @@ public class AvailableProvidersPage extends WizardPage {
 	public AvailableProvidersPage() {
 		super("Available Providers", Messages.getString("AvailableProvidersPage.availableProviders"), null); //$NON-NLS-1$ //$NON-NLS-2$
 		setMessage(Messages.getString("AvailableProvidersPage.selectMessage")); //$NON-NLS-1$
-		providerServiceTracker = new ServiceTracker(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class.getName(), null);
+		providerServiceTracker = new ServiceTracker<INMEAConnector,INMEAConnector>(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class.getName(), null);
 		providerServiceTracker.open();
 	}
 

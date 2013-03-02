@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,7 @@ public class NMEADataContentProvider implements IStructuredContentProvider {
 	 */
 	@Override
 	public void dispose() {
-		
+		//
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +51,7 @@ public class NMEADataContentProvider implements IStructuredContentProvider {
 	 */
 	@Override
 	public void inputChanged(Viewer arg0, Object arg1, Object arg2) {
-		
+		//
 	}
 
 	/* (non-Javadoc)

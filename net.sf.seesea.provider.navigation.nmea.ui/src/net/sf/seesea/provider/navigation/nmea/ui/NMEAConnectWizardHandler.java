@@ -42,13 +42,13 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class NMEAConnectWizardHandler extends AbstractHandler {
 	
-	private final ServiceTracker nmeaConnectorTracker;
+	private final ServiceTracker<INMEAConnector,INMEAConnector> nmeaConnectorTracker;
 
 	/**
 	 * 
 	 */
 	public NMEAConnectWizardHandler() {
-		nmeaConnectorTracker = new ServiceTracker(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class.getName(), null);
+		nmeaConnectorTracker = new ServiceTracker<INMEAConnector,INMEAConnector>(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class, null);
 		nmeaConnectorTracker.open();
 	}
 

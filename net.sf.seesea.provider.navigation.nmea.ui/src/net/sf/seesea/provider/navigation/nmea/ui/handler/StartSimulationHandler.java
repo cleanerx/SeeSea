@@ -1,12 +1,10 @@
 package net.sf.seesea.provider.navigation.nmea.ui.handler;
 
 import net.sf.seesea.provider.navigation.nmea.NMEA0183TrackSimulator;
-import net.sf.seesea.provider.navigation.nmea.ui.NMEAUIActivator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.osgi.framework.ServiceRegistration;
 
 public class StartSimulationHandler extends AbstractHandler {
 

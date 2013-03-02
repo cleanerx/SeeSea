@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,6 @@ package net.sf.seesea.provider.navigation.nmea.ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -49,7 +48,7 @@ public class NMEAWizard extends Wizard {
 
 	private static final String DIALOG_SETTING_FILE = "nmeaDialog.xml"; //$NON-NLS-1$
 	private INMEAConnector currentConnector  ;
-	private final ServiceTracker availableConnectorsTracker;
+	private final ServiceTracker<INMEAConnector,INMEAConnector> availableConnectorsTracker;
 	
 	/**
 	 * 
@@ -70,7 +69,7 @@ public class NMEAWizard extends Wizard {
 	    
 	    setDialogSettings(dialogSettings);
 		setForcePreviousAndNextButtons(true);
-		availableConnectorsTracker = new ServiceTracker(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class.getName(), null);
+		availableConnectorsTracker = new ServiceTracker<INMEAConnector,INMEAConnector>(NMEAUIActivator.getDefault().getBundle().getBundleContext(), INMEAConnector.class, null);
 		availableConnectorsTracker.open();
 	}
 
