@@ -1,5 +1,7 @@
 package net.sf.seesea.provider.navigation.nmea.v183;
 
+import java.text.MessageFormat;
+
 import net.sf.seesea.model.core.physx.Measurement;
 
 public class SensorDescription<T extends Measurement> {
@@ -32,9 +34,9 @@ public class SensorDescription<T extends Measurement> {
 
 	@Override
 	public String toString() {
-		return "SensorDescription [measurement=" + measurement.getSimpleName()
-				+ ", sensorID=" + sensorID + ", messageType=" + messageType
-				+ "]";
+		return MessageFormat
+				.format("SensorDescription [measurement={0}, sensorID={1}, messageType={2}]", //$NON-NLS-1$
+						measurement.getSimpleName(), sensorID, messageType);
 	}
 
 	@Override
@@ -58,7 +60,8 @@ public class SensorDescription<T extends Measurement> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SensorDescription other = (SensorDescription) obj;
+		@SuppressWarnings("unchecked")
+		SensorDescription<T> other = (SensorDescription<T>) obj;
 		if (measurement == null) {
 			if (other.measurement != null)
 				return false;

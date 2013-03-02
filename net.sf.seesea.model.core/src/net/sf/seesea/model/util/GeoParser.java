@@ -48,7 +48,7 @@ public class GeoParser {
 			throw new IllegalArgumentException("Decimal degree must be between -90.0 and 90.0"); //$NON-NLS-1$
 		}
 		net.sf.seesea.model.core.geo.Latitude latitude = GeoFactory.eINSTANCE.createLatitude();
-		setCoordinate(decimalDegree, latitude);
+		latitude.setDecimalDegree(decimalDegree);
 		return latitude;
 	}
 
@@ -57,19 +57,19 @@ public class GeoParser {
 			throw new IllegalArgumentException("Decimal degree must be between -180.0 and 180.0"); //$NON-NLS-1$
 		}
 		Longitude longitude = GeoFactory.eINSTANCE.createLongitude();
-		setCoordinate(decimalDegree, longitude);
+		longitude.setDecimalDegree(decimalDegree);
 		return longitude;
 	}
 
-	private static void setCoordinate(Double decimalDegree,
-			net.sf.seesea.model.core.geo.Coordinate latitude) {
-		double decDegree = decimalDegree;
-		latitude.setDegree((int) Math.floor(decDegree));
-		decDegree = (decDegree - latitude.getDegree()) * 60;
-		latitude.setMinute((int) Math.floor(decDegree));
-		decDegree = (decDegree - latitude.getMinute()) * 60;
-		latitude.setSecond(decDegree);
-	}
+//	private static void setCoordinate(Double decimalDegree,
+//			net.sf.seesea.model.core.geo.Coordinate latitude) {
+//		double decDegree = decimalDegree;
+//		latitude.setDegree((int) Math.floor(decDegree));
+//		decDegree = (decDegree - latitude.getDegree()) * 60;
+//		latitude.setMinute((int) Math.floor(decDegree));
+//		decDegree = (decDegree - latitude.getMinute()) * 60;
+//		latitude.setSecond(decDegree);
+//	}
 	
 	/**
 	 * 

@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.HeadingType;
 import net.sf.seesea.model.core.physx.SpeedType;
 import net.sf.seesea.navigation.ui.NavigationUIActivator;
@@ -42,6 +43,7 @@ import net.sf.seesea.navigation.ui.figures.InstrumentContainerFigure;
 import net.sf.seesea.navigation.ui.figures.SingleLinedFigure;
 import net.sf.seesea.navigation.ui.listener.DepthFigureListener;
 import net.sf.seesea.navigation.ui.listener.HeadingListener;
+import net.sf.seesea.navigation.ui.listener.InvalidatingFigureListener;
 import net.sf.seesea.navigation.ui.listener.LogFigureListener;
 import net.sf.seesea.navigation.ui.listener.PositionFigureListener;
 import net.sf.seesea.navigation.ui.listener.RelativeSpeedListener;
@@ -208,7 +210,7 @@ public class SensorDataView extends ViewPart {
 		scrollPane.setContents( instrumentContainerFigure );
 		lws.setContents(scrollPane);
 		
-		PositionFigureListener positionFigureListener = new PositionFigureListener(positionInstrumentFigure);
+		InvalidatingFigureListener<MeasuredPosition3D> positionFigureListener = new PositionFigureListener(positionInstrumentFigure);
 		positionRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), positionFigureListener, null);
 		
 //		timeUpdateThread = new Thread(new TimeUpdater(timeFigure, timeFigureUTC, dateFigure));

@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Display;
 public class PositionFigureListener extends InvalidatingFigureListener<MeasuredPosition3D> implements IPositionListener {
 
 	private final DoubleLinedInstrumentFigure _doubleLinedInstrumentFigure;
-
 	/**
 	 * @param doubleLinedInstrumentFigure 
 	 * 
@@ -54,6 +53,9 @@ public class PositionFigureListener extends InvalidatingFigureListener<MeasuredP
 	 */
 	@Override
 	public void notify(final MeasuredPosition3D sensorData, String source) {
+		if(isSensorUpdateFast()) {
+			return;
+		}
 		
 		Display.getDefault().asyncExec(new Runnable() {
 			

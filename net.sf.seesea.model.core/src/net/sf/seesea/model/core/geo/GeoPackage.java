@@ -144,31 +144,13 @@ public interface GeoPackage extends EPackage {
 	int COORDINATE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Degree</b></em>' attribute.
+	 * The feature id for the '<em><b>Decimal Degree</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COORDINATE__DEGREE = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Minute</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COORDINATE__MINUTE = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Second</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COORDINATE__SECOND = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 2;
+	int COORDINATE__DECIMAL_DEGREE = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Coordinate</em>' class.
@@ -177,7 +159,7 @@ public interface GeoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COORDINATE_FEATURE_COUNT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 3;
+	int COORDINATE_FEATURE_COUNT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.impl.LatitudeImpl <em>Latitude</em>}' class.
@@ -190,31 +172,13 @@ public interface GeoPackage extends EPackage {
 	int LATITUDE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Degree</b></em>' attribute.
+	 * The feature id for the '<em><b>Decimal Degree</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LATITUDE__DEGREE = COORDINATE__DEGREE;
-
-	/**
-	 * The feature id for the '<em><b>Minute</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LATITUDE__MINUTE = COORDINATE__MINUTE;
-
-	/**
-	 * The feature id for the '<em><b>Second</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LATITUDE__SECOND = COORDINATE__SECOND;
+	int LATITUDE__DECIMAL_DEGREE = COORDINATE__DECIMAL_DEGREE;
 
 	/**
 	 * The number of structural features of the '<em>Latitude</em>' class.
@@ -236,31 +200,13 @@ public interface GeoPackage extends EPackage {
 	int LONGITUDE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Degree</b></em>' attribute.
+	 * The feature id for the '<em><b>Decimal Degree</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LONGITUDE__DEGREE = COORDINATE__DEGREE;
-
-	/**
-	 * The feature id for the '<em><b>Minute</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONGITUDE__MINUTE = COORDINATE__MINUTE;
-
-	/**
-	 * The feature id for the '<em><b>Second</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONGITUDE__SECOND = COORDINATE__SECOND;
+	int LONGITUDE__DECIMAL_DEGREE = COORDINATE__DECIMAL_DEGREE;
 
 	/**
 	 * The number of structural features of the '<em>Longitude</em>' class.
@@ -1247,37 +1193,15 @@ public interface GeoPackage extends EPackage {
 	EClass getCoordinate();
 
 	/**
-	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.Coordinate#getDegree <em>Degree</em>}'.
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.Coordinate#getDecimalDegree <em>Decimal Degree</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Degree</em>'.
-	 * @see net.sf.seesea.model.core.geo.Coordinate#getDegree()
+	 * @return the meta object for the attribute '<em>Decimal Degree</em>'.
+	 * @see net.sf.seesea.model.core.geo.Coordinate#getDecimalDegree()
 	 * @see #getCoordinate()
 	 * @generated
 	 */
-	EAttribute getCoordinate_Degree();
-
-	/**
-	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.Coordinate#getMinute <em>Minute</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Minute</em>'.
-	 * @see net.sf.seesea.model.core.geo.Coordinate#getMinute()
-	 * @see #getCoordinate()
-	 * @generated
-	 */
-	EAttribute getCoordinate_Minute();
-
-	/**
-	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.Coordinate#getSecond <em>Second</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Second</em>'.
-	 * @see net.sf.seesea.model.core.geo.Coordinate#getSecond()
-	 * @see #getCoordinate()
-	 * @generated
-	 */
-	EAttribute getCoordinate_Second();
+	EAttribute getCoordinate_DecimalDegree();
 
 	/**
 	 * Returns the meta object for class '{@link net.sf.seesea.model.core.geo.Latitude <em>Latitude</em>}'.
@@ -1828,28 +1752,12 @@ public interface GeoPackage extends EPackage {
 		EClass COORDINATE = eINSTANCE.getCoordinate();
 
 		/**
-		 * The meta object literal for the '<em><b>Degree</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Decimal Degree</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute COORDINATE__DEGREE = eINSTANCE.getCoordinate_Degree();
-
-		/**
-		 * The meta object literal for the '<em><b>Minute</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute COORDINATE__MINUTE = eINSTANCE.getCoordinate_Minute();
-
-		/**
-		 * The meta object literal for the '<em><b>Second</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute COORDINATE__SECOND = eINSTANCE.getCoordinate_Second();
+		EAttribute COORDINATE__DECIMAL_DEGREE = eINSTANCE.getCoordinate_DecimalDegree();
 
 		/**
 		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.impl.LatitudeImpl <em>Latitude</em>}' class.

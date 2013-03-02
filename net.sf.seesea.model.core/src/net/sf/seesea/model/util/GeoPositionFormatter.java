@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -325,12 +325,13 @@ public class GeoPositionFormatter {
 //		Longitude longitude = GeoFactory.eINSTANCE.createLongitude();
 		
 		double decDegree = Double.parseDouble(longitudeString);
-		coordinate.setDegree((int) (Math.floor(Math.abs(decDegree)) * Math.signum(decDegree)));
-		decDegree = (decDegree - coordinate.getDegree()) * 60;
-		decDegree = Math.abs(decDegree);
-		coordinate.setMinute((int) (Math.floor(decDegree)));
-		decDegree = (decDegree - coordinate.getMinute()) * 60;
-		coordinate.setSecond(decDegree);
+		coordinate.setDecimalDegree(decDegree);
+//		coordinate.setDegree((int) (Math.floor(Math.abs(decDegree)) * Math.signum(decDegree)));
+//		decDegree = (decDegree - coordinate.getDegree()) * 60;
+//		decDegree = Math.abs(decDegree);
+//		coordinate.setMinute((int) (Math.floor(decDegree)));
+//		decDegree = (decDegree - coordinate.getMinute()) * 60;
+//		coordinate.setSecond(decDegree);
 //		return parseLongitude(Double.parseDouble(longitude));
 	}
 

@@ -26,17 +26,21 @@
  */
 package net.sf.seesea.rendering.chart.editpart;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import net.sf.seesea.model.core.geo.GeoPackage;
 import net.sf.seesea.model.core.geo.GeoPosition;
-import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.model.core.physx.Heading;
+import net.sf.seesea.model.core.physx.HeadingType;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.figures.ShipFigure;
+import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 import net.sf.seesea.services.navigation.listener.IHeadingListener;
 import net.sf.seesea.tileservice.ITileProvider;
-import net.sf.seesea.tileservice.projections.IMapProjection;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -51,6 +55,7 @@ import org.osgi.framework.ServiceRegistration;
 public class ShipPositionEditPart extends TransactionalEditPart  implements Adapter, IHeadingListener {
 
 	private ServiceRegistration<IHeadingListener> serviceRegistration;
+	private net.sf.seesea.rendering.chart.editpart.ShipPositionEditPart.UpdateMapZoomLevelPropertyChangeListener propertyChangeListener;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
@@ -72,47 +77,47 @@ public class ShipPositionEditPart extends TransactionalEditPart  implements Adap
 	@Override
 	public void activate() {
 		super.activate();
-		((GeoPosition) getModel()).eContainer().eAdapters().add(this);
+		propertyChangeListener = new UpdateMapZoomLevelPropertyChangeListener();
+		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().addPropertyChangeListener(propertyChangeListener);
+		((GeospatialGraphicalViewer)getViewer()).getVerticalRangeModel().addPropertyChangeListener(propertyChangeListener);
+
 		((GeoPosition) getModel()).eAdapters().add(this);
 		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IHeadingListener.class, this, null);
 	}
 
 	@Override
 	public void deactivate() {
-		((GeoPosition) getModel()).eContainer().eAdapters().remove(this);
 		((GeoPosition) getModel()).eAdapters().remove(this);
 		serviceRegistration.unregister();
+		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().removePropertyChangeListener(propertyChangeListener);
+		((GeospatialGraphicalViewer)getViewer()).getVerticalRangeModel().removePropertyChangeListener(propertyChangeListener);
+
 		super.deactivate();
 	}
 
-	/** calls a layout */
+//	/** calls a layout */
 	@Override
 	protected void refreshVisuals() {
-		ShipFigure buoyFigure = ((ShipFigure)getFigure());
-		GeoPosition geoPosition = ((GeoPosition)getModel());
-		BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
-		ServiceReference<ITileProvider> serviceReference = bundleContext.getServiceReference(ITileProvider.class);
-		if(serviceReference == null) {
-
-		} else {
-			IMapProjection service = (bundleContext.getService(serviceReference)).getProjection();
+		GeoPosition geoPosition = (GeoPosition) getModel();
+		if(geoPosition != null && System.currentTimeMillis() - lastUpdate > 1000) {
+			BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
+			ServiceReference<ITileProvider> serviceReference = bundleContext.getServiceReference(ITileProvider.class);
+			if(serviceReference != null) {
+				ITileProvider tileProvider =  (ITileProvider) bundleContext.getService(serviceReference);
+				org.eclipse.swt.graphics.Point tileSize = tileProvider.getTileSize();
+				int zoom = ((ScalableZoomableRootEditPart) getRoot()).getZoom();
+				org.eclipse.swt.graphics.Point point = tileProvider.getProjection().project(geoPosition, (1<< zoom) *  tileSize.x);
+				getFigure().setBounds(new PrecisionRectangle(point.x - 10, point.y - 10, 20, 20));
+//				refreshVisuals();
+			}
+			lastUpdate = System.currentTimeMillis();
 		}
-		
-//		org.eclipse.swt.graphics.Point project = service.project(geoPosition, getFigure().getParent().getPreferredSize().width);
-//		bundleContext.ungetService(serviceReference);
-//		
-//		Point loc =  new Point(project.x,project.y);
-//		loc.x -= getFigure().getPreferredSize().width / 2;
-//		loc.y -= getFigure().getPreferredSize().height / 2;
-//		((GraphicalEditPart) getParent()).setLayoutConstraint(this, buoyFigure, new Rectangle(loc,getFigure().getPreferredSize()));
-//		getFigure().invalidate();
-//		getFigure().getParent().repaint();
 	}
-
 	
 	public void notifyChanged(Notification notification) {
 		// listen for zoom and position changes
-		if((notification.getNotifier() instanceof World && notification.getFeatureID(World.class) == GeoPackage.NAVAREA__ZOOM_LEVEL) || (notification.getNotifier() instanceof GeoPosition && notification.getFeatureID(GeoPosition.class) == GeoPackage.GEO_POSITION3_D__LATITUDE) ) { //|| (notification.getNotifier() instanceof GeoPosition && notification.getFeatureID(GeoPosition.class) == GeoPackage.GEO_POSITION3_D__LONGITUDE)) {
+		// (notification.getNotifier() instanceof World && notification.getFeatureID(World.class) == GeoPackage.NAVAREA__ZOOM_LEVEL) 
+		if((notification.getNotifier() instanceof GeoPosition && notification.getFeatureID(GeoPosition.class) == GeoPackage.GEO_POSITION3_D__LATITUDE) ) { //|| (notification.getNotifier() instanceof GeoPosition && notification.getFeatureID(GeoPosition.class) == GeoPackage.GEO_POSITION3_D__LONGITUDE)) {
 			Display.getDefault().asyncExec(new Runnable() {
 				
 				public void run() {
@@ -144,21 +149,32 @@ public class ShipPositionEditPart extends TransactionalEditPart  implements Adap
 	}
 
 	public void providerEnabled(String providerID) {
-		
+		// nothing to do
 	}
 
 	public void notify(Heading sensorData, String source) {
-		// FIXME: handle different positions
-//		if(sensorData)
-//		
-//		Double cog = sensorData.getHeadings().get(HeadingType.COG);
-//		System.out.println(cog);
-//		((ShipFigure)getFigure()).setCOGOrientation(cog);
-//		sensorData.getHeadings().get(HeadingType.COG);
+		if(HeadingType.COG.equals(sensorData.getHeadingType())) {
+			((ShipFigure)getFigure()).setCOGOrientation(sensorData.getDegrees());
+		} else if(HeadingType.MAGNETIC.equals(sensorData.getHeadingType())) {
+			((ShipFigure)getFigure()).setCompassOrientation(sensorData.getDegrees());
+		}
 	}
 
 	public void providerDisabled(String providerID) {
-		
+		// nothing to do
 	}
+	
+	/**
+	 * repaints the figure to draw its position
+	 */
+	private class UpdateMapZoomLevelPropertyChangeListener implements PropertyChangeListener {
+		public void propertyChange(PropertyChangeEvent evt) {
+			if("minimum".equals(evt.getPropertyName()) || "maximum".equals(evt.getPropertyName())) {  //$NON-NLS-1$//$NON-NLS-2$
+				refreshVisuals();
+			}
+		}
+	}
+	
+	private long lastUpdate;
 	
 }

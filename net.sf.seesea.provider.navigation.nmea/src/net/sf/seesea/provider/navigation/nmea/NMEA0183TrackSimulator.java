@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.provider.navigation.nmea;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,9 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.seesea.services.navigation.INMEAReader;
-import net.sf.seesea.services.navigation.RawDataEventListener;
 import net.sf.seesea.services.navigation.NMEAProcessingException;
 import net.sf.seesea.services.navigation.RawDataEvent;
+import net.sf.seesea.services.navigation.RawDataEventListener;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
@@ -70,15 +69,15 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 					.getBundle().getBundleContext();
 			ServiceRegistration<INMEAReader> serviceRegistration = bundleContext.registerService(INMEAReader.class, this, null);
 //			AISParser aisParser = new AISParser(new AisMessageMultiplexer(), new DummyErrorHandler());
-			File file = new File(".");
+//			File file = new File(".");
 			for (InputStream stream : inputStreams) {
-				int lineNumber = 0;
+//				int lineNumber = 0;
 				InputStreamReader inputStreamReader = new InputStreamReader(stream);
 				BufferedReader in = new BufferedReader(inputStreamReader);
 				currentLine = ""; //$NON-NLS-1$
 				while (currentLine != null) {
 					currentLine = in.readLine();
-					lineNumber++;
+//					lineNumber++;
 					while(_paused && !_stopped) {
 						Thread.sleep(1000);
 					}
@@ -87,7 +86,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 						return;
 					}
 					if (currentLine != null) {
-						if(currentLine.startsWith("$")) {
+						if(currentLine.startsWith("$")) { //$NON-NLS-1$
 							RawDataEvent nmeaEvent = new RawDataEvent(currentLine, null);
 							try {
 								for (RawDataEventListener eventListener : nmeaEventListeners) {
@@ -96,8 +95,8 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 							} catch (NMEAProcessingException e) {
 								Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
 							}
-							Thread.sleep(5);
-						} else if(currentLine.startsWith("!")) {
+//							Thread.sleep(5);
+						} else if(currentLine.startsWith("!")) { //$NON-NLS-1$
 							RawDataEvent nmeaEvent = new RawDataEvent(currentLine, null);
 							try {
 								for (RawDataEventListener eventListener : aisEventListeners) {
@@ -106,7 +105,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 							} catch (NMEAProcessingException e) {
 								Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
 							}
-							Thread.sleep(5);
+//							Thread.sleep(5);
 							
 //							aisParser.handleSensorData(new FileSource(file, lineNumber, currentLine, Calendar.getInstance().getTime().getTime()), currentLine);
 						}

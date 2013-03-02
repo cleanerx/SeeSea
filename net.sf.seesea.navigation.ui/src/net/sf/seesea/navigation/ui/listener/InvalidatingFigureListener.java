@@ -38,12 +38,14 @@ public abstract class InvalidatingFigureListener<SensorDataType> implements
 		IDataListener<SensorDataType> {
 
 	private Set<IInvalidatableFigure> invalidatableFigures;
+	protected long lastTimeMillis;
 
 	public InvalidatingFigureListener(IInvalidatableFigure... figures) {
 		invalidatableFigures = new LinkedHashSet<IInvalidatableFigure>();
 		for (IInvalidatableFigure invalidatableFigure : figures) {
 			invalidatableFigures.add(invalidatableFigure);
 		}
+		lastTimeMillis = System.currentTimeMillis();
 	}
 	
 	@Override
@@ -74,6 +76,15 @@ public abstract class InvalidatingFigureListener<SensorDataType> implements
 	
 	protected Set<IInvalidatableFigure> getInvalidatableFigure() {
 		return invalidatableFigures;
+	}
+
+	protected boolean isSensorUpdateFast() {
+		long currentTimeMillis = System.currentTimeMillis();
+		if(currentTimeMillis - lastTimeMillis < 250) {
+			return true;
+		}
+		lastTimeMillis = currentTimeMillis;
+		return false;
 	}
 
 }

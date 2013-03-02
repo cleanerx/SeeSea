@@ -72,8 +72,9 @@ public class AISEditPart extends AbstractGraphicalEditPart {
 			BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
 			ServiceReference<IMapProjection> mapProjectionServiceReferenceX = bundleContext.getServiceReference(IMapProjection.class);
 			IMapProjection mapProjectionX = bundleContext.getService(mapProjectionServiceReferenceX);
-			double latitude2Value = mapProjectionX.latitude2Value(positionReport.getLatitudeInDegrees(), (1<< ((ScalableZoomableRootEditPart) getRoot()).getZoom()) *  256);
-			double longitude2Value = mapProjectionX.longitude2Value(positionReport.getLongitudeInDegrees(), (1<< ((ScalableZoomableRootEditPart) getRoot()).getZoom()) *  256) ;
+			int zoom = ((ScalableZoomableRootEditPart) getRoot()).getZoom();
+			double latitude2Value = mapProjectionX.latitude2Value(positionReport.getLatitudeInDegrees(), (1<< zoom) *  256);
+			double longitude2Value = mapProjectionX.longitude2Value(positionReport.getLongitudeInDegrees(), (1<< zoom) *  256) ;
 			bundleContext.ungetService(mapProjectionServiceReferenceX);
 
 			if(positionReport instanceof AISMessagePositionReport) {

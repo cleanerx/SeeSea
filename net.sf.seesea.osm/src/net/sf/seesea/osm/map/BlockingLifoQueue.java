@@ -40,7 +40,7 @@ public final class BlockingLifoQueue<T> extends LinkedBlockingDeque<T> implement
 	private static final long serialVersionUID = -2018695356363650074L;
 
 	public BlockingLifoQueue() {
-		super(1000);
+		super();
 	}
 
 	public boolean add(T e) {

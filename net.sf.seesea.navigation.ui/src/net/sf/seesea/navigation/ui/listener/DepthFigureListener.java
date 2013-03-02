@@ -47,6 +47,10 @@ public class DepthFigureListener extends InvalidatingFigureListener<Depth> imple
 	
 	@Override
 	public void notify(final Depth sensorData, String source) {
+		if(isSensorUpdateFast()) {
+			return;
+		}
+
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

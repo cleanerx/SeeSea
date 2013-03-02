@@ -23,6 +23,9 @@ public class LogFigureListener extends InvalidatingFigureListener<Distance> impl
 	
 	@Override
 	public void notify(final Distance sensorData, String source) {
+		if(isSensorUpdateFast()) {
+			return;
+		}
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

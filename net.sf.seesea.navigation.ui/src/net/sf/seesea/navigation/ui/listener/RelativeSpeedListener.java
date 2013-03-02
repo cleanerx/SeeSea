@@ -66,6 +66,9 @@ public class RelativeSpeedListener extends InvalidatingFigureListener<RelativeSp
 	 */
 	@Override
 	public void notify(final RelativeSpeed sensorData, String source) {
+		if(isSensorUpdateFast()) {
+			return;
+		}
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

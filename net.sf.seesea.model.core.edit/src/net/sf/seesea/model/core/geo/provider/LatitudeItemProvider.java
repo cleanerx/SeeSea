@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -105,7 +105,7 @@ public class LatitudeItemProvider
 	@Override
 	public String getText(Object object) {
 		Latitude latitude = (Latitude)object;
-		return getString("_UI_Latitude_type") + " " + latitude.getDegree();
+		return getString("_UI_Latitude_type") + " " + latitude.getDecimalDegree();
 	}
 
 	/**

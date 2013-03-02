@@ -58,6 +58,9 @@ public class WindSpeedFigureListener extends InvalidatingFigureListener<WindMeas
 
 	@Override
 	public void notify(final WindMeasurement sensorData, String source) {
+		if(isSensorUpdateFast()) {
+			return;
+		}
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

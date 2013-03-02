@@ -44,7 +44,9 @@ import org.eclipse.swt.SWT;
 public class ShipFigure extends Figure {
 
 	private double cogOrientation;
-	
+
+	private double compassOrientation;
+
 	public ShipFigure() {
 		cogOrientation = 0.0;
 	}
@@ -113,6 +115,15 @@ public class ShipFigure extends Figure {
 		this.cogOrientation = orientation;
 	}
 
+	public double getCompassOrientation() {
+		return compassOrientation;
+	}
+
+	public void setCompassOrientation(double compassOrientation) {
+		this.compassOrientation = compassOrientation;
+	}
+
+	
 	
 	
 	

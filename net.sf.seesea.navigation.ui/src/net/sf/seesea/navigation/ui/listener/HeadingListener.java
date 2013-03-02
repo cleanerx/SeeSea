@@ -64,6 +64,9 @@ public class HeadingListener extends InvalidatingFigureListener<Heading> impleme
 	 */
 	@Override
 	public void notify(final Heading sensorData, String source) {
+		if(isSensorUpdateFast()) {
+			return;
+		}
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

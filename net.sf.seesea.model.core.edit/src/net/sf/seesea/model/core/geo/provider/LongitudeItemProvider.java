@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -105,7 +105,7 @@ public class LongitudeItemProvider
 	@Override
 	public String getText(Object object) {
 		Longitude longitude = (Longitude)object;
-		return getString("_UI_Longitude_type") + " " + longitude.getDegree();
+		return getString("_UI_Longitude_type") + " " + longitude.getDecimalDegree();
 	}
 
 	/**

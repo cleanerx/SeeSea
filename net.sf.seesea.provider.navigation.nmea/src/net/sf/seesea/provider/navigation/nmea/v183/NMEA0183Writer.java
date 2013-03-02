@@ -168,7 +168,7 @@ public class NMEA0183Writer implements IDataWriter {
         // checksum must be 2 characters!
         // if it falls short, add a zero before the checksum
         while (chk_s.length() < 2) {
-            chk_s = "0" + chk_s;
+            chk_s = "0" + chk_s; //$NON-NLS-1$
         }
 
         //show the calculated checksum

@@ -1,6 +1,6 @@
 /**
  * <copyright>
- Copyright (c) 2010-2012, Jens Kübler
+ Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -88,71 +88,25 @@ public class CoordinateItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addDegreePropertyDescriptor(object);
-			addMinutePropertyDescriptor(object);
-			addSecondPropertyDescriptor(object);
+			addDecimalDegreePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Degree feature.
+	 * This adds a property descriptor for the Decimal Degree feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addDegreePropertyDescriptor(Object object) {
+	protected void addDecimalDegreePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Coordinate_degree_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Coordinate_degree_feature", "_UI_Coordinate_type"),
-				 GeoPackage.Literals.COORDINATE__DEGREE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Minute feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMinutePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Coordinate_minute_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Coordinate_minute_feature", "_UI_Coordinate_type"),
-				 GeoPackage.Literals.COORDINATE__MINUTE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Second feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSecondPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Coordinate_second_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Coordinate_second_feature", "_UI_Coordinate_type"),
-				 GeoPackage.Literals.COORDINATE__SECOND,
+				 getString("_UI_Coordinate_decimalDegree_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Coordinate_decimalDegree_feature", "_UI_Coordinate_type"),
+				 GeoPackage.Literals.COORDINATE__DECIMAL_DEGREE,
 				 true,
 				 false,
 				 false,
@@ -181,7 +135,7 @@ public class CoordinateItemProvider
 	@Override
 	public String getText(Object object) {
 		Coordinate coordinate = (Coordinate)object;
-		return getString("_UI_Coordinate_type") + " " + coordinate.getDegree();
+		return getString("_UI_Coordinate_type") + " " + coordinate.getDecimalDegree();
 	}
 
 	/**
@@ -196,9 +150,7 @@ public class CoordinateItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Coordinate.class)) {
-			case GeoPackage.COORDINATE__DEGREE:
-			case GeoPackage.COORDINATE__MINUTE:
-			case GeoPackage.COORDINATE__SECOND:
+			case GeoPackage.COORDINATE__DECIMAL_DEGREE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

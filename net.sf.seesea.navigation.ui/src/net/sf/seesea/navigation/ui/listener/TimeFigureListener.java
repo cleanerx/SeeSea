@@ -55,6 +55,9 @@ public class TimeFigureListener extends InvalidatingFigureListener<Time> impleme
 
 	@Override
 	public void notify(final Time time, String source) {
+		if(isSensorUpdateFast()) {
+			return;
+		}
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

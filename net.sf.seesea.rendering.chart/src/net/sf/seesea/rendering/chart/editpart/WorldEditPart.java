@@ -138,6 +138,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		List<Object> modelChildren = new ArrayList<Object>();
 		// show the target if we are tracking
 		modelChildren.addAll(aisTracker.getAISMessagePositionReport());
+//		modelChildren.add(getWorld().getMapCenterPosition());
 		modelChildren.addAll(getWorld().getTracksContainer().getTracks());
 		modelChildren.addAll(areaMarkers);
 		if(trackPosition) {
@@ -307,11 +308,6 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	public void enablePositionTracking(boolean zoomIn) {
 		positionTrackerRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), new PositionListener(), null);
 		zoomInOnFirstPosition = zoomIn;
-			
-//			ScalableZoomableRootEditPart scalableZoomableRootEditPart = (ScalableZoomableRootEditPart)((GeospatialGraphicalViewer)getViewer()).getRootEditPart();
-//			scalableZoomableRootEditPart.setZoom(18);
-//		((GeospatialGraphicalViewer)getViewer()).setScrollingPosition();
-
 	}
 
 	/**
@@ -328,7 +324,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		 */
 		public void notify(final MeasuredPosition3D sensorData, String source) {
 			
-			if(System.currentTimeMillis() - lastUpdate > 1000) {
+			if(System.currentTimeMillis() - lastUpdate > 100) {
 				Display.getDefault().asyncExec(new Runnable() {
 					
 					public void run() {
@@ -416,6 +412,8 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 										removePosition(iterator);
 									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 2000) && (navState == 1 || navState == 2 || navState == 5 || navState == 6)) {
 										removePosition(iterator);
+									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 2000)) {
+										removePosition(iterator);
 									}
 								} else if(aisMessage instanceof AISMessageClassBPositionReport) {
 									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 2000)) {
@@ -459,8 +457,11 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 					if(message instanceof AISMessage) {
 						AISMessage positionReport = (AISMessage) message;
 						long time = Calendar.getInstance().getTime().getTime();
-						shipIdentifications.put(positionReport.getUserID(), new AISMessageTime(positionReport, time));
-						refreshChildren();
+						synchronized (AISTracker.this) {
+							shipIdentifications.put(positionReport.getUserID(), new AISMessageTime(positionReport, time));
+							refreshChildren();
+						}
+					
 					}
 				}
 			});

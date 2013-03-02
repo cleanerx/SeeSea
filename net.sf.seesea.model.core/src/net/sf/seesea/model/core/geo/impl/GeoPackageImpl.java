@@ -84,6 +84,7 @@ import net.sf.seesea.model.core.weather.impl.WeatherPackageImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -409,26 +410,8 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getCoordinate_Degree() {
+	public EAttribute getCoordinate_DecimalDegree() {
 		return (EAttribute)coordinateEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCoordinate_Minute() {
-		return (EAttribute)coordinateEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getCoordinate_Second() {
-		return (EAttribute)coordinateEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -879,9 +862,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		createEAttribute(geoPositionEClass, GEO_POSITION__PRECISION);
 
 		coordinateEClass = createEClass(COORDINATE);
-		createEAttribute(coordinateEClass, COORDINATE__DEGREE);
-		createEAttribute(coordinateEClass, COORDINATE__MINUTE);
-		createEAttribute(coordinateEClass, COORDINATE__SECOND);
+		createEAttribute(coordinateEClass, COORDINATE__DECIMAL_DEGREE);
 
 		latitudeEClass = createEClass(LATITUDE);
 
@@ -1020,9 +1001,22 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		initEAttribute(getGeoPosition_Precision(), ecorePackage.getEInt(), "precision", null, 0, 1, GeoPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(coordinateEClass, Coordinate.class, "Coordinate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCoordinate_Degree(), ecorePackage.getEInt(), "degree", "0", 0, 1, Coordinate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCoordinate_Minute(), ecorePackage.getEInt(), "minute", "0", 0, 1, Coordinate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCoordinate_Second(), ecorePackage.getEDouble(), "second", "0", 0, 1, Coordinate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCoordinate_DecimalDegree(), ecorePackage.getEDouble(), "decimalDegree", "0", 0, 1, Coordinate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(coordinateEClass, ecorePackage.getEInt(), "getDegree", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(coordinateEClass, ecorePackage.getEInt(), "getMinute", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(coordinateEClass, ecorePackage.getEDouble(), "getSecond", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		EOperation op = addEOperation(coordinateEClass, null, "setDegree", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEInt(), "degree", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = addEOperation(coordinateEClass, null, "setMinute", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEInt(), "minute", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = addEOperation(coordinateEClass, null, "setSecond", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEDouble(), "seconds", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(latitudeEClass, Latitude.class, "Latitude", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

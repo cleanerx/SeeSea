@@ -184,6 +184,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 				}
 			}
 		});
+		heartbeatThread.setName("Heartbeat"); //$NON-NLS-1$
 		heartbeatThread.start();
 	}
 

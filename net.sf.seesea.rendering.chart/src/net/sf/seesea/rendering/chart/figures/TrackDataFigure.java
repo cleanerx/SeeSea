@@ -69,7 +69,7 @@ public class TrackDataFigure extends PolylineConnection {
 	 */
 	public int addRelativePoint(Point point) {
 		synchronized (syncObject) {
-			if(_relativePoints.size() > 2000) {
+			if(_relativePoints.size() > 10) {
 				_relativePoints.remove(0);
 			}
 			_relativePoints.add(point);
@@ -84,13 +84,13 @@ public class TrackDataFigure extends PolylineConnection {
 	}
 	
 	public void addDataPoint(int position, String dataValue) {
-		synchronized (syncObject) {
-		_labels.put(position, dataValue);
-		Label dataValueLabel = new Label(dataValue);
-		MidpointLocator midpointLocator = new MidpointLocator(this, position);
-		midpointLocator.setRelativePosition(PositionConstants.WEST);
-		add(dataValueLabel, midpointLocator);
-		}
+//		synchronized (syncObject) {
+//		_labels.put(position, dataValue);
+//		Label dataValueLabel = new Label(dataValue);
+//		MidpointLocator midpointLocator = new MidpointLocator(this, position);
+//		midpointLocator.setRelativePosition(PositionConstants.WEST);
+//		add(dataValueLabel, midpointLocator);
+//		}
 	}
 
 	public void clearDataPoints() {

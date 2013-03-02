@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -41,9 +41,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link net.sf.seesea.model.core.geo.Coordinate#getDegree <em>Degree</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.geo.Coordinate#getMinute <em>Minute</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.geo.Coordinate#getSecond <em>Second</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.Coordinate#getDecimalDegree <em>Decimal Degree</em>}</li>
  * </ul>
  * </p>
  *
@@ -53,90 +51,79 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Coordinate extends ModelObject {
 	/**
-	 * Returns the value of the '<em><b>Degree</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Degree</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Degree</em>' attribute.
-	 * @see #setDegree(int)
-	 * @see net.sf.seesea.model.core.geo.GeoPackage#getCoordinate_Degree()
-	 * @model default="0"
+	 * @model kind="operation"
 	 * @generated
 	 */
 	int getDegree();
 
 	/**
-	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.Coordinate#getDegree <em>Degree</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Degree</em>' attribute.
-	 * @see #getDegree()
-	 * @generated
-	 */
-	void setDegree(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Minute</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Minute</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Minute</em>' attribute.
-	 * @see #setMinute(int)
-	 * @see net.sf.seesea.model.core.geo.GeoPackage#getCoordinate_Minute()
-	 * @model default="0"
+	 * @model kind="operation"
 	 * @generated
 	 */
 	int getMinute();
 
 	/**
-	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.Coordinate#getMinute <em>Minute</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Minute</em>' attribute.
-	 * @see #getMinute()
-	 * @generated
-	 */
-	void setMinute(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Second</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Second</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Second</em>' attribute.
-	 * @see #setSecond(double)
-	 * @see net.sf.seesea.model.core.geo.GeoPackage#getCoordinate_Second()
-	 * @model default="0"
+	 * @model kind="operation"
 	 * @generated
 	 */
 	double getSecond();
 
 	/**
-	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.Coordinate#getSecond <em>Second</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Second</em>' attribute.
-	 * @see #getSecond()
+	 * @model
 	 * @generated
 	 */
-	void setSecond(double value);
+	void setDegree(int degree);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setMinute(int minute);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setSecond(double seconds);
 
 	/**
 	 * 
 	 * @return the decimal degree
 	 */
 	double getDecimalDegree();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.Coordinate#getDecimalDegree <em>Decimal Degree</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Decimal Degree</em>' attribute.
+	 * @see #getDecimalDegree()
+	 * @generated
+	 */
+	void setDecimalDegree(double value);
 
 } 

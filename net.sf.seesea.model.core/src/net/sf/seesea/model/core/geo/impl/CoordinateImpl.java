@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -46,9 +46,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link net.sf.seesea.model.core.geo.impl.CoordinateImpl#getDegree <em>Degree</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.geo.impl.CoordinateImpl#getMinute <em>Minute</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.geo.impl.CoordinateImpl#getSecond <em>Second</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.CoordinateImpl#getDecimalDegree <em>Decimal Degree</em>}</li>
  * </ul>
  * </p>
  *
@@ -56,64 +54,24 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	/**
-	 * The default value of the '{@link #getDegree() <em>Degree</em>}' attribute.
+	 * The default value of the '{@link #getDecimalDegree() <em>Decimal Degree</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDegree()
+	 * @see #getDecimalDegree()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int DEGREE_EDEFAULT = 0;
+	protected static final double DECIMAL_DEGREE_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getDegree() <em>Degree</em>}' attribute.
+	 * The cached value of the '{@link #getDecimalDegree() <em>Decimal Degree</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDegree()
+	 * @see #getDecimalDegree()
 	 * @generated
 	 * @ordered
 	 */
-	protected int degree = DEGREE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getMinute() <em>Minute</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMinute()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int MINUTE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getMinute() <em>Minute</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMinute()
-	 * @generated
-	 * @ordered
-	 */
-	protected int minute = MINUTE_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSecond() <em>Second</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSecond()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double SECOND_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getSecond() <em>Second</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSecond()
-	 * @generated
-	 * @ordered
-	 */
-	protected double second = SECOND_EDEFAULT;
+	protected double decimalDegree = DECIMAL_DEGREE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -139,8 +97,8 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getDegree() {
-		return degree;
+	public double getDecimalDegree() {
+		return decimalDegree;
 	}
 
 	/**
@@ -148,41 +106,40 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDegree(int newDegree) {
-		int oldDegree = degree;
-		degree = newDegree;
+	public void setDecimalDegree(double newDecimalDegree) {
+		double oldDecimalDegree = decimalDegree;
+		decimalDegree = newDecimalDegree;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.COORDINATE__DEGREE, oldDegree, degree));
+			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.COORDINATE__DECIMAL_DEGREE, oldDecimalDegree, decimalDegree));
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
+	 */
+	public int getDegree() {
+		return (int) Math.floor(decimalDegree);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
 	 */
 	public int getMinute() {
-		return minute;
+		return (int) Math.floor((decimalDegree - getDegree()) * 60);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setMinute(int newMinute) {
-		int oldMinute = minute;
-		minute = newMinute;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.COORDINATE__MINUTE, oldMinute, minute));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public double getSecond() {
-		return second;
+		double d = (decimalDegree - getDegree()) * 60;
+		d = (d - getMinute()) * 60;
+		return d;
 	}
 
 	/**
@@ -190,11 +147,32 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setSecond(double newSecond) {
-		double oldSecond = second;
-		second = newSecond;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.COORDINATE__SECOND, oldSecond, second));
+	public void setDegree(int degree) {
+		double residuum = decimalDegree - getDegree();
+		decimalDegree = degree + residuum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void setMinute(int minute) {
+		double minuteresiduum = decimalDegree - getDegree();
+		double seconds = (minuteresiduum * 60) - getMinute();
+		decimalDegree = getDegree() + (minute + seconds) / 60;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void setSecond(double seconds) {
+		double x = getDegree();
+		double y = getMinute();
+		decimalDegree = ((seconds / 60) + y) / 60 + x; 
+
 	}
 
 	/**
@@ -205,12 +183,8 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case GeoPackage.COORDINATE__DEGREE:
-				return getDegree();
-			case GeoPackage.COORDINATE__MINUTE:
-				return getMinute();
-			case GeoPackage.COORDINATE__SECOND:
-				return getSecond();
+			case GeoPackage.COORDINATE__DECIMAL_DEGREE:
+				return getDecimalDegree();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -223,14 +197,8 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case GeoPackage.COORDINATE__DEGREE:
-				setDegree((Integer)newValue);
-				return;
-			case GeoPackage.COORDINATE__MINUTE:
-				setMinute((Integer)newValue);
-				return;
-			case GeoPackage.COORDINATE__SECOND:
-				setSecond((Double)newValue);
+			case GeoPackage.COORDINATE__DECIMAL_DEGREE:
+				setDecimalDegree((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -244,14 +212,8 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case GeoPackage.COORDINATE__DEGREE:
-				setDegree(DEGREE_EDEFAULT);
-				return;
-			case GeoPackage.COORDINATE__MINUTE:
-				setMinute(MINUTE_EDEFAULT);
-				return;
-			case GeoPackage.COORDINATE__SECOND:
-				setSecond(SECOND_EDEFAULT);
+			case GeoPackage.COORDINATE__DECIMAL_DEGREE:
+				setDecimalDegree(DECIMAL_DEGREE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -265,12 +227,8 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case GeoPackage.COORDINATE__DEGREE:
-				return degree != DEGREE_EDEFAULT;
-			case GeoPackage.COORDINATE__MINUTE:
-				return minute != MINUTE_EDEFAULT;
-			case GeoPackage.COORDINATE__SECOND:
-				return second != SECOND_EDEFAULT;
+			case GeoPackage.COORDINATE__DECIMAL_DEGREE:
+				return decimalDegree != DECIMAL_DEGREE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -285,25 +243,21 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (degree: ");
-		result.append(degree);
-		result.append(", minute: ");
-		result.append(minute);
-		result.append(", second: ");
-		result.append(second);
+		result.append(" (decimalDegree: ");
+		result.append(decimalDegree);
 		result.append(')');
 		return result.toString();
 	}
 	
-	/* (non-Javadoc)
-	 * @see net.sf.seesea.model.core.geo.Coordinate#getDecimalDegree()
-	 */
-	@Override
-	public double getDecimalDegree() {
-		double decimalminutes = minute + (second / 60);
-		double decimalDegrees = degree + (decimalminutes / 60);
-		return decimalDegrees;
-	}
+//	/* (non-Javadoc)
+//	 * @see net.sf.seesea.model.core.geo.Coordinate#getDecimalDegree()
+//	 */
+//	@Override
+//	public double getDecimalDegree() {
+//		double decimalminutes = minute + (second / 60);
+//		double decimalDegrees = degree + (decimalminutes / 60);
+//		return decimalDegrees;
+//	}
 
 
 

@@ -122,16 +122,16 @@ public class ThreadedSerialInputReader extends InputStreamReader implements INME
 		if(processingThread != null) {
 			processingThread.interrupt();
 		}
-		if(serviceRegistration != null) {
-			serviceRegistration.unregister();
-			serviceRegistration = null;
-		}
-		super.close();
 		try {
 			streamProvider.close();
 		} catch (IOException e) {
 			Logger.getLogger(getClass()).error("Failed to close input stream", e); //$NON-NLS-1$
 		}
+		if(serviceRegistration != null) {
+			serviceRegistration.unregister();
+			serviceRegistration = null;
+		}
+		super.close();
 	}
 	
 	/**

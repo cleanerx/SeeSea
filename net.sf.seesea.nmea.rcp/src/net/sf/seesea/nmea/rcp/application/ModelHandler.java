@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -82,15 +82,11 @@ public class ModelHandler implements IModel {
 		modelRoot.setChartContainer(factory.createChartContainer());
 
 		Latitude latitude2 = factory.createLatitude();
-		latitude2.setDegree(49);
-		latitude2.setMinute(0);
-		latitude2.setSecond(0.0);
+		latitude2.setDecimalDegree(49.0);
 		resource.getContents().add(latitude2);
 
 		Longitude longitude2 = factory.createLongitude();
-		longitude2.setDegree(8);
-		longitude2.setMinute(23);
-		longitude2.setSecond(0.0);
+		longitude2.setDecimalDegree(8.23);
 		resource.getContents().add(longitude2);
 
 		GeoPosition geoPosition = factory.createGeoPosition();

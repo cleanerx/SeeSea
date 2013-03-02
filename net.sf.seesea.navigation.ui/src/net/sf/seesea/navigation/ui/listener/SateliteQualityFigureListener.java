@@ -55,7 +55,10 @@ public class SateliteQualityFigureListener extends InvalidatingFigureListener<Sa
 	 */
 	@Override
 	public void notify(final SatellitesVisible sensorData, String source) {
-		
+		if(isSensorUpdateFast()) {
+			return;
+		}
+
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override

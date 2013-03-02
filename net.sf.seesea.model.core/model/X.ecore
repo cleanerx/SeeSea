@@ -23,11 +23,20 @@
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
             </eClassifiers>
             <eClassifiers xsi:type="ecore:EClass" name="Coordinate" eSuperTypes="#//sf/seesea/model/core/ModelObject">
-              <eStructuralFeatures xsi:type="ecore:EAttribute" name="degree" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-                  defaultValueLiteral="0"/>
-              <eStructuralFeatures xsi:type="ecore:EAttribute" name="minute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-                  defaultValueLiteral="0"/>
-              <eStructuralFeatures xsi:type="ecore:EAttribute" name="second" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+              <eOperations name="getDegree" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <eOperations name="getMinute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              <eOperations name="getSecond" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eOperations name="setDegree">
+                <eParameters name="degree" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              </eOperations>
+              <eOperations name="setMinute">
+                <eParameters name="minute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+              </eOperations>
+              <eOperations name="setSecond">
+                <eParameters name="seconds" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              </eOperations>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="decimalDegree"
+                  eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
                   defaultValueLiteral="0"/>
             </eClassifiers>
             <eClassifiers xsi:type="ecore:EClass" name="Latitude" eSuperTypes="#//sf/seesea/model/core/geo/Coordinate"/>

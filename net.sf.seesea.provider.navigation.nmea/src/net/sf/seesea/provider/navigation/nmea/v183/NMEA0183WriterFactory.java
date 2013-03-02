@@ -23,7 +23,7 @@ public class NMEA0183WriterFactory implements IWriterFactory {
 			outputStream = new FileOutputStream(filename);
 			return new NMEA0183Writer(outputStream);
 		} catch (FileNotFoundException e) {
-			throw new WriterException("Could not find file", e);
+			throw new WriterException("Could not find file", e); //$NON-NLS-1$
 		}
 	}
 

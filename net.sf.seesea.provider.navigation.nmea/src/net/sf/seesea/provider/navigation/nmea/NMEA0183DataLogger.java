@@ -216,6 +216,6 @@ public class NMEA0183DataLogger implements RawDataEventListener, ManagedService 
 
 	@Override
 	public void disable() {
-		// TODO Auto-generated method stub
+		//
 	}
 }
