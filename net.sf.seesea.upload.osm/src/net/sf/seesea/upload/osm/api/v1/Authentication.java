@@ -89,7 +89,7 @@ public class Authentication {
 	public IStatus createAccount(String user, String password, String captcha) {
 		PostMethod method = null;
         try {
-        	String shapassword = encryptPassword(password);
+        	String shapassword = encryptPassword(password).toUpperCase();
 			method = new PostMethod(MessageFormat.format("{0}/api1/auth/create", baseURL)); //$NON-NLS-1$
 			
 			NameValuePair[] nameValuePairs = new NameValuePair[3];
@@ -187,7 +187,7 @@ public class Authentication {
 		cript.reset();
 		cript.update(password.getBytes("utf8")); //$NON-NLS-1$
 		String shapassword = new BigInteger(1, cript.digest()).toString(16);
-		return shapassword;
+		return shapassword.toUpperCase();
 	}
 
 
