@@ -114,10 +114,10 @@ public class DescriptiveInstrumentFigure extends FontFigure implements IInvalida
 	
 	@Override
 	public Dimension getPreferredSize(int wHint, int hHint) {
-		Font font2 = new Font(Display.getDefault(),"Arial", fontSize, SWT.BOLD);  //$NON-NLS-1$
-		Dimension textDimensionLatitude = FigureUtilities.getTextExtents(description + value, font2);
+		Font font2 = new Font(Display.getDefault(),"Arial", fontSize - 5, SWT.BOLD);  //$NON-NLS-1$
+		Dimension textDimensionLatitude = FigureUtilities.getTextExtents(value, font2);
 		font2.dispose();
-		return new Dimension(textDimensionLatitude.width, textDimensionLatitude.height * 2);
+		return new Dimension(textDimensionLatitude.width + 50, textDimensionLatitude.height * 2 + 10);
 	}
 	
 	@Override

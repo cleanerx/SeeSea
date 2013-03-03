@@ -64,7 +64,7 @@ public InstrumentContainerFigure() {
     setMinimumSize(minSize);
     setPreferredSize(minSize);
     setForegroundColor(ColorConstants.white);
-    setBounds(new Rectangle(0,0,280,700));
+    setBounds(new Rectangle(0,0,100,200));
 //    GridLayout gridLayout = new GridLayout(2, true);
 //    gridLayout.verticalSpacing = 5;
     
@@ -81,20 +81,6 @@ public InstrumentContainerFigure() {
   
 	@Override
 	protected void paintFigure(Graphics g) {
-		
-//		System.out.println("Instrument COntainer" +  getBounds());
-		
-//		IFigure p = this;
-//		while(!(p instanceof Viewport)) {
-//			p = p.getParent();
-//		}
-//		
-//		Viewport viewport = (Viewport) p;
-//		Rectangle copyX = new Rectangle(viewport.getViewLocation(), viewport.getSize());
-//		
-//		Dimension prefSize2 = getPreferredSize();
-//		Rectangle copy = new Rectangle(copyX.x + copyX.width - prefSize2.width, copyX.y + copyX.height - prefSize2.height, prefSize2.width, prefSize2.height);
-		
 		Rectangle copy = getBounds().getCopy();
 //		Color rgb = new Color(Display.getDefault(), new RGB(130,173,231));
 //		Color rgb2 = new Color(Display.getDefault(), new RGB(98,133,240));
@@ -108,11 +94,6 @@ public InstrumentContainerFigure() {
 
 	}
 	
-//	@Override
-//	public Dimension getPreferredSize(int wHint, int hHint) {
-//		return new Dimension(200, 80);
-//	}
-
 	  private void createChildAreaFigure() {
 		    childArea = new ChildFigure();
 		    DelegatingListLayout layout2 = new DelegatingListLayout(false, 5);

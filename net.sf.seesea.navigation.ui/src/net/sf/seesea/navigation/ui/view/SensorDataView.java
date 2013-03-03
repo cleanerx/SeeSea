@@ -36,6 +36,7 @@ import net.sf.seesea.model.core.physx.HeadingType;
 import net.sf.seesea.model.core.physx.SpeedType;
 import net.sf.seesea.navigation.ui.NavigationUIActivator;
 import net.sf.seesea.navigation.ui.figures.BarFigure;
+import net.sf.seesea.navigation.ui.figures.ChildFigure;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.DoubleLinedInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.GraphFigure;
@@ -61,8 +62,12 @@ import net.sf.seesea.services.navigation.listener.ITripLogListener;
 import net.sf.seesea.services.navigation.listener.IWindListener;
 
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.GridData;
+import org.eclipse.draw2d.GridLayout;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.ScrollPane;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.widgets.Composite;
@@ -177,35 +182,77 @@ public class SensorDataView extends ViewPart {
 		totalTripFigure.setValue("---.- nm"); //$NON-NLS-1$
 		totalTripFigure.setFontSize(fontSize);
 
-		//		List<Double> heights = new ArrayList<Double>();
-//		for(int i = 0 ; i < 24; i++) {
-//			heights.add(Math.random() * 99.0);
-//		}
-//		barFigure.setBarHeights(heights);
-		
 //		CompassFigure compassFigure = new CompassFigure();
 		
 		instrumentContainerFigure.getChildArea().add(positionInstrumentFigure);
 		instrumentContainerFigure.getChildArea().add(timeFigure);
 		instrumentContainerFigure.getChildArea().add(timeFigureUTC);
 		instrumentContainerFigure.getChildArea().add(dateFigure);
-		instrumentContainerFigure.getChildArea().add(cog);
-		instrumentContainerFigure.getChildArea().add(sog);
-		instrumentContainerFigure.getChildArea().add(mgk);
-		instrumentContainerFigure.getChildArea().add(fdw);
+		
+		IFigure childArea = instrumentContainerFigure.getChildArea();
+		ChildFigure childFigure = new ChildFigure();
+		childFigure.add(cog);
+		childFigure.add(sog);
+		childArea.add(childFigure);
+		GridLayout gridLayout = new GridLayout(2, true);
+		gridLayout.verticalSpacing = 0;
+		gridLayout.horizontalSpacing = 5;
+		gridLayout.marginHeight = 0;
+		gridLayout.marginWidth = 0;
+		childFigure.setLayoutManager(gridLayout);
+
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridLayout.setConstraint(cog, gridData);
+
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridLayout.setConstraint(sog, gridData);
+
+		childFigure = new ChildFigure();
+		childFigure.add(mgk);
+		childFigure.add(fdw);
+		childArea.add(childFigure);
+		gridLayout = new GridLayout(2, true);
+		gridLayout.verticalSpacing = 0;
+		gridLayout.horizontalSpacing = 5;
+		gridLayout.marginHeight = 0;
+		gridLayout.marginWidth = 0;
+		childFigure.setLayoutManager(gridLayout);
+
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridLayout.setConstraint(mgk, gridData);
+
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridLayout.setConstraint(fdw, gridData);
+
 		instrumentContainerFigure.getChildArea().add(graphFigure);
-		instrumentContainerFigure.getChildArea().add(windSpeed);
-		instrumentContainerFigure.getChildArea().add(windDirection);
+
+		childFigure = new ChildFigure();
+		childFigure.add(windSpeed);
+		childFigure.add(windDirection);
+		childArea.add(childFigure);
+		gridLayout = new GridLayout(2, true);
+		gridLayout.verticalSpacing = 0;
+		gridLayout.horizontalSpacing = 5;
+		gridLayout.marginHeight = 0;
+		gridLayout.marginWidth = 0;
+		childFigure.setLayoutManager(gridLayout);
+
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridLayout.setConstraint(windSpeed, gridData);
+
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridLayout.setConstraint(windDirection, gridData);
+		
 		instrumentContainerFigure.getChildArea().add(barFigure);
 		instrumentContainerFigure.getChildArea().add(tripFigure);
 		instrumentContainerFigure.getChildArea().add(totalTripFigure);
 //		instrumentContainerFigure.getChildArea().add(compassFigure);
-		cog.getParent().getLayoutManager().setConstraint(cog, 2.0);
-		sog.getParent().getLayoutManager().setConstraint(sog, 2.0);
-		mgk.getParent().getLayoutManager().setConstraint(mgk, 2.0);
-		fdw.getParent().getLayoutManager().setConstraint(fdw, 2.0);
-		windSpeed.getParent().getLayoutManager().setConstraint(windSpeed, 2.0);
-		windDirection.getParent().getLayoutManager().setConstraint(windDirection, 2.0);
 		
 		scrollPane.setContents( instrumentContainerFigure );
 		lws.setContents(scrollPane);
