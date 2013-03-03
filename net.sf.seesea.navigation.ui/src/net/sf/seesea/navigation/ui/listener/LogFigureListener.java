@@ -31,6 +31,7 @@ public class LogFigureListener extends InvalidatingFigureListener<Distance> impl
 			@Override
 			public void run() {
 				figure.setValue(logDecimalFormat.format(sensorData.getValue()) + Messages.getString("LogFigureListener.nauticalMile")); //$NON-NLS-1$
+				figure.repaint();
 			}
 		});
 	}
