@@ -66,7 +66,7 @@ public class RXTXPreferencePage extends PreferencePage implements
 		Composite composite = new Composite(parent, SWT.NONE);
 
 		btnAutomaticallyScanSerial = new Button(composite, SWT.CHECK);
-		btnAutomaticallyScanSerial.setBounds(10, 10, 175, 16);
+		btnAutomaticallyScanSerial.setBounds(10, 10, 337, 16);
 		btnAutomaticallyScanSerial.setText(Messages.getString("RXTXPreferencePage.scan")); //$NON-NLS-1$
 
 		Boolean manualPorts = getPreferenceStore().getBoolean(MANUAL_PORTS);
