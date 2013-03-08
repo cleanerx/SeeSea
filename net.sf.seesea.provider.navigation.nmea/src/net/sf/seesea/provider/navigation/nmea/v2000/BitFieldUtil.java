@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,13 +30,25 @@ package net.sf.seesea.provider.navigation.nmea.v2000;
 
 public class BitFieldUtil {
 
-	public static int getBitfields(byte[] data, int startPosition, int endPostion) {
+	public static int getBitfields(int[] data, int startPosition, int endPostion) {
 		int totalBits = endPostion - startPosition;
 		
-		return 0;
+		long bits = 0L; 
+		for (int i = 0 ; i < data.length ; i++) {
+			bits |= data[i] << i;
+		}
+		
+		long bitmask = 0;
+		for(int i = startPosition; i < endPostion; i++) {
+			bitmask |= 1 << i;
+		}
+
+		long maskedValue = (bits & bitmask) >> startPosition; 
+		
+		return (int) maskedValue;
 	}
 	
-	public static int getBitfield(byte data) {
+	public static int getBitfield(int data) {
 		return data & 0xFF;
 	}
 	

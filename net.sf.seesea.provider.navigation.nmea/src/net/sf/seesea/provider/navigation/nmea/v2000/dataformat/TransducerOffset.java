@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@ import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Int16;
 
 public class TransducerOffset extends Int16 {
 
-	public TransducerOffset(byte[] uintByte) {
+	public TransducerOffset(int[] uintByte) {
 		super(uintByte, 1000, -32764, 32764);
 		// TODO Auto-generated constructor stub
 	}

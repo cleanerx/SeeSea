@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,14 +32,14 @@ import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.RangeValue;
 
 public class UInt16 extends RangeValue {
 
-	private double value;
+	protected double value;
 	
-	public UInt16(byte uintByte[], int resolution, double lowerRange, double upperRange) {
+	public UInt16(int uintByte[], int resolution, double lowerRange, double upperRange) {
 		if(uintByte == null || uintByte.length != 2) {
 			throw new IllegalArgumentException("must be 2 byte");
 		}
-		long uint = (uintByte[0] & 0xFF) << 8;
-		uint |= (uintByte[1] & 0xFF) ;
+		long uint = (uintByte[1] & 0xFF) << 8;
+		uint |= (uintByte[0] & 0xFF) ;
 
 		value = ((double)uint) / resolution; 
 

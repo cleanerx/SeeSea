@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,14 +28,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.datadictionary;
 
+import net.sf.seesea.provider.navigation.nmea.v2000.data.TypeOfSystem;
+
 public enum WindReference {
 	
-	TheoreticalWindRefTrueNorth(0), TheoreticalWindRefMagneticNorth(1), ApparentWind(2), TheoreticalRefGround(3), TheoreticalRefWater(4), Error(6), Null(7);
+	TheoreticalWindRefTrueNorth(0), 
+	TheoreticalWindRefMagneticNorth(1), 
+	ApparentWind(2), 
+	TheoreticalRefGround(3), 
+	TheoreticalRefWater(4), 
+	Error(6), 
+	Null(7);
 	
 	private final int value;
 
 	private WindReference(int value) {
 		this.value = value;
+	}
+
+	public static WindReference of(int linkType) {
+
+	    switch (linkType) {
+	        case 0: return TheoreticalWindRefTrueNorth;
+	        case 1: return TheoreticalWindRefMagneticNorth;
+	        case 2: return ApparentWind;
+	        case 3: return TheoreticalRefGround;
+	        case 4: return TheoreticalRefWater;
+	        case 6: return Error;
+	        case 7: return Null;
+
+	        //ETC....
+
+	        default: return Null;
+
+	    }
 	}
 
 

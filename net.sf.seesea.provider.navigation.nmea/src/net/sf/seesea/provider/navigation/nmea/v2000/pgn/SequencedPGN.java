@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,23 +32,23 @@ import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint8;
 
 public class SequencedPGN extends PGN {
 
-	public SequencedPGN(byte[] data, int id, boolean singleFrame, int priorityDefault,
+	public SequencedPGN(int[] data, int id, boolean singleFrame, int priorityDefault,
 			int defaultUpadateRate, double frequence) {
 		super(id, singleFrame, priorityDefault, defaultUpadateRate, frequence);
-		sequenceID = new Uint8(data[0]);
+		sequenceID = data[0];
 	}
 
-	private Uint8 sequenceID;
+	private int sequenceID;
 
 	/**
 	 * 
 	 * @return the sequence to tie this information to, null if no valid position fix is available
 	 */
 	public Integer getSequenceID() {
-		if(sequenceID.getUint8() > 250) {
+		if(sequenceID > 250) {
 			return null;
 		}
-		return sequenceID.getUint8();
+		return sequenceID;
 	}
 	
 }

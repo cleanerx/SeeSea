@@ -26,54 +26,41 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
+package net.sf.seesea.provider.navigation.nmea.v2000.datadictionary;
 
-import java.util.Arrays;
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.RangeValue;
 
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.SpeedWaterReferencedType;
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint8;
-import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Speed;
+public class Int32 extends RangeValue {
 
-public class SpeedWaterReferenced extends PGN {
-
-	public SpeedWaterReferenced(int[] data) {
-		super(128259, true, 2, 1000, 1);
-//		sequenceID = new Uint8(data[0]);
-		sequenceID = data[0];
-		speedWaterReferenced = new Speed(Arrays.copyOfRange(data, 1, 3));
-		speedGroundReferenced = new Speed(Arrays.copyOfRange(data, 3, 5));
-		speedWaterReferencedType = SpeedWaterReferencedType.getByIndex(data[6] & 0xFF);
-	}
+	private double value;
 	
-	private int sequenceID;
-
-	private Speed speedWaterReferenced;
-
-	private Speed speedGroundReferenced;
-
-	private SpeedWaterReferencedType speedWaterReferencedType;
-
-	public int getSequenceID() {
-		return sequenceID;
-	}
-
-	public Double getSpeedWaterReferenced() {
-		if(!speedWaterReferenced.isValid()) {
-			return Double.NaN;
+	public Int32(int uintByte[], int resolution, double lowerRange, double upperRange) {
+		if(uintByte == null || uintByte.length != 4) {
+			throw new IllegalArgumentException("must be 4 byte"); //$NON-NLS-1$
 		}
-		return speedWaterReferenced.getValue();
-	}
+		long uint = (uintByte[3]) << 24;
+		uint |= (uintByte[2] ) << 16;
+		uint |= (uintByte[1] ) << 8;
+		uint |= (uintByte[0] ) ;
 
-	public Double getSpeedGroundReferenced() {
-		if(!speedGroundReferenced.isValid()) {
-			return Double.NaN;
+		
+
+		value = ((double)uint) / resolution; 
+
+		if(value < lowerRange || value > upperRange) {
+			setValid(false);
+		} else {
+			setValid(true);
 		}
-		return speedGroundReferenced.getValue();
 	}
 
-	public SpeedWaterReferencedType getSpeedWaterReferencedType() {
-		return speedWaterReferencedType;
+	public double getValue() {
+		return value;
 	}
+
+	
+	
+	
 	
 	
 }

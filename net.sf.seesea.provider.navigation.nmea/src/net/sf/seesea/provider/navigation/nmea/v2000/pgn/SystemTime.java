@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,7 @@ public class SystemTime extends SequencedPGN {
 	
 	private TimeOfDay timeOfDay;
 	
-	public SystemTime(byte[] data) {
+	public SystemTime(int[] data) {
 		super(data, 126992, true, 3, 1000, 1);
 		timeSource = TimeSource.getByIndex(data[1] & 0x0F);
 		date = new DateDayCount(Arrays.copyOfRange(data, 2, 4));

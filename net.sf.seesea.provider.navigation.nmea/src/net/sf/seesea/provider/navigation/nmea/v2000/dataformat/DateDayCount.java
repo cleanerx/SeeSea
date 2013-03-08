@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@ import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.UInt16;
 
 public class DateDayCount extends UInt16 {
 
-	public DateDayCount(byte[] uintByte) {
+	public DateDayCount(int[] uintByte) {
 		super(uintByte, 1, 0, 65532);
 	}
 

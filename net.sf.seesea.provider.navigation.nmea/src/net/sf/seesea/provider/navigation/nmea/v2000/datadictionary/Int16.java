@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -34,13 +34,13 @@ public class Int16 extends RangeValue {
 
 	private double value;
 	
-	public Int16(byte uintByte[], int resolution, double lowerRange, double upperRange) {
+	public Int16(int uintByte[], int resolution, double lowerRange, double upperRange) {
 		if(uintByte == null || uintByte.length != 2) {
 			throw new IllegalArgumentException("must be 2 byte"); //$NON-NLS-1$
 		}
 		// FIXME: signed is not available
-		short uint = uintByte[0];
-		uint |= uint << 8 | uintByte[1];
+		short uint = (short) uintByte[1];
+		uint |= uint << 8 | uintByte[0];
 
 		value = ((double)uint) / resolution; 
 

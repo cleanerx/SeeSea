@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,29 +26,43 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.provider.navigation.nmea.v2000.data;
+package net.sf.seesea.provider.navigation.nmea.v2000.datadictionary;
 
-public enum MethodGNSS {
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.RangeValue;
 
-	NOGPS(0), GNSSFIX(1), DGNSSFIX(2), PRECISEGNSS(3), RTKFIXEDINTEGER(4), RTKFLOAT(5), ESTIMATEDMODE(6), MANUALINPUT(7), SIMUALTEMODE(8), ERROR(14), NULL(15); 
-	
-	private final int i;
+public class Int64 extends RangeValue {
 
-	private MethodGNSS(int i) {
-		this.i = i;
-	}
+	private double value;
 	
-	public int getIndex() {
-		return i;
-	}
-	
-	public static MethodGNSS getByIndex(int i) {
-		for (MethodGNSS methodGNSS : values()) {
-			if(methodGNSS.getIndex() == i) {
-				return methodGNSS;
-			}
+	public Int64(int uintByte[], long resolution, double lowerRange, double upperRange) {
+		if(uintByte == null || uintByte.length != 8) {
+			throw new IllegalArgumentException("must be 8 byte"); //$NON-NLS-1$
 		}
-		return null;
+		long uint = ((long)(uintByte[7])) << 56;
+		uint |= ((long)(uintByte[6])) << 48;
+		uint |= ((long)(uintByte[5])) << 40;
+		uint |= ((long)(uintByte[4])) << 32;
+		uint |= ((long)(uintByte[3])) << 24;
+		uint |= ((long)(uintByte[2])) << 16;
+		uint |= ((long)(uintByte[1])) << 8;
+		uint |= ((long)(uintByte[0])) ;
+
+		value = ((double)uint) / resolution; 
+
+		if(value < lowerRange || value > upperRange) {
+			setValid(false);
+		} else {
+			setValid(true);
+		}
 	}
+
+	public double getValue() {
+		return value;
+	}
+
+	
+	
+	
+	
 	
 }

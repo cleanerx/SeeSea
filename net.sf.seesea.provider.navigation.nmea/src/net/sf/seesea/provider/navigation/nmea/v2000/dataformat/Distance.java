@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@ import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint32;
 
 public class Distance extends Uint32 {
 
-	public Distance(byte[] uintByte) {
+	public Distance(int[] uintByte) {
 		super(uintByte, 100, 0, 42950000);
 	}
 

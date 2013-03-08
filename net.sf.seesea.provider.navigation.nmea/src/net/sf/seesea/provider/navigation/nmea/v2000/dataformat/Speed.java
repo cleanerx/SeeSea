@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@ package net.sf.seesea.provider.navigation.nmea.v2000.dataformat;
 
 public class Speed extends TwoByteUInt {
 
-	public Speed(byte[] speed) {
+	public Speed(int[] speed) {
 		super(speed, 100, 0, 655.32);
 	}
 

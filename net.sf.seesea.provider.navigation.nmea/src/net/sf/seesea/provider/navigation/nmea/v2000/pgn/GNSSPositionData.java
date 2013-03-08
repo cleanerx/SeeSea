@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,12 +28,58 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 
-import org.eclipse.core.runtime.IStatus;
+import java.util.Arrays;
 
-public class GNSSPositionData {
+import net.sf.seesea.provider.navigation.nmea.v2000.BitFieldUtil;
+import net.sf.seesea.provider.navigation.nmea.v2000.data.TypeOfSystem;
+import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.MethodGNSS;
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Altitude;
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.DateDayCount;
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Distance;
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.LatitudeExt;
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.LongitudeExt;
+import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.TimeOfDay;
 
+public class GNSSPositionData extends SequencedPGN {
+
+	private DateDayCount positionDate;
 	
-	public IStatus validate() {
-		return null;
+	private TimeOfDay timeOfDay;
+	
+	private LatitudeExt latitude;
+
+	private LongitudeExt longitude;
+	
+	private Altitude altitude;
+
+	private TypeOfSystem typeOfSystem;
+	
+	private MethodGNSS methodGNSS;
+	
+	// Integrity
+	// Satelites visibile
+	// HDOP 
+	// PDOP 
+	
+	private Distance geodialSeparation;
+	
+	public GNSSPositionData(int[] data) {
+		super(data, 129029, false, 3, 1000, 1);
+		if(data.length < 41) {
+			return;
+		}
+
+		positionDate = new DateDayCount(Arrays.copyOfRange(data, 1, 3));
+		timeOfDay = new TimeOfDay(Arrays.copyOfRange(data, 3, 7));
+		latitude = new LatitudeExt(Arrays.copyOfRange(data, 7, 15));
+		longitude = new LongitudeExt(Arrays.copyOfRange(data, 15, 23));
+		altitude = new Altitude(Arrays.copyOfRange(data, 23, 31));
+		int[] byte31 = Arrays.copyOfRange(data, 31, 32);
+		int bitfields = BitFieldUtil.getBitfields(byte31, 4, 8);
+		typeOfSystem = TypeOfSystem.of(bitfields);
+		bitfields = BitFieldUtil.getBitfields(byte31, 0, 4);
+		methodGNSS = MethodGNSS.of(bitfields);
+		geodialSeparation = new Distance(Arrays.copyOfRange(data, 37, 41));
 	}
 }
+

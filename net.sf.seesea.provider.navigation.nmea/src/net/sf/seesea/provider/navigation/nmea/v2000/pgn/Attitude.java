@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,7 @@ public class Attitude extends SequencedPGN {
 	
 	private AngleSigned roll;
 	
-	public Attitude(byte[] data) {
+	public Attitude(int[] data) {
 		super(data, 127257, true, 3, 1000, 1);
 		yaw = new AngleSigned(Arrays.copyOfRange(data, 1, 3));
 		pitch = new AngleSigned(Arrays.copyOfRange(data, 3, 5));

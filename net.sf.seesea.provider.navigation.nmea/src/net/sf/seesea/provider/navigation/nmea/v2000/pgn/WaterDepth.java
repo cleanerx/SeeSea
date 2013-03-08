@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,27 +30,26 @@ package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 
 import java.util.Arrays;
 
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint8;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Distance;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.DistanceSignedMedium;
 
 public class WaterDepth extends PGN {
 
-	public WaterDepth(byte[] data) {
+	public WaterDepth(int[] data) {
 		super(128267, true, 3, 1000, 1);
-		sequenceID = new Uint8(data[0]);
+		sequenceID = data[0];
 		waterDepthAtTransducer = new Distance(Arrays.copyOfRange(data, 1, 5));
 		transducerOffset = new DistanceSignedMedium(Arrays.copyOfRange(data, 5, 7));
 	}
 
-	private Uint8 sequenceID;
+	private int sequenceID;
 	
 	private Distance waterDepthAtTransducer;
 	
 	private DistanceSignedMedium transducerOffset;
 
 	public int getSequenceID() {
-		return sequenceID.getUint8();
+		return sequenceID;
 	}
 
 	public Double getWaterDepthAtTransducer() {

@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@ public class Uint32 extends RangeValue {
 
 	private double value;
 
-	public Uint32(byte uintByte[], int resolution, double lowerRange, double upperRange) {
+	public Uint32(int uintByte[], int resolution, double lowerRange, double upperRange) {
 		if(uintByte == null || uintByte.length != 4) {
 			throw new IllegalArgumentException("must be 4 byte");
 		}

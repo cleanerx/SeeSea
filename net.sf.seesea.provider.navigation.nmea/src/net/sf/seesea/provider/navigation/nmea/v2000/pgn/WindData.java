@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,23 +28,27 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint8;
+import java.util.Arrays;
+
+import net.sf.seesea.provider.navigation.nmea.v2000.BitFieldUtil;
 import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.WindReference;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Angle;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Speed;
 
-public class WindData extends PGN {
+public class WindData extends SequencedPGN {
 
-	private Uint8 sequenceID;
-	
 	private Speed genericSpeed;
 	
 	private Angle windDirection;
 	
 	private WindReference windReference;
 
-	public WindData() {
-		super(130306, true, 2, 100, 10);
+	public WindData(int[] data) {
+		super(data, 130306, true, 2, 100, 10);
+		genericSpeed = new Speed(Arrays.copyOfRange(data, 1, 3));
+		windDirection = new Angle(Arrays.copyOfRange(data, 3, 5));
+		int bitfields = BitFieldUtil.getBitfields(Arrays.copyOfRange(data, 5, 6), 5, 8);
+		windReference = WindReference.of(bitfields);
 	}
 
 }

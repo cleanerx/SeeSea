@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@ import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Int16;
 
 public class AngleSigned extends Int16 {
 
-	public AngleSigned(byte[] uintByte) {
+	public AngleSigned(int[] uintByte) {
 		super(uintByte, 10000, -Math.PI, Math.PI);
 	}
 

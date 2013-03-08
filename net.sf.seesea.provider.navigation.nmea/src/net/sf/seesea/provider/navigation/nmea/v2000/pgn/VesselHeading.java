@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@ public class VesselHeading extends SequencedPGN {
 	
 	private HeadingSensorReference headingSensorReference;
 	
-	public VesselHeading(byte[] data) {
+	public VesselHeading(int[] data) {
 		super(data, 127250, true, 2, 100, 0.1);
 		headingSensorReading = new Angle(Arrays.copyOfRange(data, 1, 3));
 		deviation = new AngleSigned(Arrays.copyOfRange(data, 3, 5));

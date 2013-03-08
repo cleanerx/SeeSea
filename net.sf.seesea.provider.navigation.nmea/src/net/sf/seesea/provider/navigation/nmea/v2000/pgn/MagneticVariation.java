@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,7 @@ public class MagneticVariation extends SequencedPGN {
 	
 	private AngleSigned magneticHeadingCorrection;
 	
-	public MagneticVariation(byte[] data) {
+	public MagneticVariation(int[] data) {
 		super(data, 127258, true, 7, 1000, 1);
 		variationSource = VariationSource.getByIndex(data[1] & 0x0F);
 		ageOfService = new DateDayCount(Arrays.copyOfRange(data, 2, 4));

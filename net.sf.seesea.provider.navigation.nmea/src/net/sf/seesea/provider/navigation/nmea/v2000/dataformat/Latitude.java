@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,11 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.dataformat;
 
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint32;
+import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Int32;
 
-public class Latitude extends Uint32 {
+public class Latitude extends Int32 {
 	
-	public Latitude(byte[] longitude) {
+	public Latitude(int[] longitude) {
 		super(longitude, 10000000, -90.0, 90.0);
 	}
 

@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -34,12 +34,12 @@ public class TwoByteUInt {
 
 	private boolean valid;
 	
-	public TwoByteUInt(byte uintByte[], int resolution, double lowerRange, double upperRange) {
+	public TwoByteUInt(int uintByte[], int resolution, double lowerRange, double upperRange) {
 		if(uintByte == null || uintByte.length != 2) {
 			throw new IllegalArgumentException("must be 2 byte");
 		}
-		int uint = (uintByte[0] & 0xFF) << 8;
-		uint |= (uintByte[1] & 0xFF) ;
+		int uint = (uintByte[1] & 0xFF) << 8;
+		uint |= (uintByte[0] & 0xFF) ;
 
 		value = ((double)uint) / resolution; 
 
