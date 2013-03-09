@@ -47,8 +47,21 @@ public class WindData extends SequencedPGN {
 		super(data, 130306, true, 2, 100, 10);
 		genericSpeed = new Speed(Arrays.copyOfRange(data, 1, 3));
 		windDirection = new Angle(Arrays.copyOfRange(data, 3, 5));
-		int bitfields = BitFieldUtil.getBitfields(Arrays.copyOfRange(data, 5, 6), 5, 8);
+		int bitfields = BitFieldUtil.getBitfield(Arrays.copyOfRange(data, 5, 6), 5, 8);
 		windReference = WindReference.of(bitfields);
 	}
 
+	public Speed getGenericSpeed() {
+		return genericSpeed;
+	}
+
+	public Angle getWindDirection() {
+		return windDirection;
+	}
+
+	public WindReference getWindReference() {
+		return windReference;
+	}
+
+	
 }

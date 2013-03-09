@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" enabled="true" name="net.sf.seesea.provider.navigation.nmea2000">
+   <implementation class="net.sf.seesea.provider.navigation.nmea.v2000.NMEA2000EventProcessor"/>
+   <property name="provider" type="String" value="NMEA2000"/><reference bind="bindReader" cardinality="1..1" interface="net.sf.seesea.provider.navigation.nmea.v2000.INMEA2000Reader" name="INMEA2000Reader" policy="dynamic" unbind="unbindReader"/>
+   <reference bind="attachPositionListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IPositionListener" name="IPositionListener" policy="dynamic" unbind="detachPositionListener"/>
+   <reference bind="attachWindListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IWindListener" name="IWindListener" policy="dynamic" unbind="detachWindListener"/>
+   <reference bind="attachShipMovementListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IHeadingListener" name="IHeadingListener" policy="dynamic" unbind="detachShipMovementListener"/>
+   <reference bind="attachWaterTemperatureListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IWaterTemperatureListener" name="IWaterTemperatureListener" policy="dynamic" unbind="detachWaterTemperatureListener"/>
+   <reference bind="attachSatelliteInfoListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ISatelliteInfoListener" name="ISatelliteInfoListener" policy="dynamic" unbind="detachSatelliteInfoListener"/>
+   <reference bind="attachTrackMadeGoodGroundSpeedListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITrackMadeGoodGroundSpeedListener" name="ITrackMadeGoodGroundSpeedListener" policy="dynamic" unbind="detachTrackMadeGoodGroundSpeedListener"/>
+   <reference bind="attachRelativeWindSpeedListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IRelativeWindSpeedListener" name="IRelativeWindSpeedListener" policy="dynamic" unbind="detachRelativeWindSpeedListener"/>
+   <reference bind="attachDepthListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.IDepthListener" name="IDepthListener" policy="dynamic" unbind="detachDepthListener"/>
+   <reference bind="attachTimeListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITimeListener" name="ITimeListener" policy="dynamic" unbind="detachTimeListener"/>
+   <reference bind="attachSpeedListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ISpeedListener" name="ISpeedListener" policy="dynamic" unbind="detachSpeedListener"/>
+   <reference bind="attachTripLogListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITripLogListener" name="ITripLogListener" policy="dynamic" unbind="detachTripLogListener"/>
+   <reference bind="attachLogListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITotalLogListener" name="ITotalLogListener" policy="dynamic" unbind="detachLogListener"/>
+</scr:component>

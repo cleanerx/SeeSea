@@ -49,7 +49,7 @@ public class VesselHeading extends SequencedPGN {
 		headingSensorReading = new Angle(Arrays.copyOfRange(data, 1, 3));
 		deviation = new AngleSigned(Arrays.copyOfRange(data, 3, 5));
 		variation = new AngleSigned(Arrays.copyOfRange(data, 5, 7));
-		headingSensorReference = HeadingSensorReference.getByIndex(data[8] & 0x03); 
+		headingSensorReference = HeadingSensorReference.getByIndex(data[7] & 0x03); 
 	}
 
 	public Angle getHeadingSensorReading() {

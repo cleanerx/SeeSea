@@ -35,6 +35,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.seesea.model.core.geo.Depth;
+import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.model.core.physx.CompositeMeasurement;
+import net.sf.seesea.model.core.physx.Distance;
+import net.sf.seesea.model.core.physx.Heading;
+import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.model.core.physx.RelativeSpeed;
+import net.sf.seesea.model.core.physx.RelativeWind;
+import net.sf.seesea.model.core.physx.SatellitesVisible;
+import net.sf.seesea.model.core.physx.Temperature;
+import net.sf.seesea.model.core.physx.Time;
+import net.sf.seesea.model.core.weather.WindMeasurement;
 import net.sf.seesea.services.navigation.listener.IDataListener;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
@@ -374,5 +386,98 @@ IWindDataProvider, IShipMovementVectorProvider {
 	}
 
 	protected abstract String getProviderName();
+
+	protected void notifyListeners(Measurement measurement) {
+		if(measurement instanceof CompositeMeasurement) {
+			for (Measurement childMeasurements : ((CompositeMeasurement) measurement).getMeasurements()) {
+				notifyListeners(childMeasurements);
+			}
+		} else if (measurement instanceof Temperature) {
+			synchronized (_waterTemperatureListeners) {
+				for (IWaterTemperatureListener listener : _waterTemperatureListeners) {
+					heartbeat(IWaterTemperatureListener.class);
+					listener.notify((Temperature) measurement, null);
+				}
+			}
+		} else if (measurement instanceof Heading) {
+			synchronized (_headingListeners) {
+				heartbeat(IHeadingListener.class);
+				for (IHeadingListener speedVectorListener : _headingListeners) {
+					speedVectorListener.notify(
+							(Heading) measurement, null);
+				}
+			}
+		} else if (measurement instanceof RelativeSpeed) {
+			synchronized (_speedListeners) {
+				heartbeat(ISpeedListener.class);
+				for (ISpeedListener speedListener : _speedListeners) {
+					speedListener.notify(
+							(RelativeSpeed) measurement, null);
+				}
+			}
+		} else if (measurement instanceof Distance) {
+			Distance distance = (Distance) measurement;
+			switch (distance.getDistanceType()) {
+			case TOTAL:
+				synchronized (_totalLogListeners) {
+					heartbeat(ITotalLogListener.class);
+					for (ITotalLogListener totalLogListener : _totalLogListeners) {
+						totalLogListener.notify(distance, null);
+					}
+				}
+				break;
+			case TRIP:
+				synchronized (_tripLogListeners) {
+					heartbeat(ITripLogListener.class);
+					for (ITripLogListener tripLogListener : _tripLogListeners) {
+						tripLogListener.notify(distance, null);
+					}
+				}
+			default:
+				break;
+			}
+		} else if (measurement instanceof MeasuredPosition3D) {
+			synchronized (_positionListeners) {
+				heartbeat(IPositionListener.class);
+				for (IPositionListener listener : _positionListeners) {
+					listener.notify((MeasuredPosition3D) measurement, null);
+				}
+			}
+		} else if (measurement instanceof Time) {
+			heartbeat(ITimeListener.class);
+			for (ITimeListener listener : _timeListeners) {
+				listener.notify((Time) measurement, null);
+			}
+		} else if (measurement instanceof SatellitesVisible) {
+			synchronized (_satelliteInfoListeners) {
+				heartbeat(ISatelliteInfoListener.class);
+				for (ISatelliteInfoListener satelliteInfoListener : _satelliteInfoListeners) {
+					satelliteInfoListener.notify(
+							(SatellitesVisible) measurement, null);
+				}
+			}
+		} else if (measurement instanceof RelativeWind) {
+			synchronized (_relativeWindSpeedListeners) {
+				heartbeat(IRelativeWindSpeedListener.class);
+				for (IRelativeWindSpeedListener listener : _relativeWindSpeedListeners) {
+					listener.notify((RelativeWind) measurement, null);
+				}
+			}
+		} else if (measurement instanceof WindMeasurement) {
+			synchronized (_windListeners) {
+				for (IWindListener listener : _windListeners) {
+					heartbeat(IWindListener.class);
+					listener.notify((WindMeasurement) measurement, null);
+				}
+			}
+		} else if (measurement instanceof Depth) {
+			synchronized (_depthListeners) {
+				for (IDepthListener listener : _depthListeners) {
+					heartbeat(IDepthListener.class);
+					listener.notify((Depth) measurement, null);
+				}
+			}
+		}
+	}
 
 }

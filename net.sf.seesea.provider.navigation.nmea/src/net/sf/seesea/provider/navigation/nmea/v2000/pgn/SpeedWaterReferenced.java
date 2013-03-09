@@ -31,28 +31,26 @@ package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 import java.util.Arrays;
 
 import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.SpeedWaterReferencedType;
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint8;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Speed;
 
 public class SpeedWaterReferenced extends PGN {
 
+	private int sequenceID;
+	
+	private Speed speedWaterReferenced;
+	
+	private Speed speedGroundReferenced;
+	
+	private SpeedWaterReferencedType speedWaterReferencedType;
+	
 	public SpeedWaterReferenced(int[] data) {
 		super(128259, true, 2, 1000, 1);
-//		sequenceID = new Uint8(data[0]);
 		sequenceID = data[0];
 		speedWaterReferenced = new Speed(Arrays.copyOfRange(data, 1, 3));
 		speedGroundReferenced = new Speed(Arrays.copyOfRange(data, 3, 5));
-		speedWaterReferencedType = SpeedWaterReferencedType.getByIndex(data[6] & 0xFF);
+		speedWaterReferencedType = SpeedWaterReferencedType.getByIndex(data[5]);
 	}
 	
-	private int sequenceID;
-
-	private Speed speedWaterReferenced;
-
-	private Speed speedGroundReferenced;
-
-	private SpeedWaterReferencedType speedWaterReferencedType;
-
 	public int getSequenceID() {
 		return sequenceID;
 	}

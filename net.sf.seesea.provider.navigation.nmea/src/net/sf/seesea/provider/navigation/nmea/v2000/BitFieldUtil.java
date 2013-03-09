@@ -30,9 +30,14 @@ package net.sf.seesea.provider.navigation.nmea.v2000;
 
 public class BitFieldUtil {
 
-	public static int getBitfields(int[] data, int startPosition, int endPostion) {
-		int totalBits = endPostion - startPosition;
-		
+	/**
+	 * 
+	 * @param data
+	 * @param startPosition the least significant bit start from
+	 * @param endPostion the most significant bit to end
+	 * @return
+	 */
+	public static int getBitfield(int[] data, int startPosition, int endPostion) {
 		long bits = 0L; 
 		for (int i = 0 ; i < data.length ; i++) {
 			bits |= data[i] << i;
@@ -46,10 +51,6 @@ public class BitFieldUtil {
 		long maskedValue = (bits & bitmask) >> startPosition; 
 		
 		return (int) maskedValue;
-	}
-	
-	public static int getBitfield(int data) {
-		return data & 0xFF;
 	}
 	
 }

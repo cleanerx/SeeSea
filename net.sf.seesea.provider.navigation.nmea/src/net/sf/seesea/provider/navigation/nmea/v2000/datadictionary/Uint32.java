@@ -38,10 +38,10 @@ public class Uint32 extends RangeValue {
 		if(uintByte == null || uintByte.length != 4) {
 			throw new IllegalArgumentException("must be 4 byte");
 		}
-		long uint = (uintByte[0] & 0xFF) << 24;
-		uint |= (uintByte[1] & 0xFF) << 16;
-		uint |= (uintByte[2] & 0xFF) << 8;
-		uint |= (uintByte[3] & 0xFF) ;
+		long uint = (long)(uintByte[3] & 0xFF) << 24;
+		uint |= (long)(uintByte[2] & 0xFF) << 16;
+		uint |= (long)(uintByte[1] & 0xFF) << 8;
+		uint |= (long)(uintByte[0] & 0xFF) ;
 
 		value = ((double)uint) / resolution; 
 

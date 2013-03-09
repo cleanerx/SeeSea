@@ -28,7 +28,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.dataformat;
 
-public class Temperature extends TwoByteUInt {
+import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.UInt16;
+
+public class Temperature extends UInt16 {
 	
 	public Temperature(int data[]) {
 		super(data, 100, 0, 655.32);

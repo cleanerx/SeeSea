@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.provider.navigation.nmea0183.serial">
+   <implementation class="net.sf.seesea.provider.navigation.nmea.v183.SerialNMEA0183InputStreamProcessor"/>
+   <service>
+      <provide interface="net.sf.seesea.services.navigation.IStreamProcessor"/>
+      <provide interface="net.sf.seesea.services.navigation.INMEAReader"/>
+   </service>
+</scr:component>

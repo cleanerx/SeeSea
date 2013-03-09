@@ -75,11 +75,29 @@ public class GNSSPositionData extends SequencedPGN {
 		longitude = new LongitudeExt(Arrays.copyOfRange(data, 15, 23));
 		altitude = new Altitude(Arrays.copyOfRange(data, 23, 31));
 		int[] byte31 = Arrays.copyOfRange(data, 31, 32);
-		int bitfields = BitFieldUtil.getBitfields(byte31, 4, 8);
+		int bitfields = BitFieldUtil.getBitfield(byte31, 4, 8);
 		typeOfSystem = TypeOfSystem.of(bitfields);
-		bitfields = BitFieldUtil.getBitfields(byte31, 0, 4);
+		bitfields = BitFieldUtil.getBitfield(byte31, 0, 4);
 		methodGNSS = MethodGNSS.of(bitfields);
 		geodialSeparation = new Distance(Arrays.copyOfRange(data, 37, 41));
 	}
+
+	public LatitudeExt getLatitude() {
+		return latitude;
+	}
+
+	public LongitudeExt getLongitude() {
+		return longitude;
+	}
+
+	public Altitude getAltitude() {
+		return altitude;
+	}
+
+	public Distance getGeodialSeparation() {
+		return geodialSeparation;
+	}
+	
+	
 }
 

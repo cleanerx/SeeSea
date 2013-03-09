@@ -28,7 +28,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint8;
 
 public class SequencedPGN extends PGN {
 
