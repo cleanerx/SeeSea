@@ -41,6 +41,9 @@ import net.sf.seesea.services.navigation.provider.IShipMovementVectorProvider;
 import net.sf.seesea.services.navigation.provider.IWaterTemperatureDataProvider;
 import net.sf.seesea.services.navigation.provider.IWindDataProvider;
 
+/**
+ * The main event processor
+ */
 public class NMEA2000EventProcessor extends NMEAParser implements INMEA2000Listener,
 IPositionProvider, IWaterTemperatureDataProvider, IWindDataProvider,
 IShipMovementVectorProvider {
@@ -57,23 +60,29 @@ IShipMovementVectorProvider {
 	
 	@Override
 	public void nmeaEventReceived(int[] data) {
+
 		int priority = data[0];
-		long pgn = (long)data[1] + 256L * ((long) data[2] + 256L * (long) data[3]);
+		long pgn = (long) data[1] + 256L
+				* ((long) data[2] + 256L * (long) data[3]);
 		int destination = data[4];
 		int source = data[5];
 		int messageLength = data[10];
-		switch ((int)pgn) {
+		switch ((int) pgn) {
 		case 60928:
 			System.out.println("ISO Address clain" + pgn);
 			break;
 		case 127250:
-			System.out.println("Vessel Heading" + pgn);
-			VesselHeading vesselHeading = new VesselHeading(Arrays.copyOfRange(data, 11, 19));
+			// System.out.println("Vessel Heading" + pgn);
+			VesselHeading vesselHeading = new VesselHeading(Arrays.copyOfRange(
+					data, 11, 19));
 			Heading heading = PhysxFactory.eINSTANCE.createHeading();
-			heading.setDegrees(vesselHeading.getHeadingSensorReading().getValue() * 180 / Math.PI);
-			if(vesselHeading.getHeadingSensorReference().equals(HeadingSensorReference.Magnetic)) {
+			heading.setDegrees(vesselHeading.getHeadingSensorReading()
+					.getValue() * 180 / Math.PI);
+			if (vesselHeading.getHeadingSensorReference().equals(
+					HeadingSensorReference.Magnetic)) {
 				heading.setHeadingType(HeadingType.MAGNETIC);
-			} else if(vesselHeading.getHeadingSensorReference().equals(HeadingSensorReference.True)) {
+			} else if (vesselHeading.getHeadingSensorReference().equals(
+					HeadingSensorReference.True)) {
 				heading.setHeadingType(HeadingType.TRUE);
 			} else {
 				heading.setHeadingType(HeadingType.UNKNOWN);
@@ -81,15 +90,16 @@ IShipMovementVectorProvider {
 			notifyListeners(heading);
 			break;
 		case 128259:
-//			System.out.println("Speed, Water referenced " + pgn);
-			SpeedWaterReferenced speedWaterReferenced = new SpeedWaterReferenced(Arrays.copyOfRange(data, 11, 19));
-			if(speedWaterReferenced.getSpeedWaterReferenced().isNaN()) {
+			// System.out.println("Speed, Water referenced " + pgn);
+			SpeedWaterReferenced speedWaterReferenced = new SpeedWaterReferenced(
+					Arrays.copyOfRange(data, 11, 19));
+			if (speedWaterReferenced.getSpeedWaterReferenced().isNaN()) {
 				return;
-			} 
+			}
 			RelativeSpeed speed = PhysxFactory.eINSTANCE.createRelativeSpeed();
 			Speed speedx = PhysxFactory.eINSTANCE.createSpeed();
 			speedx.setSpeed(speedWaterReferenced.getSpeedWaterReferenced());
-			speedx.setSpeedUnit(SpeedUnit.N);	
+			speedx.setSpeedUnit(SpeedUnit.N);
 			speed.setKey(SpeedType.SPEEDTHOUGHWATER);
 			speed.setValue(speedx);
 			speed.setValid(true);
@@ -97,45 +107,55 @@ IShipMovementVectorProvider {
 			break;
 		case 129025:
 			System.out.println("Position, Rapid Update " + pgn);
-			PositionRapid positionRapid = new PositionRapid(Arrays.copyOfRange(data, 11, 19));
+			PositionRapid positionRapid = new PositionRapid(Arrays.copyOfRange(
+					data, 11, 19));
 			break;
 		case 129026:
-			System.out.println("COG & SOG, Rapid Update " + pgn);
+			// System.out.println("COG & SOG, Rapid Update " + pgn);
 			COGSOG cogsog = new COGSOG(Arrays.copyOfRange(data, 11, 19));
-			RelativeSpeed relSpeed = PhysxFactory.eINSTANCE.createRelativeSpeed();
+			RelativeSpeed relSpeed = PhysxFactory.eINSTANCE
+					.createRelativeSpeed();
 			relSpeed.setKey(SpeedType.COG);
 			Speed speed1 = PhysxFactory.eINSTANCE.createSpeed();
 			speed1.setSpeed(cogsog.getSpeed().getValue());
 			speed1.setSpeedUnit(SpeedUnit.N);
 			relSpeed.setValue(speed1);
 			Heading heading2 = PhysxFactory.eINSTANCE.createHeading();
-			heading2.setDegrees(cogsog.getCourseOverGround().getValue() * 180 / Math.PI);
+			heading2.setDegrees(cogsog.getCourseOverGround().getValue() * 180
+					/ Math.PI);
 			heading2.setHeadingType(cogsog.getHeadingType());
-			CompositeMeasurement compositeMeasurement = PhysxFactory.eINSTANCE.createCompositeMeasurement();
-			EList<Measurement> measurements = compositeMeasurement.getMeasurements();
+			CompositeMeasurement compositeMeasurement = PhysxFactory.eINSTANCE
+					.createCompositeMeasurement();
+			EList<Measurement> measurements = compositeMeasurement
+					.getMeasurements();
 			measurements.add(relSpeed);
 			measurements.add(heading2);
 			notifyListeners(compositeMeasurement);
 			break;
 		case 129029:
-//			System.out.println("GNSS Position Data" + pgn);
-			GNSSPositionData gnssPositionData = new GNSSPositionData(Arrays.copyOfRange(data, 11, data.length));
-			if(gnssPositionData.getLatitude() != null) {
-				MeasuredPosition3D measuredPosition3D = GeoFactory.eINSTANCE.createMeasuredPosition3D();
+			// System.out.println("GNSS Position Data" + pgn);
+			GNSSPositionData gnssPositionData = new GNSSPositionData(
+					Arrays.copyOfRange(data, 11, data.length));
+			if (gnssPositionData.getLatitude() != null) {
+				MeasuredPosition3D measuredPosition3D = GeoFactory.eINSTANCE
+						.createMeasuredPosition3D();
 				Latitude latitude = GeoFactory.eINSTANCE.createLatitude();
-				latitude.setDecimalDegree(gnssPositionData.getLatitude().getValue());
+				latitude.setDecimalDegree(gnssPositionData.getLatitude()
+						.getValue());
 				measuredPosition3D.setLatitude(latitude);
 				Longitude longitude = GeoFactory.eINSTANCE.createLongitude();
-				longitude.setDecimalDegree(gnssPositionData.getLongitude().getValue());
+				longitude.setDecimalDegree(gnssPositionData.getLongitude()
+						.getValue());
 				measuredPosition3D.setLongitude(longitude);
-				measuredPosition3D.setAltitude(gnssPositionData.getAltitude().getValue());
+				measuredPosition3D.setAltitude(gnssPositionData.getAltitude()
+						.getValue());
 				measuredPosition3D.setSensorID(new Integer(source).toString());
 				measuredPosition3D.setValid(true);
 				notifyListeners(measuredPosition3D);
 				break;
 			}
 		case 129033:
-			System.out.println("Time and Date" + pgn);
+			// System.out.println("Time and Date" + pgn);
 			TimeDate timeDate = new TimeDate(Arrays.copyOfRange(data, 11, 19));
 			Time time = PhysxFactory.eINSTANCE.createTime();
 			time.setTime(timeDate.getDate());
@@ -143,24 +163,29 @@ IShipMovementVectorProvider {
 			notifyListeners(time);
 			break;
 		case 129540:
-			System.out.println("GNSS Sats in View " + pgn);
-			GNSSSatsInView satsInview = new GNSSSatsInView(Arrays.copyOfRange(data, 11, data.length));
+			// System.out.println("GNSS Sats in View " + pgn);
+			GNSSSatsInView satsInview = new GNSSSatsInView(Arrays.copyOfRange(
+					data, 11, data.length));
 			notifyListeners(satsInview.getSatellitesVisible());
 			break;
 		case 130306:
-			System.out.println("Wind Data" + pgn);
+			// System.out.println("Wind Data" + pgn);
 			WindData windData = new WindData(Arrays.copyOfRange(data, 11, 19));
-			WindMeasurement wind = WeatherFactory.eINSTANCE.createWindMeasurement();
-			wind.setAngle(windData.getWindDirection().getValue() * 180 / Math.PI);
+			WindMeasurement wind = WeatherFactory.eINSTANCE
+					.createWindMeasurement();
+			wind.setAngle(windData.getWindDirection().getValue() * 180
+					/ Math.PI);
 			wind.setSpeed(windData.getGenericSpeed().getValue());
 			wind.setSpeedUnit(SpeedUnit.N);
 			wind.setValid(true);
 			notifyListeners(wind);
 			break;
 		case 130310:
-			System.out.println("Environmental Parameters 1 " + pgn);
-			EnvironmentalParameters1 parameters1 = new EnvironmentalParameters1(data);
-			Temperature temperature = PhysxFactory.eINSTANCE.createTemperature();
+			// System.out.println("Environmental Parameters 1 " + pgn);
+			EnvironmentalParameters1 parameters1 = new EnvironmentalParameters1(
+					data);
+			Temperature temperature = PhysxFactory.eINSTANCE
+					.createTemperature();
 			temperature.setUnit(TemperatureUnit.KELVIN);
 			temperature.setValue(parameters1.getWaterTemperature().getValue());
 			notifyListeners(temperature);
@@ -169,7 +194,7 @@ IShipMovementVectorProvider {
 			System.out.println("Environmental Parameters 2 " + pgn);
 			break;
 		default:
-			if(pgn > 120000) { 
+			if (pgn > 120000) {
 				System.out.println("NMEA PGN " + pgn);
 			} else {
 				System.out.println("Engine PGN " + pgn);
@@ -177,7 +202,7 @@ IShipMovementVectorProvider {
 			break;
 		}
 	}
-	
+
 	public synchronized void bindReader(INMEA2000Reader reader) {
 		_nmeaReaders.add(reader);
 		reader.addNMEA2000Listener(this);

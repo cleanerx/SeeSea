@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -27,8 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.datadictionary;
-
-import net.sf.seesea.provider.navigation.nmea.v2000.data.TypeOfSystem;
 
 public enum WindReference {
 	

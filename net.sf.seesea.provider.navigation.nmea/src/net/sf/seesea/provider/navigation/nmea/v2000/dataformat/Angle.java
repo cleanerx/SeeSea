@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.dataformat;
 
-public class Angle extends TwoByteUInt { 
+import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.UInt16;
+
+public class Angle extends UInt16 { 
 	
 	public Angle(int angleByte[]) {
 		super(angleByte, 10000, 0, Math.PI * 2);

@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,38 +26,23 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.provider.navigation.nmea.v2000.dataformat;
+package net.sf.seesea.provider.navigation.nmea.v2000;
 
-public class TwoByteUInt {
+/**
+ * 
+ */
+public interface INMEA2000Reader {
 
-	private double value;
+	/**
+	 * 
+	 * @param listener
+	 */
+	void addNMEA2000Listener(INMEA2000Listener listener);
 
-	private boolean valid;
-	
-	public TwoByteUInt(int uintByte[], int resolution, double lowerRange, double upperRange) {
-		if(uintByte == null || uintByte.length != 2) {
-			throw new IllegalArgumentException("must be 2 byte");
-		}
-		int uint = (uintByte[1] & 0xFF) << 8;
-		uint |= (uintByte[0] & 0xFF) ;
+	/**
+	 * 
+	 * @param listener
+	 */
+	void removeNMEA2000Listener(INMEA2000Listener listener);
 
-		value = ((double)uint) / resolution; 
-
-		if(value < lowerRange || value > upperRange) {
-			valid = false;
-		} else {
-			valid = true;
-		}
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public boolean isValid() {
-		return valid;
-	}
-	
-	
-	
 }

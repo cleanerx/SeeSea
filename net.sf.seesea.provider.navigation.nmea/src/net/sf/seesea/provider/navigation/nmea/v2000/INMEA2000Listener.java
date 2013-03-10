@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,22 +28,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+public interface INMEA2000Listener {
 
-public class NMEA2000Reader extends InputStreamReader {
-
-	public NMEA2000Reader(InputStream in) {
-		super(in);
-//		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
-//		serviceRegistration = NMEA0183Activator.getDefault().getBundle().getBundleContext().registerService(ThreadedSerialInputReader.class.getName(), this, null);
-	}
-	
-	public void readFrame(byte[] frameData) {
-		
-		
-	}
-
-
-
+	/**
+	 * 
+	 * @param data
+	 */
+	void nmeaEventReceived(int[] data);
 }

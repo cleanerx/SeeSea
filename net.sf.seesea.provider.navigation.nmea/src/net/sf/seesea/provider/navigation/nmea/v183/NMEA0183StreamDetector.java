@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2013, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,12 +26,34 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.provider.navigation.nmea.v2000.data;
+package net.sf.seesea.provider.navigation.nmea.v183;
 
-public enum Integrety {
-	
-	NOCHECK, SAFE, CAUTION, UNSAFE;
-	
-	
+import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.services.navigation.RawDataEvent;
+import net.sf.seesea.services.navigation.RawDataEventListener;
 
+public class NMEA0183StreamDetector implements RawDataEventListener {
+
+	private boolean nmea0183Stream;
+
+	public NMEA0183StreamDetector() {
+		nmea0183Stream = false;
+	}
+	
+	@Override
+	public void receiveRawDataEvent(RawDataEvent e)
+			throws NMEAProcessingException {
+		nmea0183Stream = true;
+	}
+
+	@Override
+	public void disable() {
+		//
+	}
+
+	public boolean isNmea0183Stream() {
+		return nmea0183Stream;
+	}
+
+	
 }

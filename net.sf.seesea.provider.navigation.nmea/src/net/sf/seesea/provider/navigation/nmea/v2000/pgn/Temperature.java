@@ -29,11 +29,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 
 import java.util.Arrays;
-import java.util.BitSet;
 
-import net.sf.seesea.provider.navigation.nmea.v2000.BitFieldUtil;
 import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.TemperatureSource;
-import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint8;
 
 
 public class Temperature extends SequencedPGN {
@@ -48,8 +45,8 @@ public class Temperature extends SequencedPGN {
 
 	public Temperature(int[] data) {
 		super(data, 130312, true, 5, 2000, 0.5);
-		temperatureInstance = BitFieldUtil.getBitfield(data[0]);
-		temperatureSource = TemperatureSource.getByIndex(BitFieldUtil.getBitfield(data[1]));
+//		temperatureInstance = BitFieldUtil.getBitfield(data[0]);
+//		temperatureSource = TemperatureSource.getByIndex(BitFieldUtil.getBitfield(data[1]));
 		actualTemperature = new net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Temperature(Arrays.copyOfRange(data, 3, 5));
 		setTemperature = new net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Temperature(Arrays.copyOfRange(data, 5, 7));
 	}

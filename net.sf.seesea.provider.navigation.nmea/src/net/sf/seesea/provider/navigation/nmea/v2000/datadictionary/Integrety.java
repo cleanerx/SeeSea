@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2013, Jens Kübler
+Copyright (c) 2010-2012, Jens K�bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,56 +26,12 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
+package net.sf.seesea.provider.navigation.nmea.v2000.datadictionary;
 
-public class PGN {
-
-	private int id;
+public enum Integrety {
 	
-	private boolean singleFrame;
-	
-	private int priorityDefault;
-	
-	/** in ms */
-	private int defaultUpadateRate;
-	
-	private double frequency;
-	
-	public PGN(int id) {
-		this.id = id;
-	}
-
-	public PGN(int id, boolean singleFrame, int priorityDefault,
-			int defaultUpadateRate, double frequence) {
-		super();
-		this.id = id;
-		this.singleFrame = singleFrame;
-		this.priorityDefault = priorityDefault;
-		this.defaultUpadateRate = defaultUpadateRate;
-		this.frequency = frequence;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public boolean isSingleFrame() {
-		return singleFrame;
-	}
-
-	public int getPriorityDefault() {
-		return priorityDefault;
-	}
-
-	public int getDefaultUpadateRate() {
-		return defaultUpadateRate;
-	}
-
-	public double getFrequence() {
-		return frequency;
-	}
-
+	NOCHECK, SAFE, CAUTION, UNSAFE;
 	
 	
-	
+
 }

@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 
-
+/**
+ * a PGN that owns a sequence as first field.
+ * Sequences are used to group different PGNs logically together
+ */
 public class SequencedPGN extends PGN {
 
 	public SequencedPGN(int[] data, int id, boolean singleFrame, int priorityDefault,

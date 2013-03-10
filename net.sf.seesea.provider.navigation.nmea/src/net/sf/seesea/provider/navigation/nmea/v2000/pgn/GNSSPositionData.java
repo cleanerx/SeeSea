@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -31,8 +31,8 @@ package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 import java.util.Arrays;
 
 import net.sf.seesea.provider.navigation.nmea.v2000.BitFieldUtil;
-import net.sf.seesea.provider.navigation.nmea.v2000.data.TypeOfSystem;
 import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.MethodGNSS;
+import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.TypeOfSystem;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Altitude;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.DateDayCount;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Distance;

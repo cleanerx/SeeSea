@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2013, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,6 @@ public class TransducerOffset extends Int16 {
 
 	public TransducerOffset(int[] uintByte) {
 		super(uintByte, 1000, -32764, 32764);
-		// TODO Auto-generated constructor stub
 	}
 
 }
