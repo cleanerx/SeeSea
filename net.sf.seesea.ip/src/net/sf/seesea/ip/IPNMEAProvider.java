@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -29,11 +29,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
-import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
+import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -41,8 +43,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 
 import wizard.SelectHostPage;
 
@@ -53,7 +53,7 @@ public class IPNMEAProvider implements INMEAConnector {
 
 	private final List<IWizardPage> wizardPages;
 
-	private ServiceRegistration<INMEAStreamProvider> serviceRegistration;
+	private TCPIPInputStreamProvider inputStreamProvider;
 
 	/**
 	 * 
@@ -88,30 +88,11 @@ public class IPNMEAProvider implements INMEAConnector {
 		return wizardPages;
 	}
 	
-	public Callable<Object> getFinishCallable() {
-		return new Callable<Object>() {
-
-			@Override
-			public Object call() throws Exception {
-				SelectHostPage selectHostPage = (SelectHostPage) wizardPages.get(0);
-				String host = selectHostPage.getHost();
-				int port = selectHostPage.getPort();
-				
-				serviceRegistration = IPActivator.getContext().registerService(INMEAStreamProvider.class, new TCPIPInputStreamProvider(host, port), null);
-				return null;
-			}
-		};
-	}
-
 	/* (non-Javadoc)
 	 * @see net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector#performCancel()
 	 */
 	@Override
 	public boolean performCancel() {
-		if(serviceRegistration != null) {
-			serviceRegistration.unregister();
-		}
-		
 		return true;
 	}
 
@@ -120,35 +101,39 @@ public class IPNMEAProvider implements INMEAConnector {
 		// nothing to do
 	}
 
-//	@Override
-//	public void disconnect(String device) {
-//		if(serviceRegistration != null) {
-//			ServiceReference<INMEAStreamProvider> reference = serviceRegistration.getReference();
-//			INMEAStreamProvider streamProvider = IPActivator.getContext().getService(reference);
-//			serviceRegistration.unregister();
-//			try {
-//				streamProvider.close();
-//			} catch (IOException e) {
-//				Logger.getLogger(getClass()).error("Failed to close NMEAStreamProvider", e); //$NON-NLS-1$
-//			}
-//			serviceRegistration = null;
-//		}
-//	}
-
 	/* (non-Javadoc)
 	 * @see net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector#performFinish()
 	 */
 	@Override
 	public boolean performFinish() {
+		ThreadedSerialInputReader reader = null;
+		SelectHostPage selectHostPage = (SelectHostPage) wizardPages.get(0);
+		String host = selectHostPage.getHost();
+		int port = selectHostPage.getPort();
+		inputStreamProvider = new TCPIPInputStreamProvider(host, port);
 		try {
-			getFinishCallable().call();
+			reader = new ThreadedSerialInputReader(inputStreamProvider);
+			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
+			ExecutorService es = Executors.newSingleThreadExecutor ();
+			Future<Void> submit = (Future<Void>) es.submit (futureTask);
 		} catch (Exception e) {
-//			disconnect("NoName"); //$NON-NLS-1$
-			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("IPNMEAProvider.connectionFail"), Messages.getString("IPNMEAProvider.fail") + e.getLocalizedMessage());  //$NON-NLS-1$ //$NON-NLS-2$
+			if(reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e2) {
+					Logger.getLogger(getClass()).error("Failed to close input stream", e2); //$NON-NLS-1$
+				}
+			}
+			if(inputStreamProvider != null) {
+				try {
+					inputStreamProvider.close();
+				} catch (IOException e2) {
+					Logger.getLogger(getClass()).error("Failed to close input stream", e2); //$NON-NLS-1$
+				}
+			}
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "", "" + e.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			Logger.getLogger(getClass()).error("Failed to connect to device", e); //$NON-NLS-1$
-			return false;
 		}
-
 		return true;
 	}
 

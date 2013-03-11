@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,12 +26,16 @@
  */
 package wizard;
 
+import java.text.ParseException;
+
 import net.sf.seesea.lib.IValidatingPage;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -80,6 +84,13 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		fd_text.top = new FormAttachment(0, 10);
 		fd_text.right = new FormAttachment(100, -10);
 		text.setLayoutData(fd_text);
+		text.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				host = ((Text)e.widget).getText();
+			}
+		});
 		
 		Label lblPort = new Label(container, SWT.NONE);
 		FormData fd_lblPort = new FormData();
@@ -93,6 +104,17 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		fd_text_1.bottom = new FormAttachment(lblPort, 0, SWT.BOTTOM);
 		fd_text_1.left = new FormAttachment(text, 0, SWT.LEFT);
 		text_1.setLayoutData(fd_text_1);
+		text_1.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				try {
+					port = Integer.parseInt(((Text)e.widget).getText());
+				} catch (NumberFormatException e2) {
+					// nothing to do;
+				}
+			}
+		});
 
 		
 	}
