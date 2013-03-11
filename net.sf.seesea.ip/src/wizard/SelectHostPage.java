@@ -26,12 +26,11 @@
  */
 package wizard;
 
-import java.text.ParseException;
-
 import net.sf.seesea.lib.IValidatingPage;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -71,6 +70,8 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		setControl(container);
 		container.setLayout(new FormLayout());
 		
+		final IDialogSettings settings = getWizard().getDialogSettings();
+		
 		Label lblHost = new Label(container, SWT.NONE);
 		FormData fd_lblHost = new FormData();
 		fd_lblHost.top = new FormAttachment(0, 10);
@@ -84,11 +85,17 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		fd_text.top = new FormAttachment(0, 10);
 		fd_text.right = new FormAttachment(100, -10);
 		text.setLayoutData(fd_text);
+		String lastHost = settings.get("lastHost"); //$NON-NLS-1$
+		if(lastHost != null) {
+			text.setText(lastHost);
+		}
+
 		text.addModifyListener(new ModifyListener() {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				host = ((Text)e.widget).getText();
+				settings.put("lastHost", host);
 			}
 		});
 		
@@ -104,12 +111,21 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		fd_text_1.bottom = new FormAttachment(lblPort, 0, SWT.BOTTOM);
 		fd_text_1.left = new FormAttachment(text, 0, SWT.LEFT);
 		text_1.setLayoutData(fd_text_1);
+		try {
+			int lastPort = settings.getInt("lastPort"); //$NON-NLS-1$
+			if(lastPort != 0) {
+				text_1.setText(new Integer(lastPort).toString());
+			}
+		} catch (NumberFormatException e) {
+			// nothing to do
+		}
 		text_1.addModifyListener(new ModifyListener() {
 			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				try {
 					port = Integer.parseInt(((Text)e.widget).getText());
+					settings.put("lastPort", port);
 				} catch (NumberFormatException e2) {
 					// nothing to do;
 				}
