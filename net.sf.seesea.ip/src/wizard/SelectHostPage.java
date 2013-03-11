@@ -88,6 +88,7 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		String lastHost = settings.get("lastHost"); //$NON-NLS-1$
 		if(lastHost != null) {
 			text.setText(lastHost);
+			host = lastHost;
 		}
 
 		text.addModifyListener(new ModifyListener() {
@@ -115,6 +116,7 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 			int lastPort = settings.getInt("lastPort"); //$NON-NLS-1$
 			if(lastPort != 0) {
 				text_1.setText(new Integer(lastPort).toString());
+				port = lastPort;
 			}
 		} catch (NumberFormatException e) {
 			// nothing to do
