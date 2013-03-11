@@ -28,27 +28,44 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.services.navigation;
 
+import java.io.UnsupportedEncodingException;
+
+import org.apache.log4j.Logger;
+
 /**
  * An NMEA event
  * 
  */
 public class RawDataEvent {
 
-	private final String nmeaMessageContent;
+	private final byte[] nmeaMessageContent;
 
+	public RawDataEvent(String nmeaMessageContent, String streamProviderName) throws UnsupportedEncodingException {
+		this(nmeaMessageContent.getBytes("UTF-8"), streamProviderName);
+	}
+	
 	/**
 	 * 
 	 * @param nmeaMessageContent
 	 * @param streamProviderName TODO
 	 */
-	public RawDataEvent(String nmeaMessageContent, String streamProviderName) {
+	public RawDataEvent(byte[] nmeaMessageContent, String streamProviderName) {
 		this.nmeaMessageContent = nmeaMessageContent;
 	}
 
-	public String getNmeaMessageContent() {
+	public byte[] getNmeaMessageContentAsBytes() {
 		return nmeaMessageContent;
 	}
-	
+
+	public String getNmeaMessageContent() {
+		try {
+			return new String(nmeaMessageContent,"UTF-8"); //$NON-NLS-1$
+		} catch (UnsupportedEncodingException e) {
+			Logger.getLogger(getClass()).error("Unsupported encoding", e); //$NON-NLS-1$
+		}
+		return null;
+	}
+
 	
 
 }

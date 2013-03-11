@@ -29,16 +29,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.services.navigation;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.PushbackInputStream;
+import java.net.SocketTimeoutException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -47,19 +49,22 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * A reader that processes nmea input streams
  */
-public class ThreadedSerialInputReader extends InputStreamReader implements INMEAReader, Callable<Void>{
+public class ThreadedSerialInputReader implements Callable<Void>{
 
 	private static final String PROVIDER_TYPE = "provider"; //$NON-NLS-1$
 	
 	private static final String PROVIDER_NAME = "providerName"; //$NON-NLS-1$
 	
-	private final List<RawDataEventListener> nmeaEventListeners;
-	private List<RawDataEventListener> aisEventListeners;
+//	private final List<RawDataEventListener> nmeaEventListeners;
+//	private List<RawDataEventListener> aisEventListeners;
 
 	private final INMEAStreamProvider streamProvider;
 	private ServiceRegistration<?> serviceRegistration;
 	private Thread processingThread;
 
+	private ServiceTracker<IStreamProcessor, IStreamProcessor> streamTracker;
+
+	private PushbackInputStream pushbackInputStream;
 
 	/**
 	 * @param in
@@ -67,66 +72,39 @@ public class ThreadedSerialInputReader extends InputStreamReader implements INME
 	 * @throws IOException 
 	 */
 	public ThreadedSerialInputReader(INMEAStreamProvider nmeaStreamProvider) throws IOException {
-		super(nmeaStreamProvider.getInputStream());
+		pushbackInputStream = new PushbackInputStream(nmeaStreamProvider.getInputStream(), 2048);
 		streamProvider = nmeaStreamProvider;
-		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
-		aisEventListeners = new ArrayList<RawDataEventListener>(1);
+//		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
+//		aisEventListeners = new ArrayList<RawDataEventListener>(1);
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 		properties.put("hardware", true); //$NON-NLS-1$
 		properties.put(PROVIDER_NAME, nmeaStreamProvider.getName());
 		properties.put(PROVIDER_TYPE, "sensor");
 		if(NavigationServicesActivator.getDefault() != null) {
 			BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
-			serviceRegistration = bundleContext.registerService(INMEAReader.class.getName(), this, properties);
-//			new ProcessorsTracker(bundleContext);
+//			serviceRegistration = bundleContext.registerService(INMEAReader.class.getName(), this, properties);
+			streamTracker = new ServiceTracker<IStreamProcessor,IStreamProcessor>(bundleContext, IStreamProcessor.class, null);
+			streamTracker.open();
 		}
 		
 		Logger.getLogger(getClass()).info("Start reading from device"); //$NON-NLS-1$
 	}
 	
-	/**
-	 * 
-	 * @param nmeaEventListener
-	 */
-	public void addNMEAEventListener(RawDataEventListener nmeaEventListener) {
-		nmeaEventListeners.add(nmeaEventListener);
-	}
-
-	/**
-	 * 
-	 * @param nmeaEventListener
-	 */
-	public void removeNMEAEventListener(RawDataEventListener nmeaEventListener) {
-		nmeaEventListeners.remove(nmeaEventListener);
-	}
-
-	/**
-	 * 
-	 * @param nmeaEventListener
-	 */
-	public void addAISEventListener(RawDataEventListener nmeaEventListener) {
-		aisEventListeners.add(nmeaEventListener);
-	}
-
-	/**
-	 * 
-	 * @param nmeaEventListener
-	 */
-	public void removeAISEventListener(RawDataEventListener nmeaEventListener) {
-		aisEventListeners.remove(nmeaEventListener);
-	}
 
 	
 
 	public void close() throws IOException {
+		if(streamTracker != null) {
+			streamTracker.close();
+		}
 		if(processingThread != null) {
 			processingThread.interrupt();
 		}
-		if(serviceRegistration != null) {
-			serviceRegistration.unregister();
-			serviceRegistration = null;
-		}
-		super.close();
+//		if(serviceRegistration != null) {
+//			serviceRegistration.unregister();
+//			serviceRegistration = null;
+//		}
+		pushbackInputStream.close();
 		try {
 			streamProvider.close();
 		} catch (IOException e) {
@@ -140,106 +118,60 @@ public class ThreadedSerialInputReader extends InputStreamReader implements INME
 	 * @throws NMEAProcessingException 
 	 */
 	public Void call() throws Exception {
-		processingThread = Thread.currentThread();
 		try {
-			StringBuffer stringBuffer = null;
-			for (int i = read(); i != -1 ;) {
-				switch (i) {
-				case '\n':
-					if(stringBuffer != null) {
-						stringBuffer.append((char) i);
-						String line = stringBuffer.toString();
-						if(line.startsWith("!")) { //$NON-NLS-1$
-							RawDataEvent nmeaEvent = new RawDataEvent(stringBuffer.toString(), streamProvider.getName());
-							for(RawDataEventListener aisEventListener : aisEventListeners) {
-								aisEventListener.receiveRawDataEvent(nmeaEvent);
-							}
-						} else if(line.startsWith("$")) { //$NON-NLS-1$
-							RawDataEvent nmeaEvent = new RawDataEvent(stringBuffer.toString(), streamProvider.getName());
-							for (RawDataEventListener nmeaEventListener : nmeaEventListeners) {
-								nmeaEventListener.receiveRawDataEvent(nmeaEvent);
+			processingThread = Thread.currentThread();
+			Object[] services = streamTracker.getServices();
+			IStreamProcessor streamProcessor = null;
+			byte[] input = new byte[2048];
+			int read = pushbackInputStream.read(input, 0 ,2048);
+			if(services != null) {
+				for (Object object : services) {
+					IStreamProcessor currentStreamProcessor = (IStreamProcessor) object;
+					if(currentStreamProcessor.isValidStreamProcessor(Arrays.copyOfRange(input, 0, read))) {
+						streamProcessor = currentStreamProcessor;
+						Logger.getLogger(getClass()).info("Detected provider" + streamProcessor.getClass().getSimpleName());
+						break;
+					}
+				}
+				pushbackInputStream.unread(input,0, read);
+				String streamProviderName = streamProvider.getName();
+				try {
+					int j = 0;
+					for (int i = pushbackInputStream.read();  i != -1 ; i = pushbackInputStream.read()) {
+						streamProcessor.readByte(i, streamProviderName);
+						if(j++ > 100) {
+							j = 0;
+							Thread.sleep(1);
+						}
+					}
+				} catch (Exception e) {
+					// exception during processing
+					if(!processingThread.interrupted()) {
+						Logger.getLogger(getClass()).error("Exception while reading input stream", e); //$NON-NLS-1$
+						BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
+						Collection<ServiceReference<INMEAReaderFailureNotifier>> serviceReferences = bundleContext.getServiceReferences(INMEAReaderFailureNotifier.class, null);
+						if(serviceReferences != null) {
+							for (ServiceReference<INMEAReaderFailureNotifier> serviceReference : serviceReferences) {
+								INMEAReaderFailureNotifier failureNotifier = bundleContext.getService(serviceReference);
+								failureNotifier.notify(streamProvider, e);
+								bundleContext.ungetService(serviceReference);
 							}
 						}
 					}
-					i = read();
-					break;
-				case '$':
-					stringBuffer = new StringBuffer();
-					stringBuffer.append((char) i);
-					i = read();
-					break;
-				case '!':
-					stringBuffer = new StringBuffer();
-					stringBuffer.append((char) i);
-					i = read();
-					break;
-				default :
-					if(stringBuffer != null) {
-						stringBuffer.append((char) i);
+					try {
+						close();
+					} catch (IOException e2) {
+						Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
 					}
-					i = read();
-					break;
 				}
-//				}
 			}
+		} catch (SocketTimeoutException e) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Timeout", "The source did not provide any data within the specified time. Check the cable connection or raise the timeout.");
+			Logger.getLogger(getClass()).error("Fail", e);
 		} catch (Exception e) {
-			// exception during processing
-			if(!processingThread.interrupted()) {
-				Logger.getLogger(getClass()).error("Exception while reading input stream", e); //$NON-NLS-1$
-				BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
-				Collection<ServiceReference<INMEAReaderFailureNotifier>> serviceReferences = bundleContext.getServiceReferences(INMEAReaderFailureNotifier.class, null);
-				if(serviceReferences != null) {
-					for (ServiceReference<INMEAReaderFailureNotifier> serviceReference : serviceReferences) {
-						INMEAReaderFailureNotifier failureNotifier = bundleContext.getService(serviceReference);
-						failureNotifier.notify(streamProvider, e);
-						bundleContext.ungetService(serviceReference);
-					}
-				}
-			}
-			try {
-				close();
-			} catch (IOException e2) {
-				Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
-			}
+			Logger.getLogger(getClass()).error("Fail", e);
 		}
 		return null;
 	}
 	
-//	private class ProcessorsTracker extends ServiceTracker<RawDataEventListener,RawDataEventListener> {
-//
-//		private static final String NMEA = "nmea"; //$NON-NLS-1$
-//		private static final String AIS = "ais"; //$NON-NLS-1$
-//		private static final String TYPE = "type"; //$NON-NLS-1$
-//
-//		public ProcessorsTracker(BundleContext context) {
-//			super(context, RawDataEventListener.class, null);
-//		}
-//		
-//		@Override
-//		public RawDataEventListener addingService(
-//				ServiceReference<RawDataEventListener> reference) {
-//			RawDataEventListener listener = super.addingService(reference);
-//			if(reference.getProperty(TYPE).equals(AIS)) {
-//				aisEventListeners.add(listener);
-//			} else if(reference.getProperty(TYPE).equals(NMEA)) {
-//				nmeaEventListeners.add(listener);
-//			}
-//			return listener; 
-//		}
-//		
-//		@Override
-//		public void removedService(
-//				ServiceReference<RawDataEventListener> reference,
-//				RawDataEventListener service) {
-//			if(reference.getProperty(TYPE).equals(AIS)) {
-//				aisEventListeners.add(service);
-//			} else if(reference.getProperty(TYPE).equals(NMEA)) {
-//				nmeaEventListeners.add(service);
-//			}
-//			super.removedService(reference, service);
-//		}
-//		
-//	}
-
-
 }
