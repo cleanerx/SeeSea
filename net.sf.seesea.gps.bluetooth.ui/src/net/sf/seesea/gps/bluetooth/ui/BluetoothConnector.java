@@ -110,7 +110,6 @@ public class BluetoothConnector implements INMEAConnector {
 		ThreadedSerialInputReader reader = null;
 		try {
 			DevicesPage iWizardPage = (DevicesPage) wizardPages.get(0);
-			BundleContext bundleContext = GPSBluetoothUIActivator.getDefault().getBundle().getBundleContext();
 			bluetoothInputStreamProvider = new BluetoothInputStreamProvider(iWizardPage.getServiceRecord());
 			reader = new ThreadedSerialInputReader(bluetoothInputStreamProvider);
 			// Trigger reading
