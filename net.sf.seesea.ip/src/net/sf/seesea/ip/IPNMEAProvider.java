@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
@@ -110,12 +109,13 @@ public class IPNMEAProvider implements INMEAConnector {
 		SelectHostPage selectHostPage = (SelectHostPage) wizardPages.get(0);
 		String host = selectHostPage.getHost();
 		int port = selectHostPage.getPort();
-		inputStreamProvider = new TCPIPInputStreamProvider(host, port);
+		int timeout = selectHostPage.getTimeout();
+		inputStreamProvider = new TCPIPInputStreamProvider(host, port, timeout);
 		try {
 			reader = new ThreadedSerialInputReader(inputStreamProvider);
 			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
 			ExecutorService es = Executors.newSingleThreadExecutor ();
-			Future<Void> submit = (Future<Void>) es.submit (futureTask);
+			es.submit (futureTask);
 		} catch (Exception e) {
 			if(reader != null) {
 				try {

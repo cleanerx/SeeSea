@@ -68,13 +68,16 @@ public class TCPIPInputStreamProvider implements INMEAStreamProvider {
 	private final String host;
 	private final int port;
 	private Socket socket;
+	private final int timeout;
 
 	/**
+	 * @param timeout 
 	 * 
 	 */
-	public TCPIPInputStreamProvider(String host, int port) {
+	public TCPIPInputStreamProvider(String host, int port, int timeout) {
 		this.host = host;
 		this.port = port;
+		this.timeout = timeout;
 	}
 	
 	/* (non-Javadoc)
@@ -83,7 +86,7 @@ public class TCPIPInputStreamProvider implements INMEAStreamProvider {
 	@Override
 	public InputStream getInputStream() throws IOException {
 		socket = new Socket(host, port);
-		socket.setSoTimeout(10000);
+		socket.setSoTimeout(timeout);
         return socket.getInputStream();
 	}
 
@@ -95,8 +98,10 @@ public class TCPIPInputStreamProvider implements INMEAStreamProvider {
 	@Override
 	public void close() throws IOException {
 		if(socket != null) {
-			socket.getInputStream().close();
-			socket.close();
+			if(!socket.isClosed()) {
+				socket.getInputStream().close();
+				socket.close();
+			}
 			socket = null;
 		}
 	}
