@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.services.navigation;
 
 import java.io.IOException;
-import java.io.PushbackInputStream;
+import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,7 +43,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -54,17 +53,13 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 	private static final String PROVIDER_TYPE = "provider"; //$NON-NLS-1$
 	
 	private static final String PROVIDER_NAME = "providerName"; //$NON-NLS-1$
-	
-//	private final List<RawDataEventListener> nmeaEventListeners;
-//	private List<RawDataEventListener> aisEventListeners;
 
 	private final INMEAStreamProvider streamProvider;
-	private ServiceRegistration<?> serviceRegistration;
 	private Thread processingThread;
 
 	private ServiceTracker<IStreamProcessor, IStreamProcessor> streamTracker;
 
-	private PushbackInputStream pushbackInputStream;
+	private InputStream pushbackInputStream;
 
 	/**
 	 * @param in
@@ -72,14 +67,12 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 	 * @throws IOException 
 	 */
 	public ThreadedSerialInputReader(INMEAStreamProvider nmeaStreamProvider) throws IOException {
-		pushbackInputStream = new PushbackInputStream(nmeaStreamProvider.getInputStream(), 2048);
+		pushbackInputStream = nmeaStreamProvider.getInputStream();
 		streamProvider = nmeaStreamProvider;
-//		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
-//		aisEventListeners = new ArrayList<RawDataEventListener>(1);
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
 		properties.put("hardware", true); //$NON-NLS-1$
 		properties.put(PROVIDER_NAME, nmeaStreamProvider.getName());
-		properties.put(PROVIDER_TYPE, "sensor");
+		properties.put(PROVIDER_TYPE, "sensor"); //$NON-NLS-1$
 		if(NavigationServicesActivator.getDefault() != null) {
 			BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
 //			serviceRegistration = bundleContext.registerService(INMEAReader.class.getName(), this, properties);
@@ -100,10 +93,6 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 		if(processingThread != null) {
 			processingThread.interrupt();
 		}
-//		if(serviceRegistration != null) {
-//			serviceRegistration.unregister();
-//			serviceRegistration = null;
-//		}
 		pushbackInputStream.close();
 		try {
 			streamProvider.close();
@@ -122,28 +111,75 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 			processingThread = Thread.currentThread();
 			Object[] services = streamTracker.getServices();
 			IStreamProcessor streamProcessor = null;
-			byte[] input = new byte[2048];
-			int read = pushbackInputStream.read(input, 0 ,2048);
+			int intialBytesToBeRead = 2048;
+			int[] input = new int[intialBytesToBeRead];
+			int x;
+			int k = 0;
+			Logger.getLogger(getClass()).info("Reading initial bytes for stream detection"); //$NON-NLS-1$
+			while((x = pushbackInputStream.read()) != -1) {
+				input[k] = x;
+				k++;
+				if(k >= intialBytesToBeRead) {
+					break;
+				}
+			}
 			if(services != null) {
 				for (Object object : services) {
 					IStreamProcessor currentStreamProcessor = (IStreamProcessor) object;
-					if(currentStreamProcessor.isValidStreamProcessor(Arrays.copyOfRange(input, 0, read))) {
+					if(currentStreamProcessor.isValidStreamProcessor(Arrays.copyOf(input,intialBytesToBeRead))) {
 						streamProcessor = currentStreamProcessor;
-						Logger.getLogger(getClass()).info("Detected provider" + streamProcessor.getClass().getSimpleName());
+						Logger.getLogger(getClass()).info("Detected provider: " + streamProcessor.getClass().getSimpleName()); //$NON-NLS-1$
 						break;
 					}
 				}
-				pushbackInputStream.unread(input,0, read);
 				String streamProviderName = streamProvider.getName();
+				if(streamProcessor == null) {
+					Display.getDefault().asyncExec(new Runnable() {
+						
+						@Override
+						public void run() {
+							MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.noProvider"), Messages.getString("ThreadedSerialInputReader.invalidStream")); //$NON-NLS-1$ //$NON-NLS-2$
+						}
+					});
+							
+					try {
+						close();
+					} catch (IOException e2) {
+						Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
+					}
+					return null;
+				}
 				try {
 					int j = 0;
+					boolean continueProcessing = true;
 					for (int i = pushbackInputStream.read();  i != -1 ; i = pushbackInputStream.read()) {
-						streamProcessor.readByte(i, streamProviderName);
+						continueProcessing = streamProcessor.readByte(i, streamProviderName);
+						if(!continueProcessing) {
+							break;
+						}
 						if(j++ > 100) {
 							j = 0;
 							Thread.sleep(1);
 						}
 					}
+					if(!continueProcessing) {
+						Display.getDefault().asyncExec(new Runnable() {
+							
+							@Override
+							public void run() {
+								MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.processingStopped"), Messages.getString("ThreadedSerialInputReader.stop1")); //$NON-NLS-1$ //$NON-NLS-2$
+							}
+						});
+					} else {
+						Display.getDefault().asyncExec(new Runnable() {
+							
+							@Override
+							public void run() {
+								MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.processingStopped"), Messages.getString("ThreadedSerialInputReader.stop2")); //$NON-NLS-1$ //$NON-NLS-2$
+							}
+						});
+					}
+
 				} catch (Exception e) {
 					// exception during processing
 					if(!processingThread.interrupted()) {
@@ -166,10 +202,16 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 				}
 			}
 		} catch (SocketTimeoutException e) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), "Timeout", "The source did not provide any data within the specified time. Check the cable connection or raise the timeout.");
-			Logger.getLogger(getClass()).error("Fail", e);
+			Display.getDefault().asyncExec(new Runnable() {
+				
+				@Override
+				public void run() {
+					MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.timeout"), Messages.getString("ThreadedSerialInputReader.nodata")); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			});
+			Logger.getLogger(getClass()).error("Fail", e); //$NON-NLS-1$
 		} catch (Exception e) {
-			Logger.getLogger(getClass()).error("Fail", e);
+			Logger.getLogger(getClass()).error("Fail", e); //$NON-NLS-1$
 		}
 		return null;
 	}

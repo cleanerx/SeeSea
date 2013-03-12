@@ -138,11 +138,6 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 		nmeaEventListeners.remove(nmeaEventListener);
 	}
 
-	@Override
-	public void close() throws IOException {
-		// TODO Auto-generated method stub
-	}
-	
 	public void pause() {
 		_paused = true;
 	}

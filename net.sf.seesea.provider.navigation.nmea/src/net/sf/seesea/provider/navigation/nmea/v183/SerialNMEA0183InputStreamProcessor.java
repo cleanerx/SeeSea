@@ -49,13 +49,16 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 
 	private List<RawDataEventListener> aisEventListeners;
 	
+	private boolean processData;
+	
 	public SerialNMEA0183InputStreamProcessor() {
 		stringBuffer = null;	
 		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
 		aisEventListeners = new ArrayList<RawDataEventListener>(1);
 	}
  
-	public boolean isValidStreamProcessor(byte[] buf) throws NMEAProcessingException {
+	public boolean isValidStreamProcessor(int[] buf) throws NMEAProcessingException {
+		processData = true;
 		NMEA0183StreamDetector nmea0183StreamDetector = new NMEA0183StreamDetector();
 		nmeaEventListeners.add(nmea0183StreamDetector);
 		aisEventListeners.add(nmea0183StreamDetector);
@@ -68,7 +71,7 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		
 	}
 	
-	public void readByte(int i, String streamProvider) throws NMEAProcessingException {
+	public boolean readByte(int i, String streamProvider) throws NMEAProcessingException {
 		switch (i) {
 		case '\n':
 			if(stringBuffer != null) {
@@ -102,6 +105,7 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 			}
 			break;
 		}
+		return processData;
 	}
 
 	/**
@@ -138,8 +142,8 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 
 	@Override
 	public void close() throws IOException {
-		// TODO Auto-generated method stub
-		
+		processData = false;
+//		Thread.currentThread().interrupt();
 	}
 	
 	

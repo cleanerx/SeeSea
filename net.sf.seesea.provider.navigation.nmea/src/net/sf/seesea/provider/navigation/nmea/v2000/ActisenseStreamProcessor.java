@@ -65,6 +65,8 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 
 	private List<INMEA2000Listener> listeners;
 
+	private boolean processData;
+	
 	public ActisenseStreamProcessor() {
 		state = MessageProcessingState.MESSAGE_START;
 		counter = 0;
@@ -74,7 +76,7 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 	/**
 	 * assembles the nmea 2000 message
 	 */
-	public void readByte(int c, String providerName) {
+	public boolean readByte(int c, String providerName) {
 		if (state.equals(MessageProcessingState.MESSAGE_START)) {
 			if ((c == 0x1B) && isFile) {
 				noEscape = true;
@@ -106,6 +108,7 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 				state = MessageProcessingState.MESSAGE_ESACPE;
 			}
 		}
+		return processData;
 	}
 
 	public void messageReceived(int[] is) {
@@ -130,13 +133,14 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 		
 	}
 	
-	public boolean isValidStreamProcessor(byte[] buffer) throws NMEAProcessingException {
+	public boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException {
+		processData = true; 
 		List<INMEA2000Listener> list = new ArrayList<INMEA2000Listener>(listeners);
 		listeners.removeAll(list);
 		NMEA2000StreamDetector detector = new NMEA2000StreamDetector();
 		addNMEA2000Listener(detector);
 		for (int i : buffer) {
-			readByte(i & 0xFF, "none"); //$NON-NLS-1$
+			readByte(i, "none"); //$NON-NLS-1$
 		}
 		removeNMEA2000Listener(detector);
 		listeners.addAll(list);
@@ -166,6 +170,12 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 				actisense.readByte(c, "none");
 			}
 		}
+	}
+
+	@Override
+	public void close() throws IOException {
+		processData = false;
+//		Thread.currentThread().interrupt();
 	}
 
 	

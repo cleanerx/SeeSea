@@ -28,9 +28,10 @@
 package net.sf.seesea.nmea.rcp.handler;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import net.sf.seesea.nmea.rcp.NMEARCPActivator;
-import net.sf.seesea.services.navigation.INMEAReader;
+import net.sf.seesea.services.navigation.IStreamProcessor;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.AbstractHandler;
@@ -48,6 +49,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.handlers.RegistryToggleState;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 public class ToggleLogEnablementHandler extends AbstractHandler {
@@ -86,24 +88,31 @@ public class ToggleLogEnablementHandler extends AbstractHandler {
 		} else if (!(Boolean) state.getValue()) {
 			BundleContext bundleContext = NMEARCPActivator.getDefault()
 					.getBundle().getBundleContext();
-			ServiceReference<INMEAReader> serviceReference = bundleContext
-					.getServiceReference(INMEAReader.class);
-			if (serviceReference != null) {
-				INMEAReader reader = bundleContext.getService(serviceReference);
-				try {
-					reader.close();
-				} catch (IOException e) {
-					Logger.getLogger(getClass()).error(
-							"Failed to close reader", e); //$NON-NLS-1$
+			Collection<ServiceReference<IStreamProcessor>> serviceReferences;
+			try {
+				serviceReferences = bundleContext
+						.getServiceReferences(IStreamProcessor.class, null);
+				if(serviceReferences != null) {
+					for (ServiceReference<IStreamProcessor> serviceReference2 : serviceReferences) {
+						IStreamProcessor reader = bundleContext.getService(serviceReference2);
+						try {
+							reader.close();
+						} catch (IOException e) {
+							Logger.getLogger(getClass()).error(
+									"Failed to close reader", e); //$NON-NLS-1$
+						}
+					}
+					if ((Boolean) state.getValue()) {
+						HandlerUtil.toggleCommandState(command);
+					}
+				} else {
+					
+					if ((Boolean) state.getValue()) {
+						HandlerUtil.toggleCommandState(command);
+					}
 				}
-				if ((Boolean) state.getValue()) {
-					HandlerUtil.toggleCommandState(command);
-				}
-			} else {
-
-				if ((Boolean) state.getValue()) {
-					HandlerUtil.toggleCommandState(command);
-				}
+			} catch (InvalidSyntaxException e1) {
+				Logger.getLogger(getClass()).error("Failed filter syntax", e1); //$NON-NLS-1$
 			}
 		}
 		return null;

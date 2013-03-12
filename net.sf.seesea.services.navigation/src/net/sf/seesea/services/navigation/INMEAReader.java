@@ -1,6 +1,5 @@
 package net.sf.seesea.services.navigation;
 
-import java.io.IOException;
 
 public interface INMEAReader {
 
@@ -12,5 +11,4 @@ public interface INMEAReader {
 	
 	void removeAISEventListener(RawDataEventListener nmeaEventListener);
 
-	void close() throws IOException;
 }
