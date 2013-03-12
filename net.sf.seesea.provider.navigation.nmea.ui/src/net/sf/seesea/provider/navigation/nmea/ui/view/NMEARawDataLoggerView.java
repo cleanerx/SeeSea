@@ -38,6 +38,8 @@ import net.sf.seesea.services.navigation.INMEAReader;
 import net.sf.seesea.services.navigation.RawDataEventListener;
 import net.sf.seesea.services.navigation.NMEAProcessingException;
 import net.sf.seesea.services.navigation.RawDataEvent;
+import nl.esi.metis.aisparser.AISMessage;
+import nl.esi.metis.aisparser.HandleAISMessage;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.State;
@@ -52,19 +54,21 @@ import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * 
  */
-public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListener {
+public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListener, HandleAISMessage {
 
 	private ServiceTracker<INMEAReader,INMEAReader> serviceTracker;
 	private final List<String> messages;
 	private TableViewer listViewer;
 
 	private long lastUpdate = System.currentTimeMillis();
+	private ServiceRegistration<HandleAISMessage> serviceRegistration;
 	
 	/**
 	 * 
@@ -81,12 +85,13 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 		listViewer = new TableViewer(arg0, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		listViewer.setContentProvider(new NMEADataContentProvider());
 		TableViewerColumn column = new TableViewerColumn(listViewer, SWT.NONE);
-		column.getColumn().setWidth(400);
+		column.getColumn().setWidth(800);
 		column.setLabelProvider(new NMEAColumnLabelProvider());
 
 		// hmm service listener
 		final BundleContext bundleContext = NMEAUIActivator.getDefault().getBundle().getBundleContext();
 		
+		serviceRegistration = bundleContext.registerService(HandleAISMessage.class, this, null);
 		serviceTracker = new ServiceTracker<INMEAReader,INMEAReader>(bundleContext, INMEAReader.class, new ServiceTrackerCustomizer<INMEAReader,INMEAReader>() {
 			
 			@Override
@@ -94,6 +99,7 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 				if(arg1 instanceof INMEAReader) {
 					INMEAReader nmeaReader = (INMEAReader) arg1;
 					nmeaReader.removeNMEAEventListener(NMEARawDataLoggerView.this);
+//					nmeaReader.removeAISEventListener(NMEARawDataLoggerView.this);
 				}
 			}
 			
@@ -106,6 +112,7 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 			public INMEAReader addingService(ServiceReference<INMEAReader> serviceReference) {
 				INMEAReader nmeaReader = (INMEAReader) bundleContext.getService(serviceReference);
 				nmeaReader.addNMEAEventListener(NMEARawDataLoggerView.this);
+//				nmeaReader.addAISEventListener(NMEARawDataLoggerView.this);
 				return nmeaReader;
 			}
 		});
@@ -128,6 +135,7 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 	@Override
 	public void dispose() {
 		serviceTracker.close();
+		serviceRegistration.unregister();
 		super.dispose();
 	}
 
@@ -170,6 +178,37 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 	public void disable() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void handleAISMessage(AISMessage message) {
+		if(messages.size() > 10000) {
+			while (messages.size() > 9999) {
+				messages.remove(9999);
+			}
+		}
+		// log or don't log ! state of the command
+		ICommandService service = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
+		Command command = service.getCommand("net.sf.seesea.provider.navigation.nmea.ui.toggleRawLog"); //$NON-NLS-1$
+		State state = command.getState(RegistryToggleState.STATE_ID);
+		if(state.getValue().equals(true)) {
+			String nmeaMessageContent = message.toString();
+			if(nmeaMessageContent != null && !nmeaMessageContent.isEmpty()) {
+				nmeaMessageContent = nmeaMessageContent.replaceAll("\\r\\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				messages.add(0, nmeaMessageContent);
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						// limit update rate in case of many events
+						if(System.currentTimeMillis() - lastUpdate > 1000) {
+							listViewer.refresh(true);
+							lastUpdate = System.currentTimeMillis();
+						}
+					}
+				});
+			}
+		}
 	}
 
 }
