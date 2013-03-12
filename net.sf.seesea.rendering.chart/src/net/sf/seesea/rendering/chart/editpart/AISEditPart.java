@@ -80,33 +80,52 @@ public class AISEditPart extends AbstractGraphicalEditPart {
 			if(positionReport instanceof AISMessagePositionReport) {
 				AISMessagePositionReport positionReport2 = (AISMessagePositionReport)positionReport;
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.append("COG: ");
+				stringBuilder.append(Messages.getString("AISEditPart.mmsi")); //$NON-NLS-1$
+				stringBuilder.append(positionReport2.getUserID());
+				stringBuilder.append("\n"); //$NON-NLS-1$
+				stringBuilder.append(Messages.getString("AISEditPart.cog")); //$NON-NLS-1$
 				stringBuilder.append(positionReport2.getCourseOverGround() / 10.0);
 				
 				((ShipFigure)getFigure()).setCOGOrientation(positionReport2.getCourseOverGround() / 10.0);
 				
-				stringBuilder.append("\u00B0\n");
-				stringBuilder.append("SOG: ");
+				stringBuilder.append("\u00B0"); //$NON-NLS-1$
+				stringBuilder.append("\n"); //$NON-NLS-1$
+				stringBuilder.append(Messages.getString("AISEditPart.sog")); //$NON-NLS-1$
 				stringBuilder.append(positionReport2.getSpeedOverGround() / 10.0);
-				stringBuilder.append("kn\n");
-				stringBuilder.append("State:");
+				stringBuilder.append(Messages.getString("AISEditPart.knots")); //$NON-NLS-1$
+				stringBuilder.append("\n"); //$NON-NLS-1$
+				stringBuilder.append(Messages.getString("AISEditPart.state")); //$NON-NLS-1$
 				stringBuilder.append(UtilsNavStatus.toString(positionReport2.getNavigationalStatus()));
 				if(positionReport2.getRateOfTurn() != 128) {
-					stringBuilder.append("\n");
-					stringBuilder.append("Rate of turn:");
-					stringBuilder.append(positionReport2.getRateOfTurn());
-					tooltipLabel.setText(stringBuilder.toString());
+					int rateOfTurn = positionReport2.getRateOfTurn();
+					if(rateOfTurn != -128) {
+						stringBuilder.append("\n"); //$NON-NLS-1$
+						stringBuilder.append(Messages.getString("AISEditPart.rateofturn")); //$NON-NLS-1$
+						if(rateOfTurn == -127) {
+							stringBuilder.append("< 5\u00B0 / 30sec"); //$NON-NLS-1$
+						} else if(rateOfTurn == 127) {
+							stringBuilder.append("> 5\u00B0 / 30sec"); //$NON-NLS-1$
+						} else {
+							stringBuilder.append(Math.sqrt(rateOfTurn) * 4.733);
+							stringBuilder.append("\u00B0/min"); //$NON-NLS-1$
+						}
+					}
 				}
+				tooltipLabel.setText(stringBuilder.toString());
 			} else if(positionReport instanceof AISMessageClassBPositionReport) {
 				AISMessageClassBPositionReport classBPositionReport = (AISMessageClassBPositionReport) positionReport;
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.append("COG: ");
+				stringBuilder.append(Messages.getString("AISEditPart.mmsi")); //$NON-NLS-1$
+				stringBuilder.append(classBPositionReport.getUserID());
+				stringBuilder.append("\n"); //$NON-NLS-1$
+				stringBuilder.append(Messages.getString("AISEditPart.cog")); //$NON-NLS-1$
 				stringBuilder.append(classBPositionReport.getCourseOverGround() / 10.0);
 				((ShipFigure)getFigure()).setCOGOrientation(classBPositionReport.getCourseOverGround() / 10.0);
-				stringBuilder.append("\u00B0\n");
-				stringBuilder.append("SOG: ");
+				stringBuilder.append("\u00B0"); //$NON-NLS-1$
+				stringBuilder.append("\n"); //$NON-NLS-1$
+				stringBuilder.append(Messages.getString("AISEditPart.sog")); //$NON-NLS-1$
 				stringBuilder.append(classBPositionReport.getSpeedOverGround() / 10.0);
-				stringBuilder.append("kn");
+				stringBuilder.append(Messages.getString("AISEditPart.knots")); //$NON-NLS-1$
 				tooltipLabel.setText(stringBuilder.toString());
 			}
 //			System.out.println(latitude2Value + ":" + longitude2Value);

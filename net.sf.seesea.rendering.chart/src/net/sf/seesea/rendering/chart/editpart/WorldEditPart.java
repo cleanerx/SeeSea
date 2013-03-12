@@ -408,20 +408,26 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 								if(aisMessage instanceof AISMessagePositionReport) {
 									AISMessagePositionReport aisMessagePositionReport = (AISMessagePositionReport) aisMessage;
 									int navState = aisMessagePositionReport.getNavigationalStatus();
-									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_POSITION_UPDATE_RATE + 2000) && (navState == 0 || navState == 3 || navState == 4 || navState == 7 || navState == 8)) {
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_POSITION_UPDATE_RATE + 10000) && (navState == 0 || navState == 3 || navState == 4 || navState == 7 || navState == 8)) {
+//										System.out.println(aisMessage);
 										removePosition(iterator);
-									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 2000) && (navState == 1 || navState == 2 || navState == 5 || navState == 6)) {
+									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 5000) && (navState == 1 || navState == 2 || navState == 5 || navState == 6)) {
+//										System.out.println(aisMessage);
 										removePosition(iterator);
-									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 2000)) {
+									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 5000)) {
+//										System.out.println(aisMessage);
 										removePosition(iterator);
 									}
 								} else if(aisMessage instanceof AISMessageClassBPositionReport) {
-									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 2000)) {
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 5000)) {
+//										System.out.println(aisMessage);
 										removePosition(iterator);
 									}
 								} else {
 //									System.out.println(aisMessage);
-									removePosition(iterator);
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 5000)) {
+										removePosition(iterator);
+									}
 								}
 							}
 						}
