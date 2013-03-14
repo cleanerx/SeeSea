@@ -110,25 +110,25 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 		try {
 			processingThread = Thread.currentThread();
 			Object[] services = streamTracker.getServices();
-			IStreamProcessor streamProcessor = null;
-			int intialBytesToBeRead = 2048;
-			int[] input = new int[intialBytesToBeRead];
-			int x;
-			int k = 0;
-			Logger.getLogger(getClass()).info("Reading initial bytes for stream detection"); //$NON-NLS-1$
-			while((x = pushbackInputStream.read()) != -1) {
-				input[k] = x;
-				k++;
-				if(k >= intialBytesToBeRead) {
-					break;
-				}
-			}
 			if(services != null) {
-				for (Object object : services) {
-					IStreamProcessor currentStreamProcessor = (IStreamProcessor) object;
-					if(currentStreamProcessor.isValidStreamProcessor(Arrays.copyOf(input,intialBytesToBeRead))) {
-						streamProcessor = currentStreamProcessor;
-						Logger.getLogger(getClass()).info("Detected provider: " + streamProcessor.getClass().getSimpleName()); //$NON-NLS-1$
+				IStreamProcessor streamProcessor = null;
+				int intialBytesToBeRead = 16384;
+				int[] input = new int[intialBytesToBeRead];
+				int x;
+				int k = 0;
+				Logger.getLogger(getClass()).info("Reading initial bytes for stream detection"); //$NON-NLS-1$
+				streamcheck : while((x = pushbackInputStream.read()) != -1) {
+					input[k] = x;
+					k++;
+					for (Object object : services) {
+						IStreamProcessor currentStreamProcessor = (IStreamProcessor) object;
+						if(currentStreamProcessor.isValidStreamProcessor(Arrays.copyOf(input,k))) {
+							streamProcessor = currentStreamProcessor;
+							Logger.getLogger(getClass()).info("Detected provider: " + streamProcessor.getClass().getSimpleName()); //$NON-NLS-1$
+							break streamcheck;
+						}
+					}
+					if(k >= intialBytesToBeRead) {
 						break;
 					}
 				}
