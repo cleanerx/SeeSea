@@ -37,11 +37,14 @@ import net.sf.seesea.tileservice.ITileProvider;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
@@ -154,6 +157,16 @@ public class MapLayer extends FreeformLayer {
 		} catch (InvalidSyntaxException e) {
 			Logger.getLogger(getClass()).error("Failed to set filter", e); //$NON-NLS-1$
 		}
+		Font font2 = new Font(Display.getDefault(),"Arial", 8, SWT.BOLD);  //$NON-NLS-1$
+		g.setFont(font2);
+		String text = "\u00A9 OpenStreetMap contributors"; //$NON-NLS-1$
+		Dimension textExtents = FigureUtilities.getTextExtents(text, font2);
+		textExtents.negate();
+		Rectangle clip = g.getClip(new Rectangle());
+		clip.expand(textExtents.width, textExtents.height);
+		g.drawText(text , clip.getBottomRight());
+		font2.dispose();
+
 	}
 	
 	
