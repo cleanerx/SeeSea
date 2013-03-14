@@ -7,13 +7,16 @@ import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.figures.ShipFigure;
 import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 import net.sf.seesea.tileservice.projections.IMapProjection;
+import nl.esi.metis.aisparser.AISMessage04;
 import nl.esi.metis.aisparser.AISMessageClassBPositionReport;
 import nl.esi.metis.aisparser.AISMessagePositionReport;
 import nl.esi.metis.aisparser.PositionInfo;
 import nl.esi.metis.aisparser.UtilsNavStatus;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.osgi.framework.BundleContext;
@@ -28,10 +31,17 @@ public class AISEditPart extends AbstractGraphicalEditPart {
 
 	@Override
 	protected IFigure createFigure() {
-		ShipFigure _figure = new ShipFigure();
-		tooltipLabel = new Label(""); //$NON-NLS-1$
-		_figure.setToolTip(tooltipLabel);
-		return _figure;
+		if(((AISMessageTime)getModel()).getPosition() instanceof AISMessage04) {
+			RoundedRectangle _figure = new RoundedRectangle();
+			_figure.setForegroundColor(ColorConstants.red);
+			_figure.setFill(false);
+			return _figure;
+		} else {
+			ShipFigure _figure = new ShipFigure();
+			tooltipLabel = new Label(""); //$NON-NLS-1$
+			_figure.setToolTip(tooltipLabel);
+			return _figure;
+		}
 	}
 
 	@Override
