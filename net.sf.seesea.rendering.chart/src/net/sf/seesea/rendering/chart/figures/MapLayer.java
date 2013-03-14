@@ -81,7 +81,7 @@ public class MapLayer extends FreeformLayer {
 				xxx.add(serviceReference);
 			}
 			if(serviceReferences == null) {
-				g.drawText("The tile provider is unavailable. Change the preferences to point to an appropriate URL", 10, 10);
+				g.drawText(Messages.getString("MapLayer.tileUnavailable"), 10, 10); //$NON-NLS-1$
 			} else {
 				List<ImagePosition> imagePositions = new ArrayList<MapLayer.ImagePosition>(20);
 				for (ServiceReference<?> serviceReference : xxx) {
