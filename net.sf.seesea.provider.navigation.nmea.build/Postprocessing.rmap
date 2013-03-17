@@ -17,8 +17,6 @@
             </rm:uri>
     </rm:provider>
   </rm:searchPath>
-  <rm:searchPath name="localSVN">
-  </rm:searchPath>
   <rm:searchPath name="default">
     <rm:provider componentTypes="eclipse.feature,osgi.bundle,buckminster" readerType="svn" resolutionFilter="">
       <rm:uri format="http://svn.code.sf.net/p/seesea/code/trunk/{0}">
