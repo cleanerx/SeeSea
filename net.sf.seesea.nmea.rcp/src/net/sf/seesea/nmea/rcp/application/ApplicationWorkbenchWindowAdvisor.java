@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -64,6 +65,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public void preWindowOpen() {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 //        configurer.setInitialSize(new Point(2000, 2000));
+        PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR, IWorkbenchPreferenceConstants.TOP_RIGHT);
         
         configurer.setTitle(MessageFormat.format(Messages.getString("ApplicationWorkbenchWindowAdvisor.title"), VERSION) ); //$NON-NLS-1$
         configurer.setShowMenuBar(false);

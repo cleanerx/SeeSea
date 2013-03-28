@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -246,10 +246,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	  protected void addPerspectiveActions(MenuManager menu) {
 		    addOpenPerspectiveActions(menu);
 		    menu.add(new Separator());
-		    menu.add(savePerspectiveAction);
+//		    menu.add(savePerspectiveAction);
 		    menu.add(resetPerspectiveAction);
-		    menu.add(closePerspAction);
-		    menu.add(closeAllPerspsAction);
+//		    menu.add(closePerspAction);
+//		    menu.add(closeAllPerspsAction);
 		  }
 
 	  
