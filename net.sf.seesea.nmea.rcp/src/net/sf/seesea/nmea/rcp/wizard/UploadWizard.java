@@ -129,7 +129,7 @@ public class UploadWizard extends Wizard {
 				}
 			});
 			} catch (MalformedURLException e) {
-				Logger.getLogger(getClass()).error("Failed URL", e);
+				Logger.getLogger(getClass()).error("Failed URL", e); //$NON-NLS-1$
 			} catch (IOException e) {
 				Logger.getLogger(UploadWizard.class).error(
 						"Failed to read configuration file for service", e); //$NON-NLS-1$
