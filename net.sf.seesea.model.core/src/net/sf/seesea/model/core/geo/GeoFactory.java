@@ -158,6 +158,15 @@ public interface GeoFactory extends EFactory {
 	GNSSMeasuredPosition createGNSSMeasuredPosition();
 
 	/**
+	 * Returns a new object of class '<em>Anchor Position</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Anchor Position</em>'.
+	 * @generated
+	 */
+	AnchorPosition createAnchorPosition();
+
+	/**
 	 * Returns a new object of class '<em>Chart Container</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

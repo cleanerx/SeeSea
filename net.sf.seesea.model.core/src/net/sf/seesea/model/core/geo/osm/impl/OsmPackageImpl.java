@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -234,6 +234,15 @@ public class OsmPackageImpl extends EPackageImpl implements OsmPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getWorld_AnchorPosition() {
+		return (EReference)worldEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public OsmFactory getOsmFactory() {
 		return (OsmFactory)getEFactoryInstance();
 	}
@@ -265,6 +274,7 @@ public class OsmPackageImpl extends EPackageImpl implements OsmPackage {
 		worldEClass = createEClass(WORLD);
 		createEAttribute(worldEClass, WORLD__LONGITUDE_SCALE);
 		createEAttribute(worldEClass, WORLD__LATITUDE_SCALE);
+		createEReference(worldEClass, WORLD__ANCHOR_POSITION);
 	}
 
 	/**
@@ -311,6 +321,7 @@ public class OsmPackageImpl extends EPackageImpl implements OsmPackage {
 		initEClass(worldEClass, World.class, "World", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWorld_LongitudeScale(), ecorePackage.getEBoolean(), "longitudeScale", "true", 0, 1, World.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getWorld_LatitudeScale(), ecorePackage.getEBoolean(), "latitudeScale", "true", 0, 1, World.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getWorld_AnchorPosition(), theGeoPackage.getAnchorPosition(), null, "anchorPosition", null, 0, 1, World.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 	}
 
 } //OsmPackageImpl

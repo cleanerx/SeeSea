@@ -1,10 +1,7 @@
 package net.sf.seesea.rendering.chart.tools;
 
-import java.rmi.activation.ActivateFailedException;
-
 import org.eclipse.gef.internal.GEFMessages;
 import org.eclipse.gef.palette.ToolEntry;
-import org.eclipse.jface.resource.ImageDescriptor;
 
 public class Cache2ToolEntry extends ToolEntry {
 

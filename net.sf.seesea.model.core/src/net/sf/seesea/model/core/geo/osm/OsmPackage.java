@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -277,13 +277,22 @@ public interface OsmPackage extends EPackage {
 	int WORLD__LATITUDE_SCALE = AREA_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Anchor Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORLD__ANCHOR_POSITION = AREA_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>World</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORLD_FEATURE_COUNT = AREA_FEATURE_COUNT + 2;
+	int WORLD_FEATURE_COUNT = AREA_FEATURE_COUNT + 3;
 
 
 	/**
@@ -360,6 +369,17 @@ public interface OsmPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getWorld_LatitudeScale();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link net.sf.seesea.model.core.geo.osm.World#getAnchorPosition <em>Anchor Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Anchor Position</em>'.
+	 * @see net.sf.seesea.model.core.geo.osm.World#getAnchorPosition()
+	 * @see #getWorld()
+	 * @generated
+	 */
+	EReference getWorld_AnchorPosition();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -442,6 +462,14 @@ public interface OsmPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute WORLD__LATITUDE_SCALE = eINSTANCE.getWorld_LatitudeScale();
+
+		/**
+		 * The meta object literal for the '<em><b>Anchor Position</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference WORLD__ANCHOR_POSITION = eINSTANCE.getWorld_AnchorPosition();
 
 	}
 

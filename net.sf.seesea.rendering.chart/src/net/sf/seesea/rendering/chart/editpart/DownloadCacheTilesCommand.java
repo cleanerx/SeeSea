@@ -37,33 +37,38 @@ public class DownloadCacheTilesCommand extends Command {
 						InterruptedException {
 					HttpClient httpClient = new HttpClient();
 					try {
-						GetMethod method = new GetMethod(url);
-						int executeMethod = httpClient.executeMethod(method);
-						long fileSize = method.getResponseContentLength();
-						ZipInputStream zis = new ZipInputStream(method.getResponseBodyAsStream());
-						ZipEntry entry;
-						while ((entry = zis.getNextEntry()) != null) {
-			                System.out.println("Unzipping: " + entry.getName());
-			 
-			                int size;
-			                byte[] buffer = new byte[16384];
-			 
-			                // FIXME: base cache directory
+						if(url.toLowerCase().endsWith(".zip")) {
+							GetMethod method = new GetMethod(url);
+							int executeMethod = httpClient.executeMethod(method);
+							long fileSize = method.getResponseContentLength();
+							ZipInputStream zis = new ZipInputStream(method.getResponseBodyAsStream());
+							ZipEntry entry;
+							while ((entry = zis.getNextEntry()) != null) {
+								System.out.println("Unzipping: " + entry.getName());
+								
+								int size;
+								byte[] buffer = new byte[16384];
+								
+								// FIXME: base cache directory
 //			                new File()
-			                FileOutputStream fos = new FileOutputStream(entry.getName());
-			                BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
-			 
-			                if(monitor.isCanceled()) {
-				                bos.flush();
-				                bos.close();
-				                return;
-			                }
-			                while ((size = zis.read(buffer, 0, buffer.length)) != -1) {
-			                    bos.write(buffer, 0, size);
-			                }
-			                bos.flush();
-			                bos.close();
-			            }
+								FileOutputStream fos = new FileOutputStream(entry.getName());
+								BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
+								
+								if(monitor.isCanceled()) {
+									bos.flush();
+									bos.close();
+									return;
+								}
+								while ((size = zis.read(buffer, 0, buffer.length)) != -1) {
+									bos.write(buffer, 0, size);
+								}
+								bos.flush();
+								bos.close();
+							}
+						} else {
+							
+						}
+						
 					} catch (HttpException e) {
 						e.printStackTrace();
 					} catch (IOException e) {

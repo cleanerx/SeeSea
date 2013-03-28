@@ -24,45 +24,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.rendering.chart.commands;
+package net.sf.seesea.rendering.chart.factory;
 
 import net.sf.seesea.model.core.geo.AnchorPosition;
-import net.sf.seesea.model.core.geo.osm.World;
+import net.sf.seesea.model.core.geo.GeoFactory;
+import net.sf.seesea.model.core.geo.NamedPosition;
 
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.gmf.runtime.common.core.command.CommandResult;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.gef.requests.CreationFactory;
 
 /**
  * 
  */
-public class AddPositionToAreaCommand extends CreateCommand {
+public class CreationFactoryImplementation implements CreationFactory {
 	
-	private final AnchorPosition position;
-	private final World world;
+	private final Class clazz;
 
 	/**
-	 * @param editingDomain
-	 * @param viewDescriptor
-	 * @param containerView
+	 * 
 	 */
-	public AddPositionToAreaCommand(TransactionalEditingDomain editingDomain, World world, AnchorPosition position) {
-		super(editingDomain, "Create Anchor Position", world);
-		this.world = world;
-		this.position = position;
-//		System.out.println("anchorpos");
+	public CreationFactoryImplementation(Class clazz) {
+		this.clazz = clazz;
+	}
+	
+	public Object getObjectType() {
+		return clazz;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand#doExecuteWithResult(org.eclipse.core.runtime.IProgressMonitor, org.eclipse.core.runtime.IAdaptable)
-	 */
-	@Override
-	protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
-			throws ExecutionException {
-		world.setAnchorPosition(position);
-		return CommandResult.newOKCommandResult(position);
+	public Object getNewObject() {
+		AnchorPosition anchorPosition = GeoFactory.eINSTANCE.createAnchorPosition();
+//		NamedPosition namedPosition = GeoFactory.eINSTANCE.createNamedPosition();
+//		namedPosition.setName("New Position");
+//		namedPosition.setLatitude(GeoFactory.eINSTANCE.createLatitude());
+//		namedPosition.setLongitude(GeoFactory.eINSTANCE.createLongitude());
+		return anchorPosition;
 	}
-
 }

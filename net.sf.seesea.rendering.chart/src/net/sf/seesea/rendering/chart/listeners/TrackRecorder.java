@@ -102,13 +102,13 @@ public class TrackRecorder implements IPositionListener {
 		List<Track> routes = world.getTracksContainer().getTracks();
 		Track currentTrack = routes.get(routes.size() - 1);
 
-		AddPositionToAreaCommand createPositionCommand = new AddPositionToAreaCommand((TransactionalEditingDomain) domainProvider.getEditingDomain(), currentTrack, sensorData);
-		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-		try {
-			IStatus status = operationHistory.execute(createPositionCommand, new NullProgressMonitor(), null);
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
+//		AddPositionToAreaCommand createPositionCommand = new AddPositionToAreaCommand((TransactionalEditingDomain) domainProvider.getEditingDomain(), currentTrack, sensorData);
+//		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
+//		try {
+//			IStatus status = operationHistory.execute(createPositionCommand, new NullProgressMonitor(), null);
+//		} catch (ExecutionException e) {
+//			e.printStackTrace();
+//		}
 //		currentRoute.getWaypoints().add(e)
 	}
 

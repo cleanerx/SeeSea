@@ -58,7 +58,7 @@ import org.eclipse.gef.tools.TargetingTool;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
 
-public class CacheMarqueeSelectionTool2 extends TargetingTool {
+public class CacheMarqueeSelectionTool2 extends ChartSelectionTool {
 
 	private Request hoverRequest;
 

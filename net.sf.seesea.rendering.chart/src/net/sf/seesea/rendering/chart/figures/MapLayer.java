@@ -166,7 +166,7 @@ public class MapLayer extends FreeformLayer {
 		clip.expand(textExtents.width, textExtents.height);
 		g.drawText(text , clip.getBottomRight());
 		font2.dispose();
-
+//		System.out.println("paint");
 	}
 	
 	

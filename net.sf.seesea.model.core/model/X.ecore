@@ -143,6 +143,10 @@
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="vdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="pdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
             </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="AnchorPosition" eSuperTypes="#//sf/seesea/model/core/geo/GeoPosition">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="xExtent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="yExtent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            </eClassifiers>
             <eSubpackages name="osm" nsURI="osm" nsPrefix="osm">
               <eClassifiers xsi:type="ecore:EClass" name="Area" eSuperTypes="#//sf/seesea/model/core/geo/Chart #//sf/seesea/model/core/geo/NavigationCompound">
                 <eStructuralFeatures xsi:type="ecore:EAttribute" name="zoomLevel"
@@ -160,6 +164,8 @@
                 <eStructuralFeatures xsi:type="ecore:EAttribute" name="latitudeScale"
                     eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
                     defaultValueLiteral="true"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="anchorPosition"
+                    eType="#//sf/seesea/model/core/geo/AnchorPosition" containment="true"/>
               </eClassifiers>
             </eSubpackages>
           </eSubpackages>

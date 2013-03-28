@@ -1097,6 +1097,70 @@ public interface GeoPackage extends EPackage {
 	int GNSS_MEASURED_POSITION_FEATURE_COUNT = MEASURED_POSITION3_D_FEATURE_COUNT + 3;
 
 	/**
+	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.impl.AnchorPositionImpl <em>Anchor Position</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see net.sf.seesea.model.core.geo.impl.AnchorPositionImpl
+	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getAnchorPosition()
+	 * @generated
+	 */
+	int ANCHOR_POSITION = 22;
+
+	/**
+	 * The feature id for the '<em><b>Longitude</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANCHOR_POSITION__LONGITUDE = GEO_POSITION__LONGITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Latitude</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANCHOR_POSITION__LATITUDE = GEO_POSITION__LATITUDE;
+
+	/**
+	 * The feature id for the '<em><b>Precision</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANCHOR_POSITION__PRECISION = GEO_POSITION__PRECISION;
+
+	/**
+	 * The feature id for the '<em><b>XExtent</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANCHOR_POSITION__XEXTENT = GEO_POSITION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>YExtent</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANCHOR_POSITION__YEXTENT = GEO_POSITION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Anchor Position</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANCHOR_POSITION_FEATURE_COUNT = GEO_POSITION_FEATURE_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1104,7 +1168,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 22;
+	int DIRECTION = 23;
 
 
 	/**
@@ -1115,7 +1179,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getLatitudeHemisphere()
 	 * @generated
 	 */
-	int LATITUDE_HEMISPHERE = 23;
+	int LATITUDE_HEMISPHERE = 24;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.LongitudeHemisphere <em>Longitude Hemisphere</em>}' enum.
@@ -1125,7 +1189,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getLongitudeHemisphere()
 	 * @generated
 	 */
-	int LONGITUDE_HEMISPHERE = 24;
+	int LONGITUDE_HEMISPHERE = 25;
 
 
 	/**
@@ -1136,7 +1200,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getRelativeDepthMeasurementPosition()
 	 * @generated
 	 */
-	int RELATIVE_DEPTH_MEASUREMENT_POSITION = 25;
+	int RELATIVE_DEPTH_MEASUREMENT_POSITION = 26;
 
 
 	/**
@@ -1434,6 +1498,38 @@ public interface GeoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getGNSSMeasuredPosition_Pdop();
+
+	/**
+	 * Returns the meta object for class '{@link net.sf.seesea.model.core.geo.AnchorPosition <em>Anchor Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Anchor Position</em>'.
+	 * @see net.sf.seesea.model.core.geo.AnchorPosition
+	 * @generated
+	 */
+	EClass getAnchorPosition();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.AnchorPosition#getXExtent <em>XExtent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>XExtent</em>'.
+	 * @see net.sf.seesea.model.core.geo.AnchorPosition#getXExtent()
+	 * @see #getAnchorPosition()
+	 * @generated
+	 */
+	EAttribute getAnchorPosition_XExtent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.AnchorPosition#getYExtent <em>YExtent</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>YExtent</em>'.
+	 * @see net.sf.seesea.model.core.geo.AnchorPosition#getYExtent()
+	 * @see #getAnchorPosition()
+	 * @generated
+	 */
+	EAttribute getAnchorPosition_YExtent();
 
 	/**
 	 * Returns the meta object for enum '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}'.
@@ -1954,6 +2050,32 @@ public interface GeoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute GNSS_MEASURED_POSITION__PDOP = eINSTANCE.getGNSSMeasuredPosition_Pdop();
+
+		/**
+		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.impl.AnchorPositionImpl <em>Anchor Position</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see net.sf.seesea.model.core.geo.impl.AnchorPositionImpl
+		 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getAnchorPosition()
+		 * @generated
+		 */
+		EClass ANCHOR_POSITION = eINSTANCE.getAnchorPosition();
+
+		/**
+		 * The meta object literal for the '<em><b>XExtent</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANCHOR_POSITION__XEXTENT = eINSTANCE.getAnchorPosition_XExtent();
+
+		/**
+		 * The meta object literal for the '<em><b>YExtent</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANCHOR_POSITION__YEXTENT = eINSTANCE.getAnchorPosition_YExtent();
 
 		/**
 		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}' enum.

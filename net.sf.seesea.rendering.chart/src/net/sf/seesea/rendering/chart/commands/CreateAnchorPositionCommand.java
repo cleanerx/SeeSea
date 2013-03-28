@@ -26,8 +26,9 @@
  */
 package net.sf.seesea.rendering.chart.commands;
 
-import net.sf.seesea.model.core.geo.AnchorPosition;
-import net.sf.seesea.model.core.geo.osm.World;
+import net.sf.seesea.model.core.geo.GeoPosition;
+import net.sf.seesea.model.core.geo.NamedPosition;
+import net.sf.seesea.model.core.geo.osm.Area;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -38,21 +39,22 @@ import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 /**
  * 
  */
-public class AddPositionToAreaCommand extends CreateCommand {
+public class CreateAnchorPositionCommand extends CreateCommand {
 	
-	private final AnchorPosition position;
-	private final World world;
+	private final Area area;
+	private final GeoPosition position;
+	private final NamedPosition namedPosition;
 
 	/**
 	 * @param editingDomain
 	 * @param viewDescriptor
 	 * @param containerView
 	 */
-	public AddPositionToAreaCommand(TransactionalEditingDomain editingDomain, World world, AnchorPosition position) {
-		super(editingDomain, "Create Anchor Position", world);
-		this.world = world;
+	public CreateAnchorPositionCommand(TransactionalEditingDomain editingDomain, Area area, NamedPosition namedPosition, GeoPosition position) {
+		super(editingDomain, "Create Position", area);
+		this.area = area;
+		this.namedPosition = namedPosition;
 		this.position = position;
-//		System.out.println("anchorpos");
 	}
 
 	/* (non-Javadoc)
@@ -61,8 +63,10 @@ public class AddPositionToAreaCommand extends CreateCommand {
 	@Override
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		world.setAnchorPosition(position);
-		return CommandResult.newOKCommandResult(position);
+		namedPosition.setLatitude(position.getLatitude());
+		namedPosition.setLongitude(position.getLongitude());
+		area.getPoiContainer().getPois().add(namedPosition);
+		return CommandResult.newOKCommandResult(namedPosition);
 	}
 
 }

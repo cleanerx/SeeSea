@@ -26,6 +26,7 @@
  */
 package net.sf.seesea.rendering.chart.editpart;
 
+import net.sf.seesea.model.core.geo.AnchorPosition;
 import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.Track;
@@ -54,8 +55,8 @@ public class SeeSeaGraphicalPartFactory implements EditPartFactory {
 			child = new WorldEditPart();
 //			} else if(model instanceof Buoy) {
 //			child = new BuoyEditPart();
-//		} else if(model instanceof ChartSymbols) {
-//			child = new ChartSymbolsEditPart();
+		} else if(model instanceof AnchorPosition) {
+			child = new AnchorAreaEditPart();
 		} else if(model instanceof GeoPosition && ((EObject)model).eContainer() instanceof World) {
 			child = new ShipPositionEditPart();
 		} else if(model instanceof AISMessageTime) {

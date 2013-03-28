@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,13 +30,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.model.core.geo.osm.impl;
 
+import net.sf.seesea.model.core.geo.AnchorPosition;
 import net.sf.seesea.model.core.geo.osm.OsmPackage;
 import net.sf.seesea.model.core.geo.osm.World;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -48,6 +51,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#isLatitudeScale <em>Latitude Scale</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#getAnchorPosition <em>Anchor Position</em>}</li>
  * </ul>
  * </p>
  *
@@ -93,6 +97,16 @@ public class WorldImpl extends AreaImpl implements World {
 	 * @ordered
 	 */
 	protected boolean latitudeScale = LATITUDE_SCALE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAnchorPosition() <em>Anchor Position</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAnchorPosition()
+	 * @generated
+	 * @ordered
+	 */
+	protected AnchorPosition anchorPosition;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -160,6 +174,63 @@ public class WorldImpl extends AreaImpl implements World {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public AnchorPosition getAnchorPosition() {
+		return anchorPosition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetAnchorPosition(AnchorPosition newAnchorPosition, NotificationChain msgs) {
+		AnchorPosition oldAnchorPosition = anchorPosition;
+		anchorPosition = newAnchorPosition;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, OsmPackage.WORLD__ANCHOR_POSITION, oldAnchorPosition, newAnchorPosition);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAnchorPosition(AnchorPosition newAnchorPosition) {
+		if (newAnchorPosition != anchorPosition) {
+			NotificationChain msgs = null;
+			if (anchorPosition != null)
+				msgs = ((InternalEObject)anchorPosition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OsmPackage.WORLD__ANCHOR_POSITION, null, msgs);
+			if (newAnchorPosition != null)
+				msgs = ((InternalEObject)newAnchorPosition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OsmPackage.WORLD__ANCHOR_POSITION, null, msgs);
+			msgs = basicSetAnchorPosition(newAnchorPosition, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OsmPackage.WORLD__ANCHOR_POSITION, newAnchorPosition, newAnchorPosition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case OsmPackage.WORLD__ANCHOR_POSITION:
+				return basicSetAnchorPosition(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -167,6 +238,8 @@ public class WorldImpl extends AreaImpl implements World {
 				return isLongitudeScale();
 			case OsmPackage.WORLD__LATITUDE_SCALE:
 				return isLatitudeScale();
+			case OsmPackage.WORLD__ANCHOR_POSITION:
+				return getAnchorPosition();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -184,6 +257,9 @@ public class WorldImpl extends AreaImpl implements World {
 				return;
 			case OsmPackage.WORLD__LATITUDE_SCALE:
 				setLatitudeScale((Boolean)newValue);
+				return;
+			case OsmPackage.WORLD__ANCHOR_POSITION:
+				setAnchorPosition((AnchorPosition)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -203,6 +279,9 @@ public class WorldImpl extends AreaImpl implements World {
 			case OsmPackage.WORLD__LATITUDE_SCALE:
 				setLatitudeScale(LATITUDE_SCALE_EDEFAULT);
 				return;
+			case OsmPackage.WORLD__ANCHOR_POSITION:
+				setAnchorPosition((AnchorPosition)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -219,6 +298,8 @@ public class WorldImpl extends AreaImpl implements World {
 				return longitudeScale != LONGITUDE_SCALE_EDEFAULT;
 			case OsmPackage.WORLD__LATITUDE_SCALE:
 				return latitudeScale != LATITUDE_SCALE_EDEFAULT;
+			case OsmPackage.WORLD__ANCHOR_POSITION:
+				return anchorPosition != null;
 		}
 		return super.eIsSet(featureID);
 	}

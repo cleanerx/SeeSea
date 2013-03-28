@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -30,6 +30,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.model.core.geo.osm;
 
+import net.sf.seesea.model.core.geo.AnchorPosition;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -41,6 +43,7 @@ package net.sf.seesea.model.core.geo.osm;
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#isLatitudeScale <em>Latitude Scale</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.World#getAnchorPosition <em>Anchor Position</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,5 +105,31 @@ public interface World extends Area {
 	 * @generated
 	 */
 	void setLatitudeScale(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Anchor Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Anchor Position</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Anchor Position</em>' containment reference.
+	 * @see #setAnchorPosition(AnchorPosition)
+	 * @see net.sf.seesea.model.core.geo.osm.OsmPackage#getWorld_AnchorPosition()
+	 * @model containment="true"
+	 * @generated
+	 */
+	AnchorPosition getAnchorPosition();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.osm.World#getAnchorPosition <em>Anchor Position</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Anchor Position</em>' containment reference.
+	 * @see #getAnchorPosition()
+	 * @generated
+	 */
+	void setAnchorPosition(AnchorPosition value);
 
 } // World

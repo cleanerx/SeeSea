@@ -107,6 +107,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 			case GeoPackage.NAVAREA: return createNavarea();
 			case GeoPackage.DEPTH: return createDepth();
 			case GeoPackage.GNSS_MEASURED_POSITION: return createGNSSMeasuredPosition();
+			case GeoPackage.ANCHOR_POSITION: return createAnchorPosition();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -272,6 +273,16 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	public GNSSMeasuredPosition createGNSSMeasuredPosition() {
 		GNSSMeasuredPositionImpl gnssMeasuredPosition = new GNSSMeasuredPositionImpl();
 		return gnssMeasuredPosition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AnchorPosition createAnchorPosition() {
+		AnchorPositionImpl anchorPosition = new AnchorPositionImpl();
+		return anchorPosition;
 	}
 
 	/**

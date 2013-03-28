@@ -31,6 +31,7 @@ package net.sf.seesea.rendering.chart.editor;
 import java.net.URL;
 
 import net.sf.seesea.model.core.provider.XEditPlugin;
+import net.sf.seesea.rendering.chart.tools.AnchorWarnToolEntry;
 import net.sf.seesea.rendering.chart.tools.Cache2ToolEntry;
 import net.sf.seesea.rendering.chart.tools.CacheToolEntry;
 import net.sf.seesea.rendering.chart.tools.ChartSelectionToolEntry;
@@ -59,7 +60,13 @@ public class SeeSeaPaletteFactory {
 		PaletteGroup navigationGroup = new PaletteGroup("Navigation Group"); //$NON-NLS-1$
 		seeseaPalette.add(navigationGroup);
 		seeseaPalette.setDefaultEntry(toolEntry);
-		
+
+//		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/Route.gif"); //$NON-NLS-1$
+//		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
+//		creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getRoute());
+		ToolEntry anchorToolEntry = new AnchorWarnToolEntry("Anchor Alert", "Defines an area for anchor alert");
+		navigationGroup.add(anchorToolEntry);
+
 //		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/NamedPosition.gif"); //$NON-NLS-1$
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 //		CreationFactory creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getNamedPosition());

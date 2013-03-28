@@ -38,6 +38,7 @@ import net.sf.seesea.model.core.data.impl.DataPackageImpl;
 
 import net.sf.seesea.model.core.diagramInterchange.DiagramInterchangePackage;
 import net.sf.seesea.model.core.diagramInterchange.impl.DiagramInterchangePackageImpl;
+import net.sf.seesea.model.core.geo.AnchorPosition;
 import net.sf.seesea.model.core.geo.Chart;
 import net.sf.seesea.model.core.geo.ChartArea;
 import net.sf.seesea.model.core.geo.ChartContainer;
@@ -180,6 +181,13 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * @generated
 	 */
 	private EClass gnssMeasuredPositionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass anchorPositionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -617,6 +625,33 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAnchorPosition() {
+		return anchorPositionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAnchorPosition_XExtent() {
+		return (EAttribute)anchorPositionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAnchorPosition_YExtent() {
+		return (EAttribute)anchorPositionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -926,6 +961,10 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__VDOP);
 		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__PDOP);
 
+		anchorPositionEClass = createEClass(ANCHOR_POSITION);
+		createEAttribute(anchorPositionEClass, ANCHOR_POSITION__XEXTENT);
+		createEAttribute(anchorPositionEClass, ANCHOR_POSITION__YEXTENT);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
 		latitudeHemisphereEEnum = createEEnum(LATITUDE_HEMISPHERE);
@@ -993,6 +1032,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		navareaEClass.getESuperTypes().add(theOsmPackage.getArea());
 		depthEClass.getESuperTypes().add(thePhysxPackage.getMeasurement());
 		gnssMeasuredPositionEClass.getESuperTypes().add(this.getMeasuredPosition3D());
+		anchorPositionEClass.getESuperTypes().add(this.getGeoPosition());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(geoPositionEClass, GeoPosition.class, "GeoPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1079,6 +1119,10 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		initEAttribute(getGNSSMeasuredPosition_Hdop(), ecorePackage.getEDouble(), "hdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGNSSMeasuredPosition_Vdop(), ecorePackage.getEDouble(), "vdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGNSSMeasuredPosition_Pdop(), ecorePackage.getEDouble(), "pdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(anchorPositionEClass, AnchorPosition.class, "AnchorPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAnchorPosition_XExtent(), ecorePackage.getEDouble(), "xExtent", null, 0, 1, AnchorPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAnchorPosition_YExtent(), ecorePackage.getEDouble(), "yExtent", null, 0, 1, AnchorPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

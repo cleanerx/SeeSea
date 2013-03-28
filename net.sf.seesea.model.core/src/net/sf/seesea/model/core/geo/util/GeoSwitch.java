@@ -272,6 +272,14 @@ public class GeoSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case GeoPackage.ANCHOR_POSITION: {
+				AnchorPosition anchorPosition = (AnchorPosition)theEObject;
+				T result = caseAnchorPosition(anchorPosition);
+				if (result == null) result = caseGeoPosition(anchorPosition);
+				if (result == null) result = caseModelObject(anchorPosition);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -468,6 +476,21 @@ public class GeoSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGNSSMeasuredPosition(GNSSMeasuredPosition object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Anchor Position</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Anchor Position</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnchorPosition(AnchorPosition object) {
 		return null;
 	}
 

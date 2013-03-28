@@ -141,6 +141,9 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 //		modelChildren.add(getWorld().getMapCenterPosition());
 		modelChildren.addAll(getWorld().getTracksContainer().getTracks());
 		modelChildren.addAll(areaMarkers);
+		if(getWorld().getAnchorPosition() != null) {
+			modelChildren.add(getWorld().getAnchorPosition());
+		}
 		if(trackPosition) {
 			modelChildren.add(getWorld().getMapCenterPosition());
 		}
@@ -241,6 +244,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		serviceRegistration = bundleContext.registerService(HandleAISMessage.class, aisTracker, null);
 
 //		positionTrackerRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), new PositionListener(), null);
+		getWorld().eAdapters().add(this);
 		getWorld().getTracksContainer().eAdapters().add(this);
 		enablePositionTracking(true);
 		aisTracker.start();
@@ -248,6 +252,8 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 
 	@Override
 	public void deactivate() {
+		getWorld().eAdapters().remove(this);
+		getWorld().getTracksContainer().eAdapters().remove(this);
 		serviceRegistration.unregister();
 		super.deactivate();
 		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().removePropertyChangeListener(propertyChangeListener);
@@ -324,7 +330,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		 */
 		public void notify(final MeasuredPosition3D sensorData, String source) {
 			
-			if(System.currentTimeMillis() - lastUpdate > 100) {
+			if(System.currentTimeMillis() - lastUpdate > 1000) {
 				Display.getDefault().asyncExec(new Runnable() {
 					
 					public void run() {
