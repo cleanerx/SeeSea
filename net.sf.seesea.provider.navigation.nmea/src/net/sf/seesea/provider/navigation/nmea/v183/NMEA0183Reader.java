@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,11 +70,25 @@ public class NMEA0183Reader implements IDataReader {
 
 	private SimpleDateFormat simpleDateFormat;
 
+	private boolean useLastDateFromAnotherSentenceGGA = false;
+	
+	private Date lastDate;
+
+	private boolean processRMCWithMeasurements = true;
+
 	public NMEA0183Reader(
-			Map<NMEA0183MessageTypes, Set<String>> processMessageTypes2SensorIds) {
+			Map<NMEA0183MessageTypes, Set<String>> processMessageTypes2SensorIds, boolean useLastDateFromAnotherSentenceGGA) {
 		satelliteDataCache = new HashSet<SatelliteInfo>();
 		satelliteMessageCounter = 0;
 		this.processMessageTypes2SensorIds = processMessageTypes2SensorIds;
+		this.useLastDateFromAnotherSentenceGGA = useLastDateFromAnotherSentenceGGA;
+		// we need the date for the tide calculations. the GGA sentence does not have the date so we stick to RMC
+		if(useLastDateFromAnotherSentenceGGA && processMessageTypes2SensorIds.containsKey(NMEA0183MessageTypes.GGA) && !processMessageTypes2SensorIds.containsKey(NMEA0183MessageTypes.RMC)) {
+			this.processMessageTypes2SensorIds.put(NMEA0183MessageTypes.RMC, processMessageTypes2SensorIds.get(NMEA0183MessageTypes.GGA));
+			processRMCWithMeasurements = false;
+		} else {
+			processRMCWithMeasurements = true;
+		}
 		simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
 	}
 
@@ -468,7 +483,6 @@ public class NMEA0183Reader implements IDataReader {
 		RelativeSpeed relativeSpeed = physxFactory.createRelativeSpeed();
 		Heading heading = physxFactory.createHeading();
 
-		setTime(nmeaContent, geoPosition, 1);
 		try {
 			PrecisionCoordinate precisionCoordinate = null;
 			PrecisionCoordinate precisionCoordinate2 = null;
@@ -526,6 +540,9 @@ public class NMEA0183Reader implements IDataReader {
 			relativeSpeed.setTimezone("UTC"); //$NON-NLS-1$
 			geoPosition.setTime(calendar.getTime());
 			geoPosition.setTimezone("UTC"); //$NON-NLS-1$
+			if(useLastDateFromAnotherSentenceGGA) {
+				lastDate = geoPosition.getTime();
+			}
 		} catch (NumberFormatException e) {
 			// TODO: handle exception
 		}
@@ -547,6 +564,12 @@ public class NMEA0183Reader implements IDataReader {
 		} catch (NumberFormatException e) {
 			// nothing to do. fail silently
 		}
+		
+		// abort processing if only the time was of interest for other sentences
+		if(!processRMCWithMeasurements) {
+			return null;
+		}
+
 		measurement.getMeasurements().add(time);
 
 		setSensorID(nmeaContent[0], heading);
@@ -575,6 +598,18 @@ public class NMEA0183Reader implements IDataReader {
 				.createGNSSMeasuredPosition();
 		try {
 			setTime(nmeaContent, geoPosition, 1);
+			if(useLastDateFromAnotherSentenceGGA) {
+				Date time = geoPosition.getTime();
+				if(lastDate != null && time != null) {
+					Calendar lastTimeCalendar = Calendar.getInstance();
+					lastTimeCalendar.setTime(lastDate);
+					Calendar measurmentTimeCalendar = Calendar.getInstance();
+					measurmentTimeCalendar.setTime(time);
+					measurmentTimeCalendar.set(Calendar.YEAR, lastTimeCalendar.get(lastTimeCalendar.YEAR));
+					measurmentTimeCalendar.set(Calendar.DAY_OF_YEAR, lastTimeCalendar.get(lastTimeCalendar.DAY_OF_YEAR));
+					geoPosition.setTime(measurmentTimeCalendar.getTime());
+				}
+			}
 			PrecisionCoordinate precisionCoordinate = parseLatitude(
 					nmeaContent, 2);
 			if (precisionCoordinate != null) {
@@ -594,26 +629,30 @@ public class NMEA0183Reader implements IDataReader {
 			} else {
 				return null;
 			}
+//			System.out.println(geoPosition.getLatitude());
 
-			try {
-				geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
-			} catch (NumberFormatException e) {
-				// nothing to do
+			if(nmeaContent.length > 9) {
+				try {
+					geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
+				} catch (NumberFormatException e) {
+					// nothing to do
+				}
 			}
+			if(nmeaContent.length > 8) {
 			try {
 				geoPosition.setHdop(Double.parseDouble(nmeaContent[8]));
 			} catch (NumberFormatException e) {
 				// nothing to do
 			}
-
+			}
 		} catch (StringIndexOutOfBoundsException e) {
 			Logger.getLogger(NMEA0183Reader.class).error(
 					"Failed to analyze positon" + e.getMessage()); //$NON-NLS-1$
 			return null;
-		}
-
-		if (!nmeaContent[9].isEmpty()) {
-			geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));
+		} catch (ArrayIndexOutOfBoundsException e) {
+			Logger.getLogger(NMEA0183Reader.class).error(
+					"Failed to analyze positon" + e.getMessage()); //$NON-NLS-1$
+			return null;
 		}
 
 		setSensorID(nmeaContent[0], geoPosition);
@@ -976,3 +1015,4 @@ public class NMEA0183Reader implements IDataReader {
 		int precision;
 	}
 }
+

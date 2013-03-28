@@ -51,10 +51,13 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 	
 	private boolean processData;
 	
+	private int charcounter;
+	
 	public SerialNMEA0183InputStreamProcessor() {
 		stringBuffer = null;	
 		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
 		aisEventListeners = new ArrayList<RawDataEventListener>(1);
+		charcounter = 0;
 	}
  
 	public boolean isValidStreamProcessor(int[] buf) throws NMEAProcessingException {
@@ -72,9 +75,11 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 	}
 	
 	public boolean readByte(int i, String streamProvider) throws NMEAProcessingException {
+		charcounter++;
 		switch (i) {
 		case '\n':
-			if(stringBuffer != null) {
+			if(stringBuffer != null && charcounter <= 82) {
+				charcounter = 0;
 				stringBuffer.append((char) i);
 				String line = stringBuffer.toString();
 				try {
@@ -92,6 +97,9 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 				} catch (UnsupportedEncodingException e) {
 					Logger.getLogger(getClass()).error("No Encoding available", e); //$NON-NLS-1$
 				}
+			} else if(charcounter > 82) {
+				stringBuffer = null;
+				charcounter = 0;
 			}
 			break;
 		case '$':

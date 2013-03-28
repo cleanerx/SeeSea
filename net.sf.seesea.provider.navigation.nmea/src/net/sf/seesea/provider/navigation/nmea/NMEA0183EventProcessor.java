@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.nmea.v183.NMEA0183Reader;
 import net.sf.seesea.services.navigation.INMEAReader;
@@ -77,8 +79,12 @@ public class NMEA0183EventProcessor extends NMEAParser implements RawDataEventLi
 		List<Measurement> measurements = nmea0183Reader
 				.extractMeasurementsFromNMEA(e.getNmeaMessageContent(),
 						new ArrayList<Measurement>(1));
-		for (Measurement measurement : measurements) {
-			notifyListeners(measurement);
+		try {
+			for (Measurement measurement : measurements) {
+				notifyListeners(measurement);
+			}
+		} catch (Exception ex) {
+			Logger.getLogger(getClass()).error("Failed to notify a listener", ex);
 		}
 	}
 

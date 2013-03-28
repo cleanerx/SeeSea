@@ -69,6 +69,7 @@ public enum NMEA0183MessageTypes {
 	HDM, 
 	HDT, 
 	HSC, 
+	HVM, 
 	LCD,
 	LOR,
 	MSK, 
