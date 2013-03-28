@@ -42,7 +42,7 @@ import net.sf.seesea.services.navigation.provider.IWaterTemperatureDataProvider;
 import net.sf.seesea.services.navigation.provider.IWindDataProvider;
 
 /**
- * The main event processor
+ * The main event processor for nmea 2000 events
  */
 public class NMEA2000EventProcessor extends NMEAParser implements INMEA2000Listener,
 IPositionProvider, IWaterTemperatureDataProvider, IWindDataProvider,
@@ -55,21 +55,18 @@ IShipMovementVectorProvider {
 		return "NMEA2000"; //$NON-NLS-1$
 	}
 	
-	public NMEA2000EventProcessor() {
-	}
-	
 	@Override
 	public void nmeaEventReceived(int[] data) {
 
-		int priority = data[0];
+//		int priority = data[0];
 		long pgn = (long) data[1] + 256L
 				* ((long) data[2] + 256L * (long) data[3]);
-		int destination = data[4];
+//		int destination = data[4];
 		int source = data[5];
-		int messageLength = data[10];
+//		int messageLength = data[10];
 		switch ((int) pgn) {
 		case 60928:
-			System.out.println("ISO Address clain" + pgn);
+//			System.out.println("ISO Address clain" + pgn);
 			break;
 		case 127250:
 			// System.out.println("Vessel Heading" + pgn);
@@ -106,9 +103,20 @@ IShipMovementVectorProvider {
 			notifyListeners(speed);
 			break;
 		case 129025:
-			System.out.println("Position, Rapid Update " + pgn);
+//			System.out.println("Position, Rapid Update " + pgn);
 			PositionRapid positionRapid = new PositionRapid(Arrays.copyOfRange(
 					data, 11, 19));
+			MeasuredPosition3D measuredPositionRapid = GeoFactory.eINSTANCE
+					.createMeasuredPosition3D();
+			Latitude lat2 = GeoFactory.eINSTANCE.createLatitude();
+			lat2.setDecimalDegree(positionRapid.getLatitude().getValue());
+			measuredPositionRapid.setLatitude(lat2);
+			Longitude lon2 = GeoFactory.eINSTANCE.createLongitude();
+			lon2.setDecimalDegree(positionRapid.getLongitude().getValue());
+			measuredPositionRapid.setLongitude(lon2);
+			measuredPositionRapid.setSensorID(new Integer(source).toString());
+			measuredPositionRapid.setValid(true);
+			notifyListeners(measuredPositionRapid);
 			break;
 		case 129026:
 			// System.out.println("COG & SOG, Rapid Update " + pgn);
@@ -191,14 +199,14 @@ IShipMovementVectorProvider {
 			notifyListeners(temperature);
 			break;
 		case 130311:
-			System.out.println("Environmental Parameters 2 " + pgn);
+//			System.out.println("Environmental Parameters 2 " + pgn);
 			break;
 		default:
-			if (pgn > 120000) {
-				System.out.println("NMEA PGN " + pgn);
-			} else {
-				System.out.println("Engine PGN " + pgn);
-			}
+//			if (pgn > 120000) {
+//				System.out.println("NMEA PGN " + pgn);
+//			} else {
+//				System.out.println("Engine PGN " + pgn);
+//			}
 			break;
 		}
 	}
@@ -216,10 +224,4 @@ IShipMovementVectorProvider {
 		_nmeaReaders.remove(reader);
 	}
 	
-//	@Override
-//	public void disable() {
-//		heartbeatThread.interrupt();
-//	}
-
-
 }
