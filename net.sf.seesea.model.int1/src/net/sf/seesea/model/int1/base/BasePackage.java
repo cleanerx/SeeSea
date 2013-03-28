@@ -208,13 +208,22 @@ public interface BasePackage extends EPackage {
 	int MARINE_CHART__LATITUDE_SCALE = GeoPackage.CHART_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Anchor Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARINE_CHART__ANCHOR_POSITION = GeoPackage.CHART_FEATURE_COUNT + 8;
+
+	/**
 	 * The feature id for the '<em><b>Seamarks</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARINE_CHART__SEAMARKS = GeoPackage.CHART_FEATURE_COUNT + 8;
+	int MARINE_CHART__SEAMARKS = GeoPackage.CHART_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Marine Chart</em>' class.
@@ -223,7 +232,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARINE_CHART_FEATURE_COUNT = GeoPackage.CHART_FEATURE_COUNT + 9;
+	int MARINE_CHART_FEATURE_COUNT = GeoPackage.CHART_FEATURE_COUNT + 10;
 
 
 	/**

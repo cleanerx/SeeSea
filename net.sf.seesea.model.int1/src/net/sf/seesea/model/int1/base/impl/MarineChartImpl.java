@@ -8,6 +8,7 @@ package net.sf.seesea.model.int1.base.impl;
 
 import java.util.Collection;
 
+import net.sf.seesea.model.core.geo.AnchorPosition;
 import net.sf.seesea.model.core.geo.GeoPackage;
 import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.NavigationCompound;
@@ -50,6 +51,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getSubArea <em>Sub Area</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#isLatitudeScale <em>Latitude Scale</em>}</li>
+ *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getAnchorPosition <em>Anchor Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getSeamarks <em>Seamarks</em>}</li>
  * </ul>
  * </p>
@@ -156,6 +158,15 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 	 * @ordered
 	 */
 	protected boolean latitudeScale = LATITUDE_SCALE_EDEFAULT;
+	/**
+	 * The cached value of the '{@link #getAnchorPosition() <em>Anchor Position</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAnchorPosition()
+	 * @generated
+	 * @ordered
+	 */
+	protected AnchorPosition anchorPosition;
 	/**
 	 * The cached value of the '{@link #getSeamarks() <em>Seamarks</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -437,6 +448,49 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public AnchorPosition getAnchorPosition() {
+		return anchorPosition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetAnchorPosition(AnchorPosition newAnchorPosition, NotificationChain msgs) {
+		AnchorPosition oldAnchorPosition = anchorPosition;
+		anchorPosition = newAnchorPosition;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, BasePackage.MARINE_CHART__ANCHOR_POSITION, oldAnchorPosition, newAnchorPosition);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAnchorPosition(AnchorPosition newAnchorPosition) {
+		if (newAnchorPosition != anchorPosition) {
+			NotificationChain msgs = null;
+			if (anchorPosition != null)
+				msgs = ((InternalEObject)anchorPosition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - BasePackage.MARINE_CHART__ANCHOR_POSITION, null, msgs);
+			if (newAnchorPosition != null)
+				msgs = ((InternalEObject)newAnchorPosition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - BasePackage.MARINE_CHART__ANCHOR_POSITION, null, msgs);
+			msgs = basicSetAnchorPosition(newAnchorPosition, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BasePackage.MARINE_CHART__ANCHOR_POSITION, newAnchorPosition, newAnchorPosition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AbstractSeamark> getSeamarks() {
 		if (seamarks == null) {
 			seamarks = new EObjectContainmentEList<AbstractSeamark>(AbstractSeamark.class, this, BasePackage.MARINE_CHART__SEAMARKS);
@@ -462,6 +516,8 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return basicSetMapCenterPosition(null, msgs);
 			case BasePackage.MARINE_CHART__SUB_AREA:
 				return ((InternalEList<?>)getSubArea()).basicRemove(otherEnd, msgs);
+			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
+				return basicSetAnchorPosition(null, msgs);
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				return ((InternalEList<?>)getSeamarks()).basicRemove(otherEnd, msgs);
 		}
@@ -492,6 +548,8 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return isLongitudeScale();
 			case BasePackage.MARINE_CHART__LATITUDE_SCALE:
 				return isLatitudeScale();
+			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
+				return getAnchorPosition();
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				return getSeamarks();
 		}
@@ -531,6 +589,9 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return;
 			case BasePackage.MARINE_CHART__LATITUDE_SCALE:
 				setLatitudeScale((Boolean)newValue);
+				return;
+			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
+				setAnchorPosition((AnchorPosition)newValue);
 				return;
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				getSeamarks().clear();
@@ -572,6 +633,9 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 			case BasePackage.MARINE_CHART__LATITUDE_SCALE:
 				setLatitudeScale(LATITUDE_SCALE_EDEFAULT);
 				return;
+			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
+				setAnchorPosition((AnchorPosition)null);
+				return;
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				getSeamarks().clear();
 				return;
@@ -603,6 +667,8 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return longitudeScale != LONGITUDE_SCALE_EDEFAULT;
 			case BasePackage.MARINE_CHART__LATITUDE_SCALE:
 				return latitudeScale != LATITUDE_SCALE_EDEFAULT;
+			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
+				return anchorPosition != null;
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				return seamarks != null && !seamarks.isEmpty();
 		}
@@ -636,6 +702,7 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 			switch (derivedFeatureID) {
 				case BasePackage.MARINE_CHART__LONGITUDE_SCALE: return OsmPackage.WORLD__LONGITUDE_SCALE;
 				case BasePackage.MARINE_CHART__LATITUDE_SCALE: return OsmPackage.WORLD__LATITUDE_SCALE;
+				case BasePackage.MARINE_CHART__ANCHOR_POSITION: return OsmPackage.WORLD__ANCHOR_POSITION;
 				default: return -1;
 			}
 		}
@@ -669,6 +736,7 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 			switch (baseFeatureID) {
 				case OsmPackage.WORLD__LONGITUDE_SCALE: return BasePackage.MARINE_CHART__LONGITUDE_SCALE;
 				case OsmPackage.WORLD__LATITUDE_SCALE: return BasePackage.MARINE_CHART__LATITUDE_SCALE;
+				case OsmPackage.WORLD__ANCHOR_POSITION: return BasePackage.MARINE_CHART__ANCHOR_POSITION;
 				default: return -1;
 			}
 		}

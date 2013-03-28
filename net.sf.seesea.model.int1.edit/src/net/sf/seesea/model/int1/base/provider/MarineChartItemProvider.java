@@ -190,6 +190,7 @@ public class MarineChartItemProvider
 			childrenFeatures.add(GeoPackage.Literals.NAVIGATION_COMPOUND__TRACKS_CONTAINER);
 			childrenFeatures.add(OsmPackage.Literals.AREA__MAP_CENTER_POSITION);
 			childrenFeatures.add(OsmPackage.Literals.AREA__SUB_AREA);
+			childrenFeatures.add(OsmPackage.Literals.WORLD__ANCHOR_POSITION);
 			childrenFeatures.add(BasePackage.Literals.MARINE_CHART__SEAMARKS);
 		}
 		return childrenFeatures;
@@ -255,6 +256,7 @@ public class MarineChartItemProvider
 			case BasePackage.MARINE_CHART__TRACKS_CONTAINER:
 			case BasePackage.MARINE_CHART__MAP_CENTER_POSITION:
 			case BasePackage.MARINE_CHART__SUB_AREA:
+			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -330,6 +332,11 @@ public class MarineChartItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(OsmPackage.Literals.AREA__MAP_CENTER_POSITION,
+				 GeoFactory.eINSTANCE.createAnchorPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(OsmPackage.Literals.AREA__SUB_AREA,
 				 BaseFactory.eINSTANCE.createMarineChart()));
 
@@ -347,6 +354,11 @@ public class MarineChartItemProvider
 			(createChildParameter
 				(OsmPackage.Literals.AREA__SUB_AREA,
 				 OsmFactory.eINSTANCE.createWorld()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__ANCHOR_POSITION,
+				 GeoFactory.eINSTANCE.createAnchorPosition()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -377,7 +389,8 @@ public class MarineChartItemProvider
 
 		boolean qualify =
 			childFeature == OsmPackage.Literals.AREA__MAP_CENTER_POSITION ||
-			childFeature == BasePackage.Literals.MARINE_CHART__SEAMARKS;
+			childFeature == BasePackage.Literals.MARINE_CHART__SEAMARKS ||
+			childFeature == OsmPackage.Literals.WORLD__ANCHOR_POSITION;
 
 		if (qualify) {
 			return getString
