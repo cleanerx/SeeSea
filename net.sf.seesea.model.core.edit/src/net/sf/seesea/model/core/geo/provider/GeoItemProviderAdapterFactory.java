@@ -376,6 +376,29 @@ public class GeoItemProviderAdapterFactory extends GeoAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.geo.AnchorPosition} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AnchorPositionItemProvider anchorPositionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link net.sf.seesea.model.core.geo.AnchorPosition}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAnchorPositionAdapter() {
+		if (anchorPositionItemProvider == null) {
+			anchorPositionItemProvider = new AnchorPositionItemProvider(this);
+		}
+
+		return anchorPositionItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.geo.ChartContainer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -726,6 +749,7 @@ public class GeoItemProviderAdapterFactory extends GeoAdapterFactory implements 
 		if (navareaItemProvider != null) navareaItemProvider.dispose();
 		if (depthItemProvider != null) depthItemProvider.dispose();
 		if (gnssMeasuredPositionItemProvider != null) gnssMeasuredPositionItemProvider.dispose();
+		if (anchorPositionItemProvider != null) anchorPositionItemProvider.dispose();
 	}
 
 }

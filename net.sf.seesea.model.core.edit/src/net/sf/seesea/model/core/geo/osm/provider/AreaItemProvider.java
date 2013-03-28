@@ -262,6 +262,11 @@ public class AreaItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(OsmPackage.Literals.AREA__MAP_CENTER_POSITION,
+				 GeoFactory.eINSTANCE.createAnchorPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(OsmPackage.Literals.AREA__SUB_AREA,
 				 OsmFactory.eINSTANCE.createArea()));
 

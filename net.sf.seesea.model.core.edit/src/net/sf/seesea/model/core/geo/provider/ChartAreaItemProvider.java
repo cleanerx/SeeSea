@@ -200,6 +200,11 @@ public class ChartAreaItemProvider
 			(createChildParameter
 				(GeoPackage.Literals.CHART_AREA__BOUNDS,
 				 GeoFactory.eINSTANCE.createGNSSMeasuredPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(GeoPackage.Literals.CHART_AREA__BOUNDS,
+				 GeoFactory.eINSTANCE.createAnchorPosition()));
 	}
 
 	/**
