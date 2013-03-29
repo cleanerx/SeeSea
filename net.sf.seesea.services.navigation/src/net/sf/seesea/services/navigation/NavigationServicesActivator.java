@@ -28,13 +28,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.services.navigation;
 
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class NavigationServicesActivator extends AbstractUIPlugin {
+public class NavigationServicesActivator extends Plugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "net.sf.seesea.services.navigation"; //$NON-NLS-1$
