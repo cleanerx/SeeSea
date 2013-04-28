@@ -50,9 +50,9 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 
 	boolean noEscape = false;
 
-	boolean isFile;
+	boolean isFile = true;
 
-	int[] message = new int[500];
+	int[] message = new int[2048];
 
 	int STARTTX = 0x02;
 	int ENDTX = 0x03;
@@ -86,6 +86,7 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 		if (state.equals(MessageProcessingState.MESSAGE_ESACPE)) {
 			if (c == ENDTX) {
 				messageReceived(Arrays.copyOfRange(message, 0, counter));
+//				System.out.println(System.currentTimeMillis() +  ": Read bytes:" + counter);
 				counter = 0;
 				state = MessageProcessingState.MESSAGE_START;
 			} else if (c == STARTTX) {
@@ -116,11 +117,31 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 		  if (is.length < 3)
 		  {
 		    return;
-		  }
+		  } else if(is.length < is[1] + 2) {
+			  return;
+		  } 
 		  command = is[0];
-		  if (command == N2K_MSG_RECEIVED) {
-		    processNmea2000Message(Arrays.copyOfRange(is, 2, is.length));
+		  
+		  long checksum = 0;
+		  if(is[1] + 2 >= is.length) {
+//			  System.out.println("No checksum");
+			  checksum = 0;
+		  } else {
+			  for (int i = 0; i < is[1] + 2; i++) {
+				  checksum += is[i];
+			  }
+//			  System.out.println(is[is[1] + 2] + ":" + checksum % 256);
+			  checksum = 0;
 		  }
+		  
+		  if(checksum % 256 == 0) {
+			  if (command == N2K_MSG_RECEIVED) {
+				  processNmea2000Message(Arrays.copyOfRange(is, 2, is.length));
+			  } else if(command == 160) {
+				  processNmea2000Message(Arrays.copyOfRange(is, 2, is.length));
+			  }
+		  }
+		  
 	}
 
 	private void processNmea2000Message(int[] data) {

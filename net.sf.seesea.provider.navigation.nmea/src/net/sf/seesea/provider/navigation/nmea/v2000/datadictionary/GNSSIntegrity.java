@@ -36,4 +36,17 @@ public enum GNSSIntegrity {
 	UNSAFE;
 	
 	
+	public static GNSSIntegrity of(int linkType) {
+
+	    switch (linkType) {
+	        case 0: return NOCHECK;
+	        case 1: return SAFE;
+	        case 2: return CAUTION;
+	        case 3: return UNSAFE;
+	        default: return UNSAFE;
+	    }
+	}
+
+	
+	
 }

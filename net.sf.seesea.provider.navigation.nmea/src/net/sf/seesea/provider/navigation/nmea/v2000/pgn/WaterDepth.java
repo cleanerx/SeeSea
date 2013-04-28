@@ -53,6 +53,9 @@ public class WaterDepth extends PGN {
 	}
 
 	public Double getWaterDepthAtTransducer() {
+		if(!waterDepthAtTransducer.isValid()) {
+			return Double.NaN;
+		}
 		return waterDepthAtTransducer.getValue();
 	}
 

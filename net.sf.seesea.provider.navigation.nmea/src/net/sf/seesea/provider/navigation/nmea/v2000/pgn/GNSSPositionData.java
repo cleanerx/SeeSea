@@ -29,8 +29,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.provider.navigation.nmea.v2000.pgn;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import net.sf.seesea.provider.navigation.nmea.v2000.BitFieldUtil;
+import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.GNSSIntegrity;
 import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.MethodGNSS;
 import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.TypeOfSystem;
 import net.sf.seesea.provider.navigation.nmea.v2000.dataformat.Altitude;
@@ -62,6 +64,10 @@ public class GNSSPositionData extends SequencedPGN {
 	// PDOP 
 	
 	private Distance geodialSeparation;
+
+	private GNSSIntegrity quality;
+
+	private int satelitesVisible;
 	
 	public GNSSPositionData(int[] data) {
 		super(data, 129029, false, 3, 1000, 1);
@@ -79,6 +85,11 @@ public class GNSSPositionData extends SequencedPGN {
 		typeOfSystem = TypeOfSystem.of(bitfields);
 		bitfields = BitFieldUtil.getBitfield(byte31, 0, 4);
 		methodGNSS = MethodGNSS.of(bitfields);
+		int[] byte32 = Arrays.copyOfRange(data, 32, 33);
+		bitfields = BitFieldUtil.getBitfield(byte32, 0, 2);
+		quality = GNSSIntegrity.of(bitfields);
+		satelitesVisible = data[33];
+		
 		geodialSeparation = new Distance(Arrays.copyOfRange(data, 37, 41));
 	}
 
@@ -96,6 +107,24 @@ public class GNSSPositionData extends SequencedPGN {
 
 	public Distance getGeodialSeparation() {
 		return geodialSeparation;
+	}
+	
+	public Date getTime() {
+		long millisecondsSince1970 = ((long)positionDate.getValue()) * 1000 * 60 * 60 * 24;
+		millisecondsSince1970 += ((long)timeOfDay.getValue()) * 1000;
+		return new Date(millisecondsSince1970);
+	}
+
+	public MethodGNSS getMethodGNSS() {
+		return methodGNSS;
+	}
+
+	public GNSSIntegrity getQuality() {
+		return quality;
+	}
+
+	public int getSatelitesVisible() {
+		return satelitesVisible;
 	}
 	
 	

@@ -10,7 +10,6 @@ import java.util.Locale;
 
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.model.core.geo.Depth;
-import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Measurement;
@@ -39,15 +38,15 @@ public class CSVWriter implements IDataWriter {
 	
 	
 	@Override
-	public void write(Measurement measurement) {
+	public void write(Measurement measurement, boolean valid) {
 		if(measurement instanceof CompositeMeasurement) {
 			CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
-			write(compositeMeasurement.getMeasurements());
+			write(compositeMeasurement.getMeasurements(), valid);
 		}
 	}
 
 	@Override
-	public void write(Collection<Measurement> measurements) {
+	public void write(Collection<Measurement> measurements, boolean valid) {
 		MeasuredPosition3D geoPosition = null;
 		Depth depth = null;
 		if(printWriter == null) {

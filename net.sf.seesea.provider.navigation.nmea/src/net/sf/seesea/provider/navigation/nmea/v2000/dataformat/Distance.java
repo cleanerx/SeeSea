@@ -33,7 +33,7 @@ import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.Uint32;
 public class Distance extends Uint32 {
 
 	public Distance(int[] uintByte) {
-		super(uintByte, 100, 0, 42950000);
+		super(uintByte, 100, 0, 42940000);
 	}
 
 }

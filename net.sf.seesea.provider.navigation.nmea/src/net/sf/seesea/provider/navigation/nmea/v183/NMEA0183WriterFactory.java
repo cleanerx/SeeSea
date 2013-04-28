@@ -27,9 +27,4 @@ public class NMEA0183WriterFactory implements IWriterFactory {
 		}
 	}
 
-	@Override
-	public IDataReader createReader() {
-		return null;
-	}
-
 }
