@@ -16,12 +16,12 @@ public class MemoryDataWriter implements IDataWriter {
 	
 	
 	@Override
-	public void write(Measurement data) {
+	public void write(Measurement data, boolean valid) {
 		measurements.add(data);
 	}
 
 	@Override
-	public void write(Collection<Measurement> data) {
+	public void write(Collection<Measurement> data, boolean valid) {
 		measurements.addAll(data);
 	}
 

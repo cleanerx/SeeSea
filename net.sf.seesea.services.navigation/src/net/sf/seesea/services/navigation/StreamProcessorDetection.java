@@ -12,7 +12,7 @@ public class StreamProcessorDetection {
 			Object[] services, boolean log) throws IOException,
 			NMEAProcessingException {
 		IStreamProcessor streamProcessor = null;
-		int intialBytesToBeRead = 16384;
+		int intialBytesToBeRead = 65536;
 		int[] input = new int[intialBytesToBeRead];
 		int x;
 		int k = 0;

@@ -14,12 +14,6 @@ public class MemoryDataWriterFactory implements IWriterFactory {
 	}
 	
 	@Override
-	public IDataReader createReader() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public IDataWriter createWriter(Map<String, String> parameters) {
 		MemoryDataWriter memoryDataWriter = new MemoryDataWriter();
 		createDatawriters.add(memoryDataWriter);
