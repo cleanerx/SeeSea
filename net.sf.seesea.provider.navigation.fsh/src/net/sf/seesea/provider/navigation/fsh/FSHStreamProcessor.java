@@ -70,6 +70,8 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 	
 	public FSHHeader readHeader(byte[] header) {
 		StringBuffer flashFile = new StringBuffer();
+		if(header.length < 42) 
+			return null;
 		for(int i = 0 ; i < 16; i++) {
 			flashFile.append((char) header[i]);
 		}
@@ -146,16 +148,15 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 		
 		
 	public boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException {
-		ByteBuffer byteBuffer = ByteBuffer.allocate(buffer.length * 4);        
-        IntBuffer intBuffer = byteBuffer.asIntBuffer();
-        intBuffer.put(buffer);
-
-        byte[] array = byteBuffer.array();//		readHeader(buffer);
+		byte[] array =  new byte[buffer.length];
+		for (int i = 0 ; i < buffer.length ; i++) {
+			array[i] = (byte) buffer[i];
+		}
 		FSHHeader readHeader = readHeader(array);
-		if(readHeader.getRl90().startsWith("RL90 FLASH FILE")) { //$NON-NLS-1$
+		if(readHeader != null && readHeader.getRl90().startsWith("RL90 FLASH FILE")) { //$NON-NLS-1$
 			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -172,6 +173,11 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 	@Override
 	public void removeFSHListener(IFSHListener listener) {
 		listeners.remove(listener);	}
+
+	@Override
+	public String getMimeType() {
+		return "application/x-flashfile"; //$NON-NLS-1$
+	}
 
 	
 }
