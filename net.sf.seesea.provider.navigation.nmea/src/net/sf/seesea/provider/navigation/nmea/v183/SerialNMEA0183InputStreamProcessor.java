@@ -153,6 +153,11 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		processData = false;
 //		Thread.currentThread().interrupt();
 	}
+
+	@Override
+	public String getMimeType() {
+		return "application/x-nmea0183"; //$NON-NLS-1$
+	}
 	
 	
 }

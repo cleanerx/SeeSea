@@ -157,6 +157,9 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 	public boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException {
 		processData = true;
 		counter = 0;
+		if(buffer.length > 500) {
+			return false;
+		}
 		List<INMEA2000Listener> list = new ArrayList<INMEA2000Listener>(listeners);
 		listeners.removeAll(list);
 		NMEA2000StreamDetector detector = new NMEA2000StreamDetector();
@@ -198,6 +201,11 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 	public void close() throws IOException {
 		processData = false;
 //		Thread.currentThread().interrupt();
+	}
+
+	@Override
+	public String getMimeType() {
+		return "application/x-actisense"; //$NON-NLS-1$
 	}
 
 	
