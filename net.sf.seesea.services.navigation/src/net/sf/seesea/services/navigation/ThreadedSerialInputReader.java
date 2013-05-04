@@ -137,9 +137,9 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 						if(!continueProcessing) {
 							break;
 						}
-						if(j++ > 100) {
+						if(j++ > 1000) {
 							j = 0;
-							Thread.sleep(1);
+//							Thread.sleep(1);
 						}
 					}
 					if(!continueProcessing) {

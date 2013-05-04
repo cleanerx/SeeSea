@@ -29,13 +29,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.provider.navigation.nmea.v2000;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.seesea.services.navigation.CompressionType;
 import net.sf.seesea.services.navigation.IStreamProcessor;
+import net.sf.seesea.services.navigation.ITrack;
 import net.sf.seesea.services.navigation.NMEAProcessingException;
 
 /**
@@ -206,6 +209,12 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 	@Override
 	public String getMimeType() {
 		return "application/x-actisense"; //$NON-NLS-1$
+	}
+
+	@Override
+	public List<ITrack> getTracks(CompressionType compressionType, File file) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

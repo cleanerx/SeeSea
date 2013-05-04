@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v183;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -35,8 +36,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import net.sf.seesea.services.navigation.CompressionType;
 import net.sf.seesea.services.navigation.INMEAReader;
 import net.sf.seesea.services.navigation.IStreamProcessor;
+import net.sf.seesea.services.navigation.ITrack;
 import net.sf.seesea.services.navigation.NMEAProcessingException;
 import net.sf.seesea.services.navigation.RawDataEvent;
 import net.sf.seesea.services.navigation.RawDataEventListener;
@@ -157,6 +160,12 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 	@Override
 	public String getMimeType() {
 		return "application/x-nmea0183"; //$NON-NLS-1$
+	}
+
+	@Override
+	public List<ITrack> getTracks(CompressionType compressionType, File file) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

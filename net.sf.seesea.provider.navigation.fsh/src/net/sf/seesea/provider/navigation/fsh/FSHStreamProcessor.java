@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.fsh;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -36,7 +37,9 @@ import java.util.List;
 
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
+import net.sf.seesea.services.navigation.CompressionType;
 import net.sf.seesea.services.navigation.IStreamProcessor;
+import net.sf.seesea.services.navigation.ITrack;
 import net.sf.seesea.services.navigation.NMEAProcessingException;
 
 /**
@@ -177,6 +180,12 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 	@Override
 	public String getMimeType() {
 		return "application/x-flashfile"; //$NON-NLS-1$
+	}
+
+	@Override
+	public List<ITrack> getTracks(CompressionType compressionType, File file) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
