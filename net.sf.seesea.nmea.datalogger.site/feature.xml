@@ -40,4 +40,8 @@
          id="net.sf.seesea.ip.feature"
          version="0.0.0"/>
 
+   <includes
+         id="net.sf.seesea.gpsd.feature"
+         version="0.0.0"/>
+
 </feature>
