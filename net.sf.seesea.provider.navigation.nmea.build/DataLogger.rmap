@@ -2,7 +2,7 @@
 <rm:rmap xmlns:bc="http://www.eclipse.org/buckminster/Common-1.0" xmlns:rm="http://www.eclipse.org/buckminster/RMap-1.0">
   <rm:locator pattern="^org\.eclipse\.nebula(\..+)?$" searchPathRef="default"/>
   <rm:locator pattern="^org\.apache\.log4j(\..+)?$" searchPathRef="default"/>
-  <rm:locator pattern="^org\.apache\.math(\..+)?$" searchPathRef="default"/>
+  <rm:locator pattern="^org\.apache\.commons\.math(\..+)?$" searchPathRef="default"/>
   <rm:locator pattern="^org\.apache(\..+)?$" searchPathRef="org.eclipse.platform"/>
   <rm:locator pattern="^org\.eclipse(\..+)?$" searchPathRef="org.eclipse.platform"/>
   <rm:locator pattern="^net\.sf\.seesea(\..+)?$" searchPathRef="default"/>
