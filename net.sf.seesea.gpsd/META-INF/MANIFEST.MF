@@ -7,8 +7,6 @@ Bundle-Activator: net.sf.seesea.gpsd.GPSDActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  net.sf.seesea.provider.navigation.nmea.ui,
- net.sf.seesea.gpsd,
- net.sf.seesea.provider.navigation.nmea,
  net.sf.seesea.services.navigation,
  net.sf.seesea.lib
 Bundle-ActivationPolicy: lazy
