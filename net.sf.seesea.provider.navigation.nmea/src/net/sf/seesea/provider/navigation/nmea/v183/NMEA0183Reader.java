@@ -280,7 +280,7 @@ public class NMEA0183Reader implements IDataReader {
 					// fail silently
 				}
 			}
-			if (!nmeaContent[2].isEmpty() && depthBelowTransducer != null) {
+			if (nmeaContent.length > 2 && !nmeaContent[2].isEmpty() && depthBelowTransducer != null) {
 				try {
 					double offset = Double.parseDouble(nmeaContent[2]);
 					if (offset != 0.0) {
