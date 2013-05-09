@@ -50,6 +50,7 @@ import net.sf.seesea.navigation.ui.listener.PositionFigureListener;
 import net.sf.seesea.navigation.ui.listener.RelativeSpeedListener;
 import net.sf.seesea.navigation.ui.listener.SateliteQualityFigureListener;
 import net.sf.seesea.navigation.ui.listener.TimeFigureListener;
+import net.sf.seesea.navigation.ui.listener.WaterTempertureFigureListener;
 import net.sf.seesea.navigation.ui.listener.WindSpeedFigureListener;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
 import net.sf.seesea.services.navigation.listener.IHeadingListener;
@@ -59,6 +60,7 @@ import net.sf.seesea.services.navigation.listener.ISpeedListener;
 import net.sf.seesea.services.navigation.listener.ITimeListener;
 import net.sf.seesea.services.navigation.listener.ITotalLogListener;
 import net.sf.seesea.services.navigation.listener.ITripLogListener;
+import net.sf.seesea.services.navigation.listener.IWaterTemperatureListener;
 import net.sf.seesea.services.navigation.listener.IWindListener;
 
 import org.eclipse.draw2d.FigureCanvas;
@@ -93,6 +95,7 @@ public class SensorDataView extends ViewPart {
 	private ServiceRegistration<?> speedListenerRegistration;
 	private ServiceRegistration<?> mgkRegistration;
 	private ServiceRegistration<?> fdwSpeedListenerRegistration;
+	private ServiceRegistration<?> temperatureRegistration;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -182,6 +185,11 @@ public class SensorDataView extends ViewPart {
 		totalTripFigure.setValue("---.- nm"); //$NON-NLS-1$
 		totalTripFigure.setFontSize(fontSize);
 
+		DescriptiveInstrumentFigure waterTemperatureFigure = new DescriptiveInstrumentFigure();
+		waterTemperatureFigure.setDescription("Water Temp"); 
+		waterTemperatureFigure.setValue("---.- \u00B0"); //$NON-NLS-1$
+		waterTemperatureFigure.setFontSize(fontSize);
+
 //		CompassFigure compassFigure = new CompassFigure();
 		
 		instrumentContainerFigure.getChildArea().add(positionInstrumentFigure);
@@ -252,7 +260,7 @@ public class SensorDataView extends ViewPart {
 		instrumentContainerFigure.getChildArea().add(barFigure);
 		instrumentContainerFigure.getChildArea().add(tripFigure);
 		instrumentContainerFigure.getChildArea().add(totalTripFigure);
-//		instrumentContainerFigure.getChildArea().add(compassFigure);
+		instrumentContainerFigure.getChildArea().add(waterTemperatureFigure);
 		
 		scrollPane.setContents( instrumentContainerFigure );
 		lws.setContents(scrollPane);
@@ -292,6 +300,10 @@ public class SensorDataView extends ViewPart {
 
 		LogFigureListener tripFigureListener = new LogFigureListener(tripFigure);
 		totalTripRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ITripLogListener.class.getName(), tripFigureListener, null);
+
+		WaterTempertureFigureListener tempertureFigureListener = new WaterTempertureFigureListener(waterTemperatureFigure);
+		temperatureRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IWaterTemperatureListener.class.getName(), tempertureFigureListener, null);
+
 	}
 
 	/* (non-Javadoc)
@@ -318,6 +330,7 @@ public class SensorDataView extends ViewPart {
 		}
 		tripRegistration.unregister();
 		totalTripRegistration.unregister();
+		temperatureRegistration.unregister();
 		resourceManager.dispose();
 		super.dispose();
 	}
