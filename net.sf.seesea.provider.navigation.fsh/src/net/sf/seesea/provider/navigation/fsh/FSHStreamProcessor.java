@@ -31,8 +31,6 @@ package net.sf.seesea.provider.navigation.fsh;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.List;
 
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
