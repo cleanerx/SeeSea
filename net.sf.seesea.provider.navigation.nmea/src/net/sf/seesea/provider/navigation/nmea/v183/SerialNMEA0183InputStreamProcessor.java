@@ -32,7 +32,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
 
@@ -68,6 +72,8 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		NMEA0183StreamDetector nmea0183StreamDetector = new NMEA0183StreamDetector();
 		nmeaEventListeners.add(nmea0183StreamDetector);
 		aisEventListeners.add(nmea0183StreamDetector);
+		stringBuffer = null;
+		charcounter = 0;
 		for (int i : buf) {
 			readByte(i, "none"); //$NON-NLS-1$
 		}
@@ -109,6 +115,7 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		case '!':
 			stringBuffer = new StringBuffer();
 			stringBuffer.append((char) i);
+			charcounter = 1;
 			break;
 		default :
 			if(stringBuffer != null) {
@@ -163,9 +170,22 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 	}
 
 	@Override
-	public List<ITrack> getTracks(CompressionType compressionType, File file) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ITrack> getTracks(CompressionType compressionType, File file) throws ZipException, IOException {
+		List<ITrack> tracks = new ArrayList<ITrack>();
+		switch (compressionType) {
+
+		case ZIP:
+			ZipFile zipFile = new ZipFile(file);
+			List<ZipEntry> zipEntries = new ArrayList<ZipEntry>();
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+			while(entries.hasMoreElements()) {
+				ZipEntry nextElement = entries.nextElement();
+				if(!nextElement.isDirectory()) {
+					zipEntries.add(nextElement);
+				}
+			}
+		}
+		return tracks;
 	}
 	
 	
