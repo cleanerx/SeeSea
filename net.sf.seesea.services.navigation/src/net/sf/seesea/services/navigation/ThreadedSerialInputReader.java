@@ -31,7 +31,6 @@ package net.sf.seesea.services.navigation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.concurrent.Callable;
@@ -39,8 +38,6 @@ import java.util.concurrent.Callable;
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -61,12 +58,15 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 
 	private InputStream pushbackInputStream;
 
+	private final IFeedbackMessageConsumer feedbackMessageConsumer;
+
 	/**
 	 * @param in
 	 * @param streamproviderName 
 	 * @throws IOException 
 	 */
-	public ThreadedSerialInputReader(INMEAStreamProvider nmeaStreamProvider) throws IOException {
+	public ThreadedSerialInputReader(INMEAStreamProvider nmeaStreamProvider, IFeedbackMessageConsumer feedbackMessageConsumer) throws IOException {
+		this.feedbackMessageConsumer = feedbackMessageConsumer;
 		pushbackInputStream = nmeaStreamProvider.getInputStream();
 		streamProvider = nmeaStreamProvider;
 		Hashtable<String, Object> properties = new Hashtable<String, Object>();
@@ -114,14 +114,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 				IStreamProcessor streamProcessor = StreamProcessorDetection.detectStreamProcessor(pushbackInputStream, services, true);
 				String streamProviderName = streamProvider.getName();
 				if(streamProcessor == null) {
-					Display.getDefault().asyncExec(new Runnable() {
-						
-						@Override
-						public void run() {
-							MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.noProvider"), Messages.getString("ThreadedSerialInputReader.invalidStream")); //$NON-NLS-1$ //$NON-NLS-2$
-						}
-					});
-							
+					feedbackMessageConsumer.noProviderAvailable();
 					try {
 						close();
 					} catch (IOException e2) {
@@ -143,21 +136,9 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 						}
 					}
 					if(!continueProcessing) {
-						Display.getDefault().asyncExec(new Runnable() {
-							
-							@Override
-							public void run() {
-								MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.processingStopped"), Messages.getString("ThreadedSerialInputReader.stop1")); //$NON-NLS-1$ //$NON-NLS-2$
-							}
-						});
+						feedbackMessageConsumer.processingStopped();
 					} else {
-						Display.getDefault().asyncExec(new Runnable() {
-							
-							@Override
-							public void run() {
-								MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.processingStopped"), Messages.getString("ThreadedSerialInputReader.stop2")); //$NON-NLS-1$ //$NON-NLS-2$
-							}
-						});
+						feedbackMessageConsumer.processingStopped();
 					}
 
 				} catch (Exception e) {
@@ -182,13 +163,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 				}
 			}
 		} catch (SocketTimeoutException e) {
-			Display.getDefault().asyncExec(new Runnable() {
-				
-				@Override
-				public void run() {
-					MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.getString("ThreadedSerialInputReader.timeout"), Messages.getString("ThreadedSerialInputReader.nodata")); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			});
+			feedbackMessageConsumer.timeout();
 			Logger.getLogger(getClass()).error("Fail", e); //$NON-NLS-1$
 		} catch (Exception e) {
 			Logger.getLogger(getClass()).error("Fail", e); //$NON-NLS-1$

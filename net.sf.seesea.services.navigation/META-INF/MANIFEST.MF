@@ -4,8 +4,7 @@ Bundle-Name: Navigation
 Bundle-SymbolicName: net.sf.seesea.services.navigation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.services.navigation.NavigationServicesActivator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.model.core,
  org.apache.log4j;bundle-version="1.2.16"
 Bundle-ActivationPolicy: lazy

@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import net.sf.seesea.provider.navigation.nmea.ui.DefaultFeedbackMessageConsumer;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
 import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
@@ -112,7 +113,7 @@ public class IPNMEAProvider implements INMEAConnector {
 		int timeout = selectHostPage.getTimeout();
 		inputStreamProvider = new TCPIPInputStreamProvider(host, port, timeout);
 		try {
-			reader = new ThreadedSerialInputReader(inputStreamProvider);
+			reader = new ThreadedSerialInputReader(inputStreamProvider, new DefaultFeedbackMessageConsumer());
 			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
 			ExecutorService es = Executors.newSingleThreadExecutor ();
 			es.submit (futureTask);

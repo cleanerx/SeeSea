@@ -36,6 +36,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import net.sf.seesea.provider.navigation.nmea.ui.DefaultFeedbackMessageConsumer;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
 import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
@@ -94,7 +95,7 @@ public class GPSDConnector implements INMEAConnector {
 		int timeout = selectHostPage.getTimeout();
 		GPSDInputStreamProvider inputStreamProvider = new GPSDInputStreamProvider(host, port, timeout);
 		try {
-			reader = new ThreadedSerialInputReader(inputStreamProvider);
+			reader = new ThreadedSerialInputReader(inputStreamProvider, new DefaultFeedbackMessageConsumer());
 			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
 			ExecutorService es = Executors.newSingleThreadExecutor ();
 			es.submit (futureTask);

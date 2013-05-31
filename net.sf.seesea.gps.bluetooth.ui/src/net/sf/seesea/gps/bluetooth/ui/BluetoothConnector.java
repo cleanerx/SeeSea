@@ -39,6 +39,7 @@ import java.util.concurrent.FutureTask;
 import net.sf.seesea.gps.bluetooth.BluetoothInputStreamProvider;
 import net.sf.seesea.gps.bluetooth.ui.wizard.BluetoothDiscoveryPageChangeListener;
 import net.sf.seesea.gps.bluetooth.ui.wizard.DevicesPage;
+import net.sf.seesea.provider.navigation.nmea.ui.DefaultFeedbackMessageConsumer;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
 import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
@@ -111,7 +112,7 @@ public class BluetoothConnector implements INMEAConnector {
 		try {
 			DevicesPage iWizardPage = (DevicesPage) wizardPages.get(0);
 			bluetoothInputStreamProvider = new BluetoothInputStreamProvider(iWizardPage.getServiceRecord());
-			reader = new ThreadedSerialInputReader(bluetoothInputStreamProvider);
+			reader = new ThreadedSerialInputReader(bluetoothInputStreamProvider, new DefaultFeedbackMessageConsumer());
 			// Trigger reading
 			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
 			ExecutorService es = Executors.newSingleThreadExecutor ();
