@@ -34,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.sf.seesea.services.navigation.CompressionType;
@@ -213,8 +214,12 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 
 	@Override
 	public List<ITrack> getTracks(CompressionType compressionType, File file) {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.<ITrack>emptyList();
+	}
+
+	@Override
+	public boolean isBinary() {
+		return true;
 	}
 
 	

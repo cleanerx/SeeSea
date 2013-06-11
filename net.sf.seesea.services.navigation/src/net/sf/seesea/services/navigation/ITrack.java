@@ -1,11 +1,14 @@
 package net.sf.seesea.services.navigation;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public interface ITrack {
 	
 	String getTrackQualifier();
 	
-	InputStream getInputStream();
+	InputStream getInputStream() throws IOException;
 
+	String getMimeType();
+	
 }

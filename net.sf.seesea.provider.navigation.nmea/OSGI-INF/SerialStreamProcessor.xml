@@ -5,4 +5,5 @@
       <provide interface="net.sf.seesea.services.navigation.IStreamProcessor"/>
       <provide interface="net.sf.seesea.services.navigation.INMEAReader"/>
    </service>
+   <property name="type" type="String" value="ascii"/>
 </scr:component>

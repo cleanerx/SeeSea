@@ -59,12 +59,15 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 	private boolean processData;
 	
 	private int charcounter;
+
+	private NMEA0183Reader nmea0183Reader;
 	
 	public SerialNMEA0183InputStreamProcessor() {
 		stringBuffer = null;	
 		nmeaEventListeners = new ArrayList<RawDataEventListener>(1);
 		aisEventListeners = new ArrayList<RawDataEventListener>(1);
 		charcounter = 0;
+		nmea0183Reader = new NMEA0183Reader();
 	}
  
 	public boolean isValidStreamProcessor(int[] buf) throws NMEAProcessingException {
@@ -92,12 +95,12 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 				stringBuffer.append((char) i);
 				String line = stringBuffer.toString();
 				try {
-					if(line.startsWith("!")) { //$NON-NLS-1$
+					if(line.startsWith("!") && line.endsWith("\r\n")) { //$NON-NLS-1$ //$NON-NLS-2$
 						RawDataEvent nmeaEvent = new RawDataEvent(stringBuffer.toString(), streamProvider);
 						for(RawDataEventListener aisEventListener : aisEventListeners) {
 							aisEventListener.receiveRawDataEvent(nmeaEvent);
 						}
-					} else if(line.startsWith("$")) { //$NON-NLS-1$
+					} else if(line.startsWith("$") && nmea0183Reader.removeValidChecksum(line) != null) { //$NON-NLS-1$
 						RawDataEvent nmeaEvent = new RawDataEvent(stringBuffer.toString(), streamProvider);
 						for (RawDataEventListener nmeaEventListener : nmeaEventListeners) {
 							nmeaEventListener.receiveRawDataEvent(nmeaEvent);
@@ -171,21 +174,12 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 
 	@Override
 	public List<ITrack> getTracks(CompressionType compressionType, File file) throws ZipException, IOException {
-		List<ITrack> tracks = new ArrayList<ITrack>();
-		switch (compressionType) {
+		return new ArrayList<ITrack>();
+	}
 
-		case ZIP:
-			ZipFile zipFile = new ZipFile(file);
-			List<ZipEntry> zipEntries = new ArrayList<ZipEntry>();
-			Enumeration<? extends ZipEntry> entries = zipFile.entries();
-			while(entries.hasMoreElements()) {
-				ZipEntry nextElement = entries.nextElement();
-				if(!nextElement.isDirectory()) {
-					zipEntries.add(nextElement);
-				}
-			}
-		}
-		return tracks;
+	@Override
+	public boolean isBinary() {
+		return false;
 	}
 	
 	

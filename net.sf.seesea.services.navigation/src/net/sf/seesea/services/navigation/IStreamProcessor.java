@@ -55,4 +55,5 @@ public interface IStreamProcessor {
 
 	List<ITrack> getTracks(CompressionType compressionType, File file) throws ZipException, IOException;
 	
+	boolean isBinary();
 }
