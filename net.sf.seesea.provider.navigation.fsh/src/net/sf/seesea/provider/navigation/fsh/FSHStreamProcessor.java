@@ -31,6 +31,7 @@ package net.sf.seesea.provider.navigation.fsh;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
@@ -182,8 +183,12 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 
 	@Override
 	public List<ITrack> getTracks(CompressionType compressionType, File file) {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.<ITrack>emptyList();
+	}
+
+	@Override
+	public boolean isBinary() {
+		return true;
 	}
 
 	
