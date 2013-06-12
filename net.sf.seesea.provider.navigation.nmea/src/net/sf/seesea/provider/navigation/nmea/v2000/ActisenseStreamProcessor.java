@@ -161,11 +161,9 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 	public boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException {
 		processData = true;
 		counter = 0;
-		if(buffer.length > 500) {
-			return false;
-		}
 		List<INMEA2000Listener> list = new ArrayList<INMEA2000Listener>(listeners);
 		listeners.removeAll(list);
+		message = new int[65536 * 4];
 		NMEA2000StreamDetector detector = new NMEA2000StreamDetector();
 		addNMEA2000Listener(detector);
 		for (int i : buffer) {
@@ -173,7 +171,7 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 		}
 		removeNMEA2000Listener(detector);
 		listeners.addAll(list);
-		message = new int[500];
+		message = new int[2048];
 		state = MessageProcessingState.MESSAGE_START;
 		return detector.isNMEA2000Stream();
 	}
