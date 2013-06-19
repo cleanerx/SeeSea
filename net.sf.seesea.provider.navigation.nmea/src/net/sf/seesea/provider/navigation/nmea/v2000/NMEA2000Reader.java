@@ -12,8 +12,11 @@ import net.sf.seesea.model.core.geo.Latitude;
 import net.sf.seesea.model.core.geo.Longitude;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.RelativeDepthMeasurementPosition;
+import net.sf.seesea.model.core.physx.Distance;
+import net.sf.seesea.model.core.physx.DistanceType;
 import net.sf.seesea.model.core.physx.Heading;
 import net.sf.seesea.model.core.physx.HeadingType;
+import net.sf.seesea.model.core.physx.LengthUnit;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.core.physx.PhysxFactory;
 import net.sf.seesea.model.core.physx.RelativeSpeed;
@@ -26,9 +29,13 @@ import net.sf.seesea.model.core.physx.Time;
 import net.sf.seesea.model.core.weather.WeatherFactory;
 import net.sf.seesea.model.core.weather.WindMeasurement;
 import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.HeadingSensorReference;
+import net.sf.seesea.provider.navigation.nmea.v2000.datadictionary.TemperatureSource;
 import net.sf.seesea.provider.navigation.nmea.v2000.pgn.COGSOG;
+import net.sf.seesea.provider.navigation.nmea.v2000.pgn.DistanceLog;
 import net.sf.seesea.provider.navigation.nmea.v2000.pgn.EnvironmentalParameters1;
+import net.sf.seesea.provider.navigation.nmea.v2000.pgn.EnvironmentalParameters2;
 import net.sf.seesea.provider.navigation.nmea.v2000.pgn.GNSSPositionData;
+import net.sf.seesea.provider.navigation.nmea.v2000.pgn.PositionRapid;
 import net.sf.seesea.provider.navigation.nmea.v2000.pgn.SpeedWaterReferenced;
 import net.sf.seesea.provider.navigation.nmea.v2000.pgn.TimeDate;
 import net.sf.seesea.provider.navigation.nmea.v2000.pgn.VesselHeading;
@@ -123,11 +130,28 @@ public class NMEA2000Reader {
 				}
 				break;
 			case 128275:
-				// FIXME: Distance Log
+				DistanceLog log = new DistanceLog(Arrays.copyOfRange(data, startIndex, startIndex + 14));
+				if(log.getDistanceVoyage().isValid()) {
+					double tripDistance = log.getDistanceVoyage().getValue();
+					Distance tripDistanceObject = PhysxFactory.eINSTANCE
+							.createDistance();
+					tripDistanceObject.setValue(tripDistance);
+					tripDistanceObject.setUnit(LengthUnit.METERS);
+					tripDistanceObject.setDistanceType(DistanceType.TRIP);
+				}
+				if(log.getTotalDistance().isValid()) {
+					double totalDistance = log.getTotalDistance().getValue();
+					Distance totalDistanceObject = PhysxFactory.eINSTANCE
+							.createDistance();
+					totalDistanceObject.setValue(totalDistance);
+					totalDistanceObject.setUnit(LengthUnit.METERS);
+					totalDistanceObject.setDistanceType(DistanceType.TOTAL);
+				}
+				break;
 			case 129025:
 //			System.out.println("Position, Rapid Update " + pgn);
 //			PositionRapid positionRapid = new PositionRapid(Arrays.copyOfRange(
-//					data, 11, 19));
+//					data, startIndex, startIndex + 8));
 //			MeasuredPosition3D measuredPositionRapid = GeoFactory.eINSTANCE
 //					.createMeasuredPosition3D();
 //			Latitude lat2 = GeoFactory.eINSTANCE.createLatitude();
@@ -236,9 +260,19 @@ public class NMEA2000Reader {
 				results.add(temperature);
 				break;
 			case 130311:
+				EnvironmentalParameters2 parameters2 = new EnvironmentalParameters2(data);
+				if(TemperatureSource.SeaTemperature.equals(parameters2.getTemperatureSource())) {
+					Temperature wtemperature = PhysxFactory.eINSTANCE
+							.createTemperature();
+					wtemperature.setUnit(TemperatureUnit.KELVIN);
+					wtemperature.setValue(parameters2.getTemperature().getValue());
+					results.add(wtemperature);
+				}
+				
 //			System.out.println("Environmental Parameters 2 " + pgn);
 				break;
 			default:
+				// 130823:  Browser Control Status : 
 				if (pgn > 120000) {
 					System.out.println("NMEA PGN " + pgn);
 				} else {
@@ -247,6 +281,13 @@ public class NMEA2000Reader {
 				break;
 			}
 		}
+		if (pgn > 120000) {
+			System.out.println("NMEA PGN " + pgn);
+//		} else {
+//		System.out.println("Engine PGN " + pgn);
+		}
+//		break;
+//	}
 		
 		return results;
 	}

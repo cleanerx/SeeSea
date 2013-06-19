@@ -32,10 +32,12 @@ IShipMovementVectorProvider {
 	}
 	
 	public NMEA2000EventProcessor() {
-		Set<Integer> pgns = new HashSet<Integer>();
-		pgns.add(129029);
-		pgns.add(128267);
-		nmea2000Reader = new NMEA2000Reader(pgns);
+//		Set<Integer> pgns = new HashSet<Integer>();
+//		pgns.add(129029);
+//		pgns.add(128267);
+//		pgns.add(130919);
+//		pgns.add(128259);
+		nmea2000Reader = new NMEA2000Reader();
 	}
 	
 	@Override
