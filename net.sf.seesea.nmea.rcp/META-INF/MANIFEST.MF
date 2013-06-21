@@ -28,3 +28,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.nmea.rcp
 Service-Component: OSGI-INF/ModelService.xml
+Bundle-ClassPath: .,
+ swt-grouplayout.jar
