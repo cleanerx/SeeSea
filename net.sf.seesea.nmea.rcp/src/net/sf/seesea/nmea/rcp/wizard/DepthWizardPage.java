@@ -19,6 +19,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.TouchEvent;
+import org.eclipse.swt.events.TouchListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
@@ -195,6 +197,26 @@ public class DepthWizardPage extends WizardPage {
 				}
 			}
 		});
+		boatSchemeCanvas.addTouchListener(new TouchListener() {
+			
+			@Override
+			public void touch(TouchEvent e) {
+				if(e.y >= 45 && e.y <= 240 && e.x >= 79 && e.x <= 160) {
+					x = e.x;
+					y = e.y;
+					
+					VesselWizardPage vesselWizardPage = (VesselWizardPage) getPreviousPage();
+
+					double length = vesselWizardPage.getLength();
+					distanceSternText.setText(format.format(((240D - y) / 195D) * length));
+					
+					double beam = vesselWizardPage.getBeam();
+					distanceCenterText.setText(format.format(((x - 119.5) / 40.5) * beam));
+					
+					boatSchemeCanvas.redraw();
+				}
+			}
+		});
 			
 		boatSchemeCanvas.addPaintListener(new PaintListener() {
 			@Override
@@ -254,7 +276,7 @@ public class DepthWizardPage extends WizardPage {
 		Label lblDragThePosition = new Label(composite, SWT.NONE);
 		lblDragThePosition.setText("Drag to position the sensor");
 		
-		Canvas canvas = new Canvas(composite, SWT.BORDER);
+		final Canvas canvas = new Canvas(composite, SWT.BORDER);
 		canvas.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -268,7 +290,7 @@ public class DepthWizardPage extends WizardPage {
 				Color red = new Color(gc.getDevice(), rgb);
 				gc.setBackground(red);
 				gc.setForeground(red);
-				gc.fillRoundRectangle(x - 5, y - 5, 10, 10, 2, 2);
+				gc.fillRoundRectangle(121, z - 5, 10, 10, 2, 2);
 				red.dispose();
 			}
 		});	
@@ -282,9 +304,9 @@ public class DepthWizardPage extends WizardPage {
 					VesselWizardPage vesselWizardPage = (VesselWizardPage) getPreviousPage();
 
 					double draft = vesselWizardPage.getDraft();
-//					distanceWaterlineText.setText(format.format(((240D - y) / 195D) * length));
+					distanceWaterlineText.setText(format.format(((z - 80D) / 61D) * draft));
 					
-					boatSchemeCanvas.redraw();
+					canvas.redraw();
 				}
 			}
 			
@@ -301,13 +323,28 @@ public class DepthWizardPage extends WizardPage {
 				if(pressed && e.y >= 80 && e.y <= 141) {
 					z = e.y;
 					
-					System.out.println(e.y);
 					VesselWizardPage vesselWizardPage = (VesselWizardPage) getPreviousPage();
 
 					double draft = vesselWizardPage.getDraft();
 					distanceWaterlineText.setText(format.format(((z - 80D) / 61D) * draft));
 					
-					boatSchemeCanvas.redraw();
+					canvas.redraw();
+				}
+			}
+		});
+		canvas.addTouchListener(new TouchListener() {
+			
+			@Override
+			public void touch(TouchEvent e) {
+				if(e.y >= 80 && e.y <= 141) {
+					z = e.y;
+					
+					VesselWizardPage vesselWizardPage = (VesselWizardPage) getPreviousPage();
+
+					double draft = vesselWizardPage.getDraft();
+					distanceWaterlineText.setText(format.format(((z - 80D) / 61D) * draft));
+					
+					canvas.redraw();
 				}
 			}
 		});

@@ -47,10 +47,10 @@ public class UploadDataHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		UploadWizard uploadWizard = new UploadWizard();
 		uploadWizard.addPage(new UsernamePasswordWizardPage());
-//		uploadWizard.addPage(new OrganizationWizardPage());
-//		uploadWizard.addPage(new VesselWizardPage());
-//		uploadWizard.addPage(new DepthWizardPage());
-//		uploadWizard.addPage(new SBASWizardPage());
+		uploadWizard.addPage(new OrganizationWizardPage());
+		uploadWizard.addPage(new VesselWizardPage());
+		uploadWizard.addPage(new DepthWizardPage());
+		uploadWizard.addPage(new SBASWizardPage());
 		uploadWizard.setWindowTitle(Messages.getString("UploadDataHandler.wizardTitle")); //$NON-NLS-1$
 		
 		ValidatingWizardDialog wizardDialog = new ValidatingWizardDialog(HandlerUtil.getActiveShell(event), uploadWizard);
