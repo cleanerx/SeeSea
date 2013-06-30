@@ -65,28 +65,32 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 	}
 	
 	public FSHHeader readHeader(InputStream is) throws IOException {
-		byte[] header = new byte[42];
-		is.read(header, 0, 42);
+		byte[] header = new byte[28];
+		int read = is.read(header, 0, 28);
+//		System.out.println(read);
 		return readHeader(header);
 	}
 	
 	public FSHHeader readHeader(byte[] header) {
 		StringBuffer flashFile = new StringBuffer();
-		if(header.length < 42) 
+		if(header.length < 28) 
 			return null;
 		for(int i = 0 ; i < 16; i++) {
 			flashFile.append((char) header[i]);
 		}
-		StringBuffer rayflob1 = new StringBuffer();
-		for(int i = 28; i < 28 + 8; i++) {
-			rayflob1.append((char)header[i]);
-		}
-		return new FSHHeader(flashFile.toString(), rayflob1.toString());
+		short flobcount = getShort(header, 16);
+		
+//		StringBuffer rayflob1 = new StringBuffer();
+//		for(int i = 18; i < 28 + 8; i++) {
+//			rayflob1.append((char)header[i]);
+//		}
+		return new FSHHeader(flashFile.toString(), flobcount);
 	}
 
 	public FSHBlock readBlock(InputStream is) throws IOException {
 		byte[] block = new byte[14];
 		int read = is.read(block);
+//		System.out.println(read);
 		if(read == -1 || read != 14) {
 			return null;
 		}
@@ -110,6 +114,9 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 		int type = (block[11] & 0xFF) << 8;
 		type |= (block[10] & 0xFF) ;
 		
+		if(type == 0xFF) {
+			return null;
+		}
 		return new FSHBlock(length,guid,type);
 	}
 
@@ -191,5 +198,28 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 		return true;
 	}
 
+	private short getShort(byte[] block, int startIndex) {
+		int guid = (block[startIndex + 0] & 0xFF) << 8;
+		guid |= (block[startIndex + 1] & 0xFF);
+		return (short)guid;
+	}
+
+	public FlobHeader readFlobHeader(byte[] header) {
+		StringBuffer flashFile = new StringBuffer();
+		if(header.length < 14) 
+			return null;
+		for(int i = 0 ; i < 14; i++) {
+			flashFile.append((char) header[i]);
+		}
+
+		return new FlobHeader();
+	}
+
+	public FlobHeader readFlobHeader(InputStream inputStream) throws IOException {
+		byte[] header = new byte[14];
+		int read = inputStream.read(header, 0, 14);
+//		System.out.println(read);
+		return readFlobHeader(header);
+	}
 	
 }

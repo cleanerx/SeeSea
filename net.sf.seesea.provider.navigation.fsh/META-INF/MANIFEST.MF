@@ -9,5 +9,6 @@ Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.services.navigation;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: net.sf.seesea.provider.navigation.fsh
+Export-Package: net.sf.seesea.provider.navigation.fsh,
+ net.sf.seesea.provider.navigation.fsh.data
 Service-Component: OSGI-INF/FSHStreamProcessor.xml

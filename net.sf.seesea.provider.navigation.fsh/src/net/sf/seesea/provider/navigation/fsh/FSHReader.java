@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */package net.sf.seesea.provider.navigation.fsh;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -39,6 +40,7 @@ import net.sf.seesea.model.core.geo.Longitude;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
+import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
 
 
 public class FSHReader {
@@ -68,6 +70,7 @@ public class FSHReader {
 				break;
 			// track meta data
 			case 0x0e:
+				readTrackMetadata(message);
 				break;
 			// route
 			case 0x21:
@@ -81,6 +84,11 @@ public class FSHReader {
 		}
 		return measurements;
 	}
+		private void readTrackMetadata(byte[] message) {
+		
+	}
+
+
 
 	private List<Measurement> readTrackData(byte[] data) {
 		List<Measurement> results = new ArrayList<Measurement>();
@@ -88,8 +96,9 @@ public class FSHReader {
 		int trackpointsCount = (data[5] & 0xFF) << 8;
 		trackpointsCount |= (data[4] & 0xFF) ;
 		
-		for(int j = 0 ; j < trackpointsCount ; j++) {
-			for(int i = (j * 14) + 8 ; i < data.length; i+= 14) {
+//		for(int j = 0 ; j < trackpointsCount ; j++) {
+			for(int i = 8 ; i < data.length; i+= 14) {
+				byte[] debugArray = Arrays.copyOfRange(data , i + 8, i + 14);
 				long lat = (long)(data[i + 3] & 0xFF) << 24;
 				lat |= (long)(data[i + 2] & 0xFF) << 16;
 				lat |= (long)(data[i + 1] & 0xFF) << 8;
@@ -112,16 +121,19 @@ public class FSHReader {
 				position3d.setLatitude(latitude2);
 				Longitude longitude2 = GeoFactory.eINSTANCE.createLongitude();
 				longitude2.setDecimalDegree(longitude);
+				position3d.setLongitude(longitude2);
+				position3d.setValid(true);
 				
 //				System.out.println(latitude + ":" + longitude + ":" + depth );
 				
 				Depth depth2 = GeoFactory.eINSTANCE.createDepth();
 				depth2.setDepth(((double)depth) / 100);
+				depth2.setValid(true);
 				
 				results.add(position3d);
 				results.add(depth2);
 			}
-		}
+//		}
 		return results;
 	}
 	

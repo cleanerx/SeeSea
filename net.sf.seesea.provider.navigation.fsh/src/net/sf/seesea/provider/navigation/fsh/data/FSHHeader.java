@@ -30,10 +30,12 @@ package net.sf.seesea.provider.navigation.fsh.data;
 
 public class FSHHeader {
 	
-	public FSHHeader(String rl90, String rflob) {
+	private final short flobcount;
+
+	public FSHHeader(String rl90, short flobcount) {
 		super();
 		this.rl90 = rl90;
-		this.rflob = rflob;
+		this.flobcount = flobcount;
 	}
 
 	private String rl90;
@@ -60,9 +62,15 @@ public class FSHHeader {
 		return rl90;
 	}
 
-	public String getRflob() {
-		return rflob;
+	public short getFlobcount() {
+		return flobcount;
 	}
+	
+	
+
+//	public String getRflob() {
+//		return rflob;
+//	}
 
 	
 	
