@@ -40,7 +40,6 @@ import net.sf.seesea.model.core.geo.Longitude;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
-import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
 
 
 public class FSHReader {
