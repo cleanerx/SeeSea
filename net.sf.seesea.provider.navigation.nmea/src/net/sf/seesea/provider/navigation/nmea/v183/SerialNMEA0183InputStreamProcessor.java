@@ -31,6 +31,7 @@ package net.sf.seesea.provider.navigation.nmea.v183;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -182,5 +183,18 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		return false;
 	}
 	
+	private List<ZipEntry> getZipEntries(File file, String charset) throws IOException {
+		ZipFile zipFile = new ZipFile(file, Charset.forName(charset));
+		List<ZipEntry> zipEntries = new ArrayList<ZipEntry>();
+		Enumeration<? extends ZipEntry> entries = zipFile.entries();
+		while(entries.hasMoreElements()) {
+			ZipEntry nextElement = entries.nextElement();
+			if(!nextElement.isDirectory()) {
+				zipEntries.add(nextElement);
+			}
+		}
+		return zipEntries;
+}
+
 	
 }

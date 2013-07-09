@@ -314,11 +314,11 @@ public class NMEA0183Reader implements IDataReader {
 	 * @return
 	 */
 	protected String removeValidChecksum(String nmeaMessageContent) {
-		if (!nmeaMessageContent.startsWith("$")) { //$NON-NLS-1$
+		if (!nmeaMessageContent.contains("$")) { //$NON-NLS-1$
 			return null;
 		}
 		try {
-			String rawContent = nmeaMessageContent.substring(1,
+			String rawContent = nmeaMessageContent.substring(nmeaMessageContent.indexOf("$") + 1,
 					nmeaMessageContent.length());
 			int checksumIndex = rawContent.lastIndexOf("*"); //$NON-NLS-1$
 			if (checksumIndex != -1) {

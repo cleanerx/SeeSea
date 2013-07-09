@@ -281,11 +281,11 @@ public class NMEA2000Reader {
 				break;
 			}
 		}
-		if (pgn > 120000) {
-			System.out.println("NMEA PGN " + pgn);
+//		if (pgn > 120000) {
+//			System.out.println("NMEA PGN " + pgn);
 //		} else {
 //		System.out.println("Engine PGN " + pgn);
-		}
+//		}
 //		break;
 //	}
 		
