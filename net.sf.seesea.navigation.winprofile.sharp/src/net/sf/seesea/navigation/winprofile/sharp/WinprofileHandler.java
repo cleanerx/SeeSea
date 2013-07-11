@@ -41,8 +41,6 @@ public class WinprofileHandler extends DefaultHandler {
 			Attributes attributes) throws SAXException {
 		if(localName.equals("WinProfile_Sharp_Data")) {
 			validStream = true;
-		} else if(localName.equals("Depth")) {
-			
 		}
 	}
 

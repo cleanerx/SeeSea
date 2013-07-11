@@ -94,7 +94,7 @@ public class WinprofileSharpStreamProcessor implements IStreamProcessor {
 	@Override
 	public List<ITrack> getTracks(CompressionType compressionType, File file)
 			throws ZipException, IOException {
-		return new ArrayList<>(1);
+		return new ArrayList<ITrack>(1);
 	}
 	
 	@Override
