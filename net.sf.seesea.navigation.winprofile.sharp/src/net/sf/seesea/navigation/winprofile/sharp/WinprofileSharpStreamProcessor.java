@@ -32,24 +32,14 @@ import java.io.ByteArrayInputStream;
 import java.io.CharConversionException;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import net.sf.seesea.services.navigation.CompressionType;
 import net.sf.seesea.services.navigation.IStreamProcessor;
 import net.sf.seesea.services.navigation.ITrack;
 import net.sf.seesea.services.navigation.NMEAProcessingException;
-import net.sf.seesea.services.navigation.StreamProcessorDetection;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
@@ -107,21 +97,6 @@ public class WinprofileSharpStreamProcessor implements IStreamProcessor {
 		return new ArrayList<>(1);
 	}
 	
-	private Map<ZipFile,List<ZipEntry>> getZipEntries(File file, String charset) throws IOException {
-		ZipFile zipFile = new ZipFile(file, Charset.forName(charset));
-		List<ZipEntry> zipEntries = new ArrayList<ZipEntry>();
-		Enumeration<? extends ZipEntry> entries = zipFile.entries();
-		while(entries.hasMoreElements()) {
-			ZipEntry nextElement = entries.nextElement();
-			if(!nextElement.isDirectory()) {
-				zipEntries.add(nextElement);
-			}
-		}
-		Map<ZipFile, List<ZipEntry>> map = new HashMap<>();
-		map.put(zipFile, zipEntries);
-		return map;
-}
-
 	@Override
 	public boolean isBinary() {
 		return false;
