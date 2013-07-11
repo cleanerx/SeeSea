@@ -242,7 +242,7 @@ public class NMEA0183Reader implements IDataReader {
 				}
 			} catch (IllegalArgumentException e) {
 				Logger.getLogger(getClass()).error(
-						"Unknown message " + e.getMessage(), e);
+						"Unknown message is being ignored " + e.getMessage());
 			}
 		}
 		return results;
