@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
@@ -39,6 +40,7 @@ import net.sf.seesea.osm.OpenSeaMapActivator;
 import net.sf.seesea.osm.util.IOUtils;
 import net.sf.seesea.tileservice.ITileSource;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -113,13 +115,18 @@ public class OpenStreetMapHardDiskTileSource implements ITileSource {
 		connection.setConnectTimeout(5000);
 		connection.setUseCaches(false);
 		connection.setReadTimeout(5000);
-		connection.connect();
+		try {
+			
+			connection.connect();
+			ReadableByteChannel readableByteChannel = Channels.newChannel(connection.getInputStream());
+			FileOutputStream fileOutputStream = new FileOutputStream(new File(xDir, yTile + ".png")); //$NON-NLS-1$
+			WritableByteChannel writableByteChannel = Channels.newChannel(fileOutputStream);
+			IOUtils.channelCopy(readableByteChannel, writableByteChannel);
+			fileOutputStream.close();
+		} catch (UnknownHostException e) {
+			Logger.getLogger(getClass()).debug("Host not found");
+		}
 		
-		ReadableByteChannel readableByteChannel = Channels.newChannel(connection.getInputStream());
-		FileOutputStream fileOutputStream = new FileOutputStream(new File(xDir, yTile + ".png")); //$NON-NLS-1$
-		WritableByteChannel writableByteChannel = Channels.newChannel(fileOutputStream);
-		IOUtils.channelCopy(readableByteChannel, writableByteChannel);
-		fileOutputStream.close();
 	}
 
 	public IStatus clearCache() {
