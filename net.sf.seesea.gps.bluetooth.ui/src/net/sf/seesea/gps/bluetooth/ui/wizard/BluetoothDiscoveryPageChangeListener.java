@@ -64,7 +64,7 @@ public class BluetoothDiscoveryPageChangeListener implements
 			try {
 				LocalDevice localDevice = LocalDevice.getLocalDevice();
 				if(bluetoothDiscoveryListener != null) {
-					localDevice.getDiscoveryAgent().cancelInquiry(bluetoothDiscoveryListener);
+//					localDevice.getDiscoveryAgent().cancelInquiry(bluetoothDiscoveryListener);
 				}
 			} catch (BluetoothStateException e) {
 				Logger.getRootLogger().error(e);
