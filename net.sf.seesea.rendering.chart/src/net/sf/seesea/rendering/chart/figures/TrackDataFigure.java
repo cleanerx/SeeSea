@@ -58,6 +58,7 @@ public class TrackDataFigure extends PolylineConnection {
 	private PointList pointList; 
 	
 	public TrackDataFigure() {
+		setToolTip(new Label());
 		_relativePoints = new ArrayList<Point>();
 		_labels = new HashMap<Integer, String>();
 		setOpaque(false);
@@ -84,13 +85,13 @@ public class TrackDataFigure extends PolylineConnection {
 	}
 	
 	public void addDataPoint(int position, String dataValue) {
-//		synchronized (syncObject) {
-//		_labels.put(position, dataValue);
-//		Label dataValueLabel = new Label(dataValue);
-//		MidpointLocator midpointLocator = new MidpointLocator(this, position);
-//		midpointLocator.setRelativePosition(PositionConstants.WEST);
-//		add(dataValueLabel, midpointLocator);
-//		}
+		synchronized (syncObject) {
+		_labels.put(position, dataValue);
+		Label dataValueLabel = new Label(dataValue);
+		MidpointLocator midpointLocator = new MidpointLocator(this, position);
+		midpointLocator.setRelativePosition(PositionConstants.WEST);
+		add(dataValueLabel, midpointLocator);
+		}
 	}
 
 	public void clearDataPoints() {

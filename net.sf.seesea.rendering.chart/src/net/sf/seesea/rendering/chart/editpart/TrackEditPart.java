@@ -150,7 +150,9 @@ public class TrackEditPart extends TransactionalEditPart implements Adapter {
 				IMapProjection service = ((ITileProvider)bundleContext.getService(serviceReference)).getProjection();
 				org.eclipse.swt.graphics.Point project = service.project(position3d,Integer.MAX_VALUE);
 				((TrackDataFigure)getFigure()).addRelativePoint(new Point(project.x, project.y));
+				bundleContext.ungetService(serviceReference);
 			}
+			
 		}
 //		Display.getDefault().asyncExec(new Runnable() {
 //			

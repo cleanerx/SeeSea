@@ -87,18 +87,7 @@ public class MapLayer extends FreeformLayer {
 				for (ServiceReference<?> serviceReference : xxx) {
 					ITileProvider tileProvider =  (ITileProvider) bundleContext.getService(serviceReference);
 					Point tileSize = new Point(tileProvider.getTileSize().x, tileProvider.getTileSize().y);
-					paintBounds = g.getClip(new Rectangle()).getCopy();
-					prevpaintBounds.add(0, paintBounds);
-					if(prevpaintBounds.size() > 10) {
-						prevpaintBounds.remove(10);
-					}
-//					g.setAlpha(64);
-					int maxHeight = 0;
-					int maxWidth = 0;
-					for (Rectangle rectangle : prevpaintBounds) {
-						maxHeight = Math.max(rectangle.height, maxHeight);
-						maxWidth = Math.max(rectangle.width, maxWidth);
-					}
+
 					Point upperLeftCorner = new Point(mapPosition.x - (mapPosition.x % tileSize.y),
 							mapPosition.y - (mapPosition.y % tileSize.y));
 					int x0 = upperLeftCorner.x / tileSize.x;
@@ -162,9 +151,11 @@ public class MapLayer extends FreeformLayer {
 		String text = "\u00A9 OpenStreetMap contributors"; //$NON-NLS-1$
 		Dimension textExtents = FigureUtilities.getTextExtents(text, font2);
 		textExtents.negate();
-		Rectangle clip = g.getClip(new Rectangle());
-		clip.expand(textExtents.width, textExtents.height);
-		g.drawText(text , clip.getBottomRight());
+//		Rectangle clip = g.getClip(new Rectangle());
+//		System.out.println(clip+ g.);
+		Rectangle copy = paintBounds.getCopy();
+		copy.expand(textExtents.width, textExtents.height);
+		g.drawText(text , copy.getBottomRight());
 		font2.dispose();
 //		System.out.println("paint");
 	}
@@ -236,6 +227,11 @@ public class MapLayer extends FreeformLayer {
 		int x;
 		
 		int y;
+		
+	}
+
+	public void setPaintBounds(Rectangle bounds) {
+		paintBounds = bounds;
 		
 	}
 }

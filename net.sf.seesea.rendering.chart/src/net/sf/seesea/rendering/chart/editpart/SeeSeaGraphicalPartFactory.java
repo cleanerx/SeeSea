@@ -29,6 +29,7 @@ package net.sf.seesea.rendering.chart.editpart;
 import net.sf.seesea.model.core.geo.AnchorPosition;
 import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.model.core.geo.Route;
 import net.sf.seesea.model.core.geo.Track;
 import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.model.int1.base.MarineChart;
@@ -81,6 +82,8 @@ public class SeeSeaGraphicalPartFactory implements EditPartFactory {
 //			child = new InstrumentEditPart();
 		} else if(model instanceof Track) {
 			child = new TrackEditPart();
+		} else if(model instanceof Route) {
+			child = new RouteEditPart();
 		}
 		if(child != null) {
 			child.setModel(model);

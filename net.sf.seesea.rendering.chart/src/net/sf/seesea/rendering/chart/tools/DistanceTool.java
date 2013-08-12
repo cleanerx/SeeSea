@@ -26,22 +26,35 @@
  */
 package net.sf.seesea.rendering.chart.tools;
 
+import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.rendering.chart.IViewerGestureListener;
+import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
+import net.sf.seesea.rendering.chart.editpart.WorldEditPart;
+import net.sf.seesea.tileservice.ITileProvider;
+import net.sf.seesea.tileservice.projections.IMapProjection;
 
+import org.eclipse.draw2d.ToolTipHelper;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.CreateConnectionRequest;
+import org.eclipse.gef.requests.LocationRequest;
+import org.eclipse.gef.tools.AbstractConnectionCreationTool;
 import org.eclipse.gef.tools.TargetingTool;
 import org.eclipse.swt.events.GestureEvent;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
-public class ChartSelectionTool extends TargetingTool implements IViewerGestureListener {
+public class DistanceTool extends AbstractConnectionCreationTool implements IViewerGestureListener {
 
-	public static final String MOVE_CHART = "Move Chart"; //$NON-NLS-1$
+	public static final String MOVE_CHART = "EditRoute"; //$NON-NLS-1$
+	private EditPartViewer viewer;
 
 	@Override
 	protected String getCommandName() {
@@ -52,38 +65,91 @@ public class ChartSelectionTool extends TargetingTool implements IViewerGestureL
 	protected boolean handleDragInProgress() {
 //		if(isInState(STATE_DRAG_IN_PROGRESS
 //				| STATE_ACCESSIBLE_DRAG_IN_PROGRESS)) {
-			updateTargetRequest();
-			updateTargetUnderMouse();
-			setCurrentCommand(getCommand());
+
 //		}
 		return true;
 	}
 	
+	
 	@Override
 	protected boolean handleButtonDown(int button) {
-		return super.handleButtonDown(button);
+		if (isInState(STATE_INITIAL) && button == 1) {
+			updateTargetRequest();
+			updateTargetUnderMouse();
+//			setConnectionSource(getTargetEditPart());
+			Command command = getCommand();
+//			((CreateConnectionRequest) getTargetRequest())
+//					.setSourceEditPart(getTargetEditPart());
+			if (command != null) {
+				setState(STATE_CONNECTION_STARTED);
+				setCurrentCommand(command);
+				viewer = getCurrentViewer();
+			}
+		}
+
+		if (isInState(STATE_INITIAL) && button != 1) {
+			setState(STATE_INVALID);
+			handleInvalidInput();
+		}
+		return true;
+		
 	}
 	
 	@Override
 	protected boolean handleButtonUp(int button) {
-		executeCurrentCommand();
+		if(isInState(STATE_CONNECTION_STARTED)) {
+			LocationSequenceRequest locationRequest = (LocationSequenceRequest) getTargetRequest();
+			
+			
+			updateTargetRequest();
+			updateTargetUnderMouse();
+			EditPart targetEditPart2 = getTargetEditPart();
+			if( targetEditPart2 != null  ) {
+				WorldEditPart worldEditPart = (WorldEditPart) targetEditPart2;
+				BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
+				ServiceReference<ITileProvider> serviceReference = bundleContext.getServiceReference(ITileProvider.class);
+				final ITileProvider tileProvider = (ITileProvider) bundleContext.getService(serviceReference);
+				IMapProjection mapProjection = tileProvider.getProjection();
+
+				Point location = getLocation();
+				worldEditPart.getFigure().translateToRelative(location);
+				GeoPosition position = mapProjection.backproject(new org.eclipse.swt.graphics.Point(location.x, location.y), (1<<worldEditPart.getWorld().getZoomLevel()) * 256);
+				locationRequest.addLocation(position);
+			}
+			setCurrentCommand(getCommand());
+		}
+		
+		
+		
+		WorldEditPart targetEditPart2 = (WorldEditPart) getTargetEditPart();
+		
+//		.getCommand(getTargetRequest());
+		
+//		executeCurrentCommand();
 		return true;
 	}
 	
 	@Override
+	protected boolean handleDoubleClick(int button) {
+		if(isInState(STATE_CONNECTION_STARTED)) {
+			executeCurrentCommand();
+			handleFinished();
+		}
+		// TODO Auto-generated method stub
+		return super.handleDoubleClick(button);
+	}
+	
+	@Override
 	protected void updateTargetRequest() {
-		Dimension delta = getDragMoveDelta();
-		ChangeBoundsRequest request = (ChangeBoundsRequest) getTargetRequest();
-		request.setMoveDelta(new Point(delta.width, delta.height));
-		request.setLocation(getLocation());
-		request.setType(getCommandName());
-
-//		super.updateTargetRequest();
+		LocationSequenceRequest locationRequest = (LocationSequenceRequest) getTargetRequest();
+//		locationRequest.addLocation(getLocation());
 	}
 	
 	@Override
 	protected Request createTargetRequest() {
-		return new ChangeBoundsRequest(REQ_MOVE);
+		LocationSequenceRequest locationRequest = new LocationSequenceRequest();
+		
+		return locationRequest;
 	}
 	
 	@Override

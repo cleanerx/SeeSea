@@ -95,6 +95,8 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	private ServiceRegistration<HandleAISMessage> serviceRegistration;
 	
 	private List<AreaMarker> areaMarkers;
+
+	private ServiceRegistration<?> positionTrackerRegistration2;
 	
 	public WorldEditPart() {
 		aisTracker = new AISTracker();
@@ -115,6 +117,8 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 //		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SeeSeaDelegatingLayoutEditPolicy());
+		installEditPolicy("EditRoute", new EditRoutePolicy());
+		installEditPolicy(EditPolicy.CONNECTION_ROLE, new EditRoutePolicy());
 //		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SeeSeaDelegatingLayoutEditPolicy());
 //		installEditPolicy(EditPolicyRoles.POPUPBAR_ROLE, new DiagramPopupBarEditPolicy());
 
@@ -140,6 +144,10 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		modelChildren.addAll(aisTracker.getAISMessagePositionReport());
 //		modelChildren.add(getWorld().getMapCenterPosition());
 		modelChildren.addAll(getWorld().getTracksContainer().getTracks());
+		if(getWorld().getRoutingContainer() != null) {
+			modelChildren.addAll(getWorld().getRoutingContainer().getRoutes());
+		}
+		
 		modelChildren.addAll(areaMarkers);
 		if(getWorld().getAnchorPosition() != null) {
 			modelChildren.add(getWorld().getAnchorPosition());
@@ -226,6 +234,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 			mapLayer.setSize( numberOfTiles * tileSize.x, numberOfTiles * tileSize.y);
 			mapLayer.setZoomLevel(zoom);
 			mapLayer.setMapPosition(viewport.getViewLocation());
+			mapLayer.setPaintBounds(new Rectangle(viewport.getViewLocation(), viewport.getSize()));
 			bundleContext.ungetService(serviceReference);
 		}
 
@@ -243,7 +252,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
 		serviceRegistration = bundleContext.registerService(HandleAISMessage.class, aisTracker, null);
 
-//		positionTrackerRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), new PositionListener(), null);
+		positionTrackerRegistration2 = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), new CenterPositionListener(), null);
 		getWorld().eAdapters().add(this);
 		getWorld().getTracksContainer().eAdapters().add(this);
 		enablePositionTracking(true);
@@ -259,6 +268,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().removePropertyChangeListener(propertyChangeListener);
 		((GeospatialGraphicalViewer)getViewer()).getVerticalRangeModel().removePropertyChangeListener(propertyChangeListener);
 		disablePositionTracking();
+		positionTrackerRegistration2.unregister();
 		aisTracker.dispose();
 //		getWorld().eAdapters().remove(this);
 //		positionTrackerRegistration.unregister();
@@ -334,10 +344,6 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 				Display.getDefault().asyncExec(new Runnable() {
 					
 					public void run() {
-						try {
-							EditingDomain editingDomain2 = ((GeospatialGraphicalViewer) getViewer()).getEditingDomainServiceTracker();
-							SetPositionCommand setPositionCommand = new SetPositionCommand((TransactionalEditingDomain) editingDomain2, ((World)getModel()), sensorData);
-							setPositionCommand.execute(new NullProgressMonitor(), null);
 							ScalableZoomableRootEditPart scalableZoomableRootEditPart = (ScalableZoomableRootEditPart) getRoot();
 							
 							BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
@@ -346,9 +352,11 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 								ITileProvider tileProvider =  (ITileProvider) bundleContext.getService(serviceReference);
 								org.eclipse.swt.graphics.Point tileSize = tileProvider.getTileSize();
 								if(zoomInOnFirstPosition) {
-									scalableZoomableRootEditPart.setZoom(tileProvider.getMaxZoomLevel());
+									scalableZoomableRootEditPart.setZoom(tileProvider.getMaxZoomLevel() - 3);
 									zoomInOnFirstPosition = false;
+									
 								}
+								
 								int zoom = scalableZoomableRootEditPart.getZoom();
 //						org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(scrollingPosition.x, scrollingPosition.y);
 								org.eclipse.swt.graphics.Point point = tileProvider.getProjection().project(getWorld().getMapCenterPosition(), (1<< zoom) *  tileSize.x);
@@ -356,9 +364,8 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 								int x = point.x - clientArea.width / 2;
 								int y = point.y - clientArea.height / 2;
 								((GeospatialGraphicalViewer)getViewer()).setScrollingPosition(new org.eclipse.draw2d.geometry.Point(x, y));
-							}
-						} catch (ExecutionException e) {
-							Logger.getLogger(WorldEditPart.class).error("Failed to set position", e); //$NON-NLS-1$
+								bundleContext.ungetService(serviceReference);
+							
 						}
 					}
 				});
@@ -384,6 +391,49 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		}
 	}
 	
+	private class CenterPositionListener implements IPositionListener {
+
+		private long lastUpdate2;
+
+		/* (non-Javadoc)
+		 * @see net.sf.seesea.services.navigation.listener.IDataListener#notify(java.lang.Object)
+		 */
+		public void notify(final MeasuredPosition3D sensorData, String source) {
+			
+			if(System.currentTimeMillis() - lastUpdate2 > 1000) {
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					public void run() {
+						try {
+							EditingDomain editingDomain2 = ((GeospatialGraphicalViewer) getViewer()).getEditingDomainServiceTracker();
+							SetPositionCommand setPositionCommand = new SetPositionCommand((TransactionalEditingDomain) editingDomain2, ((World)getModel()), sensorData);
+							setPositionCommand.execute(new NullProgressMonitor(), null);
+						} catch (ExecutionException e) {
+							Logger.getLogger(WorldEditPart.class).error("Failed to set position", e); //$NON-NLS-1$
+						}
+					}
+				});
+				lastUpdate2 = System.currentTimeMillis();
+			}
+			
+			
+		}
+
+		/* (non-Javadoc)
+		 * @see net.sf.seesea.services.navigation.listener.IDataListener#providerEnabled(java.lang.String)
+		 */
+		public void providerEnabled(String providerID) {
+			zoomInOnFirstPosition = true;
+		}
+
+		/* (non-Javadoc)
+		 * @see net.sf.seesea.services.navigation.listener.IDataListener#providerDisabled(java.lang.String)
+		 */
+		public void providerDisabled(String providerID) {
+			zoomInOnFirstPosition = true;
+			
+		}
+	}
 	private class AISTracker implements HandleAISMessage {
 
 		private static final int CLASS_A_POSITION_UPDATE_RATE = 10000; // 10 seconds

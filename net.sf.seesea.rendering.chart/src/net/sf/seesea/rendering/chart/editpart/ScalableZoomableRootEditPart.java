@@ -31,12 +31,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.seesea.rendering.chart.IViewerGestureListener;
+import net.sf.seesea.rendering.chart.tools.DragSelectionTracker;
 import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 
 import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.editparts.ZoomListener;
 import org.eclipse.swt.SWT;
@@ -303,6 +306,13 @@ public class ScalableZoomableRootEditPart extends ScalableRootEditPart {
 		super.deactivate();
 	}
 
-	
+	@Override
+	public DragTracker getDragTracker(Request req) { 
+		return new DragSelectionTracker();
+	}
+	@Override
+	public boolean isSelectable() {
+		return false;
+	}
 
 }

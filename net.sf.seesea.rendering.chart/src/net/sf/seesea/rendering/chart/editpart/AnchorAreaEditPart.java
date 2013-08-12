@@ -30,9 +30,11 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Ellipse2D.Double;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 
 import net.sf.seesea.model.core.geo.AnchorPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.model.util.GeoUtil;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
@@ -58,6 +60,8 @@ public class AnchorAreaEditPart extends TransactionalEditPart {
 	private ServiceReference<IMapProjection> mapProjectionServiceReference;
 //	private Label tooltipLabel;
 	private UpdateMapZoomLevelPropertyChangeListener propertyChangeListener;
+	
+	private DecimalFormat format = new DecimalFormat("0.#");
 
 private Double ellipse;
 
@@ -180,14 +184,16 @@ private ServiceRegistration<?> positionTrackerRegistration;
 				synchronized (AnchorAreaEditPart.this) {
 //					System.out.println("Lat/Lon" + sensorData.getLatitude() + "/" + sensorData.getLongitude());
 //				System.out.println("valid" + sensorData.isValid());
-					if(ellipse != null && !ellipse.contains(sensorData.getLatitude().getDecimalDegree(), sensorData.getLongitude().getDecimalDegree()) && alert == false) {
+					if(ellipse != null && sensorData.getLatitude() != null && sensorData.getLongitude() != null && !ellipse.contains(sensorData.getLatitude().getDecimalDegree(), sensorData.getLongitude().getDecimalDegree()) && alert == false) {
 						Display.getDefault().asyncExec(new Runnable() {
 							
 							
 							public void run() {
 								alert = true;
-								MessageDialog.openError(Display.getDefault().getActiveShell(), "Fail", "Fail");
+								double distance = GeoUtil.getDistance(ellipse.getCenterX(), sensorData.getLatitude().getDecimalDegree(), ellipse.getCenterY(), sensorData.getLongitude().getDecimalDegree());
+								MessageDialog.openError(Display.getDefault().getActiveShell(), "Anchor drinfting", "You have moved " + format.format(distance) + "nm from your deftined center position.");
 								alert = false;
+								positionTrackerRegistration.unregister();
 							}
 						});
 					}

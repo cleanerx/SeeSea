@@ -65,7 +65,7 @@ public class ShipFigure extends Figure {
 		Point center = localBounds.getCenter();
 		graphics.translate(center.x, center.y);
 		graphics.rotate((float)cogOrientation);
-		graphics.drawPolygon(new int[]{ -5, 5, 0, -7  ,  5, 5 });
+		graphics.fillPolygon(new int[]{ -5, 5, 0, -7  ,  5, 5 });
 		graphics.popState();
 
 	}

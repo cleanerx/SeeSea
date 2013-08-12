@@ -31,14 +31,17 @@ package net.sf.seesea.rendering.chart.editor;
 import java.net.URL;
 
 import net.sf.seesea.model.core.provider.XEditPlugin;
+import net.sf.seesea.rendering.chart.tools.AdvancedSelectionToolEntry;
 import net.sf.seesea.rendering.chart.tools.AnchorWarnToolEntry;
 import net.sf.seesea.rendering.chart.tools.Cache2ToolEntry;
 import net.sf.seesea.rendering.chart.tools.CacheToolEntry;
 import net.sf.seesea.rendering.chart.tools.ChartSelectionToolEntry;
+import net.sf.seesea.rendering.chart.tools.DistanceToolEntry;
 
 import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteGroup;
 import org.eclipse.gef.palette.PaletteRoot;
+import org.eclipse.gef.palette.SelectionToolEntry;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -52,21 +55,26 @@ public class SeeSeaPaletteFactory {
 		PaletteGroup controlGroup = new PaletteGroup("Control Group"); //$NON-NLS-1$
 		seeseaPalette.add(controlGroup);
 //		controlGroup.add(new MarqueeToolEntry());
-		ChartSelectionToolEntry toolEntry = new ChartSelectionToolEntry();
-		controlGroup.add(toolEntry);
+//		ChartSelectionToolEntry toolEntry = new ChartSelectionToolEntry();
+//		controlGroup.add(toolEntry);
+		AdvancedSelectionToolEntry toolEntry3 = new AdvancedSelectionToolEntry();
+		controlGroup.add(toolEntry3);
+//		SelectionToolEntry toolEntry2 = new SelectionToolEntry();
+//		controlGroup.add(toolEntry2);
 		
 		seeseaPalette.add(new PaletteDrawer("Navigation Group"));
 
 		PaletteGroup navigationGroup = new PaletteGroup("Navigation Group"); //$NON-NLS-1$
 		seeseaPalette.add(navigationGroup);
-		seeseaPalette.setDefaultEntry(toolEntry);
+		seeseaPalette.setDefaultEntry(toolEntry3);
 
 //		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/Route.gif"); //$NON-NLS-1$
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 //		creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getRoute());
 		ToolEntry anchorToolEntry = new AnchorWarnToolEntry("Anchor Alert", "Defines an area for anchor alert");
 		navigationGroup.add(anchorToolEntry);
-
+		ToolEntry distanceToolEntry = new DistanceToolEntry();
+		navigationGroup.add(distanceToolEntry);
 //		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/NamedPosition.gif"); //$NON-NLS-1$
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 //		CreationFactory creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getNamedPosition());
