@@ -830,26 +830,26 @@ public class NMEA0183Reader implements IDataReader {
 			measurement.getMeasurements().add(geoPosition);
 
 			if (nmeaContent.length > 5 && !nmeaContent[5].isEmpty()) {
-				Time time = physxFactory.createTime();
-				Calendar calendar = Calendar.getInstance();
-				try {
-					calendar.set(Calendar.HOUR_OF_DAY, Integer
-							.parseInt(nmeaContent[5].substring(0, 2).trim()));
-					calendar.set(Calendar.MINUTE, Integer
-							.parseInt(nmeaContent[5].substring(2, 4).trim()));
-					calendar.set(Calendar.SECOND, Integer
-							.parseInt(nmeaContent[5].substring(4, 6).trim()));
-					calendar.set(Calendar.MILLISECOND, 0);
-					calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
-
-					time.setTime(calendar.getTime());
-					time.setTimezone("UTC"); //$NON-NLS-1$
-					geoPosition.setTime(calendar.getTime());
-					geoPosition.setTimezone("UTC"); //$NON-NLS-1$
-				} catch (NumberFormatException e) {
-					// TODO: handle exception
+				if(useLastDateFromAnotherSentenceGGA) {
+					Date time = geoPosition.getTime();
+					if(lastDate != null && time != null) {
+						Calendar lastTimeCalendar = Calendar.getInstance();
+						lastTimeCalendar.setTime(lastDate);
+						lastTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer
+								.parseInt(nmeaContent[5].substring(0, 2).trim()));
+						lastTimeCalendar.set(Calendar.MINUTE, Integer
+								.parseInt(nmeaContent[5].substring(2, 4).trim()));
+						lastTimeCalendar.set(Calendar.SECOND, Integer
+								.parseInt(nmeaContent[5].substring(4, 6).trim()));
+						lastTimeCalendar.set(Calendar.MILLISECOND, 0);
+						lastTimeCalendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+						lastTimeCalendar.set(Calendar.YEAR, lastTimeCalendar.get(lastTimeCalendar.YEAR));
+						lastTimeCalendar.set(Calendar.DAY_OF_YEAR, lastTimeCalendar.get(lastTimeCalendar.DAY_OF_YEAR));
+						geoPosition.setTime(lastTimeCalendar.getTime());
+					}
 				}
-				measurement.getMeasurements().add(time);
+
+//				measurement.getMeasurements().add(time);
 			}
 			setSensorID(nmeaContent[0], measurement);
 
