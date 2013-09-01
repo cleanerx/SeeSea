@@ -55,10 +55,10 @@ public class SeeSeaPaletteFactory {
 		PaletteGroup controlGroup = new PaletteGroup("Control Group"); //$NON-NLS-1$
 		seeseaPalette.add(controlGroup);
 //		controlGroup.add(new MarqueeToolEntry());
-//		ChartSelectionToolEntry toolEntry = new ChartSelectionToolEntry();
-//		controlGroup.add(toolEntry);
-		AdvancedSelectionToolEntry toolEntry3 = new AdvancedSelectionToolEntry();
-		controlGroup.add(toolEntry3);
+		ChartSelectionToolEntry toolEntry = new ChartSelectionToolEntry();
+		controlGroup.add(toolEntry);
+//		AdvancedSelectionToolEntry toolEntry3 = new AdvancedSelectionToolEntry();
+//		controlGroup.add(toolEntry3);
 //		SelectionToolEntry toolEntry2 = new SelectionToolEntry();
 //		controlGroup.add(toolEntry2);
 		
@@ -66,7 +66,7 @@ public class SeeSeaPaletteFactory {
 
 		PaletteGroup navigationGroup = new PaletteGroup("Navigation Group"); //$NON-NLS-1$
 		seeseaPalette.add(navigationGroup);
-		seeseaPalette.setDefaultEntry(toolEntry3);
+		seeseaPalette.setDefaultEntry(toolEntry);
 
 //		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/Route.gif"); //$NON-NLS-1$
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
