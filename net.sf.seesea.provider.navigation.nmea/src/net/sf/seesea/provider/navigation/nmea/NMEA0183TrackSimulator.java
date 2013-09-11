@@ -95,7 +95,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 							} catch (NMEAProcessingException e) {
 								Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
 							}
-//							Thread.sleep(5);
+							Thread.sleep(5);
 						} else if(currentLine.startsWith("!")) { //$NON-NLS-1$
 							RawDataEvent nmeaEvent = new RawDataEvent(currentLine, null);
 							try {

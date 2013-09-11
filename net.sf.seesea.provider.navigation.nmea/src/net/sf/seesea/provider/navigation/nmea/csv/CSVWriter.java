@@ -38,15 +38,15 @@ public class CSVWriter implements IDataWriter {
 	
 	
 	@Override
-	public void write(Measurement measurement, boolean valid) {
+	public void write(Measurement measurement, boolean valid, long sourceTrackIdentifier) {
 		if(measurement instanceof CompositeMeasurement) {
 			CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
-			write(compositeMeasurement.getMeasurements(), valid);
+			write(compositeMeasurement.getMeasurements(), valid, sourceTrackIdentifier);
 		}
 	}
 
 	@Override
-	public void write(Collection<Measurement> measurements, boolean valid) {
+	public void write(Collection<Measurement> measurements, boolean valid, long sourceTrackIdentifier) {
 		MeasuredPosition3D geoPosition = null;
 		Depth depth = null;
 		if(printWriter == null) {

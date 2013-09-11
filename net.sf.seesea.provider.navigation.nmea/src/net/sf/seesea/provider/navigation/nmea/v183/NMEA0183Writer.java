@@ -36,16 +36,16 @@ public class NMEA0183Writer implements IDataWriter {
 	}
 	
 	@Override
-	public void write(Collection<Measurement> data, boolean valid) {
+	public void write(Collection<Measurement> data, boolean valid, long sourceTrackIdentifier) {
 		for (Measurement measurement : data) {
-			write(measurement, valid);
+			write(measurement, valid, sourceTrackIdentifier);
 		}
 	}
 
-	public void write(Measurement measurement, boolean valid) {
+	public void write(Measurement measurement, boolean valid, long sourceTrackIdentifier) {
 		if(measurement instanceof CompositeMeasurement) {
 			CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
-			write(compositeMeasurement.getMeasurements(), valid);
+			write(compositeMeasurement.getMeasurements(), valid, sourceTrackIdentifier);
 		} else
 			if(measurement instanceof MeasuredPosition3D) {
 				StringBuffer message = new StringBuffer();
