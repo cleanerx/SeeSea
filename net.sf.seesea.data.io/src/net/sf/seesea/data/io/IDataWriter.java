@@ -15,7 +15,7 @@ public interface IDataWriter {
 	 * @param valid true, if this measurment is valid, false if measurment contains an error
 	 * @throws WriterException
 	 */
-	void write(Measurement data, boolean valid) throws WriterException;
+	void write(Measurement data, boolean valid, long sourceTrackIdentifier) throws WriterException;
 
 	/**
 	 * 
@@ -23,7 +23,7 @@ public interface IDataWriter {
 	 * @param valid true, if this measurment is valid, false if measurment contains an error
 	 * @throws WriterException
 	 */
-	void write(Collection<Measurement> data, boolean valid) throws WriterException;
+	void write(Collection<Measurement> data, boolean valid, long sourceTrackIdentifier) throws WriterException;
 	
 	void closeOutput() throws WriterException;
 	
