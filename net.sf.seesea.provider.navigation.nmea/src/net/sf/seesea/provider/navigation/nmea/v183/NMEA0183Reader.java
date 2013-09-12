@@ -545,6 +545,9 @@ public class NMEA0183Reader implements IDataReader {
 			}
 		} catch (NumberFormatException e) {
 			// TODO: handle exception
+		} catch (ArrayIndexOutOfBoundsException e) {
+			Logger.getLogger(NMEA0183Reader.class).error(
+					"Failed to analyze positon" + e.getMessage()); //$NON-NLS-1$
 		}
 
 		try {
