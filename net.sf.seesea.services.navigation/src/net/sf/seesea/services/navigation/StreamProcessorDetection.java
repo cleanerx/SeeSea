@@ -25,16 +25,24 @@ public class StreamProcessorDetection {
 		case ZIP:
 			Map<ZipFile, List<ZipEntry>> zip = new HashMap<ZipFile, List<ZipEntry>>();
 			try {
-				zip = getZipEntries(file,"UTF-8"); //$NON-NLS-1$
+				zip = getZipEntries(file,"ISO-8859-1"); //$NON-NLS-1$
 			} catch (IllegalArgumentException e) {
 				Logger.getLogger(StreamProcessorDetection.class).error("Failed to open zip entry. May it is not UTF-8 encoded:" + file.getAbsolutePath());
 				try {
-					zip = getZipEntries(file,"ISO-8859-1"); //$NON-NLS-1$
+					zip = getZipEntries(file,"UTF-8"); //$NON-NLS-1$
 				} catch (IllegalArgumentException e2) {
 					Logger.getLogger(StreamProcessorDetection.class).error("Failed to open zip entry. May it is not ISO-8859-1 encoded:" + file.getAbsolutePath());
 				}
 			}
 
+			// a compression with several files make up the measurement
+			for (IStreamProcessor processor : streamProcessors) {
+				List<ITrack> tracks2 = processor.getTracks(compressionType, file);
+				if(tracks2 != null || !tracks.isEmpty()) {
+					tracks.addAll(tracks2);
+					return tracks;
+				}
+			}
 			// a multi track compression is at hand
 			ZipFile zipFile = zip.entrySet().iterator().next().getKey();
 			Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -44,11 +52,6 @@ public class StreamProcessorDetection {
 				IStreamProcessor streamProcessor = detectStreamProcessorEnblock(inputStream, streamProcessors.toArray(), false);
 				if(streamProcessor != null)
 				tracks.add(new ZippedTrack(zipFile, nextElement, streamProcessor.getMimeType()));
-			}
-			
-			// a compression with several files make up the measurement
-			for (IStreamProcessor processor : streamProcessors) {
-				tracks.addAll(processor.getTracks(compressionType, file));
 			}
 			
 			break;
@@ -87,6 +90,7 @@ public class StreamProcessorDetection {
 					Logger.getLogger(StreamProcessorDetection.class)
 							.info("Detected provider: " + streamProcessor.getClass().getSimpleName()); //$NON-NLS-1$
 				}
+				return streamProcessor;
 			}
 		}
 		return streamProcessor;
