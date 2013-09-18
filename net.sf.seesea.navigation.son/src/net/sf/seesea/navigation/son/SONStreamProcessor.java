@@ -66,7 +66,7 @@ public class SONStreamProcessor implements IStreamProcessor {
 	
 	private int counter;
 	
-	int[] message = new int[2048];
+	int[] message = new int[65536 * 4];
 
 	private int dataEnds;
 
