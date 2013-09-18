@@ -73,16 +73,16 @@ public class SONStreamProcessor implements IStreamProcessor {
 
 	private SONHeader lastBlock;
 
-	public SONStreamProcessor() {
+	public SONStreamProcessor() { 
 		state = SONProcessingState.HEADERSTART;
 		counter = 0;
 	}
 	
 	public SONHeader readBlock(InputStream is) throws IOException {
-		byte[] block = new byte[67];
+		byte[] block = new byte[72];
 		int read = is.read(block);
-		int[] blockInt = new int[67];
-		for(int i = 0 ; i < 67 ; i++) {
+		int[] blockInt = new int[72];
+		for(int i = 0 ; i < 72 ; i++) {
 			blockInt[i] = block[i];
 		}
 		return readBlock(blockInt);
@@ -90,89 +90,94 @@ public class SONStreamProcessor implements IStreamProcessor {
 	
 	public SONHeader readBlock(int[] block) {
 		SONHeader sonHeader = new SONHeader();
-		int unitType = block[3];
-//		int headerSize = Integer.MAX_VALUE;
-		for(int i = 4 ; i < 67; i++) {
-			      switch ((byte)block[i]) {
-			      case -128:
-			    	  sonHeader.setGlobalRecordNum(getInt(block, i + 1));
-			    	  i+=4;
-			    	  break;
-			      case -127:
-			    	  sonHeader.setTimeSinceStart(getInt(block, i + 1));
-			    	  i+=4;
-			    	  break;
-			      case -126:
-			    	  int lon = getInt(block, i + 1);
-			    	  sonHeader.setLongitude(positionToEllipsiodDegreeLongitude(lon));
-			    	  i+=4;
-			    	  break;
-			      case -125:
-			    	  int lat = getInt(block, i + 1);
-			    	  sonHeader.setLatitude(positionToEllipsiodDegreeLatitude(lat));
-			    	  i+=4;
-			    	  break;
-			      case -124:
-			    	  sonHeader.setGpsOn(getShort(block, i + 1));
-			    	  sonHeader.setGpsHeading(getShort(block, i + 3) / 10.0);
-			    	  i+=4;
-			        break;
-			      case -123:
-			    	  sonHeader.setGpsSpeed(getShort(block, i + 3) / 10.0);
-			    	  i+=4;
-			    	  break;
-			      case -122:
-			    	  i+=4;
-		    	  //			        this.i2 = di.readInt();
-			        break;
-			      case -121:
-			    	  sonHeader.setDepth(getInt(block, i + 1));
-			    	  i+=4;
-			    	  break;
-			      case 80:
-			    	  sonHeader.setBeam((byte) block[i + 1]);
-			    	  i++;
-			    	  break;
-			      case 81:
-			    	  i++;
-//			        this.b0 = di.readByte();
-			        break;
-			      case -110:
-			    	  sonHeader.setFrequency(getInt(block, i + 1));
-			    	  i+=4;
-			        break;
-			      case 83:
-//			        this.b1 = di.readByte();
-			    	  i++;
-			        break;
-			      case 84:
-//			        this.b2 = di.readByte();
-			    	  i++;
-			        break;
-			      case -107:
-//			        this.i1 = di.readInt();
-			    	  i++;
-			    	  i+=4;
-			        break;
-			      case 86:
-//			        this.b3 = di.readByte();
-			    	  i++;
-			        break;
-			      case 87:
-//			        this.b4 = di.readByte();
-			    	  i++;
-			        break;
-			      case -96:
-			    	  sonHeader.setDataLen(getInt(block, i + 1));
-			    	  i+=4;
-			    	  break;
-			      case 33:
-//			        moreData = false;
-			    	  i++;
-			        break;
-			      default:
-//			        throw new RuntimeException("Got unexpected spacer '" + spacer + "'");
-			      }
+		try {
+			int unitType = block[3];
+//			int headerSize = Integer.MAX_VALUE;
+			for(int i = 4 ; i < 72; i++) {
+				      switch ((byte)block[i]) {
+				      case -128:
+				    	  sonHeader.setGlobalRecordNum(getInt(block, i + 1));
+				    	  i+=4;
+				    	  break;
+				      case -127:
+				    	  sonHeader.setTimeSinceStart(getInt(block, i + 1));
+				    	  i+=4;
+				    	  break;
+				      case -126:
+				    	  int lon = getInt(block, i + 1);
+				    	  sonHeader.setLongitude(positionToEllipsiodDegreeLongitude(lon));
+				    	  i+=4;
+				    	  break;
+				      case -125:
+				    	  int lat = getInt(block, i + 1);
+				    	  sonHeader.setLatitude(positionToEllipsiodDegreeLatitude(lat));
+				    	  i+=4;
+				    	  break;
+				      case -124:
+				    	  sonHeader.setGpsOn(getShort(block, i + 1));
+				    	  sonHeader.setGpsHeading(getShort(block, i + 3) / 10.0);
+				    	  i+=4;
+				        break;
+				      case -123:
+				    	  sonHeader.setGpsSpeed(getShort(block, i + 3) / 10.0);
+				    	  i+=4;
+				    	  break;
+				      case -122:
+				    	  i+=4;
+			    	  //			        this.i2 = di.readInt();
+				        break;
+				      case -121:
+				    	  sonHeader.setDepth(getInt(block, i + 1));
+				    	  i+=4;
+				    	  break;
+				      case 80:
+				    	  sonHeader.setBeam((byte) block[i + 1]);
+				    	  i++;
+				    	  break;
+				      case 81:
+				    	  i++;
+//				        this.b0 = di.readByte();
+				        break;
+				      case -110:
+				    	  sonHeader.setFrequency(getInt(block, i + 1));
+				    	  i+=4;
+				        break;
+				      case 83:
+//				        this.b1 = di.readByte();
+				    	  i++;
+				        break;
+				      case 84:
+//				        this.b2 = di.readByte();
+				    	  i++;
+				        break;
+				      case -107:
+//				        this.i1 = di.readInt();
+//				    	  i++;
+				    	  i+=4;
+				        break;
+				      case 86:
+//				        this.b3 = di.readByte();
+				    	  i++;
+				        break;
+				      case 87:
+//				        this.b4 = di.readByte();
+				    	  i++;
+				        break;
+				      case -96:
+				    	  sonHeader.setDataLen(getInt(block, i + 1));
+				    	  i+=4;
+				    	  break;
+				      case 33:
+//				        moreData = false;
+				    	  i++;
+				        break;
+				      default:
+//				        throw new RuntimeException("Got unexpected spacer '" + spacer + "'");
+				      }
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return sonHeader;
