@@ -29,17 +29,18 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import net.sf.seesea.services.navigation.ITrack;
 
 public class ZippedSonTrack implements ITrack {
 
-	private final File zipFile;
+	private final ZipFile zipFile;
 	private final ZipEntry rootFile;
 	private final Map<ZipEntry, ZipEntry> index2Beams;
 	private final String encoding;
 
-	public ZippedSonTrack(File zipFile, ZipEntry key,
+	public ZippedSonTrack(ZipFile zipFile, ZipEntry key,
 			Map<ZipEntry, ZipEntry> value, String encoding) {
 				this.zipFile = zipFile;
 				this.rootFile = key;
@@ -82,7 +83,7 @@ public class ZippedSonTrack implements ITrack {
 		return encoding;
 	}
 
-	public File getZipFile() {
+	public ZipFile getZipFile() {
 		return zipFile;
 	}
 	
