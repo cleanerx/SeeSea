@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -255,63 +256,36 @@ public class SONStreamProcessor implements IStreamProcessor {
 		return "application/x-humminbird"; //$NON-NLS-1$
 	}
 
+	public List<ITrack> getTracks(CompressionType compression, ZipFile zipFile) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //	@Override
 	public List<ITrack> getTracks(CompressionType compressionType, File file) throws ZipException, IOException {
 		List<ITrack> tracks = new ArrayList<ITrack>();
+		ZipFile zipFile = null;
 		switch (compressionType) {
 		case ZIP:
 			List<ZipEntry> zipEntries = new ArrayList<ZipEntry>(1);
 			String encoding = null;
 			try {
-				zipEntries = getZipEntries(file,"UTF-8"); //$NON-NLS-1$
+				zipFile = new ZipFile(file, Charset.forName("UTF-8"));
+				zipEntries = getZipEntries(zipFile); //$NON-NLS-1$
 				encoding = "UTF-8";
 			} catch (IllegalArgumentException e) {
 				Logger.getLogger(this.getClass()).error("Failed to open zip entry. May it is not UTF-8 encoded:" + file.getAbsolutePath());
 				try {
-					zipEntries = getZipEntries(file,"ISO-8859-1"); //$NON-NLS-1$
-					encoding = "ISO-8859-1";
+					zipFile = new ZipFile(file, Charset.forName("ISO-8859-1"));
+					zipEntries = getZipEntries(zipFile); //$NON-NLS-1$
+					encoding = "ISO-8859-1"; //$NON-NLS-1$
 				} catch (IllegalArgumentException e2) {
 					Logger.getLogger(this.getClass()).error("Failed to open zip entry. May it is not ISO-8859-1 encoded:" + file.getAbsolutePath());
+					return Collections.emptyList();
 				}
 			}
 
-			Map<ZipEntry, Map<ZipEntry,ZipEntry>> sonFiles = new HashMap<ZipEntry, Map<ZipEntry,ZipEntry>>();
-			Map<String,ZipEntry> nameMap = new HashMap<String, ZipEntry>();
-			for (ZipEntry zipEntry : zipEntries) {
-				// root file
-				if(zipEntry.getName().toLowerCase().endsWith(".dat")) {
-					String directory = zipEntry.getName().substring(0, zipEntry.getName().length() - 4) + "/"; //$NON-NLS-1$
-					Map<ZipEntry,ZipEntry> index2Dat = new HashMap<ZipEntry,ZipEntry>();
-					for (ZipEntry zipEntry2 : zipEntries) {
-						if(zipEntry2.getName().startsWith(directory) && zipEntry2.getName().toLowerCase().endsWith(".idx")) {
-							String indexFile = zipEntry2.getName().substring(zipEntry2.getName().lastIndexOf("/") + 1, zipEntry2.getName().length() - 4); //$NON-NLS-1$
-							if(nameMap.get(indexFile) == null) {
-								nameMap.put(indexFile, zipEntry2);
-							} else {
-								index2Dat.put(zipEntry2, nameMap.get(indexFile));
-							}
-						} else if(zipEntry2.getName().startsWith(directory) && (zipEntry2.getName().toLowerCase().endsWith(".son") || zipEntry2.getName().toLowerCase().endsWith(".dri"))) {
-							String indexFile = zipEntry2.getName().substring(zipEntry2.getName().lastIndexOf("/") + 1, zipEntry2.getName().length() - 4); //$NON-NLS-1$
-							if(nameMap.get(indexFile) == null) {
-								nameMap.put(indexFile, zipEntry);
-							} else {
-								// TODO check son integrity
-								index2Dat.put(nameMap.get(indexFile), zipEntry2);
-							}
-						}
-					}	
-					sonFiles.put(zipEntry, index2Dat);
-				}
-					
-			}
-			if(!sonFiles.values().isEmpty()) {
-				for (Entry<ZipEntry, Map<ZipEntry, ZipEntry>> zipEntry : sonFiles.entrySet()) {
-					if(!zipEntry.getValue().isEmpty()) {
-						tracks.add(new ZippedSonTrack(file, zipEntry.getKey(), zipEntry.getValue(), encoding));
-					}
-				}
-			}
-			return tracks;
+			return getSonFilesFromFile(zipFile, tracks, zipEntries, encoding);
 
 		default:
 			break;
@@ -319,17 +293,57 @@ public class SONStreamProcessor implements IStreamProcessor {
 		return tracks;
 	}
 
-private List<ZipEntry> getZipEntries(File file, String charset) throws IOException {
-		ZipFile zipFile = new ZipFile(file, Charset.forName(charset));
-		List<ZipEntry> zipEntries = new ArrayList<ZipEntry>();
-		Enumeration<? extends ZipEntry> entries = zipFile.entries();
-		while(entries.hasMoreElements()) {
-			ZipEntry nextElement = entries.nextElement();
-			if(!nextElement.isDirectory()) {
-				zipEntries.add(nextElement);
+	private List<ITrack> getSonFilesFromFile(ZipFile file, List<ITrack> tracks,
+			List<ZipEntry> zipEntries, String encoding) {
+		Map<ZipEntry, Map<ZipEntry,ZipEntry>> sonFiles = new HashMap<ZipEntry, Map<ZipEntry,ZipEntry>>();
+		Map<String,ZipEntry> nameMap = new HashMap<String, ZipEntry>();
+		for (ZipEntry zipEntry : zipEntries) {
+			// root file
+			if(zipEntry.getName().toLowerCase().endsWith(".dat")) {
+				String directory = zipEntry.getName().substring(0, zipEntry.getName().length() - 4) + "/"; //$NON-NLS-1$
+				Map<ZipEntry,ZipEntry> index2Dat = new HashMap<ZipEntry,ZipEntry>();
+				for (ZipEntry zipEntry2 : zipEntries) {
+					if(zipEntry2.getName().startsWith(directory) && zipEntry2.getName().toLowerCase().endsWith(".idx")) {
+						String indexFile = zipEntry2.getName().substring(zipEntry2.getName().lastIndexOf("/") + 1, zipEntry2.getName().length() - 4); //$NON-NLS-1$
+						if(nameMap.get(indexFile) == null) {
+							nameMap.put(indexFile, zipEntry2);
+						} else {
+							index2Dat.put(zipEntry2, nameMap.get(indexFile));
+						}
+					} else if(zipEntry2.getName().startsWith(directory) && (zipEntry2.getName().toLowerCase().endsWith(".son") || zipEntry2.getName().toLowerCase().endsWith(".dri"))) {
+						String indexFile = zipEntry2.getName().substring(zipEntry2.getName().lastIndexOf("/") + 1, zipEntry2.getName().length() - 4); //$NON-NLS-1$
+						if(nameMap.get(indexFile) == null) {
+							nameMap.put(indexFile, zipEntry);
+						} else {
+							// TODO check son integrity
+							index2Dat.put(nameMap.get(indexFile), zipEntry2);
+						}
+					}
+				}	
+				sonFiles.put(zipEntry, index2Dat);
+			}
+				
+		}
+		if(!sonFiles.values().isEmpty()) {
+			for (Entry<ZipEntry, Map<ZipEntry, ZipEntry>> zipEntry : sonFiles.entrySet()) {
+				if(!zipEntry.getValue().isEmpty()) {
+					tracks.add(new ZippedSonTrack(file, zipEntry.getKey(), zipEntry.getValue(), encoding));
+				}
 			}
 		}
-		return zipEntries;
+		return tracks;
+	}
+
+private List<ZipEntry> getZipEntries(ZipFile zipFile) {
+	List<ZipEntry> zipEntries = new ArrayList<ZipEntry>();
+	Enumeration<? extends ZipEntry> entries = zipFile.entries();
+	while(entries.hasMoreElements()) {
+		ZipEntry nextElement = entries.nextElement();
+		if(!nextElement.isDirectory()) {
+			zipEntries.add(nextElement);
+		}
+	}
+	return zipEntries;
 }
 
 	@Override
@@ -423,6 +437,7 @@ private List<ZipEntry> getZipEntries(File file, String charset) throws IOExcepti
 	    }
 	    return 0.0D;
 	  }
+
 
 	
 }
