@@ -257,8 +257,10 @@ public class SONStreamProcessor implements IStreamProcessor {
 	}
 
 	public List<ITrack> getTracks(CompressionType compression, ZipFile zipFile) {
-		// TODO Auto-generated method stub
-		return null;
+		List<ITrack> tracks = new ArrayList<ITrack>(); 
+		List<ZipEntry> zipEntries = new ArrayList<ZipEntry>(1);
+		zipEntries = getZipEntries(zipFile);
+		return getSonFilesFromFile(zipFile, tracks, zipEntries, "ISO-8859-1");
 	}
 
 //	@Override
