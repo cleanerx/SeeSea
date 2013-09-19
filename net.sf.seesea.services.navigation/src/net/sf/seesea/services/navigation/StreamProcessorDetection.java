@@ -38,7 +38,7 @@ public class StreamProcessorDetection {
 			// a compression with several files make up the measurement
 			for (IStreamProcessor processor : streamProcessors) {
 				List<ITrack> tracks2 = processor.getTracks(compressionType, file);
-				if(tracks2 != null || !tracks.isEmpty()) {
+				if(tracks2 != null && !tracks2.isEmpty()) {
 					tracks.addAll(tracks2);
 					return tracks;
 				}
