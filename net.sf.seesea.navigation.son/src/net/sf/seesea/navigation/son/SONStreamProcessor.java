@@ -43,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -79,21 +80,31 @@ public class SONStreamProcessor implements IStreamProcessor {
 	}
 	
 	public SONHeader readBlock(InputStream is) throws IOException {
-		byte[] block = new byte[72];
-		int read = is.read(block);
-		int[] blockInt = new int[72];
-		for(int i = 0 ; i < 72 ; i++) {
-			blockInt[i] = block[i];
+		List<Integer> list = new ArrayList<Integer>();
+//		int[] blockInt = new int[1024];
+		is.skip(4);
+		int read = 0;
+		while(((byte)(read = is.read())) != 33) {
+			list.add(read);
 		}
-		return readBlock(blockInt);
+		int[] array = new int[list.size()];
+		for (int i = 0; i < list.size() ; i++) {
+			array[i] = list.get(i);
+		}
+			
+		return readBlock(array);
 	}
 	
 	public SONHeader readBlock(int[] block) {
+		System.out.println(block.length);
+		if(block.length < 67) {
+			return null;
+		}
 		SONHeader sonHeader = new SONHeader();
 		try {
 			int unitType = block[3];
 //			int headerSize = Integer.MAX_VALUE;
-			for(int i = 4 ; i < 72; i++) {
+			for(int i = 3 ; i < block.length; i++) {
 				      switch ((byte)block[i]) {
 				      case -128:
 				    	  sonHeader.setGlobalRecordNum(getInt(block, i + 1));
@@ -168,9 +179,9 @@ public class SONStreamProcessor implements IStreamProcessor {
 				    	  i+=4;
 				    	  break;
 				      case 33:
-//				        moreData = false;
+//				        headerIncomplete = false;
 				    	  i++;
-				        break;
+				    	  return sonHeader;
 				      default:
 //				        throw new RuntimeException("Got unexpected spacer '" + spacer + "'");
 				      }
@@ -216,29 +227,29 @@ public class SONStreamProcessor implements IStreamProcessor {
 	
 	private double positionToEllipsiodDegreeLatitude(double latitude)
 	  {
-	    if (Math.abs(latitude) < 15433199.0)
+	    if (Math.abs(latitude) < 15433199.0D)
 	    {
-	      if (latitude != 0.0)
+	      if (latitude != 0.0D)
 	      {
-	        return Math.atan(Math.tan(Math.atan(Math.exp(latitude / 6378388.0)) * 2.0 - 1.570796326794897) * 1.0067642927) * 57.295779513082302;
+	        return Math.atan(Math.tan(Math.atan(Math.exp(latitude / 6378388.0D)) * 2.0D - (Math.PI / 2.0D)) * 1.0067642927D) * 57.295779513082302D;
 	      }
-	      return 0.0;
+	      return 0.0D;
 	    }
-	    return 0.0;
+	    return 0.0D;
 	  }
 
 	  public static double positionToEllipsiodDegreeLongitude(double longitude)
 	  {
-	    if (Math.abs(longitude) <= 20038300.0)
+	    if (Math.abs(longitude) <= 20038300.0D)
 	    {
 	      double d;
-	      if ((d = longitude * 57.295779513082302 / 6378388.0) > 180.0)
-	        d = 180.0;
-	      else if (d < -180.0)
-	        d = -180.0;
+	      if ((d = longitude * 57.295779513082302D / 6378388.0D) > 180.0D)
+	        d = 180.0D;
+	      else if (d < -180.0D)
+	        d = -180.0D;
 	      return d;
 	    }
-	    return 0.0;
+	    return 0.0D;
 	  }
 
 		
@@ -303,10 +314,10 @@ public class SONStreamProcessor implements IStreamProcessor {
 	private List<ITrack> getSonFilesFromFile(ZipFile file, List<ITrack> tracks,
 			List<ZipEntry> zipEntries, String encoding) {
 		Map<ZipEntry, Map<ZipEntry,ZipEntry>> sonFiles = new HashMap<ZipEntry, Map<ZipEntry,ZipEntry>>();
-		Map<String,ZipEntry> nameMap = new HashMap<String, ZipEntry>();
 		for (ZipEntry zipEntry : zipEntries) {
 			// root file
 			if(zipEntry.getName().toLowerCase().endsWith(".dat")) {
+				Map<String,ZipEntry> nameMap = new HashMap<String, ZipEntry>();
 				String directory = zipEntry.getName().substring(0, zipEntry.getName().length() - 4) + "/"; //$NON-NLS-1$
 				Map<ZipEntry,ZipEntry> index2Dat = new HashMap<ZipEntry,ZipEntry>();
 				for (ZipEntry zipEntry2 : zipEntries) {
@@ -320,7 +331,7 @@ public class SONStreamProcessor implements IStreamProcessor {
 					} else if(zipEntry2.getName().startsWith(directory) && (zipEntry2.getName().toLowerCase().endsWith(".son") || zipEntry2.getName().toLowerCase().endsWith(".dri"))) {
 						String indexFile = zipEntry2.getName().substring(zipEntry2.getName().lastIndexOf("/") + 1, zipEntry2.getName().length() - 4); //$NON-NLS-1$
 						if(nameMap.get(indexFile) == null) {
-							nameMap.put(indexFile, zipEntry);
+							nameMap.put(indexFile, zipEntry2);
 						} else {
 							// TODO check son integrity
 							index2Dat.put(nameMap.get(indexFile), zipEntry2);
@@ -401,8 +412,9 @@ private List<ZipEntry> getZipEntries(ZipFile zipFile) {
 		byte[] buf = new byte[8];
 		int index;
 		int pointer;
-		Map<Integer,Integer> index2Pointer = new LinkedHashMap<Integer,Integer>();
-		while(input.read(buf) != -1) {
+		Map<Integer,Integer> index2Pointer = new TreeMap<Integer, Integer>();
+		int i;
+		while((i = input.read(buf)) != -1) {
 			index = (buf[0] & 0xFF) << 24;
 			index |= (buf[1] & 0xFF) << 16;
 			index |= (buf[2] & 0xFF) << 8;
