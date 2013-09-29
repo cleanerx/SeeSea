@@ -85,6 +85,9 @@ public class SONStreamProcessor implements IStreamProcessor {
 		is.skip(4);
 		int read = 0;
 		while(((byte)(read = is.read())) != 33) {
+			if(read == -1) {
+				return null;
+			}
 			list.add(read);
 		}
 		int[] array = new int[list.size()];
