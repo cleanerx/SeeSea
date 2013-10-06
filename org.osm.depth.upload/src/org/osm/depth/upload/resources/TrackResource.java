@@ -143,7 +143,7 @@ public class TrackResource {
 		
 	}
 	
-	@Path("upload")
+//	@Path("upload")
 	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -174,14 +174,14 @@ public class TrackResource {
 
 			Statement selectstatement = conn.createStatement();
 			selectstatement.executeQuery(MessageFormat
-					.format("SELECT upload_state FROM user_tracks WHERE id = {0} AND user_name = ''{1}''", //$NON-NLS-1$
+					.format("SELECT upload_state FROM user_tracks WHERE track_id = {0} AND user_name = ''{1}''", //$NON-NLS-1$
 							trackID, username));
 
 			
 			
 			Statement statement = conn.createStatement();
 			statement.execute(MessageFormat
-					.format("UPDATE user_tracks SET fileName = ''{0}'', upload_state = 1 WHERE id = {1}", //$NON-NLS-1$
+					.format("UPDATE user_tracks SET file_ref = ''{0}'', upload_state = 1 WHERE track_id = {1}", //$NON-NLS-1$
 							fileDetail.getFileName(), trackID));
 			selectstatement.close();
 		} catch (SQLException e) {

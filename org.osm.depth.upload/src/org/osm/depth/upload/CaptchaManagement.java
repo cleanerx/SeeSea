@@ -29,7 +29,7 @@ package org.osm.depth.upload;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.osm.depth.model.Captcha;
+import org.osm.depth.upload.messages.Captcha;
 
 public class CaptchaManagement {
 

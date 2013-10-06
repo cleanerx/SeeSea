@@ -15,7 +15,7 @@
 		<filter-name>CorsFilter</filter-name>
 		<filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
 		<init-param>
-			<param-name>cors.allow.origin</param-name>
+			<param-name>cors.allowed.origins</param-name>
 			<param-value>*</param-value>
 		</init-param>
 		<init-param>
@@ -24,11 +24,11 @@
 		</init-param>
 		<init-param>
 			<param-name>cors.allowed.headers</param-name>
-			<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers</param-value>
+			<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers, Access-Control-Allow-Origin</param-value>
 		</init-param>
         <init-param>
             <param-name>cors.supportedHeaders</param-name>
-            <param-value>Accept, Origin, X-Requested-With, Content-Type, Last-Modified</param-value>
+            <param-value>Accept, Origin, X-Requested-With, Content-Type, Last-Modified, Access-Control-Allow-Origin</param-value>
         </init-param>
 		<init-param>
 			<param-name>cors.exposed.headers</param-name>
