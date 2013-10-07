@@ -27,7 +27,9 @@
 package org.osm.depth.upload;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.osm.depth.upload.messages.Captcha;
 
@@ -35,10 +37,10 @@ public class CaptchaManagement {
 
 	private static CaptchaManagement captchaManagement;
 	
-	private Map<String, String> captchaId2Password;
+	private Set<String> captchaId2Password;
 	
 	public CaptchaManagement() {
-		captchaId2Password = new HashMap<>();
+		captchaId2Password = new HashSet<>();
 	}
 	
 	public static CaptchaManagement getInstance() {
@@ -48,12 +50,12 @@ public class CaptchaManagement {
 		return captchaManagement;
 	}
 	
-	public void registerCaptcha(String id,String password) {
-		captchaId2Password.put(id, password);
+	public void registerCaptcha(String password) {
+		captchaId2Password.add(password);
 	}
 
-	public void unregisterCaptcha(Captcha captcha, String password) {
-		captchaId2Password.remove(captcha);
+	public boolean unregisterCaptcha(String password) {
+		return captchaId2Password.remove(password);
 	}
 
 	

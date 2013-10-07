@@ -73,6 +73,7 @@ public class UserResource {
 	 */
 	@POST
 	@Path("captcha")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createCatpcha() {
 		Builder builder = new nl.captcha.Captcha.Builder(120, 40);
@@ -82,10 +83,9 @@ public class UserResource {
 			ImageIO.write(captcha.getImage(), "png", byteArrayOutputStream); //$NON-NLS-1$
 			byte[] imageData = byteArrayOutputStream.toByteArray();
 			
-			String captchaid = UUID.randomUUID().toString();
-			CaptchaManagement.getInstance().registerCaptcha(captchaid, captcha.getAnswer());
+			CaptchaManagement.getInstance().registerCaptcha(captcha.getAnswer());
 			Captcha captcha2 = new Captcha();
-			captcha2.id = captchaid;
+//			captcha2.id = captchaid;
 			captcha2.imageBase64 = Base64.encode(imageData);
 			return Response.
 					ok(captcha2).
@@ -124,7 +124,7 @@ public class UserResource {
 	}
 	
 	@POST
-	@Consumes({MediaType.MULTIPART_FORM_DATA})
+	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Response createUser(
 			@FormParam("username") String username,
@@ -132,36 +132,31 @@ public class UserResource {
 			@FormParam("captcha") String captcha
 			)
 		{
-		Context initContext;
-		try {
-			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
-			Connection conn = ds.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet executeQuery;
-			executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
-			
-			List<User> list = new ArrayList<>(2);
-			while(executeQuery.next()) {
-				User user = new User();
-				user.user_name = executeQuery.getString("user_name");
-				user.attemps = executeQuery.getInt("attempts");
-				user.lastAttempt = executeQuery.getDate("last_attempt");
-				if(user.user_name.equals(username)) {
-					return Response.serverError().header("X-Error", "103:Username already exists").build();
+		if(CaptchaManagement.getInstance().unregisterCaptcha(captcha)) {
+			Context initContext;
+			try {
+				initContext = new InitialContext();
+				DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
+				Connection conn = ds.getConnection();
+				Statement statement = conn.createStatement();
+				ResultSet executeQuery;
+				executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
+				while(executeQuery.next()) {
+					if(executeQuery.getString("user_name").equals(username)) {
+						return Response.serverError().header("X-Error", "103:Username already exists").build();
+					}
 				}
+				statement.execute("INSERT INTO user_profiles (user_name, password) VALUES ('" + username + "','" +  password + "')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				return Response.ok().build();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return Response.serverError().header("X-Error", "104:Database Error").build();
+			} catch (NamingException e) {
+				e.printStackTrace();
+				return Response.serverError().header("X-Error", "104:Database Error").build();
 			}
-			statement.execute("INSERT INTO user_profiles (user_name, password) VALUES (" + username + ",'" +  password + "')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return Response.serverError().header("X-Error", "104:Database Error").build();
-		} catch (NamingException e) {
-			e.printStackTrace();
-			return Response.serverError().header("X-Error", "104:Database Error").build();
 		}
-
-		return null;
+		return Response.serverError().header("X-Error", "104:Database Error").build();
 	}
 	
 	@GET
