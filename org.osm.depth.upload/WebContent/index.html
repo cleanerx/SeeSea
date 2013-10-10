@@ -1,34 +1,11 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="css/main.css">
-<script type="text/javascript" src="js/jquery.js"> </script>
-<script type="text/javascript">
+<body>
+<h3>Hello</h3>
 
-$(document).ready(  
-
-function () {
-	  var request = new XMLHttpRequest();
-	  request.open("POST","api2/users/captcha",true);
-	  request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-      request.onreadystatechange = function () {
-    	  if (request.readyState == 4 && request.status == 200) {
-    		  
-	      var response = $.parseJSON(request.responseText);
-	//      alert(response.imageBase64);
-		  // wrap our new image in jQuery, then:
-		  $('#captcha').removeClass('loading').append('<img src="data:image/png;base64,' + response.imageBase64 + '"/>')
-    	  }
-      }	    
-      request.send("dummy=true");
-      
-	});
-
-</script>
-
-</head>
-<body >
-<h3>Hello2</h3>
-<div id="captcha" class="loading"> </div>
+This is the web server page for Open Sea Map services.
+Refer to <a href="http://depth.openseamap.org"></a>
 </body>
 
 </html>

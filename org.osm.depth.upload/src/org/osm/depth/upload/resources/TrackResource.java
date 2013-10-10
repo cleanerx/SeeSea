@@ -88,7 +88,7 @@ public class TrackResource {
 			while(executeQuery.next()) {
 				Track track = new Track(executeQuery.getLong("track_id"), executeQuery.getString("file_ref"), executeQuery.getInt("upload_state"), executeQuery.getString("fileType"), executeQuery.getString("compression"), executeQuery.getLong("containertrack")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				UriBuilder ub = uriInfo.getBaseUriBuilder();
-				track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
+//				track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
 				list.add(track);
 			}
 //			GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(list) {/* */};

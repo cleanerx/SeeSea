@@ -35,7 +35,6 @@ import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.security.RolesAllowed;
 import javax.imageio.ImageIO;
@@ -47,7 +46,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -61,6 +59,7 @@ import nl.captcha.text.producer.NumbersAnswerProducer;
 
 import org.apache.catalina.util.Base64;
 import org.osm.depth.upload.CaptchaManagement;
+import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.Captcha;
 import org.osm.depth.upload.messages.User;
 
@@ -71,6 +70,7 @@ public class UserResource {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("nls")
 	@POST
 	@Path("captcha")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -99,7 +99,7 @@ public class UserResource {
 		return Response.serverError().build();
 	}
 	
-	@PUT
+//	@PUT
 	@Consumes({MediaType.MULTIPART_FORM_DATA})
 	public void changePassword(@javax.ws.rs.core.Context SecurityContext context, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword) {
 		String username = context.getUserPrincipal().getName();
@@ -118,8 +118,10 @@ public class UserResource {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new DatabaseException("Internal SQL Error");
 		} catch (NamingException e) {
 			e.printStackTrace();
+			throw new DatabaseException("Database unavailable");
 		}
 	}
 	
@@ -146,17 +148,18 @@ public class UserResource {
 						return Response.serverError().header("X-Error", "103:Username already exists").build();
 					}
 				}
-				statement.execute("INSERT INTO user_profiles (user_name, password) VALUES ('" + username + "','" +  password + "')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				return Response.ok().build();
+				statement.execute("INSERT INTO user_profiles (user_name, password) VALUES ('" + username + "','" +  password.toLowerCase() + "')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				statement.execute("INSERT INTO userroles (user_name, role) VALUES ('" + username + "','USER')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				return Response.status(204).build();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				return Response.serverError().header("X-Error", "104:Database Error").build();
+				throw new DatabaseException("Internal SQL Error");
 			} catch (NamingException e) {
 				e.printStackTrace();
-				return Response.serverError().header("X-Error", "104:Database Error").build();
+				throw new DatabaseException("Database unavailable");
 			}
 		}
-		return Response.serverError().header("X-Error", "104:Database Error").build();
+		return Response.serverError().build();
 	}
 	
 	@GET
@@ -184,10 +187,11 @@ public class UserResource {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new DatabaseException("Internal SQL Error");
 		} catch (NamingException e) {
 			e.printStackTrace();
+			throw new DatabaseException("Database unavailable");
 		}
-		return null;
 	}
 	
 //	@PUT
