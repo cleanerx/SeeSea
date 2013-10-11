@@ -143,7 +143,7 @@ public class VesselConfigurationResource {
 				executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration WHERE user_name='" + username + "'"); //$NON-NLS-1$
 			}
 			
-			List<VesselConfiguration> list = new ArrayList<>(2);
+			List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(2);
 			while(executeQuery.next()) {
 				VesselConfiguration vc = new VesselConfiguration();
 				vc.id = executeQuery.getInt("id");

@@ -40,7 +40,7 @@ public class CaptchaManagement {
 	private Set<String> captchaId2Password;
 	
 	public CaptchaManagement() {
-		captchaId2Password = new HashSet<>();
+		captchaId2Password = new HashSet<String>();
 	}
 	
 	public static CaptchaManagement getInstance() {

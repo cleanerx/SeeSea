@@ -84,7 +84,7 @@ public class TrackResource {
 				executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id WHERE u.user_name='" + username + "' ORDER BY id"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
-			List<Track> list = new ArrayList<>(2);
+			List<Track> list = new ArrayList<Track>(2);
 			while(executeQuery.next()) {
 				Track track = new Track(executeQuery.getLong("track_id"), executeQuery.getString("file_ref"), executeQuery.getInt("upload_state"), executeQuery.getString("fileType"), executeQuery.getString("compression"), executeQuery.getLong("containertrack")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				UriBuilder ub = uriInfo.getBaseUriBuilder();

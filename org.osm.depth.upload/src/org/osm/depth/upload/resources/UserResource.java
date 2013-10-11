@@ -175,7 +175,7 @@ public class UserResource {
 			ResultSet executeQuery;
 			executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
 			
-			List<User> list = new ArrayList<>(2);
+			List<User> list = new ArrayList<User>(2);
 			while(executeQuery.next()) {
 				User user = new User();
 				user.user_name = executeQuery.getString("user_name");
