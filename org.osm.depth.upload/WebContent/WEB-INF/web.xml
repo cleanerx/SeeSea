@@ -92,7 +92,7 @@
 		</web-resource-collection>
         <web-resource-collection>
             <web-resource-name>OptionsAllwaysOn</web-resource-name>
-            <url-pattern>/api2/users</url-pattern>
+            <url-pattern>/api2/users/captcha</url-pattern>
             <http-method>OPTIONS</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>
