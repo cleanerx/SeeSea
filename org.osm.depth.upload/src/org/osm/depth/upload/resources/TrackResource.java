@@ -84,9 +84,9 @@ public class TrackResource {
 			try {
 				ResultSet executeQuery = null;
 				if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-					executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id ORDER BY id"); //$NON-NLS-1$
+					executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id ORDER BY track_id"); //$NON-NLS-1$
 				} else {
-					executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id WHERE u.user_name='" + username + "' ORDER BY id"); //$NON-NLS-1$ //$NON-NLS-2$
+					executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id WHERE u.user_name='" + username + "' ORDER BY track_id"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				
 				try {
