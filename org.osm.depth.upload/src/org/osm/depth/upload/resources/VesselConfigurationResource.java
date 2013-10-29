@@ -31,7 +31,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,12 +74,8 @@ public class VesselConfigurationResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			Statement createIDStatement = conn.createStatement();
-			ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('vesselconfiguration_id_seq')"); //$NON-NLS-1$
-			if(executeQuery.next()) {
-				vesselConfiguration.id = executeQuery.getLong(1);
-				//@formatter:off
+			try {
+				Statement createIDStatement = conn.createStatement();
 				PreparedStatement selectstatement = conn.prepareStatement(
 						"INSERT INTO vesselconfiguration " +
 								"(name, " +
@@ -97,23 +92,40 @@ public class VesselConfigurationResource {
 								"user_name," +
 								"id)" +
 						"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-				selectstatement.setString(1, vesselConfiguration.name); 
-				selectstatement.setString(2,  vesselConfiguration.description); 
-				selectstatement.setString(3,  vesselConfiguration.mmsi );
-				selectstatement.setString(4,  vesselConfiguration.manufacturer); 
-				selectstatement.setString(5,  vesselConfiguration.model );
-				selectstatement.setDouble(6,  vesselConfiguration.loa );
-				selectstatement.setDouble(7,  vesselConfiguration.berth );
-				selectstatement.setDouble(8,  vesselConfiguration.draft );
-				selectstatement.setDouble(9,  vesselConfiguration.height );
-				selectstatement.setDouble(10,  vesselConfiguration.displacement );
-				selectstatement.setDouble(11,  vesselConfiguration.maximumspeed );
-				selectstatement.setString(12,  vesselConfiguration.username );
-				selectstatement.setLong(13,  vesselConfiguration.id);
-				selectstatement.execute();
-				selectstatement.close();
-				return vesselConfiguration;
+				try {
+					ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('vesselconfiguration_id_seq')"); //$NON-NLS-1$
+					try {
+						if(executeQuery.next()) {
+							vesselConfiguration.id = executeQuery.getLong(1);
+							//@formatter:off
+							selectstatement.setString(1, vesselConfiguration.name); 
+							selectstatement.setString(2,  vesselConfiguration.description); 
+							selectstatement.setString(3,  vesselConfiguration.mmsi );
+							selectstatement.setString(4,  vesselConfiguration.manufacturer); 
+							selectstatement.setString(5,  vesselConfiguration.model );
+							selectstatement.setDouble(6,  vesselConfiguration.loa );
+							selectstatement.setDouble(7,  vesselConfiguration.berth );
+							selectstatement.setDouble(8,  vesselConfiguration.draft );
+							selectstatement.setDouble(9,  vesselConfiguration.height );
+							selectstatement.setDouble(10,  vesselConfiguration.displacement );
+							selectstatement.setDouble(11,  vesselConfiguration.maximumspeed );
+							selectstatement.setString(12,  vesselConfiguration.username );
+							selectstatement.setLong(13,  vesselConfiguration.id);
+							selectstatement.execute();
+							selectstatement.close();
+							return vesselConfiguration;
+						}
+					} finally {
+						executeQuery.close();
+					}
+				} finally {
+					selectstatement.close();
+					createIDStatement.close();
+				}
+			} finally {
+				conn.close();
 			}
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -133,33 +145,37 @@ public class VesselConfigurationResource {
 		Context initContext;
 		try {
 			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
+			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet executeQuery;
-			if(context.isUserInRole("ADMIN")) {
-				executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration"); //$NON-NLS-1$
-			} else {
-				executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration WHERE user_name='" + username + "'"); //$NON-NLS-1$
+			try {
+				Statement statement = conn.createStatement();
+				try {
+					ResultSet executeQuery;
+					if(context.isUserInRole("ADMIN")) {
+						executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration"); //$NON-NLS-1$
+					} else {
+						executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration WHERE user_name='" + username + "'"); //$NON-NLS-1$
+					}
+					try {
+						List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(2);
+						while(executeQuery.next()) {
+							VesselConfiguration vc = new VesselConfiguration();
+							vc.id = executeQuery.getInt("id");
+							vc.name = executeQuery.getString("name");
+							list.add(vc);
+						}
+						GenericEntity<List<VesselConfiguration>> entity = new GenericEntity<List<VesselConfiguration>>(list) {};
+						Response response = Response.ok().entity(entity).build();
+						return response;
+					} finally {
+						executeQuery.close();
+					}
+				} finally {
+					statement.close();
+				}
+			} finally {
+				conn.close();
 			}
-			
-			List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(2);
-			while(executeQuery.next()) {
-				VesselConfiguration vc = new VesselConfiguration();
-				vc.id = executeQuery.getInt("id");
-				vc.name = executeQuery.getString("name");
-//						, executeQuery.getInt("upload_state"), executeQuery.getString("compression")); //$NON-NLS-1$
-//				UriBuilder ub = uriInfo.getBaseUriBuilder();
-//				track.delete = ub.path("/vesselconfiguration/" + track.track_id).build().toString();
-				list.add(vc);
-			}
-			GenericEntity<List<VesselConfiguration>> entity = new GenericEntity<List<VesselConfiguration>>(list) {};
-//			Link self = Link.fromMethod(VesselConfigurationResource.class,"deleteVesselConfig").build();
-			
-			Response response = Response.ok().entity(entity).build();
-			return response;
-			
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
@@ -167,10 +183,6 @@ public class VesselConfigurationResource {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 		}
-	}
-
-	public void changeVesselConfig() {
-
 	}
 
 	/**
@@ -185,25 +197,35 @@ public class VesselConfigurationResource {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
 		try {
-			int vesselId = Integer.parseInt(id);
+			long vesselId = Long.parseLong(id);
 			initContext = new InitialContext();
-			DataSource ds = (DataSource) initContext
-					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			Statement vesselconfigInUse = conn.createStatement();
-			ResultSet executeQuery = vesselconfigInUse.executeQuery("SELECT track_id FROM user_tracks WHERE vesselconfig = '{0}'"); //$NON-NLS-1$
-			if(executeQuery.next()) {
-				// do not delete used vesselconfigs
-				return Response.serverError().build();
+			try {
+				PreparedStatement vesselconfigInUse = conn.prepareStatement("SELECT track_id FROM user_tracks WHERE vesselconfig = ?"); //$NON-NLS-1$
+				PreparedStatement deleteStatement = conn.prepareStatement("DELETE FROM vesselconfiguration WHERE id = ? AND user_name = ?"); //$NON-NLS-1$
+				try {
+					vesselconfigInUse.setLong(1, vesselId);
+					ResultSet executeQuery = vesselconfigInUse.executeQuery();
+					try {
+						if(executeQuery.next()) {
+							// do not delete used vesselconfigs
+							return Response.serverError().build();
+						}
+						deleteStatement.setLong(1, vesselId);
+						deleteStatement.setString(2, username);
+						deleteStatement.execute();
+						return Response.ok().build();
+					} finally {
+						executeQuery.close();
+					}
+				} finally {
+					vesselconfigInUse.close();
+					deleteStatement.close();
+				}
+			} finally {
+				conn.close();
 			}
-			Statement selectstatement = conn.createStatement();
-			selectstatement
-					.execute(MessageFormat
-							.format("DELETE FROM vesselconfiguration WHERE id = {0} AND user_name = ''{1}''", //$NON-NLS-1$
-									vesselId, username));
-
-			selectstatement.close();
-			return Response.ok().build();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
@@ -216,3 +238,4 @@ public class VesselConfigurationResource {
 	}
 
 }
+

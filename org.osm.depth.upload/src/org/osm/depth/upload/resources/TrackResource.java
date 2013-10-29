@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -75,28 +76,43 @@ public class TrackResource {
 		try {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet executeQuery;
-			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-				executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id ORDER BY id"); //$NON-NLS-1$
-			} else {
-				executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id WHERE u.user_name='" + username + "' ORDER BY id"); //$NON-NLS-1$ //$NON-NLS-2$
+			Connection connection = ds.getConnection();
+
+		try {
+			Statement statement = connection.createStatement();
+
+			try {
+				ResultSet executeQuery = null;
+				if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
+					executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id ORDER BY id"); //$NON-NLS-1$
+				} else {
+					executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id WHERE u.user_name='" + username + "' ORDER BY id"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+				
+				try {
+				// Do stuff with the result set.
+					List<Track> list = new ArrayList<Track>(2);
+					while(executeQuery.next()) {
+						Track track = new Track(executeQuery.getLong("track_id"), executeQuery.getString("file_ref"), executeQuery.getInt("upload_state"), executeQuery.getString("fileType"), executeQuery.getString("compression"), executeQuery.getLong("containertrack")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+						UriBuilder ub = uriInfo.getBaseUriBuilder();
+//						track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
+						list.add(track);
+					}
+//					GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(list) {/* */};
+//					Link self = Link.fromMethod(TrackResource.class,"delete").build(); //$NON-NLS-1$
+//					Response response = Response.ok().entity(entity).links(self).build();
+					return list;
+				} finally {
+					if(executeQuery != null) {
+						executeQuery.close();
+					}
+					}
+			} finally {
+				statement.close();
 			}
-			
-			List<Track> list = new ArrayList<Track>(2);
-			while(executeQuery.next()) {
-				Track track = new Track(executeQuery.getLong("track_id"), executeQuery.getString("file_ref"), executeQuery.getInt("upload_state"), executeQuery.getString("fileType"), executeQuery.getString("compression"), executeQuery.getLong("containertrack")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-				UriBuilder ub = uriInfo.getBaseUriBuilder();
-//				track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
-				list.add(track);
-			}
-//			GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(list) {/* */};
-//			Link self = Link.fromMethod(TrackResource.class,"delete").build(); //$NON-NLS-1$
-//			Response response = Response.ok().entity(entity).links(self).build();
-			return list;
-			
-			
+		} finally {
+			connection.close();
+		}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error");
@@ -105,8 +121,14 @@ public class TrackResource {
 			throw new DatabaseException("Database unavailable");
 		}
 	}
-	
-//	@Path("newid")
+
+	/**
+	 * creating a step is twofold: Create its id and the update the file contents later on through a put request.
+	 * This way we can show progress of the uploaded file.
+	 * 
+	 * @param context
+	 * @return
+	 */
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
@@ -114,25 +136,37 @@ public class TrackResource {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
 		try {
-			
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			Statement statement = conn.createStatement();
-			Statement createIDStatement = conn.createStatement();
-			
-			ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('user_tracks_track_id_seq')"); //$NON-NLS-1$
-			if(executeQuery.next()) {
-				Long id = executeQuery.getLong(1);
-				statement.executeUpdate("INSERT INTO user_tracks (track_id, user_name) VALUES (" + id + ",'" + username + "')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				Track track = new Track();
-				track.id = id;
-				return track;
-			} else {
-				// failed to create id
+			try {
+				PreparedStatement insertTrackStatement = conn.prepareStatement("INSERT INTO user_tracks (track_id, user_name) VALUES (?,?)"); //$NON-NLS-1$
+				Statement createIDStatement = conn.createStatement();
+				try {
+					ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('user_tracks_track_id_seq')"); //$NON-NLS-1$
+					try {
+						if(executeQuery.next()) {
+							Long id = executeQuery.getLong(1);
+							insertTrackStatement.setLong(1, id);
+							insertTrackStatement.setString(2, username);
+							insertTrackStatement.execute();
+							Track track = new Track();
+							track.id = id;
+							return track;
+						} else {
+							// failed to create id
+						}
+						throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+					} finally {
+						executeQuery.close();
+					}
+				} finally {
+					insertTrackStatement.close();
+					createIDStatement.close();
+				}
+			} finally {
+				conn.close();
 			}
-			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 			
 		} catch (SQLException e) {
 			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
@@ -142,8 +176,16 @@ public class TrackResource {
 		}
 		
 	}
-	
-//	@Path("upload")
+
+	/**
+	 * this method must be called upon successful completed upload
+	 * 
+	 * @param context
+	 * @param uploadedInputStream
+	 * @param fileDetail
+	 * @param trackID
+	 * @return
+	 */
 	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -151,8 +193,6 @@ public class TrackResource {
 			@FormDataParam("track") InputStream uploadedInputStream,
 			@FormDataParam("track") FormDataContentDisposition fileDetail,
 			@FormDataParam("id") String trackID) {
-		
-//		FileUploadProgressMonitor progressMonitor = new FileUploadProgressMonitor();
 		
 		Long bytesRead = 0L;
 		String username = context.getUserPrincipal().getName();
@@ -171,19 +211,30 @@ public class TrackResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			Statement selectstatement = conn.createStatement();
-			selectstatement.executeQuery(MessageFormat
-					.format("SELECT upload_state FROM user_tracks WHERE track_id = {0} AND user_name = ''{1}''", //$NON-NLS-1$
-							trackID, username));
-
-			
-			
-			Statement statement = conn.createStatement();
-			statement.execute(MessageFormat
-					.format("UPDATE user_tracks SET file_ref = ''{0}'', upload_state = 1 WHERE track_id = {1}", //$NON-NLS-1$
-							fileDetail.getFileName(), trackID));
-			selectstatement.close();
+			try {
+				conn.setAutoCommit(false);
+				PreparedStatement selectUploadStateStatement = conn.prepareStatement("SELECT track_id FROM user_tracks WHERE track_id = ? AND user_name = ? AND upload_state = 1"); //$NON-NLS-1$
+				PreparedStatement updateTrackStatement = conn.prepareStatement("UPDATE user_tracks SET file_ref = ?, upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
+				try {
+					selectUploadStateStatement.setLong(1, Long.parseLong(trackID));
+					selectUploadStateStatement.setString(2, username);
+					updateTrackStatement.setString(1, fileDetail.getFileName());
+					updateTrackStatement.setLong(2, Long.parseLong(trackID));
+					ResultSet resultSet = selectUploadStateStatement.executeQuery();
+					try {
+						while(resultSet.next() && resultSet.getLong("track_id") != 0) { //$NON-NLS-1$
+							updateTrackStatement.execute();
+						}
+					} finally {
+						resultSet.close();
+					}
+				} finally {
+					selectUploadStateStatement.close();
+					updateTrackStatement.close();
+				}
+			} finally {
+				conn.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
@@ -200,6 +251,12 @@ public class TrackResource {
 		return bytesRead.toString();
 	}
 	
+	/**
+	 * deletes a track by id
+	 * 
+	 * @param context
+	 * @param id
+	 */
 	@DELETE
 	@Path("{id}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -211,20 +268,27 @@ public class TrackResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			Statement selectstatement = conn.createStatement();
-			
-			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-				selectstatement.execute(MessageFormat
-					.format("DELETE FROM user_tracks WHERE track_id = {0}", //$NON-NLS-1$
-							id));
-			} else {
-				selectstatement.execute(MessageFormat
-						.format("DELETE FROM user_tracks WHERE track_id = {0} AND user_name = ''{1}''", //$NON-NLS-1$
-								id, username));
+			try {
+				PreparedStatement deleteStatement = null;
+				try {
+					if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
+						deleteStatement = conn.prepareStatement("DELETE FROM user_tracks WHERE track_id = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+					} else {
+						deleteStatement = conn.prepareStatement("DELETE FROM user_tracks WHERE track_id = ? AND user_name = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.setString(2, username);
+						deleteStatement.execute();
+					}
+				} finally {
+					if(deleteStatement != null) {
+						deleteStatement.close();
+					}
+				}
+			} finally {
+				conn.close();
 			}
-
-			selectstatement.close();
 			getFile(trackId).delete();
 			
 		} catch (SQLException e) {
@@ -238,14 +302,6 @@ public class TrackResource {
 			throw new DatabaseException("Delete file not possible"); //$NON-NLS-1$
 		}
 	}
-	
-//	@GET
-//	@Path("status/{id}")
-//    @Produces({ MediaType.APPLICATION_JSON })
-//	public long getById(@PathParam("id") long id) {
-//		// return filesize
-//		return 10000;
-//	}
 	
 	/**
 	 * 

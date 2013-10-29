@@ -29,6 +29,7 @@ package org.osm.depth.upload.resources;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -110,11 +111,13 @@ public class UserResource {
 			Connection conn = ds.getConnection();
 
 			Statement selectstatement = conn.createStatement();
+			try {
 			selectstatement.execute(MessageFormat
 					.format("UPDATE user_profiles SET password = '{2}' WHERE password = {0} AND user_name = ''{1}''", //$NON-NLS-1$
 							oldPassword, username, newPassword));
-
-			selectstatement.close();
+			} finally {
+				selectstatement.close();
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -138,25 +141,43 @@ public class UserResource {
 			Context initContext;
 			try {
 				initContext = new InitialContext();
-				DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
+				DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 				Connection conn = ds.getConnection();
-				Statement statement = conn.createStatement();
-				ResultSet executeQuery;
-				executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
-				while(executeQuery.next()) {
-					if(executeQuery.getString("user_name").equals(username)) {
-						return Response.serverError().header("X-Error", "103:Username already exists").build();
+				try {
+					conn.setAutoCommit(false);
+					Statement statement = conn.createStatement();
+					PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password) VALUES (?,?)");
+					PreparedStatement insertUserRoleStatement = conn.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
+					try {
+						ResultSet executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
+						try {
+							while(executeQuery.next()) {
+								if(executeQuery.getString("user_name").equals(username)) { //$NON-NLS-1$
+									return Response.serverError().header("X-Error", "103:Username already exists").build();
+								}
+							}
+							insertUserStatement.setString(1, username);
+							insertUserStatement.setString(2, password.toLowerCase());
+							insertUserRoleStatement.setString(1, username);
+							insertUserStatement.execute();
+							insertUserRoleStatement.execute();
+							conn.commit();
+							return Response.status(204).build();
+						} finally {
+							executeQuery.close();
+						}
+					} finally {
+						statement.close();
 					}
+				} finally {
+					conn.close();
 				}
-				statement.execute("INSERT INTO user_profiles (user_name, password) VALUES ('" + username + "','" +  password.toLowerCase() + "')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				statement.execute("INSERT INTO userroles (user_name, role) VALUES ('" + username + "','USER')"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				return Response.status(204).build();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				throw new DatabaseException("Internal SQL Error");
+				throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
 			} catch (NamingException e) {
 				e.printStackTrace();
-				throw new DatabaseException("Database unavailable");
+				throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 			}
 		}
 		return Response.serverError().build();
@@ -171,19 +192,29 @@ public class UserResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
 			Connection conn = ds.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet executeQuery;
-			executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
-			
-			List<User> list = new ArrayList<User>(2);
-			while(executeQuery.next()) {
-				User user = new User();
-				user.user_name = executeQuery.getString("user_name");
-				user.attemps = executeQuery.getInt("attempts");
-				user.lastAttempt = executeQuery.getDate("last_attempt");
-				list.add(user);
+			try {
+				Statement statement = conn.createStatement();
+				try {
+					ResultSet executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
+					try {
+						List<User> list = new ArrayList<User>(2);
+						while(executeQuery.next()) {
+							User user = new User();
+							user.user_name = executeQuery.getString("user_name");
+							user.attemps = executeQuery.getInt("attempts");
+							user.lastAttempt = executeQuery.getDate("last_attempt");
+							list.add(user);
+						}
+						return list;
+					} finally {
+						executeQuery.close();
+					}
+				} finally {
+					statement.close();
+				}
+			} finally {
+				conn.close();
 			}
-			return list;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
