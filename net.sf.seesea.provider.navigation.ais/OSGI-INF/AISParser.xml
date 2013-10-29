@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.provider.navigation.ais">
-   <reference bind="addNMEAReader" cardinality="1..1" interface="net.sf.seesea.services.navigation.INMEAReader" name="INMEAReader" policy="static" unbind="removeNMEAReader"/>
-   <implementation class="net.sf.seesea.provider.navigation.ais.AISParserProvider"/>
-   <reference bind="addAISHandler" cardinality="0..n" interface="nl.esi.metis.aisparser.HandleAISMessage" name="HandleAISMessage" policy="dynamic" unbind="removeAISHandler"/>
-</scr:component>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" name="net.sf.seesea.osm.configuration">
-   <implementation class="net.sf.seesea.osm.preferences.OSMConfiguration"/>
-   <reference bind="bindConfigAdmin" cardinality="1..1" interface="org.osgi.service.cm.ConfigurationAdmin" name="ConfigurationAdmin" policy="dynamic" unbind="unbindConfigAdmin"/>
-</scr:component>
