@@ -54,9 +54,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import nl.captcha.Captcha.Builder;
-import nl.captcha.gimpy.BlockGimpyRenderer;
-import nl.captcha.text.producer.NumbersAnswerProducer;
+import jj.play.ns.nl.captcha.Captcha.Builder;
+import jj.play.ns.nl.captcha.gimpy.BlockGimpyRenderer;
+import jj.play.ns.nl.captcha.text.producer.DefaultTextProducer;
+import jj.play.ns.nl.captcha.text.producer.TextProducer;
+
 
 import org.apache.catalina.util.Base64;
 import org.osm.depth.upload.CaptchaManagement;
@@ -77,8 +79,8 @@ public class UserResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createCatpcha() {
-		Builder builder = new nl.captcha.Captcha.Builder(120, 40);
-		nl.captcha.Captcha captcha = builder.addText(new NumbersAnswerProducer(6)).gimp(new BlockGimpyRenderer()).build();
+		Builder builder = new Builder(120, 40);
+		jj.play.ns.nl.captcha.Captcha captcha = builder.addText(new DefaultTextProducer(6)).gimp(new BlockGimpyRenderer()).build();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
 			ImageIO.write(captcha.getImage(), "png", byteArrayOutputStream); //$NON-NLS-1$
