@@ -60,7 +60,8 @@ import jj.play.ns.nl.captcha.text.producer.DefaultTextProducer;
 import jj.play.ns.nl.captcha.text.producer.TextProducer;
 
 
-import org.apache.catalina.util.Base64;
+//import org.apache.catalina.util.Base64;
+import org.glassfish.jersey.internal.util.Base64;
 import org.osm.depth.upload.CaptchaManagement;
 import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.Captcha;
@@ -89,7 +90,7 @@ public class UserResource {
 			CaptchaManagement.getInstance().registerCaptcha(captcha.getAnswer());
 			Captcha captcha2 = new Captcha();
 //			captcha2.id = captchaid;
-			captcha2.imageBase64 = Base64.encode(imageData);
+			captcha2.imageBase64 = new String(Base64.encode(imageData), "UTF-8");
 			return Response.
 					ok(captcha2).
 					header("Cache-Control", "no-cache, no-store, must-revalidate").
