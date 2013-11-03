@@ -213,7 +213,7 @@ public class TrackResource {
 			Connection conn = ds.getConnection();
 			try {
 				conn.setAutoCommit(false);
-				PreparedStatement selectUploadStateStatement = conn.prepareStatement("SELECT track_id FROM user_tracks WHERE track_id = ? AND user_name = ? AND upload_state = 1"); //$NON-NLS-1$
+				PreparedStatement selectUploadStateStatement = conn.prepareStatement("SELECT track_id FROM user_tracks WHERE track_id = ? AND user_name = ? AND upload_state = 0"); //$NON-NLS-1$
 				PreparedStatement updateTrackStatement = conn.prepareStatement("UPDATE user_tracks SET file_ref = ?, upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
 				try {
 					selectUploadStateStatement.setLong(1, Long.parseLong(trackID));
