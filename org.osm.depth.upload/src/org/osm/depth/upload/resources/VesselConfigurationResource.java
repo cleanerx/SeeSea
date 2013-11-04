@@ -80,18 +80,18 @@ public class VesselConfigurationResource {
 						"INSERT INTO vesselconfiguration " +
 								"(name, " +
 								"description, " +
-								"mmsi, " +
-								"manufacturer, " +
-								"model, " +
-								"loa, " +
-								"berth, " +
-								"draft, " +
-								"height, " +
-								"displacement, " +
-								"maximumspeed, " +
+								"depthm, " +
+								"depthd, " +
+								"esinfront, " +
+								"esrightof, " +
+								"esdisy, " +
+								"esdisx, " +
+								"slidingsp, " +
+								"yachtmodel, " +
+							//	"maximumspeed, " +
 								"user_name," +
 								"id)" +
-						"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						"VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 				try {
 					ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('vesselconfiguration_id_seq')"); //$NON-NLS-1$
 					try {
@@ -100,17 +100,17 @@ public class VesselConfigurationResource {
 							//@formatter:off
 							selectstatement.setString(1, vesselConfiguration.name); 
 							selectstatement.setString(2,  vesselConfiguration.description); 
-							selectstatement.setString(3,  vesselConfiguration.mmsi );
-							selectstatement.setString(4,  vesselConfiguration.manufacturer); 
-							selectstatement.setString(5,  vesselConfiguration.model );
-							selectstatement.setDouble(6,  vesselConfiguration.loa );
-							selectstatement.setDouble(7,  vesselConfiguration.berth );
-							selectstatement.setDouble(8,  vesselConfiguration.draft );
-							selectstatement.setDouble(9,  vesselConfiguration.height );
-							selectstatement.setDouble(10,  vesselConfiguration.displacement );
-							selectstatement.setDouble(11,  vesselConfiguration.maximumspeed );
-							selectstatement.setString(12,  vesselConfiguration.username );
-							selectstatement.setLong(13,  vesselConfiguration.id);
+							selectstatement.setDouble(3,  vesselConfiguration.depthm );
+							selectstatement.setDouble(4,  vesselConfiguration.depthd); 
+							selectstatement.setString(5,  vesselConfiguration.esinfront );
+							selectstatement.setString(6,  vesselConfiguration.esrightof );
+							selectstatement.setDouble(7,  vesselConfiguration.esdisy );
+							selectstatement.setDouble(8,  vesselConfiguration.esdisx );
+							selectstatement.setDouble(9,  vesselConfiguration.slidingsp );
+							selectstatement.setString(10,  vesselConfiguration.yachtmodel );
+							//	selectstatement.setDouble(11,  vesselConfiguration.maximumspeed );
+							selectstatement.setString(11,  vesselConfiguration.username );
+							selectstatement.setLong(12,  vesselConfiguration.id);
 							selectstatement.execute();
 							selectstatement.close();
 							return vesselConfiguration;

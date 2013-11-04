@@ -38,17 +38,19 @@ public class VesselConfiguration {
 	public long id;
 	public String name;
 	public String description;
-	public String mmsi;
-	public String manufacturer;
-	public String model;
-	public double loa;
-	public double berth;
-	public double draft;
+	public double depthm;
+	public double depthd;
+	public String esinfront;
+	public String esrightof;
+	public double esdisy;
+	public double esdisx;
 	public double height;
-	public int displacement;
-	public double maximumspeed;
+	public String yachtmodel;
+	public double slidingsp;
 	public String username;
 
+
+	
     @XmlElementWrapper
 	@XmlAnyElement
 	public List<Offset> sbasOffsets;
