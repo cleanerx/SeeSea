@@ -19,7 +19,7 @@
 <Context >
 
       <Resource auth="Container" name="jdbc/postgres" 
-    type="javax.sql.DataSource" username="osmapi" password="ahM0Shu4" 
-            driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/osmapitest" maxActive="150"
+    type="javax.sql.DataSource" username="{osmuser}" password="{osmpass}" 
+            driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/{osmdatabase}" maxActive="150"
             maxIdle="1"/>
 </Context>
