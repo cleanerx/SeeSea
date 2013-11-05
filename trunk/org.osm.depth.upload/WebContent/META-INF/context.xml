@@ -18,9 +18,8 @@
 <!-- The contents of this file will be loaded for each web application -->
 <Context >
 
-     <Resource auth="Container" name="jdbc/postgres" 
-    type="javax.sql.DataSource" username="osm" password="dell3007" 
-            driverClassName="org.postgresql.Driver" url="jdbc:postgresql://192.168.1.1:5432/depthapi" maxActive="150"
+      <Resource auth="Container" name="jdbc/postgres" 
+    type="javax.sql.DataSource" username="osmapi" password="ahM0Shu4" 
+            driverClassName="org.postgresql.Driver" url="jdbc:postgresql://localhost:5432/osmapitest" maxActive="150"
             maxIdle="1"/>
-
 </Context>
