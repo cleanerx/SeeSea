@@ -6,9 +6,19 @@
   <packaging>war</packaging>
   <name>api2</name>
   <description>OpenSeaMap Depth API</description>
+<pluginRepositories>
+    <pluginRepository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>test</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -18,15 +28,12 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-		<plugin>            
-		  <groupId>org.apache.maven.plugins</groupId>
-		  <artifactId>maven-war-plugin</artifactId>
-		  <configuration>
-         <webXml>WebContent\WEB-INF\web.xml</webXml>        
-         <containerConfigXML>WebContent\WEB-INF\context.xml</containerConfigXML>        
-		  </configuration>
-		</plugin>
-    </plugins>
+    <plugin>
+         <groupId>org.apache.tomcat.maven</groupId>
+         <artifactId>tomcat7-maven-plugin</artifactId>
+         <version>2.2-SNAPSHOT</version>
+    </plugin>
+   </plugins>
   </build>
   <dependencies>
   	<dependency>
@@ -34,6 +41,11 @@
   		<artifactId>junit</artifactId>
   		<version>3.8.1</version>
   	</dependency>
+  	<dependency>
+    <groupId>postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>9.1-901.jdbc4</version>
+    </dependency>
   	<dependency>
   		<groupId>org.glassfish.jersey.containers</groupId>
   		<artifactId>jersey-container-servlet</artifactId>
@@ -61,5 +73,10 @@
   		<artifactId>jersey-media-moxy</artifactId>
   		<version>2.4</version>
   	</dependency>
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.4</version>
+      </dependency>
   </dependencies>
 </project>
