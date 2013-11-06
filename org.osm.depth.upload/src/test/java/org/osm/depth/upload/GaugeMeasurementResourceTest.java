@@ -1,4 +1,4 @@
-package org.osm.deoth.upload;
+package org.osm.depth.upload;
 
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
