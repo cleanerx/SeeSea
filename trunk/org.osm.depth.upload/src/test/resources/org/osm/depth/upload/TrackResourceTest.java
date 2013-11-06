@@ -95,7 +95,7 @@ public class TrackResourceTest extends TestCase {
         
         delete = delete.path("/" + new Long(track.id).toString()); //$NON-NLS-1$
         response = delete.request().delete();
-        assertEquals(204, response.getStatus());
+        assertEquals(200, response.getStatus());
         
 		return;
 		

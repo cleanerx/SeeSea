@@ -48,6 +48,9 @@ public class OSMAPIApplication extends Application {
 	    set.add(MOXyJsonProvider.class);
 	    set.add(TrackResource.class);
 	    set.add(UserResource.class);
+	    set.add(LicenseResource.class);
+	    set.add(GaugeResource.class);
+	    set.add(GaugeMeasurementResource.class);
 	    set.add(VesselConfigurationResource.class);
 	    set.add(MultiPartFeature.class);
     return set;
