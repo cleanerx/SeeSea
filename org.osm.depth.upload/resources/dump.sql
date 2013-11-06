@@ -120,7 +120,11 @@ CREATE TABLE user_tracks (
     starttime timestamp without time zone,
     endtime timestamp without time zone,
     containertrack integer,
-    vesselconfigid integer
+    vesselconfigid integer,
+    license integer
+      CONSTRAINT license_fkey FOREIGN KEY (license)
+      REFERENCES license (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
@@ -249,6 +253,97 @@ ALTER TABLE ONLY sbasoffset
 
 ALTER TABLE ONLY vesselconfiguration
     ADD CONSTRAINT vesselconfiguration_user_name_fkey FOREIGN KEY (user_name) REFERENCES user_profiles(user_name) ON UPDATE CASCADE ON DELETE CASCADE;
+
+CREATE TABLE gauge
+(
+  id integer NOT NULL,
+  name character varying(255) NOT NULL,
+  gaugetype character varying(10) DEFAULT 'UNKNOWN'::character varying,
+  lat numeric(11,3),
+  lon numeric(11,3),
+  CONSTRAINT gauge_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE gauge
+  OWNER TO osm;
+
+-- Sequence: gauge_id_seq
+
+-- DROP SEQUENCE gauge_id_seq;
+
+CREATE SEQUENCE gauge_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 51
+  CACHE 1;
+ALTER TABLE gauge_id_seq
+  OWNER TO osm;
+
+-- Table: license
+
+-- DROP TABLE license;
+
+CREATE TABLE license
+(
+  name character varying(255) NOT NULL,
+  shortname character varying(16),
+  text text,
+  public boolean,
+  id serial NOT NULL,
+  user_name character varying(255),
+  CONSTRAINT license_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE license
+  OWNER TO osm;
+
+-- Sequence: license_id_seq
+
+-- DROP SEQUENCE license_id_seq;
+
+CREATE SEQUENCE license_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 20
+  CACHE 1;
+ALTER TABLE license_id_seq
+  OWNER TO osm;
+
+-- Table: gaugemeasurement
+
+-- DROP TABLE gaugemeasurement;
+
+CREATE TABLE gaugemeasurement
+(
+  gaugeid integer NOT NULL,
+  value numeric(4,2) NOT NULL,
+  "time" timestamp without time zone NOT NULL,
+  CONSTRAINT gaugemeasurement_fkey FOREIGN KEY (gaugeid)
+      REFERENCES gauge (id) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT gaugemeasurement_unique UNIQUE (gaugeid, "time")
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE gaugemeasurement
+  OWNER TO osm;
+
+-- Index: fki_gaugemeasurement_fkey
+
+-- DROP INDEX fki_gaugemeasurement_fkey;
+
+CREATE INDEX fki_gaugemeasurement_fkey
+  ON gaugemeasurement
+  USING btree
+  (gaugeid);
+
 
 
 --

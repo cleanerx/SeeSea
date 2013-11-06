@@ -47,6 +47,8 @@ public class Track {
 
 	public long containertrack;
 	
+	public License license;
+
 	public Track() {
 		
 	}
