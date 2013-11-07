@@ -137,15 +137,15 @@ public class GaugeResource {
 
 			conn.setAutoCommit(false);
 			Statement gaugeUsedinTracks = conn.createStatement();
-			Statement deletestatement = conn.createStatement();
+			PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gauge WHERE id = ?"); //$NON-NLS-1$
 			
-			ResultSet usedInTracksResultSet = gaugeUsedinTracks.executeQuery("SELECT COUNT(id) FROM gaugetracks WHERE gaugeid ='" + gaugeId + "' ");
-			if(usedInTracksResultSet.next() && usedInTracksResultSet.getLong(1) > 0) {
-				throw new ResourceInUseException("License is still being used for recorded tracks");
-			}
+//			ResultSet usedInTracksResultSet = gaugeUsedinTracks.executeQuery("SELECT COUNT(id) FROM gaugetracks WHERE gaugeid ='" + gaugeId + "' ");
+//			if(usedInTracksResultSet.next() && usedInTracksResultSet.getLong(1) > 0) {
+//				throw new ResourceInUseException("License is still being used for recorded tracks");
+//			}
 			
-			deletestatement.execute(MessageFormat.format("DELETE FROM gauge WHERE id = {0}", //$NON-NLS-1$
-							gaugeId));
+			deletestatement.setLong(1, gaugeId);
+			deletestatement.execute();
 			conn.commit();
 			deletestatement.close();
 			return Response.ok().build();

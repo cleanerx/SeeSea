@@ -100,7 +100,7 @@ public class LicenseResource {
 			Connection conn = ds.getConnection();
 
 			Statement createIDStatement = conn.createStatement();
-			PreparedStatement statement = conn.prepareStatement("INSERT INTO license (id, user_name, name, shortname, text, public) VALUES (?,?,?,?,?,?)");
+			PreparedStatement statement = conn.prepareStatement("INSERT INTO license (id, user_name, name, shortname, text, public) VALUES (?,?,?,?,?,?)"); //$NON-NLS-1$
 			Statement userIDQueryStatement = conn.createStatement();
 			
 			ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('license_id_seq')"); //$NON-NLS-1$
