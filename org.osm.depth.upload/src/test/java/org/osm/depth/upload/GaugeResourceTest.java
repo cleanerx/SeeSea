@@ -16,11 +16,9 @@ import junit.framework.TestCase;
 import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 import org.glassfish.jersey.filter.LoggingFilter;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeType;
-import org.osm.depth.upload.messages.License;
 
 public class GaugeResourceTest extends TestCase {
 	

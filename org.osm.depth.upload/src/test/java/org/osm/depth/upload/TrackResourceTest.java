@@ -88,14 +88,15 @@ public class TrackResourceTest extends TestCase {
         for (Track track2 : tracks) {
 			if(track2.id == track.id) {
 //				assertEquals(track.file_ref,"test.txt");
-				assertEquals(track.upload_state,0);
+				assertEquals(track2.upload_state,1);
+				assertEquals(track2.fileName,"track");
 				break;
 			}
 		}
         
         delete = delete.path("/" + new Long(track.id).toString()); //$NON-NLS-1$
         response = delete.request().delete();
-        assertEquals(200, response.getStatus());
+        assertEquals(204, response.getStatus());
         
 		return;
 		
