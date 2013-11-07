@@ -225,6 +225,7 @@ public class TrackResource {
 						while(resultSet.next() && resultSet.getLong("track_id") != 0) { //$NON-NLS-1$
 							updateTrackStatement.execute();
 						}
+						conn.commit();
 					} finally {
 						resultSet.close();
 					}
