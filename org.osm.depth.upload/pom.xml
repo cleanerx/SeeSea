@@ -19,6 +19,7 @@
     </pluginRepository>
   </pluginRepositories>
   <build>
+    <finalName>org.osm.depth.upload${stage}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
