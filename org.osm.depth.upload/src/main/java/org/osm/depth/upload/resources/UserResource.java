@@ -90,7 +90,7 @@ public class UserResource {
 			CaptchaManagement.getInstance().registerCaptcha(captcha.getAnswer());
 			Captcha captcha2 = new Captcha();
 //			captcha2.id = captchaid;
-			captcha2.imageBase64 = new String(Base64.encode(imageData), "UTF-8");
+			captcha2.imageBase64 = new String(org.postgresql.util.Base64.encodeBytes(imageData));
 			return Response.
 					ok(captcha2).
 					header("Cache-Control", "no-cache, no-store, must-revalidate").
