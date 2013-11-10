@@ -31,7 +31,7 @@
                     <Realm className="org.apache.catalina.realm.DataSourceRealm"
             dataSourceName="jdbc/postgres"
             userTable="user_profiles" userNameCol="user_name" userCredCol="password"
-   userRoleTable="userroles" roleNameCol="role" localDataSource="true" digest="SHA"/>
+   userRoleTable="userroles" roleNameCol="role" localDataSource="true" digest="SHA" />
       </Realm>
             
 </Context>
