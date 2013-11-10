@@ -81,8 +81,11 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<!-- <configuration> <excludes> <exclude>**/integration/**</exclude> 
-					</excludes> </configuration> -->
+				<configuration>
+					<excludes>
+						<exclude>**/*ResourceTest.java</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<id>run-webtests</id>
@@ -91,7 +94,7 @@
 							<goal>test</goal>
 						</goals>
 						<configuration>
-                            <skip>false</skip>
+							<skip>false</skip>
 							<excludes>
 								<exclude>none</exclude>
 							</excludes>
