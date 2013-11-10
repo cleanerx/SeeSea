@@ -45,7 +45,7 @@ public class GaugeResource {
 	
 	@GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Gauge> getAllGauges(@javax.ws.rs.core.Context SecurityContext context) {
+	public List<Gauge> getAllGauges() {
 		Context initContext;
 		try {
 			initContext = new InitialContext();
@@ -59,12 +59,12 @@ public class GaugeResource {
 					List<Gauge> list = new ArrayList<Gauge>();
 					while(executeQuery.next()) {
 						Gauge gauge = new Gauge();
-						gauge.id = executeQuery.getLong("id");
-						gauge.name = executeQuery.getString("name");
-						gauge.latitude = executeQuery.getDouble("lat");
-						gauge.longitude = executeQuery.getDouble("lon");
+						gauge.id = executeQuery.getLong("id"); //$NON-NLS-1$
+						gauge.name = executeQuery.getString("name"); //$NON-NLS-1$
+						gauge.latitude = executeQuery.getDouble("lat"); //$NON-NLS-1$
+						gauge.longitude = executeQuery.getDouble("lon"); //$NON-NLS-1$
 						try {
-							gauge.gaugeType = GaugeType.valueOf(executeQuery.getString("gaugetype"));
+							gauge.gaugeType = GaugeType.valueOf(executeQuery.getString("gaugetype")); //$NON-NLS-1$
 						} catch (IllegalArgumentException e) {
 							gauge.gaugeType = GaugeType.UNDEFINED; // no such gauge type
 						}
