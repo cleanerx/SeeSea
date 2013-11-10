@@ -231,7 +231,7 @@ public class VesselConfigurationResource {
 			Connection conn = ds.getConnection();
 			try {
 				PreparedStatement vesselconfigInUse = conn
-						.prepareStatement("SELECT track_id FROM user_tracks WHERE vesselconfig = ?"); //$NON-NLS-1$
+						.prepareStatement("SELECT track_id FROM user_tracks WHERE vesselconfigid = ?"); //$NON-NLS-1$
 				PreparedStatement deleteStatement = conn
 						.prepareStatement("DELETE FROM vesselconfiguration WHERE id = ? AND user_name = ?"); //$NON-NLS-1$
 				try {
