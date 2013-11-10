@@ -57,7 +57,7 @@ public class TrackResourceTest extends TestCase {
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
 		
-		WebTarget basePath = client.target("http://localhost:8100").path("org.osm.depth.upload");
+		WebTarget basePath = client.target("http://localhost:8100").path(TestConstants.PATH);
 		WebTarget newID = basePath.path("api2/track");
 		WebTarget upload = basePath.path("api2/track");
 		WebTarget getall = basePath.path("api2/track");
