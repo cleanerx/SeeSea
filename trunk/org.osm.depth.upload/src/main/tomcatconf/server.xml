@@ -129,7 +129,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log." suffix=".txt"/>
 
-        <Context docBase="${project.build.directory}/${project.build.finalName}" path="${project.build.directory}/${project.build.finalName}" reloadable="true"/>
+<!--         <Context docBase="${project.build.directory}/${project.build.finalName}" path="${project.build.directory}/${project.build.finalName}" reloadable="true"/> -->
 
 
 <!--       <Context docBase="org.osm.depth.upload" path="/org.osm.depth.upload" reloadable="true" source="org.eclipse.jst.jee.server:org.osm.depth.upload"/> -->
