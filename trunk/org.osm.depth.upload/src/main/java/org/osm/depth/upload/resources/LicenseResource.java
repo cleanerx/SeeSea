@@ -48,6 +48,7 @@ public class LicenseResource {
 					Statement statement = conn.createStatement();
 					try {
 						executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name"); //$NON-NLS-1$
+						return getLicenses(context, executeQuery);
 					} finally {
 						statement.close();
 					}
@@ -56,37 +57,12 @@ public class LicenseResource {
 					pStatement.setString(1, username);
 					try {
 						executeQuery = pStatement.executeQuery();
+						return getLicenses(context, executeQuery);
 					} finally {
 						pStatement.close();
 					}
 				}
 				
-				List<License> list = new ArrayList<License>();
-				while(executeQuery.next()) {
-					License license = new License();
-					license.id = executeQuery.getLong("id");
-					license.name = executeQuery.getString("name");
-					license.shortName = executeQuery.getString("shortname");
-					license.text = executeQuery.getString("text");
-					license.publicLicense = executeQuery.getBoolean("public");
-					if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-						license.user = executeQuery.getString("user_name");
-					} else { 
-						if(license.user.equals(context.getUserPrincipal().getName())) {
-							license.user = executeQuery.getString("user_name");
-						} else {
-							license.user = "Other";
-						}
-					}
-					
-//					UriBuilder ub = uriInfo.getBaseUriBuilder();
-//					track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
-					list.add(license);
-				}
-//				GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(list) {/* */};
-//				Link self = Link.fromMethod(TrackResource.class,"delete").build(); //$NON-NLS-1$
-//				Response response = Response.ok().entity(entity).links(self).build();
-				return list;
 			} finally {
 				conn.close();
 			}
@@ -97,6 +73,36 @@ public class LicenseResource {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable");
 		}
+	}
+
+	private List<License> getLicenses(SecurityContext context,
+			ResultSet executeQuery) throws SQLException {
+		List<License> list = new ArrayList<License>();
+		while(executeQuery.next()) {
+			License license = new License();
+			license.id = executeQuery.getLong("id");
+			license.name = executeQuery.getString("name");
+			license.shortName = executeQuery.getString("shortname");
+			license.text = executeQuery.getString("text");
+			license.publicLicense = executeQuery.getBoolean("public");
+			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
+				license.user = executeQuery.getString("user_name");
+			} else { 
+				if(license.user.equals(context.getUserPrincipal().getName())) {
+					license.user = executeQuery.getString("user_name");
+				} else {
+					license.user = "Other";
+				}
+			}
+			
+//					UriBuilder ub = uriInfo.getBaseUriBuilder();
+//					track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
+			list.add(license);
+		}
+//				GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(list) {/* */};
+//				Link self = Link.fromMethod(TrackResource.class,"delete").build(); //$NON-NLS-1$
+//				Response response = Response.ok().entity(entity).links(self).build();
+		return list;
 	}	
 	
 	@POST
