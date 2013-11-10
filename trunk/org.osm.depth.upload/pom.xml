@@ -90,8 +90,15 @@
 						<goals>
 							<goal>test</goal>
 						</goals>
-						<!-- <configuration> <excludes> <exclude>none</exclude> </excludes> 
-							<includes> <include>**/integration/**</include> </includes> </configuration> -->
+						<configuration>
+                            <skip>false</skip>
+							<excludes>
+								<exclude>none</exclude>
+							</excludes>
+							<includes>
+								<include>**/*ResourceTest.java</include>
+							</includes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
