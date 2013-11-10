@@ -42,52 +42,54 @@ public class LicenseResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			ResultSet executeQuery;
-			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-				Statement statement = conn.createStatement();
-				try {
-					executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name"); //$NON-NLS-1$
-				} finally {
-					statement.close();
-				}
-			} else {
-				PreparedStatement pStatement = conn.prepareStatement("SELECT * FROM license l LEFT OUTER JOIN vesselconfiguration u ON u.user_name = l.user_name WHERE l.user_name= ? OR l.public = true ORDER BY shortname,name"); //$NON-NLS-1$
-				pStatement.setString(1, username);
-				try {
-					executeQuery = pStatement.executeQuery();
-				} finally {
-					pStatement.close();
-				}
-			}
-			
-			List<License> list = new ArrayList<License>();
-			while(executeQuery.next()) {
-				License license = new License();
-				license.id = executeQuery.getLong("id");
-				license.name = executeQuery.getString("name");
-				license.shortName = executeQuery.getString("shortname");
-				license.text = executeQuery.getString("text");
-				license.publicLicense = executeQuery.getBoolean("public");
+			try {
+				ResultSet executeQuery;
 				if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-					license.user = executeQuery.getString("user_name");
-				} else { 
-					if(license.user.equals(context.getUserPrincipal().getName())) {
-						license.user = executeQuery.getString("user_name");
-					} else {
-						license.user = "Other";
+					Statement statement = conn.createStatement();
+					try {
+						executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name"); //$NON-NLS-1$
+					} finally {
+						statement.close();
+					}
+				} else {
+					PreparedStatement pStatement = conn.prepareStatement("SELECT * FROM license l LEFT OUTER JOIN vesselconfiguration u ON u.user_name = l.user_name WHERE l.user_name= ? OR l.public = true ORDER BY shortname,name"); //$NON-NLS-1$
+					pStatement.setString(1, username);
+					try {
+						executeQuery = pStatement.executeQuery();
+					} finally {
+						pStatement.close();
 					}
 				}
 				
-//				UriBuilder ub = uriInfo.getBaseUriBuilder();
-//				track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
-				list.add(license);
+				List<License> list = new ArrayList<License>();
+				while(executeQuery.next()) {
+					License license = new License();
+					license.id = executeQuery.getLong("id");
+					license.name = executeQuery.getString("name");
+					license.shortName = executeQuery.getString("shortname");
+					license.text = executeQuery.getString("text");
+					license.publicLicense = executeQuery.getBoolean("public");
+					if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
+						license.user = executeQuery.getString("user_name");
+					} else { 
+						if(license.user.equals(context.getUserPrincipal().getName())) {
+							license.user = executeQuery.getString("user_name");
+						} else {
+							license.user = "Other";
+						}
+					}
+					
+//					UriBuilder ub = uriInfo.getBaseUriBuilder();
+//					track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
+					list.add(license);
+				}
+//				GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(list) {/* */};
+//				Link self = Link.fromMethod(TrackResource.class,"delete").build(); //$NON-NLS-1$
+//				Response response = Response.ok().entity(entity).links(self).build();
+				return list;
+			} finally {
+				conn.close();
 			}
-//			GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(list) {/* */};
-//			Link self = Link.fromMethod(TrackResource.class,"delete").build(); //$NON-NLS-1$
-//			Response response = Response.ok().entity(entity).links(self).build();
-			return list;
-			
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error");
@@ -159,29 +161,39 @@ public class LicenseResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
+			try {
+				conn.setAutoCommit(false);
+				PreparedStatement licenseUsedinTracks = conn.prepareStatement("SELECT COUNT(track_id) FROM user_tracks WHERE license = ? "); //$NON-NLS-1$
+				try {
+					licenseUsedinTracks.setLong(1, licenseId);
+					Statement deletestatement = conn.createStatement();
+					try {
+						ResultSet usedInTracksResultSet = licenseUsedinTracks.executeQuery();
+						if(usedInTracksResultSet.next() && usedInTracksResultSet.getLong(1) > 0) {
+							throw new ResourceInUseException("License is still being used for recorded tracks");
+						}
+						
+						if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
+							deletestatement.execute(MessageFormat
+									.format("DELETE FROM license WHERE id = {0}", //$NON-NLS-1$
+											licenseId));
+						} else {
+							deletestatement.execute(MessageFormat
+									.format("DELETE FROM license WHERE id = {0} AND user_name = ''{1}''", //$NON-NLS-1$
+											licenseId, username));
+						}
+						conn.commit();
+						return Response.ok().build();
+					} finally {
+						deletestatement.close();
+					}
+				} finally {
+					licenseUsedinTracks.close();
+				}
+			} finally {
+				conn.close();
+			}
 
-			conn.setAutoCommit(false);
-			PreparedStatement licenseUsedinTracks = conn.prepareStatement("SELECT COUNT(track_id) FROM user_tracks WHERE license = ? "); //$NON-NLS-1$
-			licenseUsedinTracks.setLong(1, licenseId);
-			Statement deletestatement = conn.createStatement();
-			
-			ResultSet usedInTracksResultSet = licenseUsedinTracks.executeQuery();
-			if(usedInTracksResultSet.next() && usedInTracksResultSet.getLong(1) > 0) {
-				throw new ResourceInUseException("License is still being used for recorded tracks");
-			}
-			
-			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-				deletestatement.execute(MessageFormat
-					.format("DELETE FROM license WHERE id = {0}", //$NON-NLS-1$
-							licenseId));
-			} else {
-				deletestatement.execute(MessageFormat
-						.format("DELETE FROM license WHERE id = {0} AND user_name = ''{1}''", //$NON-NLS-1$
-								licenseId, username));
-			}
-			conn.commit();
-			deletestatement.close();
-			return Response.ok().build();
 	
 		} catch (SQLException e) {
 			e.printStackTrace();
