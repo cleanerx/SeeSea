@@ -47,7 +47,9 @@ public class LicenseResource {
 			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 				executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name"); //$NON-NLS-1$
 			} else {
-				executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN vesselconfiguration u ON u.user_name = l.user_name WHERE l.user_name='" + username + "' OR l.public = true ORDER BY shortname,name"); //$NON-NLS-1$ //$NON-NLS-2$
+				PreparedStatement pStatement = conn.prepareStatement("SELECT * FROM license l LEFT OUTER JOIN vesselconfiguration u ON u.user_name = l.user_name WHERE l.user_name= ? OR l.public = true ORDER BY shortname,name"); //$NON-NLS-1$
+				pStatement.setString(1, username);
+				executeQuery = pStatement.executeQuery();
 			}
 			
 			List<License> list = new ArrayList<License>();
@@ -101,7 +103,7 @@ public class LicenseResource {
 
 			Statement createIDStatement = conn.createStatement();
 			PreparedStatement statement = conn.prepareStatement("INSERT INTO license (id, user_name, name, shortname, text, public) VALUES (?,?,?,?,?,?)"); //$NON-NLS-1$
-			Statement userIDQueryStatement = conn.createStatement();
+//			Statement userIDQueryStatement = conn.createStatement();
 			
 			ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('license_id_seq')"); //$NON-NLS-1$
 			if(executeQuery.next()) {
@@ -141,10 +143,11 @@ public class LicenseResource {
 			Connection conn = ds.getConnection();
 
 			conn.setAutoCommit(false);
-			Statement licenseUsedinTracks = conn.createStatement();
+			PreparedStatement licenseUsedinTracks = conn.prepareStatement("SELECT COUNT(track_id) FROM user_tracks WHERE license = ? "); //$NON-NLS-1$
+			licenseUsedinTracks.setLong(1, licenseId);
 			Statement deletestatement = conn.createStatement();
 			
-			ResultSet usedInTracksResultSet = licenseUsedinTracks.executeQuery("SELECT COUNT(track_id) FROM user_tracks WHERE license ='" + licenseId + "' ");
+			ResultSet usedInTracksResultSet = licenseUsedinTracks.executeQuery();
 			if(usedInTracksResultSet.next() && usedInTracksResultSet.getLong(1) > 0) {
 				throw new ResourceInUseException("License is still being used for recorded tracks");
 			}
