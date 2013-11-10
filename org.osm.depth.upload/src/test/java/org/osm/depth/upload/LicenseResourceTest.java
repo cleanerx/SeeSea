@@ -62,7 +62,7 @@ public class LicenseResourceTest extends TestCase {
 			assertEquals(license2.shortName,license3.shortName);
 			assertEquals(license2.publicLicense,license3.publicLicense);
 			assertEquals(license2.text,license3.text);
-			assertEquals(license2.User,"x");
+			assertEquals(license2.user,"x");
 			assertNotSame(0, license2.id);
 			licenseId = license2.id;
 		}
