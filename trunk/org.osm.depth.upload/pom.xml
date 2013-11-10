@@ -71,6 +71,7 @@
 					<fork>true</fork>
 					<port>8100</port>
 					<serverXml>resources/server.xml</serverXml>
+					<warSourceDirectory>target/org.osm.depth.upload</warSourceDirectory>
 				</configuration>
 				<executions>
 					<execution>
