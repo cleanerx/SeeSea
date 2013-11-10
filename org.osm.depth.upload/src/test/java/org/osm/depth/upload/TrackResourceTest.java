@@ -73,7 +73,7 @@ public class TrackResourceTest extends TestCase {
 //        multipart.field("track", "text.txt");
         multipart.field("id", new Long(track.id).toString());
         
-        File file = new File("res/test.txt");
+        File file = new File("Test.txt");
 		// 
         multipart.bodyPart(new FormDataBodyPart("track", file,MediaType.MULTIPART_FORM_DATA_TYPE)).bodyPart(new StreamDataBodyPart("track", new FileInputStream(file))).type(new MediaType("multipart", "form-data",
         		Collections.singletonMap(Boundary.BOUNDARY_PARAMETER, Boundary.createBoundary())));
