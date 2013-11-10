@@ -53,6 +53,31 @@
                 </archive>
             </configuration>
         </plugin>      
+       <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+<!--                 <configuration>
+                    <excludes>
+                        <exclude>**/integration/**</exclude>
+                    </excludes>
+                </configuration> -->
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+<!--                        <configuration>
+                             <excludes>
+                                <exclude>none</exclude>
+                            </excludes>
+                            <includes>
+                                <include>**/integration/**</include>
+                            </includes>
+                        </configuration>-->
+                     </execution>
+                </executions>
+            </plugin>
     <plugin>
          <groupId>org.apache.tomcat.maven</groupId>
          <artifactId>tomcat7-maven-plugin</artifactId>
