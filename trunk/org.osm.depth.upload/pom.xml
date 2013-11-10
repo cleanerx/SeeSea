@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.osm.depth.upload</groupId>
 	<artifactId>org.osm.depth.upload</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>war</packaging>
 	<name>api2</name>
 	<description>OpenSeaMap Depth API</description>
@@ -67,14 +67,14 @@
 						<id>run-tomcat</id>
 						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>tomcat7:run</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>stop-tc</id>
 						<phase>post-integration-test</phase>
 						<goals>
-							<goal>shutdown</goal>
+							<goal>tomcat7:shutdown</goal>
 						</goals>
 					</execution>
 				</executions>
