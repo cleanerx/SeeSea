@@ -59,58 +59,69 @@ import org.osm.depth.upload.messages.VesselConfiguration;
 public class VesselConfigurationResource {
 
 	@javax.ws.rs.core.Context
-    UriInfo uriInfo;
-	
+	UriInfo uriInfo;
+
 	@POST
-	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public VesselConfiguration createVesselConfig(@javax.ws.rs.core.Context SecurityContext context, VesselConfiguration vesselConfiguration) {
+	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public VesselConfiguration createVesselConfig(
+			@javax.ws.rs.core.Context SecurityContext context,
+			VesselConfiguration vesselConfiguration) {
 		String username = context.getUserPrincipal().getName();
-		if(!context.isUserInRole("ADMIN") || vesselConfiguration.username == null) {
+		if (!context.isUserInRole("ADMIN")
+				|| vesselConfiguration.username == null) {
 			vesselConfiguration.username = username;
 		}
 		Context initContext;
 		try {
 			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			DataSource ds = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
 			try {
 				Statement createIDStatement = conn.createStatement();
-				PreparedStatement selectstatement = conn.prepareStatement(
-						"INSERT INTO vesselconfiguration " +
-								"(name, " +
-								"description, " +
-								"depthm, " +
-								"depthd, " +
-								"esinfront, " +
-								"esrightof, " +
-								"esdisy, " +
-								"esdisx, " +
-								"slidingsp, " +
-								"yachtmodel, " +
-							//	"maximumspeed, " +
-								"user_name," +
-								"id)" +
-						"VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+				PreparedStatement selectstatement = conn
+						.prepareStatement("INSERT INTO vesselconfiguration "
+								+ "(name, " + "description, " + "depthm, "
+								+ "depthd, " + "esinfront, " + "esrightof, "
+								+ "esdisy, " + "esdisx, " + "slidingsp, "
+								+ "yachtmodel, "
+								+
+								// "maximumspeed, " +
+								"user_name," + "id)"
+								+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 				try {
-					ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('vesselconfiguration_id_seq')"); //$NON-NLS-1$
+					ResultSet executeQuery = createIDStatement
+							.executeQuery("SELECT nextval('vesselconfiguration_id_seq')"); //$NON-NLS-1$
 					try {
-						if(executeQuery.next()) {
+						if (executeQuery.next()) {
 							vesselConfiguration.id = executeQuery.getLong(1);
-							//@formatter:off
-							selectstatement.setString(1, vesselConfiguration.name); 
-							selectstatement.setString(2,  vesselConfiguration.description); 
-							selectstatement.setDouble(3,  vesselConfiguration.depthm );
-							selectstatement.setDouble(4,  vesselConfiguration.depthd); 
-							selectstatement.setString(5,  vesselConfiguration.esinfront );
-							selectstatement.setString(6,  vesselConfiguration.esrightof );
-							selectstatement.setDouble(7,  vesselConfiguration.esdisy );
-							selectstatement.setDouble(8,  vesselConfiguration.esdisx );
-							selectstatement.setDouble(9,  vesselConfiguration.slidingsp );
-							selectstatement.setString(10,  vesselConfiguration.yachtmodel );
-							//	selectstatement.setDouble(11,  vesselConfiguration.maximumspeed );
-							selectstatement.setString(11,  vesselConfiguration.username );
-							selectstatement.setLong(12,  vesselConfiguration.id);
+							// @formatter:off
+							selectstatement.setString(1,
+									vesselConfiguration.name);
+							selectstatement.setString(2,
+									vesselConfiguration.description);
+							selectstatement.setDouble(3,
+									vesselConfiguration.depthm);
+							selectstatement.setDouble(4,
+									vesselConfiguration.depthd);
+							selectstatement.setString(5,
+									vesselConfiguration.esinfront);
+							selectstatement.setString(6,
+									vesselConfiguration.esrightof);
+							selectstatement.setDouble(7,
+									vesselConfiguration.esdisy);
+							selectstatement.setDouble(8,
+									vesselConfiguration.esdisx);
+							selectstatement.setDouble(9,
+									vesselConfiguration.slidingsp);
+							selectstatement.setString(10,
+									vesselConfiguration.yachtmodel);
+							// selectstatement.setDouble(11,
+							// vesselConfiguration.maximumspeed );
+							selectstatement.setString(11,
+									vesselConfiguration.username);
+							selectstatement.setLong(12, vesselConfiguration.id);
 							selectstatement.execute();
 							selectstatement.close();
 							return vesselConfiguration;
@@ -126,7 +137,6 @@ public class VesselConfigurationResource {
 				conn.close();
 			}
 
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
@@ -135,9 +145,9 @@ public class VesselConfigurationResource {
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 		}
 		return null;
-		
+
 	}
-	
+
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response getAll(@javax.ws.rs.core.Context SecurityContext context) {
@@ -145,35 +155,45 @@ public class VesselConfigurationResource {
 		Context initContext;
 		try {
 			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			DataSource ds = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
 			try {
-				Statement statement = conn.createStatement();
-				try {
-					ResultSet executeQuery;
-					if(context.isUserInRole("ADMIN")) {
-						executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration"); //$NON-NLS-1$
-					} else {
-						PreparedStatement pStatement = conn.prepareStatement("SELECT * FROM vesselconfiguration WHERE user_name= ? "); //$NON-NLS-1$
+				ResultSet executeQuery;
+				if (context.isUserInRole("ADMIN")) { //$NON-NLS-1$
+					Statement statement = conn.createStatement();
+					try {
+						executeQuery = statement
+								.executeQuery("SELECT * FROM vesselconfiguration"); //$NON-NLS-1$
+					} finally {
+						statement.close();
+					}
+				} else {
+					PreparedStatement pStatement = conn
+							.prepareStatement("SELECT * FROM vesselconfiguration WHERE user_name= ? "); //$NON-NLS-1$
+					try {
 						pStatement.setString(1, username);
 						executeQuery = pStatement.executeQuery();
-					}
-					try {
-						List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(2);
-						while(executeQuery.next()) {
-							VesselConfiguration vc = new VesselConfiguration();
-							vc.id = executeQuery.getInt("id");
-							vc.name = executeQuery.getString("name");
-							list.add(vc);
-						}
-						GenericEntity<List<VesselConfiguration>> entity = new GenericEntity<List<VesselConfiguration>>(list) {};
-						Response response = Response.ok().entity(entity).build();
-						return response;
 					} finally {
-						executeQuery.close();
+						pStatement.close();
 					}
+				}
+				try {
+					List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(
+							2);
+					while (executeQuery.next()) {
+						VesselConfiguration vc = new VesselConfiguration();
+						vc.id = executeQuery.getInt("id");
+						vc.name = executeQuery.getString("name");
+						list.add(vc);
+					}
+					GenericEntity<List<VesselConfiguration>> entity = new GenericEntity<List<VesselConfiguration>>(
+							list) {
+					};
+					Response response = Response.ok().entity(entity).build();
+					return response;
 				} finally {
-					statement.close();
+					executeQuery.close();
 				}
 			} finally {
 				conn.close();
@@ -201,16 +221,19 @@ public class VesselConfigurationResource {
 		try {
 			long vesselId = Long.parseLong(id);
 			initContext = new InitialContext();
-			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			DataSource ds = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
 			try {
-				PreparedStatement vesselconfigInUse = conn.prepareStatement("SELECT track_id FROM user_tracks WHERE vesselconfig = ?"); //$NON-NLS-1$
-				PreparedStatement deleteStatement = conn.prepareStatement("DELETE FROM vesselconfiguration WHERE id = ? AND user_name = ?"); //$NON-NLS-1$
+				PreparedStatement vesselconfigInUse = conn
+						.prepareStatement("SELECT track_id FROM user_tracks WHERE vesselconfig = ?"); //$NON-NLS-1$
+				PreparedStatement deleteStatement = conn
+						.prepareStatement("DELETE FROM vesselconfiguration WHERE id = ? AND user_name = ?"); //$NON-NLS-1$
 				try {
 					vesselconfigInUse.setLong(1, vesselId);
 					ResultSet executeQuery = vesselconfigInUse.executeQuery();
 					try {
-						if(executeQuery.next()) {
+						if (executeQuery.next()) {
 							// do not delete used vesselconfigs
 							return Response.serverError().build();
 						}
@@ -240,4 +263,3 @@ public class VesselConfigurationResource {
 	}
 
 }
-

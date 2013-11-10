@@ -134,21 +134,26 @@ public class GaugeResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			conn.setAutoCommit(false);
+			try {
+				conn.setAutoCommit(false);
 //			Statement gaugeUsedinTracks = conn.createStatement();
-			PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gauge WHERE id = ?"); //$NON-NLS-1$
-			
+				PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gauge WHERE id = ?"); //$NON-NLS-1$
+				deletestatement.setLong(1, gaugeId);
+				try {
+					deletestatement.execute();
+					conn.commit();
+				} finally {
+					deletestatement.close();
+				}
 //			ResultSet usedInTracksResultSet = gaugeUsedinTracks.executeQuery("SELECT COUNT(id) FROM gaugetracks WHERE gaugeid ='" + gaugeId + "' ");
 //			if(usedInTracksResultSet.next() && usedInTracksResultSet.getLong(1) > 0) {
 //				throw new ResourceInUseException("License is still being used for recorded tracks");
 //			}
-			
-			deletestatement.setLong(1, gaugeId);
-			deletestatement.execute();
-			conn.commit();
-			deletestatement.close();
-			return Response.ok().build();
+				
+				return Response.ok().build();
+			} finally {
+				conn.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
