@@ -19,7 +19,7 @@
 <Context >
 
       <Resource auth="Container" name="jdbc/postgres" 
-    type="javax.sql.DataSource" username="${osmuser}" password="${osmpassword}" 
+    type="javax.sql.DataSource" username="${osmuser}" password="${Dosmpass}" 
             driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${osmdatabase}" maxActive="150"
             maxIdle="1"/>
             
