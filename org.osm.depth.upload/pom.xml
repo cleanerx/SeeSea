@@ -67,14 +67,14 @@
 						<id>run-tomcat</id>
 						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>tomcat7:run</goal>
+							<goal>run</goal>
 						</goals>
 					</execution>
 					<execution>
-						<id>stop-tc</id>
+						<id>stop-tomcat</id>
 						<phase>post-integration-test</phase>
 						<goals>
-							<goal>tomcat7:shutdown</goal>
+							<goal>shutdown</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -85,7 +85,7 @@
 					</excludes> </configuration> -->
 				<executions>
 					<execution>
-						<id>integration-test</id>
+						<id>run-webtests</id>
 						<phase>integration-test</phase>
 						<goals>
 							<goal>test</goal>
