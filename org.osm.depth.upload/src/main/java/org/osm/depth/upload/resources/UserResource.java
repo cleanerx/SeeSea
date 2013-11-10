@@ -80,8 +80,8 @@ public class UserResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createCatpcha() {
-		Builder builder = new Builder(120, 40);
-		jj.play.ns.nl.captcha.Captcha captcha = builder.addText(new DefaultTextProducer(4)).gimp(new BlockGimpyRenderer()).build();
+		Builder builder = new Builder(160, 40);
+		jj.play.ns.nl.captcha.Captcha captcha = builder.addText(new DefaultTextProducer(6)).gimp(new BlockGimpyRenderer()).build();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
 			ImageIO.write(captcha.getImage(), "png", byteArrayOutputStream); //$NON-NLS-1$
