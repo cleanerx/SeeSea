@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import org.osm.depth.upload.exceptions.DatabaseException;
-import org.osm.depth.upload.exceptions.ResourceInUseException;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeType;
 
@@ -53,29 +51,32 @@ public class GaugeResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet executeQuery;
-//			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-				executeQuery = statement.executeQuery("SELECT * FROM gauge g"); //$NON-NLS-1$
-//			} else {
-//				executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN vesselconfiguration u ON u.user_name = l.user_name WHERE l.user_name='" + username + "' OR l.public = true ORDER BY shortname,name"); //$NON-NLS-1$ //$NON-NLS-2$
-//			}
-			
-			List<Gauge> list = new ArrayList<Gauge>();
-			while(executeQuery.next()) {
-				Gauge gauge = new Gauge();
-				gauge.id = executeQuery.getLong("id");
-				gauge.name = executeQuery.getString("name");
-				gauge.latitude = executeQuery.getDouble("lat");
-				gauge.longitude = executeQuery.getDouble("lon");
+			try {
+				Statement statement = conn.createStatement();
 				try {
-					gauge.gaugeType = GaugeType.valueOf(executeQuery.getString("gaugetype"));
-				} catch (IllegalArgumentException e) {
-					gauge.gaugeType = GaugeType.UNDEFINED; // no such gauge type
+					ResultSet executeQuery;
+					executeQuery = statement.executeQuery("SELECT * FROM gauge g"); //$NON-NLS-1$
+					List<Gauge> list = new ArrayList<Gauge>();
+					while(executeQuery.next()) {
+						Gauge gauge = new Gauge();
+						gauge.id = executeQuery.getLong("id");
+						gauge.name = executeQuery.getString("name");
+						gauge.latitude = executeQuery.getDouble("lat");
+						gauge.longitude = executeQuery.getDouble("lon");
+						try {
+							gauge.gaugeType = GaugeType.valueOf(executeQuery.getString("gaugetype"));
+						} catch (IllegalArgumentException e) {
+							gauge.gaugeType = GaugeType.UNDEFINED; // no such gauge type
+						}
+						list.add(gauge);
+					}
+					return list;
+				} finally {
+					statement.close();
 				}
-				list.add(gauge);
+			} finally {
+				conn.close();
 			}
-			return list;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error");
@@ -88,6 +89,7 @@ public class GaugeResource {
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@RolesAllowed(value = {"USER"})
 	public Gauge newGauge(@javax.ws.rs.core.Context SecurityContext context, Gauge gauge) {
 		Context initContext;
 		try {
@@ -95,25 +97,35 @@ public class GaugeResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			Statement createIDStatement = conn.createStatement();
-			PreparedStatement statement = conn.prepareStatement("INSERT INTO gauge (id, name, lat, lon, gaugetype) VALUES (?,?,?,?,?)");
-			
-			ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('gauge_id_seq')"); //$NON-NLS-1$
-			if(executeQuery.next()) {
-				Long id = executeQuery.getLong(1);
-				statement.setLong(1, id);
-				statement.setString(2, gauge.name);
-				statement.setDouble(3, gauge.latitude);
-				statement.setDouble(4, gauge.longitude);
-				statement.setString(5, gauge.gaugeType.toString());
-				statement.execute();
-				return gauge;
-			} else {
-				// failed to create id
+			try {
+				Statement createIDStatement = conn.createStatement();
+				try {
+					PreparedStatement statement = conn.prepareStatement("INSERT INTO gauge (id, name, lat, lon, gaugetype) VALUES (?,?,?,?,?)"); //$NON-NLS-1$
+					try {
+						ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('gauge_id_seq')"); //$NON-NLS-1$
+						if(executeQuery.next()) {
+							Long id = executeQuery.getLong(1);
+							statement.setLong(1, id);
+							statement.setString(2, gauge.name);
+							statement.setDouble(3, gauge.latitude);
+							statement.setDouble(4, gauge.longitude);
+							statement.setString(5, gauge.gaugeType.toString());
+							statement.execute();
+							return gauge;
+						} else {
+							// failed to create id
+						}
+						throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+					} finally {
+						statement.close();
+					}
+				} finally {
+					createIDStatement.close();
+				}
+				
+			} finally {
+				conn.close();
 			}
-			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
@@ -138,8 +150,8 @@ public class GaugeResource {
 				conn.setAutoCommit(false);
 //			Statement gaugeUsedinTracks = conn.createStatement();
 				PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gauge WHERE id = ?"); //$NON-NLS-1$
-				deletestatement.setLong(1, gaugeId);
 				try {
+					deletestatement.setLong(1, gaugeId);
 					deletestatement.execute();
 					conn.commit();
 				} finally {

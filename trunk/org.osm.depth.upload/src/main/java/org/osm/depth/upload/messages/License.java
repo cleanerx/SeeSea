@@ -14,7 +14,7 @@ public class License {
 	public String text;
 	
 	/** if null this license may be publically used and only be changed by the admin and the owner */
-	public String User;
+	public String user;
 	
 	/** License may be used by others */
 	public boolean publicLicense;
