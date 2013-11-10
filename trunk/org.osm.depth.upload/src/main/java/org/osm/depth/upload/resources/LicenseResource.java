@@ -110,26 +110,30 @@ public class LicenseResource {
 			Connection conn = ds.getConnection();
 			try {
 				Statement createIDStatement = conn.createStatement();
-				PreparedStatement statement = conn.prepareStatement("INSERT INTO license (id, user_name, name, shortname, text, public) VALUES (?,?,?,?,?,?)"); //$NON-NLS-1$
-//			Statement userIDQueryStatement = conn.createStatement();
 				try {
-					ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('license_id_seq')"); //$NON-NLS-1$
-					if(executeQuery.next()) {
-						Long id = executeQuery.getLong(1);
-						statement.setLong(1, id);
-						statement.setString(2, username);
-						statement.setString(3, license.name);
-						statement.setString(4, license.shortName);
-						statement.setString(5, license.text);
-						statement.setBoolean(6, license.publicLicense);
-						statement.execute();
-						return license;
-					} else {
-						// failed to create id
+					PreparedStatement statement = conn.prepareStatement("INSERT INTO license (id, user_name, name, shortname, text, public) VALUES (?,?,?,?,?,?)"); //$NON-NLS-1$
+//			Statement userIDQueryStatement = conn.createStatement();
+					try {
+						ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('license_id_seq')"); //$NON-NLS-1$
+						if(executeQuery.next()) {
+							Long id = executeQuery.getLong(1);
+							statement.setLong(1, id);
+							statement.setString(2, username);
+							statement.setString(3, license.name);
+							statement.setString(4, license.shortName);
+							statement.setString(5, license.text);
+							statement.setBoolean(6, license.publicLicense);
+							statement.execute();
+							return license;
+						} else {
+							// failed to create id
+						}
+						throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+					} finally {
+						statement.close();
 					}
-					throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 				} finally {
-					statement.close();
+					createIDStatement.close();
 				}
 			} finally {
 				conn.close();
