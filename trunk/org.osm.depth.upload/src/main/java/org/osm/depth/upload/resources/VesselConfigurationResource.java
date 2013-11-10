@@ -154,7 +154,9 @@ public class VesselConfigurationResource {
 					if(context.isUserInRole("ADMIN")) {
 						executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration"); //$NON-NLS-1$
 					} else {
-						executeQuery = statement.executeQuery("SELECT * FROM vesselconfiguration WHERE user_name='" + username + "'"); //$NON-NLS-1$
+						PreparedStatement pStatement = conn.prepareStatement("SELECT * FROM vesselconfiguration WHERE user_name= ? "); //$NON-NLS-1$
+						pStatement.setString(1, username);
+						executeQuery = pStatement.executeQuery();
 					}
 					try {
 						List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(2);
