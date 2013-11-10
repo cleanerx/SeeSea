@@ -69,12 +69,12 @@ public class LicenseResource {
 				license.text = executeQuery.getString("text");
 				license.publicLicense = executeQuery.getBoolean("public");
 				if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-					license.User = executeQuery.getString("user_name");
+					license.user = executeQuery.getString("user_name");
 				} else { 
-					if(license.User.equals(context.getUserPrincipal().getName())) {
-						license.User = executeQuery.getString("user_name");
+					if(license.user.equals(context.getUserPrincipal().getName())) {
+						license.user = executeQuery.getString("user_name");
 					} else {
-						license.User = "Other";
+						license.user = "Other";
 					}
 				}
 				

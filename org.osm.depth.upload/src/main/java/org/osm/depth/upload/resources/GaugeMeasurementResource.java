@@ -60,32 +60,31 @@ public class GaugeMeasurementResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			Statement statement = conn.createStatement();
-			ResultSet executeQuery;
-			executeQuery = statement.executeQuery("SELECT * FROM gaugemeasurement g ORDER BY time"); //$NON-NLS-1$
-			
-			List<GaugeMeasurement> list = new ArrayList<GaugeMeasurement>();
-			while(executeQuery.next()) {
-				GaugeMeasurement gaugeMeasurement = new GaugeMeasurement();
-				gaugeMeasurement.gaugeId = executeQuery.getLong("gaugeid");
-				gaugeMeasurement.value = executeQuery.getFloat("value");
-				gaugeMeasurement.timestamp = new Date(executeQuery.getTimestamp("time").getTime());
+			try {
+				Statement statement = conn.createStatement();
 				try {
-					gaugeMeasurement.lengthUnit = LengthUnit.METERS;
-				} catch (IllegalArgumentException e) {
+					ResultSet executeQuery = statement.executeQuery("SELECT * FROM gaugemeasurement g ORDER BY time"); //$NON-NLS-1$
+					
+					List<GaugeMeasurement> list = new ArrayList<GaugeMeasurement>();
+					while(executeQuery.next()) {
+						GaugeMeasurement gaugeMeasurement = new GaugeMeasurement();
+						gaugeMeasurement.gaugeId = executeQuery.getLong("gaugeid");
+						gaugeMeasurement.value = executeQuery.getFloat("value");
+						gaugeMeasurement.timestamp = new Date(executeQuery.getTimestamp("time").getTime());
+						try {
+							gaugeMeasurement.lengthUnit = LengthUnit.METERS;
+						} catch (IllegalArgumentException e) {
 //					gaugeMeasurement.gaugeType = GaugeType.UNDEFINED; // no such gauge type
+						}
+						list.add(gaugeMeasurement);
+					}
+					return list;
+				} finally {
+					statement.close();
 				}
-				list.add(gaugeMeasurement);
+			} finally {
+				conn.close();
 			}
-//			List<GaugeMeasurement> gaugeMeasurement = new ArrayList<>();
-//			GaugeMeasurement gaugeMeasurement2 = new GaugeMeasurement();
-//			gaugeMeasurement2.gaugeId = new Long(id);
-//			gaugeMeasurement2.value = 1.0f;
-//			gaugeMeasurement.add(gaugeMeasurement2);
-//			return gaugeMeasurement;
-
-			
-			return list;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error");
@@ -104,15 +103,21 @@ public class GaugeMeasurementResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			PreparedStatement statement = conn.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)");
-			statement.setLong(1, gaugeMeasurement.gaugeId);
-			statement.setFloat(2, gaugeMeasurement.value);
-			statement.setTimestamp(3, new Timestamp(gaugeMeasurement.timestamp.getTime()));
-			statement.execute();
-			
-			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
-			
+			try {
+				PreparedStatement statement = conn.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)");
+				try {
+					statement.setLong(1, gaugeMeasurement.gaugeId);
+					statement.setFloat(2, gaugeMeasurement.value);
+					statement.setTimestamp(3, new Timestamp(gaugeMeasurement.timestamp.getTime()));
+					statement.execute();
+					
+					throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+				} finally {
+					statement.close();
+				}
+			} finally {
+				conn.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
@@ -134,16 +139,22 @@ public class GaugeMeasurementResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			conn.setAutoCommit(false);
-			PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gaugemeasurement WHERE time >= ? AND time < ? ");
-			deletestatement.setTimestamp(1, new Timestamp(date.getTime()));
-			deletestatement.setTimestamp(2, new Timestamp(date.getTime() + 1000));
-			deletestatement.execute();
+			try {
+				conn.setAutoCommit(false);
+				PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gaugemeasurement WHERE time >= ? AND time < ? ");
+				try {
+					deletestatement.setTimestamp(1, new Timestamp(date.getTime()));
+					deletestatement.setTimestamp(2, new Timestamp(date.getTime() + 1000));
+					deletestatement.execute();
 //			deletestatement.execute("DELETE FROM gaugemeasurement WHERE time >= TIMESTAMP '" + date.getTime() + "' AND time < TIMESTAMP '" + date.getTime() + 1000 + "'"); //$NON-NLS-1$));
-			conn.commit();
-			deletestatement.close();
-			return Response.ok().build();
+					conn.commit();
+					return Response.ok().build();
+				} finally {
+					deletestatement.close();
+				}
+			} finally {
+				conn.close();
+			}
 		} catch (SQLException e) {	
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
