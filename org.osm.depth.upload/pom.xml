@@ -71,7 +71,7 @@
 				  <tomcatLoggingFile>log.txt</tomcatLoggingFile>
 					<fork>true</fork>
 					<port>8100</port>
-<!-- 					<serverXml>resources/server.xml</serverXml> -->
+ 					<serverXml>${basedir}/src/main/tomcatconf/server.xml</serverXml>
 				</configuration>
 				<dependencies>
 		        <dependency>
