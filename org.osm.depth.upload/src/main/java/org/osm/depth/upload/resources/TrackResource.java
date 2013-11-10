@@ -78,17 +78,23 @@ public class TrackResource {
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection connection = ds.getConnection();
 
-		try {
-			Statement statement = connection.createStatement();
-
 			try {
 				ResultSet executeQuery = null;
 				if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-					executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id ORDER BY track_id"); //$NON-NLS-1$
+					Statement statement = connection.createStatement();
+					try {
+						executeQuery = statement.executeQuery("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id ORDER BY track_id"); //$NON-NLS-1$
+					} finally {
+						statement.close();
+					}
 				} else {
 					PreparedStatement pStatement = connection.prepareStatement("SELECT * FROM user_tracks u LEFT OUTER JOIN vesselconfiguration v ON u.vesselconfigid = v.id WHERE u.user_name= ? ORDER BY track_id"); //$NON-NLS-1$
-					pStatement.setString(1, username);
-					executeQuery = pStatement.executeQuery();
+					try {
+						pStatement.setString(1, username);
+						executeQuery = pStatement.executeQuery();
+					} finally {
+						pStatement.close();
+					}
 				}
 				
 				try {
@@ -109,9 +115,6 @@ public class TrackResource {
 						executeQuery.close();
 					}
 					}
-			} finally {
-				statement.close();
-			}
 		} finally {
 			connection.close();
 		}

@@ -42,14 +42,22 @@ public class LicenseResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			Statement statement = conn.createStatement();
 			ResultSet executeQuery;
 			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
-				executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name"); //$NON-NLS-1$
+				Statement statement = conn.createStatement();
+				try {
+					executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name"); //$NON-NLS-1$
+				} finally {
+					statement.close();
+				}
 			} else {
 				PreparedStatement pStatement = conn.prepareStatement("SELECT * FROM license l LEFT OUTER JOIN vesselconfiguration u ON u.user_name = l.user_name WHERE l.user_name= ? OR l.public = true ORDER BY shortname,name"); //$NON-NLS-1$
 				pStatement.setString(1, username);
-				executeQuery = pStatement.executeQuery();
+				try {
+					executeQuery = pStatement.executeQuery();
+				} finally {
+					pStatement.close();
+				}
 			}
 			
 			List<License> list = new ArrayList<License>();
@@ -100,26 +108,32 @@ public class LicenseResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			Statement createIDStatement = conn.createStatement();
-			PreparedStatement statement = conn.prepareStatement("INSERT INTO license (id, user_name, name, shortname, text, public) VALUES (?,?,?,?,?,?)"); //$NON-NLS-1$
+			try {
+				Statement createIDStatement = conn.createStatement();
+				PreparedStatement statement = conn.prepareStatement("INSERT INTO license (id, user_name, name, shortname, text, public) VALUES (?,?,?,?,?,?)"); //$NON-NLS-1$
 //			Statement userIDQueryStatement = conn.createStatement();
-			
-			ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('license_id_seq')"); //$NON-NLS-1$
-			if(executeQuery.next()) {
-				Long id = executeQuery.getLong(1);
-				statement.setLong(1, id);
-				statement.setString(2, username);
-				statement.setString(3, license.name);
-				statement.setString(4, license.shortName);
-				statement.setString(5, license.text);
-				statement.setBoolean(6, license.publicLicense);
-				statement.execute();
-				return license;
-			} else {
-				// failed to create id
+				try {
+					ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('license_id_seq')"); //$NON-NLS-1$
+					if(executeQuery.next()) {
+						Long id = executeQuery.getLong(1);
+						statement.setLong(1, id);
+						statement.setString(2, username);
+						statement.setString(3, license.name);
+						statement.setString(4, license.shortName);
+						statement.setString(5, license.text);
+						statement.setBoolean(6, license.publicLicense);
+						statement.execute();
+						return license;
+					} else {
+						// failed to create id
+					}
+					throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+				} finally {
+					statement.close();
+				}
+			} finally {
+				conn.close();
 			}
-			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
