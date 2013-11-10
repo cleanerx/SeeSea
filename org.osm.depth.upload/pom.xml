@@ -59,7 +59,8 @@
          <version>2.2-SNAPSHOT</version>
             <configuration>
                     <fork>true</fork>
-                </configuration>
+                    <port>8100</port>
+           </configuration>
                 <executions>
                     <execution>
                         <id>run-tomcat</id>
