@@ -205,41 +205,45 @@ public class TrackResource {
 		try {
 			File file = getFile(Long.parseLong(trackID));
 			FileOutputStream outputStream = new FileOutputStream(file);
-			byte[] buffer = new byte[16384];
-			int len = uploadedInputStream.read(buffer);
-			while (len != -1) {
-				outputStream.write(buffer, 0, len);
-			    len = uploadedInputStream.read(buffer);
-			    bytesRead += len;
-			}
-			
-			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
 			try {
-				conn.setAutoCommit(false);
-				PreparedStatement selectUploadStateStatement = conn.prepareStatement("SELECT track_id FROM user_tracks WHERE track_id = ? AND user_name = ? AND upload_state = 0"); //$NON-NLS-1$
-				PreparedStatement updateTrackStatement = conn.prepareStatement("UPDATE user_tracks SET file_ref = ?, upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
+				byte[] buffer = new byte[16384];
+				int len = uploadedInputStream.read(buffer);
+				while (len != -1) {
+					outputStream.write(buffer, 0, len);
+					len = uploadedInputStream.read(buffer);
+					bytesRead += len;
+				}
+				
+				initContext = new InitialContext();
+				DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+				Connection conn = ds.getConnection();
 				try {
-					selectUploadStateStatement.setLong(1, Long.parseLong(trackID));
-					selectUploadStateStatement.setString(2, username);
-					updateTrackStatement.setString(1, fileDetail.getFileName());
-					updateTrackStatement.setLong(2, Long.parseLong(trackID));
-					ResultSet resultSet = selectUploadStateStatement.executeQuery();
+					conn.setAutoCommit(false);
+					PreparedStatement selectUploadStateStatement = conn.prepareStatement("SELECT track_id FROM user_tracks WHERE track_id = ? AND user_name = ? AND upload_state = 0"); //$NON-NLS-1$
+					PreparedStatement updateTrackStatement = conn.prepareStatement("UPDATE user_tracks SET file_ref = ?, upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
 					try {
-						while(resultSet.next() && resultSet.getLong("track_id") != 0) { //$NON-NLS-1$
-							updateTrackStatement.execute();
+						selectUploadStateStatement.setLong(1, Long.parseLong(trackID));
+						selectUploadStateStatement.setString(2, username);
+						updateTrackStatement.setString(1, fileDetail.getFileName());
+						updateTrackStatement.setLong(2, Long.parseLong(trackID));
+						ResultSet resultSet = selectUploadStateStatement.executeQuery();
+						try {
+							while(resultSet.next() && resultSet.getLong("track_id") != 0) { //$NON-NLS-1$
+								updateTrackStatement.execute();
+							}
+							conn.commit();
+						} finally {
+							resultSet.close();
 						}
-						conn.commit();
 					} finally {
-						resultSet.close();
+						selectUploadStateStatement.close();
+						updateTrackStatement.close();
 					}
 				} finally {
-					selectUploadStateStatement.close();
-					updateTrackStatement.close();
+					conn.close();
 				}
 			} finally {
-				conn.close();
+				outputStream.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -295,8 +299,11 @@ public class TrackResource {
 			} finally {
 				conn.close();
 			}
-			getFile(trackId).delete();
-			
+			File file = getFile(trackId);
+			if(!file.delete()) {
+				System.out.println("Failed to deltee file " + file);
+				throw new DatabaseException("Failed to delete file on file system");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
