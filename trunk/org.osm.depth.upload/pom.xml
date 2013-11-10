@@ -70,7 +70,7 @@
 				<configuration>
 					<fork>true</fork>
 					<port>8100</port>
-					<serverXml>resources/server.xml</serverXml>
+<!-- 					<serverXml>resources/server.xml</serverXml> -->
 				</configuration>
 				<executions>
 					<execution>
