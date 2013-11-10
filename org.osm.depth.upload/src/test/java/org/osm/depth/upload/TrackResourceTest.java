@@ -34,7 +34,7 @@ public class TrackResourceTest extends TestCase {
 	public void testX() {
 		Client client = ClientBuilder.newClient();
 		client.register(new HttpBasicAuthFilter("x", "x"));
-		WebTarget target = client.target("http://localhost:8080").path("org.osm.depth.upload").path("api2/track");
+		WebTarget target = client.target("http://localhost:8100").path("org.osm.depth.upload").path("api2/track");
 		
 		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_XML);
 		 
