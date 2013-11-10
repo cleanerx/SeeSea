@@ -16,7 +16,7 @@ import org.osm.depth.upload.messages.VesselConfiguration;
 
 import junit.framework.TestCase;
 
-public class VesselConfigurationTest extends TestCase {
+public class VesselConfigurationResourceTest extends TestCase {
 
 	private Client client;
 	private WebTarget basePath;
