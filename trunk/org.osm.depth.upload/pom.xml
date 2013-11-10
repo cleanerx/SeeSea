@@ -23,7 +23,7 @@
 		<finalName>org.osm.depth.upload${stage}</finalName>
         <resources>
             <resource>
-	            <directory>/resources</directory>
+	            <directory>${basedir}/resources</directory>
 	            <filtering>true</filtering>
 	            <includes>
 	                <include>server.xml</include>
