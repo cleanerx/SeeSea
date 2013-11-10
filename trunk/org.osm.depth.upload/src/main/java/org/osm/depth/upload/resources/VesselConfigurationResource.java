@@ -165,6 +165,7 @@ public class VesselConfigurationResource {
 					try {
 						executeQuery = statement
 								.executeQuery("SELECT * FROM vesselconfiguration"); //$NON-NLS-1$
+						return analyzeResult(executeQuery);
 					} finally {
 						statement.close();
 					}
@@ -174,26 +175,10 @@ public class VesselConfigurationResource {
 					try {
 						pStatement.setString(1, username);
 						executeQuery = pStatement.executeQuery();
+						return analyzeResult(executeQuery);
 					} finally {
 						pStatement.close();
 					}
-				}
-				try {
-					List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(
-							2);
-					while (executeQuery.next()) {
-						VesselConfiguration vc = new VesselConfiguration();
-						vc.id = executeQuery.getInt("id");
-						vc.name = executeQuery.getString("name");
-						list.add(vc);
-					}
-					GenericEntity<List<VesselConfiguration>> entity = new GenericEntity<List<VesselConfiguration>>(
-							list) {
-					};
-					Response response = Response.ok().entity(entity).build();
-					return response;
-				} finally {
-					executeQuery.close();
 				}
 			} finally {
 				conn.close();
@@ -204,6 +189,26 @@ public class VesselConfigurationResource {
 		} catch (NamingException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+		}
+	}
+
+	private Response analyzeResult(ResultSet executeQuery) throws SQLException {
+		try {
+			List<VesselConfiguration> list = new ArrayList<VesselConfiguration>(
+					2);
+			while (executeQuery.next()) {
+				VesselConfiguration vc = new VesselConfiguration();
+				vc.id = executeQuery.getInt("id");
+				vc.name = executeQuery.getString("name");
+				list.add(vc);
+			}
+			GenericEntity<List<VesselConfiguration>> entity = new GenericEntity<List<VesselConfiguration>>(
+					list) {
+			};
+			Response response = Response.ok().entity(entity).build();
+			return response;
+		} finally {
+			executeQuery.close();
 		}
 	}
 
