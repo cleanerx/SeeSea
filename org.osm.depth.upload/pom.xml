@@ -21,7 +21,7 @@
 	</pluginRepositories>
 	<build>
 		<finalName>org.osm.depth.upload${stage}</finalName>
-        <resources>
+<!--         <resources>
             <resource>
 	            <directory>${basedir}/src/main/tomcatconf</directory>
 	            <filtering>true</filtering>
@@ -29,7 +29,7 @@
 	                <include>server.xml</include>
 	            </includes>
             </resource>
-        </resources>
+        </resources> -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
