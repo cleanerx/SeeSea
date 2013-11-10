@@ -112,16 +112,18 @@ public class UserResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-
-			Statement selectstatement = conn.createStatement();
 			try {
-			selectstatement.execute(MessageFormat
-					.format("UPDATE user_profiles SET password = '{2}' WHERE password = {0} AND user_name = ''{1}''", //$NON-NLS-1$
-							oldPassword, username, newPassword));
+				Statement selectstatement = conn.createStatement();
+				try {
+					selectstatement.execute(MessageFormat
+							.format("UPDATE user_profiles SET password = '{2}' WHERE password = {0} AND user_name = ''{1}''", //$NON-NLS-1$
+									oldPassword, username, newPassword));
+				} finally {
+					selectstatement.close();
+				}
 			} finally {
-				selectstatement.close();
+				conn.close();
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error");
