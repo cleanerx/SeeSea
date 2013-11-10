@@ -151,25 +151,33 @@ public class UserResource {
 				try {
 					conn.setAutoCommit(false);
 					Statement statement = conn.createStatement();
-					PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password) VALUES (?,?)");
-					PreparedStatement insertUserRoleStatement = conn.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
 					try {
-						ResultSet executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
+						PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password) VALUES (?,?)");
 						try {
-							while(executeQuery.next()) {
-								if(executeQuery.getString("user_name").equals(username)) { //$NON-NLS-1$
-									return Response.serverError().header("X-Error", "103:Username already exists").build();
+							PreparedStatement insertUserRoleStatement = conn.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
+							try {
+								ResultSet executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
+								try {
+									while(executeQuery.next()) {
+										if(executeQuery.getString("user_name").equals(username)) { //$NON-NLS-1$
+											return Response.serverError().header("X-Error", "103:Username already exists").build();
+										}
+									}
+									insertUserStatement.setString(1, username);
+									insertUserStatement.setString(2, password.toLowerCase());
+									insertUserRoleStatement.setString(1, username);
+									insertUserStatement.execute();
+									insertUserRoleStatement.execute();
+									conn.commit();
+									return Response.status(204).build();
+								} finally {
+									executeQuery.close();
 								}
+							} finally {
+								insertUserRoleStatement.close();
 							}
-							insertUserStatement.setString(1, username);
-							insertUserStatement.setString(2, password.toLowerCase());
-							insertUserRoleStatement.setString(1, username);
-							insertUserStatement.execute();
-							insertUserRoleStatement.execute();
-							conn.commit();
-							return Response.status(204).build();
 						} finally {
-							executeQuery.close();
+							insertUserStatement.close();
 						}
 					} finally {
 						statement.close();
