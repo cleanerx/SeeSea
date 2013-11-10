@@ -127,7 +127,7 @@ public class GaugeResource {
 	@Path("{id}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@RolesAllowed(value = {"ADMIN"})
-	public Response delete(@javax.ws.rs.core.Context SecurityContext context, @PathParam(value = "id") String id) {
+	public Response delete(@PathParam(value = "id") String id) {
 		Context initContext;
 		try {
 			long gaugeId = Long.parseLong(id);
@@ -136,7 +136,7 @@ public class GaugeResource {
 			Connection conn = ds.getConnection();
 
 			conn.setAutoCommit(false);
-			Statement gaugeUsedinTracks = conn.createStatement();
+//			Statement gaugeUsedinTracks = conn.createStatement();
 			PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gauge WHERE id = ?"); //$NON-NLS-1$
 			
 //			ResultSet usedInTracksResultSet = gaugeUsedinTracks.executeQuery("SELECT COUNT(id) FROM gaugetracks WHERE gaugeid ='" + gaugeId + "' ");
