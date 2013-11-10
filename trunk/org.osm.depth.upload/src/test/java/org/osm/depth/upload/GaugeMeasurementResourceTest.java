@@ -35,7 +35,7 @@ public class GaugeMeasurementResourceTest extends TestCase {
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
 		
-		WebTarget basePath = client.target("http://localhost:8100").path("org.osm.depth.upload").path("api2");
+		WebTarget basePath = client.target("http://localhost:8100").path(TestConstants.PATH).path("api2");
 		WebTarget gaugepath = basePath.path("gauge");
 		
 		Gauge gauge = new Gauge();
