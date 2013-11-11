@@ -5,7 +5,7 @@
     <servlet-name>org.osm.depth.upload.OSMAPIApplication</servlet-name>
      <init-param>
          <param-name>org.osm.upload.dataDirectory</param-name>
-         <param-value>${dataDirectory}</param-value>
+         <param-value>${org.osm.upload.dataDirectory}</param-value>
 <!--          <param-value>C:\osmfiles\</param-value> -->
      </init-param>
   </servlet>
