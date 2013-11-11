@@ -359,7 +359,7 @@ public class TrackResource {
 	private File getFile(Long trackId) throws IOException {
 		Long dirNumber = trackId / 100L * 100L;
 		String fileDirectoryConfig = config.getInitParameter("org.osm.upload.dataDirectory"); //$NON-NLS-1$
-		File fileDirectory = new File(fileDirectoryConfig
+		File fileDirectory = new File(fileDirectoryConfig + File.separator
 				+ dirNumber.toString());
 		String trackIDString = trackId.toString();
 		if (!fileDirectory.exists()) {
