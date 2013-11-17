@@ -12,7 +12,7 @@
   <rm:locator pattern="^org\.qbang\.rxtx(\..+)?$" searchPathRef="default"/>
   <rm:searchPath name="org.eclipse.platform">
    <rm:provider readerType="local" componentTypes="osgi.bundle,eclipse.feature,buckminster" mutable="true" source="true">
-            <rm:uri format="file:///{0}/{1}/">
+            <rm:uri format="file:///{0}\/{1}\/">
                 <bc:propertyRef key="workspace.root" />
                 <bc:propertyRef key="buckminster.component" />
             </rm:uri>
