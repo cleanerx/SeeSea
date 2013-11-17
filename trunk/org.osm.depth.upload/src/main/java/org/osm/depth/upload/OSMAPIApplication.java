@@ -33,6 +33,7 @@ import javax.ws.rs.core.Application;
 
 import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.osm.depth.upload.resources.GaugeMeasurementResource;
 import org.osm.depth.upload.resources.GaugeResource;
 import org.osm.depth.upload.resources.LicenseResource;
@@ -56,6 +57,7 @@ public class OSMAPIApplication extends Application {
 	    set.add(GaugeMeasurementResource.class);
 	    set.add(VesselConfigurationResource.class);
 	    set.add(MultiPartFeature.class);
+	    set.add(RolesAllowedDynamicFeature.class);
     return set;
 	}
 }
