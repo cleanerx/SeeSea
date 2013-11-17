@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.navigation.sl2">
+   <implementation class="net.sf.seesea.navigation.sl2.SL2StreamProcessor"/>
+   <service>
+      <provide interface="net.sf.seesea.services.navigation.IStreamProcessor"/>
+   </service>
+   <property name="type" type="String" value="binary"/>
+</scr:component>
