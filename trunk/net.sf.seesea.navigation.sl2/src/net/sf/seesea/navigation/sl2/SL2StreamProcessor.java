@@ -42,7 +42,7 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 	private List<ISL2Listener> listeners;
 
 	public SL2StreamProcessor() {
-		listeners = new ArrayList<>(1);
+		listeners = new ArrayList<ISL2Listener>(1);
 		state = MessageProcessingState.HEADER_START;
 		blockEnd = -1;
 	}
@@ -112,7 +112,7 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 	@Override
 	public List<ITrack> getTracks(CompressionType compressionType, File file)
 			throws ZipException, IOException {
-		return new ArrayList<>(1);
+		return new ArrayList<ITrack>(1);
 	}
 
 	@Override

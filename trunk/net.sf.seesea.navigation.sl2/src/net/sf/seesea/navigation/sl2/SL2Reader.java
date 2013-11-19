@@ -23,7 +23,7 @@ public class SL2Reader implements ISL2Listener {
 	private Collection<IMeasurementListener> listeners;
 
 	public SL2Reader() {
-		listeners = new ArrayList<>();
+		listeners = new ArrayList<IMeasurementListener>();
 	}
 	
 	@Override
