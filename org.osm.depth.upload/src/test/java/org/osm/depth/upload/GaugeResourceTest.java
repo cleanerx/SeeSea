@@ -31,7 +31,7 @@ public class GaugeResourceTest extends TestCase {
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
 		
-		WebTarget basePath = client.target("http://localhost:8100").path(TestConstants.PATH).path("api2");
+		WebTarget basePath = client.target(TestConstants.HOST).path(TestConstants.PATH).path(TestConstants.APIPATH);
 		WebTarget path = basePath.path("gauge");
 		
 		Gauge gauge = new Gauge();
