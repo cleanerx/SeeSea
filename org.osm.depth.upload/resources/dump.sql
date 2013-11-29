@@ -32,7 +32,7 @@ SET default_with_oids = false;
 -- Name: depthsoffset; Type: TABLE; Schema: public; Owner: osm; Tablespace: 
 --
 
-CREATE TABLE depthsoffset (
+CREATE TABLE depthsensor (
     vesselconfigid integer NOT NULL,
     x numeric(5,2),
     y numeric(5,2),
@@ -45,7 +45,14 @@ CREATE TABLE depthsoffset (
 );
 
 
-ALTER TABLE public.depthsoffset OWNER TO osm;
+ALTER TABLE public.depthsensor OWNER TO osm;
+
+--
+-- Name: depthsoffset_vesselconfigid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: osm
+--
+
+ALTER TABLE ONLY depthsensor
+    ADD CONSTRAINT depthsoffset_vesselconfigid_fkey FOREIGN KEY (vesselconfigid) REFERENCES vesselconfiguration(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 --
 -- Name: sbasoffset; Type: TABLE; Schema: public; Owner: osm; Tablespace: 
@@ -156,10 +163,6 @@ CREATE TABLE userroles (
 
 ALTER TABLE public.userroles OWNER TO osm;
 
---
--- Name: vesselconfiguration; Type: TABLE; Schema: public; Owner: osm; Tablespace: 
---
-
 CREATE TABLE vesselconfiguration (
     id integer NOT NULL,
     name character varying,
@@ -169,7 +172,7 @@ CREATE TABLE vesselconfiguration (
     manufacturer character varying(100),
     model character varying,
     loa numeric(7,2),
-    berth numeric(7,2),
+    breadth numeric(7,2),
     draft numeric(4,2),
     height numeric(4,2),
     displacement numeric(8,1),
@@ -208,6 +211,67 @@ ALTER TABLE ONLY vesselconfiguration ALTER COLUMN id SET DEFAULT nextval('vessel
 
 
 --
+-- Name: vesselconfiguration_pkey; Type: CONSTRAINT; Schema: public; Owner: osm; Tablespace: 
+--
+
+ALTER TABLE ONLY vesselconfiguration
+    ADD CONSTRAINT vesselconfiguration_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vesselconfiguration_user_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: osm
+--
+
+ALTER TABLE ONLY vesselconfiguration
+    ADD CONSTRAINT vesselconfiguration_user_name_fkey FOREIGN KEY (user_name) REFERENCES user_profiles(user_name) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+CREATE TABLE depthsensor (
+    vesselconfigid integer NOT NULL,
+    x numeric(5,2),
+    y numeric(5,2),
+    z numeric(5,2),
+    sensorid character varying,
+    manufacturer character varying(100),
+    model character varying(100),
+    frequency numeric(5,0),
+    angleofbeam numeric(3,0)
+);
+
+
+ALTER TABLE public.depthsensor OWNER TO osm;
+
+--
+-- Name: depthsoffset_vesselconfigid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: osm
+--
+
+ALTER TABLE ONLY depthsensor
+    ADD CONSTRAINT depthsoffset_vesselconfigid_fkey FOREIGN KEY (vesselconfigid) REFERENCES vesselconfiguration(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+CREATE TABLE sbassensor (
+    vesselconfigid integer,
+    x numeric(5,2) NOT NULL,
+    y numeric(5,2) NOT NULL,
+    z numeric(5,2) NOT NULL,
+    sensorid character varying,
+    manufacturer character varying(100),
+    model character varying(100)
+);
+
+
+ALTER TABLE public.sbassensor OWNER TO osm;
+
+--
+-- Name: sbasoffset_vesselconfigid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: osm
+--
+
+ALTER TABLE ONLY sbassensor
+    ADD CONSTRAINT sbasoffset_vesselconfigid_fkey FOREIGN KEY (vesselconfigid) REFERENCES vesselconfiguration(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: user_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: osm; Tablespace: 
 --
 
@@ -223,36 +287,6 @@ ALTER TABLE ONLY user_tracks
     ADD CONSTRAINT user_tracks_pkey PRIMARY KEY (track_id);
 
 
---
--- Name: vesselconfiguration_pkey; Type: CONSTRAINT; Schema: public; Owner: osm; Tablespace: 
---
-
-ALTER TABLE ONLY vesselconfiguration
-    ADD CONSTRAINT vesselconfiguration_pkey PRIMARY KEY (id);
-
-
---
--- Name: depthsoffset_vesselconfigid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: osm
---
-
-ALTER TABLE ONLY depthsoffset
-    ADD CONSTRAINT depthsoffset_vesselconfigid_fkey FOREIGN KEY (vesselconfigid) REFERENCES vesselconfiguration(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: sbasoffset_vesselconfigid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: osm
---
-
-ALTER TABLE ONLY sbasoffset
-    ADD CONSTRAINT sbasoffset_vesselconfigid_fkey FOREIGN KEY (vesselconfigid) REFERENCES vesselconfiguration(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: vesselconfiguration_user_name_fkey; Type: FK CONSTRAINT; Schema: public; Owner: osm
---
-
-ALTER TABLE ONLY vesselconfiguration
-    ADD CONSTRAINT vesselconfiguration_user_name_fkey FOREIGN KEY (user_name) REFERENCES user_profiles(user_name) ON UPDATE CASCADE ON DELETE CASCADE;
 
 CREATE TABLE gauge
 (
