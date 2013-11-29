@@ -55,7 +55,7 @@ public class GaugeResource {
 				Statement statement = conn.createStatement();
 				try {
 					ResultSet executeQuery;
-					executeQuery = statement.executeQuery("SELECT * FROM gauge g"); //$NON-NLS-1$
+					executeQuery = statement.executeQuery("SELECT id, name, gaugetype, lat, lon FROM gauge g"); //$NON-NLS-1$
 					List<Gauge> list = new ArrayList<Gauge>();
 					while(executeQuery.next()) {
 						Gauge gauge = new Gauge();
@@ -89,7 +89,7 @@ public class GaugeResource {
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	@RolesAllowed(value = {"USER"})
+	@RolesAllowed(value = {"USER", "ADMIN"})
 	public Gauge newGauge(@javax.ws.rs.core.Context SecurityContext context, Gauge gauge) {
 		Context initContext;
 		try {
