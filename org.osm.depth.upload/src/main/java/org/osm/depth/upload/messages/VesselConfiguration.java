@@ -44,7 +44,6 @@ public class VesselConfiguration {
 	public double displacement;
 	public double maximumspeed;
 	public String username;
-	public double slidingsp;
 
 	public SBASSensor sbasoffset;
 	public DepthSensor depthoffset;
