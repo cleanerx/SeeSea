@@ -251,10 +251,10 @@ ALTER TABLE ONLY depthsensor
 
 
 CREATE TABLE sbassensor (
-    vesselconfigid integer,
-    x numeric(5,2) NOT NULL,
-    y numeric(5,2) NOT NULL,
-    z numeric(5,2) NOT NULL,
+    vesselconfigid integer NOT NULL,
+    x numeric(5,2) ,
+    y numeric(5,2) ,
+    z numeric(5,2) ,
     sensorid character varying,
     manufacturer character varying(100),
     model character varying(100)
