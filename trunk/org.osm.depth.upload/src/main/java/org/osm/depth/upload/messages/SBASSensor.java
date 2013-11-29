@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2013, Jens K�bler All rights reserved.
+ Copyright (c) 2010-2012, Jens K�bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,35 +28,19 @@ package org.osm.depth.upload.messages;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="vesselconfig")
-public class VesselConfiguration {
+@XmlRootElement
+public class SBASSensor {
 
-	public long id;
-	public String name;
-	public String description;
-	public String mmsi;
+	public double distanceFromStern;
+	
+	public double distanceFromCenter;
+	
+	public double distanceWaterline;
+	
+	public String sensorId;
+	
 	public String manufacturer;
+	
 	public String model;
-	public double loa;
-	public double breadth;
-	public double draft;
-	public double height;
-	public double displacement;
-	public double maximumspeed;
-	public String username;
-	public double slidingsp;
-
-	public SBASSensor sbasoffset;
-	public DepthSensor depthoffset;
 	
-	
-//    @XmlElementWrapper
-//	@XmlAnyElement
-//	public List<SBASSensor> sbasOffsets;
-//	
-//
-//    @XmlElementWrapper
-//	@XmlAnyElement
-//	public List<SBASSensor> depthSensorOffsets;
-
 }

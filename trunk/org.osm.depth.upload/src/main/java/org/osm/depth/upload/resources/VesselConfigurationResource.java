@@ -42,6 +42,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -53,6 +54,8 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import org.osm.depth.upload.exceptions.DatabaseException;
+import org.osm.depth.upload.messages.DepthSensor;
+import org.osm.depth.upload.messages.SBASSensor;
 import org.osm.depth.upload.messages.VesselConfiguration;
 
 @Path("/vesselconfig")
@@ -61,10 +64,76 @@ public class VesselConfigurationResource {
 	@javax.ws.rs.core.Context
 	UriInfo uriInfo;
 
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("{id}")
+	public void updateVesselConfig(
+			@javax.ws.rs.core.Context SecurityContext context,
+			VesselConfiguration vesselConfiguration) {
+		String username = context.getUserPrincipal().getName();
+		try {
+			InitialContext initContext = new InitialContext();
+			DataSource ds = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			Connection conn = ds.getConnection();
+			PreparedStatement updateStatement = conn
+					.prepareStatement(
+							"UPDATE vesselconfiguration SET" +
+									"(name, " +
+									"description, " +
+									"mmsi, " +
+									"manufacturer, " +
+									"model, " +
+									"loa, " +
+									"berth, " +
+									"draft, " +
+									"height, " +
+									"displacement, " +
+									"maximumspeed) " +
+							"VALUES (?,?,?,?,?,?,?,?,?,?,?) WHERE username = ? AND id = ?");
+			try {
+				updateStatement.setString(1, vesselConfiguration.name); 
+				updateStatement.setString(2,  vesselConfiguration.description); 
+				updateStatement.setString(3,  vesselConfiguration.mmsi );
+				updateStatement.setString(4,  vesselConfiguration.manufacturer); 
+				updateStatement.setString(5,  vesselConfiguration.model );
+				updateStatement.setDouble(6,  vesselConfiguration.loa );
+				updateStatement.setDouble(7,  vesselConfiguration.breadth );
+				updateStatement.setDouble(8,  vesselConfiguration.draft );
+				updateStatement.setDouble(9,  vesselConfiguration.height );
+				updateStatement.setDouble(10,  vesselConfiguration.displacement );
+				updateStatement.setDouble(11,  vesselConfiguration.maximumspeed );
+				updateStatement.setString(12,  username );
+				updateStatement.setLong(13,  vesselConfiguration.id );
+				updateStatement.execute();
+
+			} finally {
+				updateStatement.close();
+			}
+		} catch (NamingException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+		}
+	}
+
 	@POST
 	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public VesselConfiguration createVesselConfig(
+	@Path("{id}")
+	public String createVesselConfigWithNullId(
+			@javax.ws.rs.core.Context SecurityContext context,
+			VesselConfiguration vesselConfiguration) {
+		return createVesselConfig(context, vesselConfiguration);
+	}
+	
+	@POST
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String createVesselConfig(
 			@javax.ws.rs.core.Context SecurityContext context,
 			VesselConfiguration vesselConfiguration) {
 		String username = context.getUserPrincipal().getName();
@@ -80,57 +149,104 @@ public class VesselConfigurationResource {
 			Connection conn = ds.getConnection();
 			try {
 				Statement createIDStatement = conn.createStatement();
-				PreparedStatement selectstatement = conn
-						.prepareStatement("INSERT INTO vesselconfiguration "
-								+ "(name, " + "description, " + "depthm, "
-								+ "depthd, " + "esinfront, " + "esrightof, "
-								+ "esdisy, " + "esdisx, " + "slidingsp, "
-								+ "yachtmodel, "
-								+
-								// "maximumspeed, " +
-								"user_name," + "id)"
-								+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+				PreparedStatement insertvesselstatement = conn
+						.prepareStatement(
+								"INSERT INTO vesselconfiguration " +
+										"(name, " +
+										"description, " +
+										"mmsi, " +
+										"manufacturer, " +
+										"model, " +
+										"loa, " +
+										"breadth, " +
+										"draft, " +
+										"height, " +
+										"displacement, " +
+										"maximumspeed, " +
+										"user_name," +
+										"id)" +
+								" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				PreparedStatement insertDepthOffset = conn
+						.prepareStatement(
+								"INSERT INTO depthsensor " +
+										"(vesselconfigid, " +
+										"x, " +
+										"y, " +
+										"z, " +
+										"sensorid, " +
+										"manufacturer, " +
+										"model, " +
+										"frequency, " +
+										"angleofbeam)" +
+								" VALUES (?,?,?,?,?,?,?,?,?)");
+				PreparedStatement insertSbasOffset = conn
+						.prepareStatement(
+								"INSERT INTO sbassensor " +
+										"(vesselconfigid, " +
+										"x, " +
+										"y, " +
+										"z, " +
+										"sensorid, " +
+										"manufacturer, " +
+										"model) " +
+								" VALUES (?,?,?,?,?,?,?)");
 				try {
+					conn.setAutoCommit(false);
 					ResultSet executeQuery = createIDStatement
 							.executeQuery("SELECT nextval('vesselconfiguration_id_seq')"); //$NON-NLS-1$
 					try {
 						if (executeQuery.next()) {
 							vesselConfiguration.id = executeQuery.getLong(1);
 							// @formatter:off
-							selectstatement.setString(1,
-									vesselConfiguration.name);
-							selectstatement.setString(2,
-									vesselConfiguration.description);
-							selectstatement.setDouble(3,
-									vesselConfiguration.depthm);
-							selectstatement.setDouble(4,
-									vesselConfiguration.depthd);
-							selectstatement.setString(5,
-									vesselConfiguration.esinfront);
-							selectstatement.setString(6,
-									vesselConfiguration.esrightof);
-							selectstatement.setDouble(7,
-									vesselConfiguration.esdisy);
-							selectstatement.setDouble(8,
-									vesselConfiguration.esdisx);
-							selectstatement.setDouble(9,
-									vesselConfiguration.slidingsp);
-							selectstatement.setString(10,
-									vesselConfiguration.yachtmodel);
-							// selectstatement.setDouble(11,
-							// vesselConfiguration.maximumspeed );
-							selectstatement.setString(11,
-									vesselConfiguration.username);
-							selectstatement.setLong(12, vesselConfiguration.id);
-							selectstatement.execute();
-							selectstatement.close();
-							return vesselConfiguration;
+							insertvesselstatement.setString(1, vesselConfiguration.name); 
+							insertvesselstatement.setString(2,  vesselConfiguration.description); 
+							insertvesselstatement.setString(3,  vesselConfiguration.mmsi );
+							insertvesselstatement.setString(4,  vesselConfiguration.manufacturer); 
+							insertvesselstatement.setString(5,  vesselConfiguration.model );
+							insertvesselstatement.setDouble(6,  vesselConfiguration.loa );
+							insertvesselstatement.setDouble(7,  vesselConfiguration.breadth );
+							insertvesselstatement.setDouble(8,  vesselConfiguration.draft );
+							insertvesselstatement.setDouble(9,  vesselConfiguration.height );
+							insertvesselstatement.setDouble(10,  vesselConfiguration.displacement );
+							insertvesselstatement.setDouble(11,  vesselConfiguration.maximumspeed );
+							insertvesselstatement.setString(12,  vesselConfiguration.username );
+							insertvesselstatement.setLong(13,  vesselConfiguration.id);
+							insertvesselstatement.execute();
+
+							if(vesselConfiguration.depthoffset != null) {
+								insertDepthOffset.setLong(1, vesselConfiguration.id);
+								insertDepthOffset.setDouble(2, vesselConfiguration.depthoffset.distanceFromCenter);
+								insertDepthOffset.setDouble(3, vesselConfiguration.depthoffset.distanceFromStern);
+								insertDepthOffset.setDouble(4, vesselConfiguration.depthoffset.distanceWaterline);
+								insertDepthOffset.setString(5, vesselConfiguration.depthoffset.sensorId);
+								insertDepthOffset.setString(6, vesselConfiguration.depthoffset.manufacturer);
+								insertDepthOffset.setString(7, vesselConfiguration.depthoffset.model);
+								insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.frequency);
+								insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.angleofbeam);
+								insertDepthOffset.execute();
+							}
+
+							if(vesselConfiguration.sbasoffset != null) {
+								insertSbasOffset.setLong(1, vesselConfiguration.id);
+								insertSbasOffset.setDouble(2, vesselConfiguration.sbasoffset.distanceFromCenter);
+								insertSbasOffset.setDouble(3, vesselConfiguration.sbasoffset.distanceFromStern);
+								insertSbasOffset.setDouble(4, vesselConfiguration.sbasoffset.distanceWaterline);
+								insertSbasOffset.setString(5, vesselConfiguration.sbasoffset.sensorId);
+								insertSbasOffset.setString(6, vesselConfiguration.sbasoffset.manufacturer);
+								insertSbasOffset.setString(7, vesselConfiguration.sbasoffset.model);
+								insertSbasOffset.execute();
+							}
+
+							conn.commit();
+							return ((Long)vesselConfiguration.id).toString();
 						}
 					} finally {
 						executeQuery.close();
 					}
 				} finally {
-					selectstatement.close();
+					insertDepthOffset.close();
+					insertSbasOffset.close();
+					insertvesselstatement.close();
 					createIDStatement.close();
 				}
 			} finally {
@@ -144,7 +260,7 @@ public class VesselConfigurationResource {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 		}
-		return null;
+		return "-1"; //$NON-NLS-1$
 
 	}
 
@@ -160,18 +276,24 @@ public class VesselConfigurationResource {
 			Connection conn = ds.getConnection();
 			try {
 				ResultSet executeQuery;
+				String query = 
+						"SELECT " + 
+								"v.id, v.name, v.description, v.loa, v.breadth, v.draft, v.height, v.displacement, v.mmsi, v.manufacturer, v.model, v.maximumspeed, " +  
+								"s.x, s.y, s.z, s.manufacturer, s.model, s.sensorid, " +  
+								"d.x, d.y, d.z, d.manufacturer, d.model, d.sensorid, d.frequency " + 
+								"FROM vesselconfiguration v LEFT JOIN depthsensor AS d ON (d.vesselconfigid = v.id) LEFT JOIN sbassensor AS s ON (s.vesselconfigid = v.id)";
 				if (context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 					Statement statement = conn.createStatement();
 					try {
 						executeQuery = statement
-								.executeQuery("SELECT * FROM vesselconfiguration"); //$NON-NLS-1$
+								.executeQuery(query); //$NON-NLS-1$
 						return analyzeResult(executeQuery);
 					} finally {
 						statement.close();
 					}
 				} else {
 					PreparedStatement pStatement = conn
-							.prepareStatement("SELECT * FROM vesselconfiguration WHERE user_name= ? "); //$NON-NLS-1$
+							.prepareStatement(query + " WHERE user_name= ? "); //$NON-NLS-1$
 					try {
 						pStatement.setString(1, username);
 						executeQuery = pStatement.executeQuery();
@@ -200,6 +322,33 @@ public class VesselConfigurationResource {
 				VesselConfiguration vc = new VesselConfiguration();
 				vc.id = executeQuery.getInt("id");
 				vc.name = executeQuery.getString("name");
+				vc.description = executeQuery.getString("description");
+				vc.loa = executeQuery.getDouble("loa");
+				vc.breadth = executeQuery.getDouble("breadth");
+				vc.draft = executeQuery.getDouble("draft");
+				vc.height = executeQuery.getDouble("height");
+				vc.displacement = executeQuery.getDouble("displacement");
+				vc.mmsi = executeQuery.getString("mmsi");
+				vc.manufacturer = executeQuery.getString(10);
+				vc.model = executeQuery.getString(11);
+				vc.maximumspeed = executeQuery.getDouble("maximumspeed");
+				vc.sbasoffset = new SBASSensor();
+				vc.sbasoffset.distanceFromCenter = executeQuery.getDouble(13);
+				vc.sbasoffset.distanceFromStern = executeQuery.getDouble(14);
+				vc.sbasoffset.distanceWaterline = executeQuery.getDouble(15);
+				vc.sbasoffset.manufacturer = executeQuery.getString(16);
+				vc.sbasoffset.model = executeQuery.getString(17);
+				vc.sbasoffset.sensorId = executeQuery.getString(18);
+
+				vc.depthoffset = new DepthSensor();
+				vc.depthoffset.distanceFromCenter = executeQuery.getDouble(19);
+				vc.depthoffset.distanceFromStern = executeQuery.getDouble(20);
+				vc.depthoffset.distanceWaterline = executeQuery.getDouble(21);
+				vc.depthoffset.manufacturer = executeQuery.getString(22);
+				vc.depthoffset.model = executeQuery.getString(23);
+				vc.depthoffset.sensorId = executeQuery.getString(24);
+				vc.depthoffset.frequency = executeQuery.getDouble(25);
+
 				list.add(vc);
 			}
 			GenericEntity<List<VesselConfiguration>> entity = new GenericEntity<List<VesselConfiguration>>(
