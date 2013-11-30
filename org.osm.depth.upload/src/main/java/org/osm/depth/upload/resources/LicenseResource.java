@@ -47,7 +47,7 @@ public class LicenseResource {
 				if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 					Statement statement = conn.createStatement();
 					try {
-						executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name"); //$NON-NLS-1$
+						executeQuery = statement.executeQuery("SELECT * FROM license l LEFT OUTER JOIN user_profiles u ON u.user_name = l.user_name ORDER BY shortname,name"); //$NON-NLS-1$
 						return getLicenses(context, executeQuery);
 					} finally {
 						statement.close();
