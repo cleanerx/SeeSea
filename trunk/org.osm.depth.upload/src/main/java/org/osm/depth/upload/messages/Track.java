@@ -26,6 +26,8 @@
  */
 package org.osm.depth.upload.messages;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="track")
@@ -43,11 +45,13 @@ public class Track {
 
 	public String delete;
 	
-	public VesselConfiguration vesselConfiguration;
+	public long vesselConfiguration;
 
 	public long containertrack;
 	
-	public License license;
+	public long license;
+	
+	public Date uploadDate;
 
 	public Track() {
 		

@@ -3,6 +3,7 @@ package org.osm.depth.upload;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -33,8 +34,9 @@ public class TrackResourceTest extends TestCase {
 
 	public void testX() {
 		Client client = ClientBuilder.newClient();
-		client.register(new HttpBasicAuthFilter("x", "x"));
-		WebTarget target = client.target("http://localhost:8100").path("org.osm.depth.upload").path("api2/track");
+		client.register(new HttpBasicAuthFilter(TestConstants.TESTUSER, TestConstants.TESTPASSWORD));
+		WebTarget basePath = client.target(TestConstants.HOST).path(TestConstants.PATH).path(TestConstants.APIPATH);
+		WebTarget target = basePath.path("track");
 		
 		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_XML);
 		 
@@ -49,21 +51,16 @@ public class TrackResourceTest extends TestCase {
 	
 	public void testTrackUploadRoundTrip() throws FileNotFoundException {
 		Client client = ClientBuilder.newClient();
-		client.register(new HttpBasicAuthFilter("x", "x"));
 		client.register(MOXyJsonProvider.class);
-
 		client.register(MultiPartFeature.class);
-
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
+
+		client.register(new HttpBasicAuthFilter(TestConstants.TESTUSER, TestConstants.TESTPASSWORD));
+		WebTarget basePath = client.target(TestConstants.HOST).path(TestConstants.PATH).path(TestConstants.APIPATH);
 		
-		WebTarget basePath = client.target("http://localhost:8100").path(TestConstants.PATH);
-		WebTarget newID = basePath.path("api2/track");
-		WebTarget upload = basePath.path("api2/track");
-		WebTarget getall = basePath.path("api2/track");
-		WebTarget delete = basePath.path("api2/track");
-		
-		Response response = newID.request(MediaType.APPLICATION_JSON).post(Entity.entity("dummy", MediaType.APPLICATION_JSON));
+		WebTarget trackPath = basePath.path("track");
+		Response response = trackPath.request(MediaType.APPLICATION_JSON).post(Entity.entity("dummy", MediaType.APPLICATION_JSON));
 		assertEquals(200, response.getStatus());
 		
 		Track track = response.readEntity(Track.class);
@@ -79,10 +76,10 @@ public class TrackResourceTest extends TestCase {
         		Collections.singletonMap(Boundary.BOUNDARY_PARAMETER, Boundary.createBoundary())));
         
 //        form.bodyPart(new FileDataBodyPart("file", file, MediaType.MULTIPART_FORM_DATA_TYPE));
-        response = upload.request(MediaType.APPLICATION_JSON).put(Entity.entity(multipart, multipart.getMediaType()));
+        response = trackPath.request(MediaType.APPLICATION_JSON).put(Entity.entity(multipart, multipart.getMediaType()));
         assertEquals(200, response.getStatus());
         
-        response = getall.request(MediaType.APPLICATION_JSON).get();
+        response = trackPath.request(MediaType.APPLICATION_JSON).get();
         assertEquals(200, response.getStatus());
         List<Track> tracks = response.readEntity(new GenericType<List<Track>>(){});
         for (Track track2 : tracks) {
@@ -90,12 +87,13 @@ public class TrackResourceTest extends TestCase {
 //				assertEquals(track.file_ref,"test.txt");
 				assertEquals(track2.upload_state,1);
 				assertEquals(track2.fileName,"track");
+				assertTrue(track2.uploadDate.before(Calendar.getInstance().getTime()));
 				break;
 			}
 		}
         
-        delete = delete.path("/" + new Long(track.id).toString()); //$NON-NLS-1$
-        response = delete.request().delete();
+        WebTarget deletePath = trackPath.path("/" + new Long(track.id).toString()); //$NON-NLS-1$
+        response = deletePath.request().delete();
         assertEquals(204, response.getStatus());
         
 		return;

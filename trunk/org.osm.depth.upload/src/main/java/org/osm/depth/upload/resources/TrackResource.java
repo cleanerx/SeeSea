@@ -38,6 +38,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.naming.Context;
@@ -125,8 +126,16 @@ public class TrackResource {
 			// Do stuff with the result set.
 			List<Track> list = new ArrayList<Track>(2);
 			while (executeQuery.next()) {
-				Track track = new Track(
-						executeQuery.getLong("track_id"), executeQuery.getString("file_ref"), executeQuery.getInt("upload_state"), executeQuery.getString("fileType"), executeQuery.getString("compression"), executeQuery.getLong("containertrack")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+				Track track = new Track();
+				track.id = executeQuery.getLong("track_id"); //$NON-NLS-1$
+				track.fileName = executeQuery.getString("file_ref"); //$NON-NLS-1$
+				track.upload_state = executeQuery.getInt("upload_state"); //$NON-NLS-1$
+				track.fileType = executeQuery.getString("fileType"); //$NON-NLS-1$
+				track.compression = executeQuery.getString("compression"); //$NON-NLS-1$
+				track.containertrack = executeQuery.getLong("containertrack");  //$NON-NLS-1$
+				track.uploadDate = executeQuery.getDate("uploadDate");  //$NON-NLS-1$
+				track.license = executeQuery.getLong("license");  //$NON-NLS-1$
+				track.vesselConfiguration = executeQuery.getLong("vesselconfigid");  //$NON-NLS-1$
 				UriBuilder ub = uriInfo.getBaseUriBuilder();
 				//						track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
 				list.add(track);
@@ -165,7 +174,7 @@ public class TrackResource {
 			Connection conn = ds.getConnection();
 			try {
 				PreparedStatement insertTrackStatement = conn
-						.prepareStatement("INSERT INTO user_tracks (track_id, user_name) VALUES (?,?)"); //$NON-NLS-1$
+						.prepareStatement("INSERT INTO user_tracks (track_id, user_name, uploaddate) VALUES (?,?,?)"); //$NON-NLS-1$
 				Statement createIDStatement = conn.createStatement();
 				try {
 					ResultSet executeQuery = createIDStatement
@@ -175,6 +184,7 @@ public class TrackResource {
 							Long id = executeQuery.getLong(1);
 							insertTrackStatement.setLong(1, id);
 							insertTrackStatement.setString(2, username);
+							insertTrackStatement.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
 							insertTrackStatement.execute();
 							Track track = new Track();
 							track.id = id;
