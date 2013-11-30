@@ -53,6 +53,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.Response.Status;
 
 import jj.play.ns.nl.captcha.Captcha.Builder;
 import jj.play.ns.nl.captcha.gimpy.BlockGimpyRenderer;
@@ -63,7 +64,9 @@ import jj.play.ns.nl.captcha.text.producer.TextProducer;
 //import org.apache.catalina.util.Base64;
 import org.glassfish.jersey.internal.util.Base64;
 import org.osm.depth.upload.CaptchaManagement;
+import org.osm.depth.upload.exceptions.ConflictException;
 import org.osm.depth.upload.exceptions.DatabaseException;
+import org.osm.depth.upload.exceptions.ValidationException;
 import org.osm.depth.upload.messages.Captcha;
 import org.osm.depth.upload.messages.User;
 
@@ -156,12 +159,11 @@ public class UserResource {
 						try {
 							PreparedStatement insertUserRoleStatement = conn.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
 							try {
-								ResultSet executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
+								PreparedStatement usernameExists = conn.prepareStatement("SELECT user_name FROM user_profiles WHERE user_name = ?"); //$NON-NLS-1$
 								try {
-									while(executeQuery.next()) {
-										if(executeQuery.getString("user_name").equals(username)) { //$NON-NLS-1$
-											return Response.serverError().header("X-Error", "103:Username already exists").build();
-										}
+									usernameExists.setString(1, username);
+									if(usernameExists.executeQuery().next()) {
+										throw new ConflictException("Username exists", Status.CONFLICT);
 									}
 									insertUserStatement.setString(1, username);
 									insertUserStatement.setString(2, password.toLowerCase());
@@ -171,7 +173,7 @@ public class UserResource {
 									conn.commit();
 									return Response.status(204).build();
 								} finally {
-									executeQuery.close();
+									usernameExists.close();
 								}
 							} finally {
 								insertUserRoleStatement.close();
@@ -193,7 +195,7 @@ public class UserResource {
 				throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 			}
 		}
-		return Response.serverError().build();
+		throw new ValidationException(Status.BAD_REQUEST);
 	}
 	
 	@GET
