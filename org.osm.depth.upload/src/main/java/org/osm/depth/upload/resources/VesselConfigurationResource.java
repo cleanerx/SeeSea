@@ -77,39 +77,43 @@ public class VesselConfigurationResource {
 			DataSource ds = (DataSource) initContext
 					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			PreparedStatement updateStatement = conn
-					.prepareStatement(
-							"UPDATE vesselconfiguration SET" +
-									"(name, " +
-									"description, " +
-									"mmsi, " +
-									"manufacturer, " +
-									"model, " +
-									"loa, " +
-									"berth, " +
-									"draft, " +
-									"height, " +
-									"displacement, " +
-									"maximumspeed) " +
-							"VALUES (?,?,?,?,?,?,?,?,?,?,?) WHERE username = ? AND id = ?");
 			try {
-				updateStatement.setString(1, vesselConfiguration.name); 
-				updateStatement.setString(2,  vesselConfiguration.description); 
-				updateStatement.setString(3,  vesselConfiguration.mmsi );
-				updateStatement.setString(4,  vesselConfiguration.manufacturer); 
-				updateStatement.setString(5,  vesselConfiguration.model );
-				updateStatement.setDouble(6,  vesselConfiguration.loa );
-				updateStatement.setDouble(7,  vesselConfiguration.breadth );
-				updateStatement.setDouble(8,  vesselConfiguration.draft );
-				updateStatement.setDouble(9,  vesselConfiguration.height );
-				updateStatement.setDouble(10,  vesselConfiguration.displacement );
-				updateStatement.setDouble(11,  vesselConfiguration.maximumspeed );
-				updateStatement.setString(12,  username );
-				updateStatement.setLong(13,  vesselConfiguration.id );
-				updateStatement.execute();
-
+				PreparedStatement updateStatement = conn
+						.prepareStatement(
+								"UPDATE vesselconfiguration SET" +
+										"(name, " +
+										"description, " +
+										"mmsi, " +
+										"manufacturer, " +
+										"model, " +
+										"loa, " +
+										"berth, " +
+										"draft, " +
+										"height, " +
+										"displacement, " +
+										"maximumspeed) " +
+								"VALUES (?,?,?,?,?,?,?,?,?,?,?) WHERE username = ? AND id = ?");
+				try {
+					updateStatement.setString(1, vesselConfiguration.name); 
+					updateStatement.setString(2,  vesselConfiguration.description); 
+					updateStatement.setString(3,  vesselConfiguration.mmsi );
+					updateStatement.setString(4,  vesselConfiguration.manufacturer); 
+					updateStatement.setString(5,  vesselConfiguration.model );
+					updateStatement.setDouble(6,  vesselConfiguration.loa );
+					updateStatement.setDouble(7,  vesselConfiguration.breadth );
+					updateStatement.setDouble(8,  vesselConfiguration.draft );
+					updateStatement.setDouble(9,  vesselConfiguration.height );
+					updateStatement.setDouble(10,  vesselConfiguration.displacement );
+					updateStatement.setDouble(11,  vesselConfiguration.maximumspeed );
+					updateStatement.setString(12,  username );
+					updateStatement.setLong(13,  vesselConfiguration.id );
+					updateStatement.execute();
+					
+				} finally {
+					updateStatement.close();
+				}
 			} finally {
-				updateStatement.close();
+				conn.close();
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
