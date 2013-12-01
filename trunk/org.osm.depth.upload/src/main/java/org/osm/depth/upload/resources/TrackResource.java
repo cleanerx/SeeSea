@@ -36,7 +36,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -45,7 +44,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -121,7 +119,8 @@ public class TrackResource {
 		}
 	}
 
-	private List<Track> getTracksFromDatabase(ResultSet executeQuery) throws SQLException {
+	private List<Track> getTracksFromDatabase(ResultSet executeQuery)
+			throws SQLException {
 		try {
 			// Do stuff with the result set.
 			List<Track> list = new ArrayList<Track>(2);
@@ -132,10 +131,11 @@ public class TrackResource {
 				track.upload_state = executeQuery.getInt("upload_state"); //$NON-NLS-1$
 				track.fileType = executeQuery.getString("fileType"); //$NON-NLS-1$
 				track.compression = executeQuery.getString("compression"); //$NON-NLS-1$
-				track.containertrack = executeQuery.getLong("containertrack");  //$NON-NLS-1$
-				track.uploadDate = executeQuery.getDate("uploadDate");  //$NON-NLS-1$
-				track.license = executeQuery.getLong("license");  //$NON-NLS-1$
-				track.vesselConfiguration = executeQuery.getLong("vesselconfigid");  //$NON-NLS-1$
+				track.containertrack = executeQuery.getLong("containertrack"); //$NON-NLS-1$
+				track.uploadDate = executeQuery.getDate("uploadDate"); //$NON-NLS-1$
+				track.license = executeQuery.getLong("license"); //$NON-NLS-1$
+				track.vesselconfigid = executeQuery
+						.getLong("vesselconfigid"); //$NON-NLS-1$
 				UriBuilder ub = uriInfo.getBaseUriBuilder();
 				//						track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
 				list.add(track);
@@ -153,6 +153,16 @@ public class TrackResource {
 		}
 	}
 
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("{id}")
+	public Track newTrackWithNullId(@javax.ws.rs.core.Context SecurityContext context,
+			Track track) {
+		return newTrack(context, track);
+	}
+
+	
 	/**
 	 * creating a step is twofold: Create its id and the update the file
 	 * contents later on through a put request. This way we can show progress of
@@ -162,9 +172,10 @@ public class TrackResource {
 	 * @return
 	 */
 	@POST
-	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Track newTrack(@javax.ws.rs.core.Context SecurityContext context) {
+	public Track newTrack(@javax.ws.rs.core.Context SecurityContext context,
+			Track track) {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
 		try {
@@ -174,31 +185,55 @@ public class TrackResource {
 			Connection conn = ds.getConnection();
 			try {
 				PreparedStatement insertTrackStatement = conn
-						.prepareStatement("INSERT INTO user_tracks (track_id, user_name, uploaddate) VALUES (?,?,?)"); //$NON-NLS-1$
+						.prepareStatement("INSERT INTO user_tracks (track_id, user_name, uploaddate, vesselconfigid , license, file_ref ) VALUES (?,?,?,?,?,?)"); //$NON-NLS-1$
+				PreparedStatement userOwnsVesselconfiguration = conn
+						.prepareStatement("SELECT id FROM vesselconfiguration WHERE user_name = ? AND id = ?"); //$NON-NLS-1$
+				PreparedStatement userMayUseLicense = conn
+						.prepareStatement("SELECT id FROM license WHERE (user_name = ? OR public = 'true') AND id = ?"); //$NON-NLS-1$
 				Statement createIDStatement = conn.createStatement();
 				try {
-					ResultSet executeQuery = createIDStatement
-							.executeQuery("SELECT nextval('user_tracks_track_id_seq')"); //$NON-NLS-1$
-					try {
-						if (executeQuery.next()) {
-							Long id = executeQuery.getLong(1);
-							insertTrackStatement.setLong(1, id);
-							insertTrackStatement.setString(2, username);
-							insertTrackStatement.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
-							insertTrackStatement.execute();
-							Track track = new Track();
-							track.id = id;
-							return track;
-						} else {
-							// failed to create id
+					userOwnsVesselconfiguration.setString(1, username);
+					userOwnsVesselconfiguration.setLong(2, track.vesselconfigid);
+					userMayUseLicense.setString(1, username);
+					userMayUseLicense.setLong(2, track.license);
+					if (userOwnsVesselconfiguration.executeQuery().next()
+							&& userMayUseLicense.executeQuery().next()) {
+						try {
+							ResultSet executeQuery = createIDStatement
+									.executeQuery("SELECT nextval('user_tracks_track_id_seq')"); //$NON-NLS-1$
+							try {
+								if (executeQuery.next()) {
+									Long id = executeQuery.getLong(1);
+									insertTrackStatement.setLong(1, id);
+									insertTrackStatement.setString(2, username);
+									insertTrackStatement.setDate(3,
+											new java.sql.Date(Calendar
+													.getInstance().getTime()
+													.getTime()));
+									insertTrackStatement.setLong(4,
+											track.vesselconfigid);
+									insertTrackStatement.setLong(5,
+											track.license);
+									insertTrackStatement.setString(6, track.fileName);
+									insertTrackStatement.execute();
+									track.id = id;
+									return track;
+								} else {
+									// failed to create id
+								}
+								throw new DatabaseException(
+										"Database unavailable"); //$NON-NLS-1$
+							} finally {
+								executeQuery.close();
+							}
+						} finally {
+							insertTrackStatement.close();
+							createIDStatement.close();
 						}
-						throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
-					} finally {
-						executeQuery.close();
 					}
 				} finally {
-					insertTrackStatement.close();
-					createIDStatement.close();
+					userOwnsVesselconfiguration.close();
+					userMayUseLicense.close();
 				}
 			} finally {
 				conn.close();
@@ -210,7 +245,7 @@ public class TrackResource {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 		}
-
+		throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
 	}
 
 	/**
@@ -254,15 +289,13 @@ public class TrackResource {
 					PreparedStatement selectUploadStateStatement = conn
 							.prepareStatement("SELECT track_id FROM user_tracks WHERE track_id = ? AND user_name = ? AND upload_state = 0"); //$NON-NLS-1$
 					PreparedStatement updateTrackStatement = conn
-							.prepareStatement("UPDATE user_tracks SET file_ref = ?, upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
+							.prepareStatement("UPDATE user_tracks SET upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
 					try {
 						selectUploadStateStatement.setLong(1,
 								Long.parseLong(trackID));
 						selectUploadStateStatement.setString(2, username);
-						updateTrackStatement.setString(1,
-								fileDetail.getFileName());
 						updateTrackStatement
-								.setLong(2, Long.parseLong(trackID));
+								.setLong(1, Long.parseLong(trackID));
 						ResultSet resultSet = selectUploadStateStatement
 								.executeQuery();
 						try {
@@ -368,7 +401,8 @@ public class TrackResource {
 	 */
 	private File getFile(Long trackId) throws IOException {
 		Long dirNumber = trackId / 100L * 100L;
-		String fileDirectoryConfig = config.getInitParameter("org.osm.upload.dataDirectory"); //$NON-NLS-1$
+		String fileDirectoryConfig = config
+				.getInitParameter("org.osm.upload.dataDirectory"); //$NON-NLS-1$
 		File fileDirectory = new File(fileDirectoryConfig + File.separator
 				+ dirNumber.toString());
 		String trackIDString = trackId.toString();
