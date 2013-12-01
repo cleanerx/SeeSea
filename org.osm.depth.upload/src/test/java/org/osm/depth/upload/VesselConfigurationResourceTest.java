@@ -41,9 +41,7 @@ public class VesselConfigurationResourceTest extends TestCase {
 	}
 	
 	public void testCreatDeleteRoundtrip() {
-		
 		WebTarget path = basePath.path("vesselconfig"); //$NON-NLS-1$
-			
 		
 		VesselConfiguration vesselConfiguration = new VesselConfiguration();
 		vesselConfiguration.name = "Dolphin Crusher 2013";
