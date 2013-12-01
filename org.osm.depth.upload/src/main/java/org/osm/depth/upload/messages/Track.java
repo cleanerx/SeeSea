@@ -45,7 +45,7 @@ public class Track {
 
 	public String delete;
 	
-	public long vesselConfiguration;
+	public long vesselconfigid;
 
 	public long containertrack;
 	
