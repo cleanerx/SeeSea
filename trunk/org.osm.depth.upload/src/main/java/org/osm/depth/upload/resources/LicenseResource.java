@@ -108,7 +108,7 @@ public class LicenseResource {
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	public License newLicense(@javax.ws.rs.core.Context SecurityContext context, License license) {
+	public String newLicense(@javax.ws.rs.core.Context SecurityContext context, License license) {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
 		try {
@@ -132,7 +132,7 @@ public class LicenseResource {
 							statement.setString(5, license.text);
 							statement.setBoolean(6, license.publicLicense);
 							statement.execute();
-							return license;
+							return id.toString();
 						} else {
 							// failed to create id
 						}
