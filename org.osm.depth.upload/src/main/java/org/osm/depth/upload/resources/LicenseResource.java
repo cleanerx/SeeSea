@@ -75,7 +75,7 @@ public class LicenseResource {
 		}
 	}
 
-	private List<License> getLicenses(SecurityContext context,
+	private List<License> getLicenses(@javax.ws.rs.core.Context SecurityContext context,
 			ResultSet executeQuery) throws SQLException {
 		List<License> list = new ArrayList<License>();
 		while(executeQuery.next()) {
