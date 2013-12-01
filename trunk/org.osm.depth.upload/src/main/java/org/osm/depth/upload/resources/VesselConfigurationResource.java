@@ -96,7 +96,7 @@ public class VesselConfigurationResource {
 				PreparedStatement insertDepthOffset = conn
 						.prepareStatement(
 								"UPDATE depthsensor SET" +
-										"(vesselconfigid, " +
+										"(" +
 										"x, " +
 										"y, " +
 										"z, " +
@@ -104,19 +104,19 @@ public class VesselConfigurationResource {
 										"manufacturer, " +
 										"model, " +
 										"frequency, " +
-										"angleofbeam)" +
-								" = (?,?,?,?,?,?,?,?,?)");
+										"angleofbeam ) " +
+								" = (?,?,?,?,?,?,?,?) WHERE vesselconfigid = ?");
 				PreparedStatement insertSbasOffset = conn
 						.prepareStatement(
 								"UPDATE sbassensor SET" +
-										"(vesselconfigid, " +
+										"(" +
 										"x, " +
 										"y, " +
 										"z, " +
 										"sensorid, " +
 										"manufacturer, " +
-										"model) " +
-								" = (?,?,?,?,?,?,?)");
+										"model ) " +
+								" = (?,?,?,?,?,?) WHERE vesselconfigid = ?");
 				try {
 					conn.setAutoCommit(false);
 
@@ -135,26 +135,26 @@ public class VesselConfigurationResource {
 					updateStatement.setLong(13,  vesselConfiguration.id );
 					updateStatement.execute();
 					if(vesselConfiguration.depthoffset != null) {
-						insertDepthOffset.setLong(1, vesselConfiguration.id);
-						insertDepthOffset.setDouble(2, vesselConfiguration.depthoffset.distanceFromCenter);
-						insertDepthOffset.setDouble(3, vesselConfiguration.depthoffset.distanceFromStern);
-						insertDepthOffset.setDouble(4, vesselConfiguration.depthoffset.distanceWaterline);
-						insertDepthOffset.setString(5, vesselConfiguration.depthoffset.sensorId);
-						insertDepthOffset.setString(6, vesselConfiguration.depthoffset.manufacturer);
-						insertDepthOffset.setString(7, vesselConfiguration.depthoffset.model);
-						insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.frequency);
-						insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.angleofbeam);
+						insertDepthOffset.setDouble(1, vesselConfiguration.depthoffset.distanceFromCenter);
+						insertDepthOffset.setDouble(2, vesselConfiguration.depthoffset.distanceFromStern);
+						insertDepthOffset.setDouble(3, vesselConfiguration.depthoffset.distanceWaterline);
+						insertDepthOffset.setString(4, vesselConfiguration.depthoffset.sensorId);
+						insertDepthOffset.setString(5, vesselConfiguration.depthoffset.manufacturer);
+						insertDepthOffset.setString(6, vesselConfiguration.depthoffset.model);
+						insertDepthOffset.setDouble(7, vesselConfiguration.depthoffset.frequency);
+						insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.angleofbeam);
+						insertDepthOffset.setLong(9, vesselConfiguration.id);
 						insertDepthOffset.execute();
 					}
 
 					if(vesselConfiguration.sbasoffset != null) {
-						insertSbasOffset.setLong(1, vesselConfiguration.id);
-						insertSbasOffset.setDouble(2, vesselConfiguration.sbasoffset.distanceFromCenter);
-						insertSbasOffset.setDouble(3, vesselConfiguration.sbasoffset.distanceFromStern);
-						insertSbasOffset.setDouble(4, vesselConfiguration.sbasoffset.distanceWaterline);
-						insertSbasOffset.setString(5, vesselConfiguration.sbasoffset.sensorId);
-						insertSbasOffset.setString(6, vesselConfiguration.sbasoffset.manufacturer);
-						insertSbasOffset.setString(7, vesselConfiguration.sbasoffset.model);
+						insertSbasOffset.setDouble(1, vesselConfiguration.sbasoffset.distanceFromCenter);
+						insertSbasOffset.setDouble(2, vesselConfiguration.sbasoffset.distanceFromStern);
+						insertSbasOffset.setDouble(3, vesselConfiguration.sbasoffset.distanceWaterline);
+						insertSbasOffset.setString(4, vesselConfiguration.sbasoffset.sensorId);
+						insertSbasOffset.setString(5, vesselConfiguration.sbasoffset.manufacturer);
+						insertSbasOffset.setString(6, vesselConfiguration.sbasoffset.model);
+						insertSbasOffset.setLong(7, vesselConfiguration.id);
 						insertSbasOffset.execute();
 					}
 					conn.commit();
