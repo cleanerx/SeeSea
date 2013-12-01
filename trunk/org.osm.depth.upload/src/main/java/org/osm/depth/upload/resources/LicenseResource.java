@@ -75,7 +75,7 @@ public class LicenseResource {
 		}
 	}
 
-	private List<License> getLicenses(@javax.ws.rs.core.Context SecurityContext context,
+	private List<License> getLicenses(SecurityContext context,
 			ResultSet executeQuery) throws SQLException {
 		List<License> list = new ArrayList<License>();
 		while(executeQuery.next()) {
@@ -88,7 +88,7 @@ public class LicenseResource {
 			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 				license.user = executeQuery.getString("user_name");
 			} else { 
-				if(license.user.equals(context.getUserPrincipal().getName())) {
+				if(context.getUserPrincipal().getName().equals(executeQuery.getString("user_name"))) {
 					license.user = executeQuery.getString("user_name");
 				} else {
 					license.user = "Other";
