@@ -60,7 +60,10 @@ public class TrackResourceTest extends TestCase {
 		WebTarget basePath = client.target(TestConstants.HOST).path(TestConstants.PATH).path(TestConstants.APIPATH);
 		
 		WebTarget trackPath = basePath.path("track");
-		Response response = trackPath.request(MediaType.APPLICATION_JSON).post(Entity.entity("dummy", MediaType.APPLICATION_JSON));
+		Track track3 = new Track();
+		track3.vesselconfigid = 1;
+		track3.license = 1;
+		Response response = trackPath.request(MediaType.APPLICATION_JSON).post(Entity.entity(track3, MediaType.APPLICATION_JSON));
 		assertEquals(200, response.getStatus());
 		
 		Track track = response.readEntity(Track.class);
