@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.exceptions.ResourceInUseException;
 import org.osm.depth.upload.messages.License;
@@ -81,9 +82,9 @@ public class LicenseResource {
 		while(executeQuery.next()) {
 			License license = new License();
 			license.id = executeQuery.getLong("id");
-			license.name = executeQuery.getString("name");
-			license.shortName = executeQuery.getString("shortname");
-			license.text = executeQuery.getString("text");
+			license.name = StringEscapeUtils.escapeJavaScript(executeQuery.getString("name"));
+			license.shortName = StringEscapeUtils.escapeJavaScript(executeQuery.getString("shortname"));
+			license.text = StringEscapeUtils.escapeJavaScript(executeQuery.getString("text"));
 			license.publicLicense = executeQuery.getBoolean("public");
 			if(context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 				license.user = executeQuery.getString("user_name");
