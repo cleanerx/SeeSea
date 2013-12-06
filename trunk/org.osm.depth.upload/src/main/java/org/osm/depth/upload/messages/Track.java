@@ -28,6 +28,7 @@ package org.osm.depth.upload.messages;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="track")
@@ -51,6 +52,7 @@ public class Track {
 	
 	public long license;
 	
+	@XmlElement(name = "uploaddate", required = true)
 	public Date uploadDate;
 
 	public Track() {
