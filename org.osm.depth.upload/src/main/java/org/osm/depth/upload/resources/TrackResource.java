@@ -132,7 +132,7 @@ public class TrackResource {
 				track.fileType = executeQuery.getString("fileType"); //$NON-NLS-1$
 				track.compression = executeQuery.getString("compression"); //$NON-NLS-1$
 				track.containertrack = executeQuery.getLong("containertrack"); //$NON-NLS-1$
-				track.uploadDate = executeQuery.getTimestamp("uploadDate"); //$NON-NLS-1$
+				track.uploadDate = executeQuery.getTimestamp("uploadDate").getTime(); //$NON-NLS-1$
 				track.license = executeQuery.getLong("license"); //$NON-NLS-1$
 				track.vesselconfigid = executeQuery
 						.getLong("vesselconfigid"); //$NON-NLS-1$

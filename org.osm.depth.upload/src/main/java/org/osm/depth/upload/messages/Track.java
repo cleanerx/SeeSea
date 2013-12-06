@@ -30,6 +30,7 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlRootElement(name="track")
 public class Track {
@@ -52,8 +53,9 @@ public class Track {
 	
 	public long license;
 	
-	@XmlElement(name = "uploaddate", required = true)
-	public Date uploadDate;
+//	@XmlElement(name = "uploaddate", required = true)
+//	@XmlJavaTypeAdapter(TimestampAdapter.class)
+	public long uploadDate;
 
 	public Track() {
 		

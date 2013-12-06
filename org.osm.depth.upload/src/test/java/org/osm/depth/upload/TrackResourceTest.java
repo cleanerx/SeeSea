@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -97,7 +98,7 @@ public class TrackResourceTest extends TestCase {
 //				assertEquals(track.file_ref,"test.txt");
 						assertEquals(track2.upload_state,1);
 						assertEquals(track2.fileName,"mytrack");
-						assertTrue(track2.uploadDate.before(Calendar.getInstance().getTime()));
+						assertTrue(new Date(track2.uploadDate).before(Calendar.getInstance().getTime()));
 						break;
 					}
 				}
