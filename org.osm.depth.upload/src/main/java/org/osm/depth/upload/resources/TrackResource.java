@@ -132,7 +132,7 @@ public class TrackResource {
 				track.fileType = executeQuery.getString("fileType"); //$NON-NLS-1$
 				track.compression = executeQuery.getString("compression"); //$NON-NLS-1$
 				track.containertrack = executeQuery.getLong("containertrack"); //$NON-NLS-1$
-				track.uploadDate = executeQuery.getDate("uploadDate"); //$NON-NLS-1$
+				track.uploadDate = executeQuery.getTimestamp("uploadDate"); //$NON-NLS-1$
 				track.license = executeQuery.getLong("license"); //$NON-NLS-1$
 				track.vesselconfigid = executeQuery
 						.getLong("vesselconfigid"); //$NON-NLS-1$
@@ -206,8 +206,8 @@ public class TrackResource {
 									Long id = executeQuery.getLong(1);
 									insertTrackStatement.setLong(1, id);
 									insertTrackStatement.setString(2, username);
-									insertTrackStatement.setDate(3,
-											new java.sql.Date(Calendar
+									insertTrackStatement.setTimestamp(3,
+											new java.sql.Timestamp(Calendar
 													.getInstance().getTime()
 													.getTime()));
 									insertTrackStatement.setLong(4,
