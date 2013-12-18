@@ -69,6 +69,9 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 	@Override
 	public boolean readByte(int c, String streamProvider)
 			throws NMEAProcessingException {
+		if(counter == message.length) {
+			throw new NMEAProcessingException("No usable data found within " + counter + "bytes");
+		}
 		if(state.equals(MessageProcessingState.HEADER_START)) {
 			message[counter++] = c;
 			if(counter == 10) {
