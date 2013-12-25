@@ -134,7 +134,7 @@ public class VesselConfigurationResource {
 					updateStatement.setDouble(9,  vesselConfiguration.height );
 					updateStatement.setDouble(10,  vesselConfiguration.displacement );
 					updateStatement.setDouble(11,  vesselConfiguration.maximumspeed );
-					updateStatement.setInt(12,  vesselConfiguration.vesselType.ordinal() );
+					updateStatement.setInt(12,  vesselConfiguration.vesselType == null ? 0 : vesselConfiguration.vesselType.ordinal() );
 					updateStatement.setString(13,  username );
 					updateStatement.setLong(14,  vesselConfiguration.id );
 					updateStatement.execute();
