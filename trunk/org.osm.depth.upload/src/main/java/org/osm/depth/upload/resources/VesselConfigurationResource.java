@@ -398,7 +398,6 @@ public class VesselConfigurationResource {
 				vc.sbasoffset.distanceWaterline = executeQuery.getDouble(15);
 				vc.sbasoffset.manufacturer = executeQuery.getString(16);
 				vc.sbasoffset.model = executeQuery.getString(17);
-				vc.sbasoffset.offsetKeel = executeQuery.getDouble(19);
 				vc.sbasoffset.sensorId = executeQuery.getString(18);
 
 				vc.depthoffset = new DepthSensor();
@@ -409,6 +408,7 @@ public class VesselConfigurationResource {
 				vc.depthoffset.model = executeQuery.getString(23);
 				vc.depthoffset.sensorId = executeQuery.getString(24);
 				vc.depthoffset.frequency = executeQuery.getDouble(25);
+				vc.depthoffset.offsetKeel = executeQuery.getDouble(26);
 
 				list.add(vc);
 			}

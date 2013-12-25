@@ -9,4 +9,5 @@ public class DepthSensor extends SBASSensor {
 
 	public double angleofbeam;
 
+	public double offsetKeel;
 }
