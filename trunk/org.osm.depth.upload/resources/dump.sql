@@ -41,7 +41,8 @@ CREATE TABLE depthsensor (
     manufacturer character varying(100),
     model character varying(100),
     frequency numeric(5,0),
-    angleofbeam numeric(3,0)
+    angleofbeam numeric(3,0),
+    offsetkeel numeric(5,2)
 );
 
 

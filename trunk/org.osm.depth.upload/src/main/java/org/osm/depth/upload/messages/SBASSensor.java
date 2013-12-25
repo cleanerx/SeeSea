@@ -37,6 +37,8 @@ public class SBASSensor {
 	
 	public double distanceWaterline;
 	
+	public double offsetKeel;
+	
 	public String sensorId;
 	
 	public String manufacturer;

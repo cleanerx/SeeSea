@@ -104,8 +104,9 @@ public class VesselConfigurationResource {
 										"manufacturer, " +
 										"model, " +
 										"frequency, " +
+										"offsetkeel, " +
 										"angleofbeam ) " +
-								" = (?,?,?,?,?,?,?,?) WHERE vesselconfigid = ?");
+								" = (?,?,?,?,?,?,?,?,?) WHERE vesselconfigid = ?");
 				PreparedStatement insertSbasOffset = conn
 						.prepareStatement(
 								"UPDATE sbassensor SET" +
@@ -142,8 +143,9 @@ public class VesselConfigurationResource {
 						insertDepthOffset.setString(5, vesselConfiguration.depthoffset.manufacturer);
 						insertDepthOffset.setString(6, vesselConfiguration.depthoffset.model);
 						insertDepthOffset.setDouble(7, vesselConfiguration.depthoffset.frequency);
-						insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.angleofbeam);
-						insertDepthOffset.setLong(9, vesselConfiguration.id);
+						insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.offsetKeel);
+						insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.angleofbeam);
+						insertDepthOffset.setLong(10, vesselConfiguration.id);
 						insertDepthOffset.execute();
 					}
 
@@ -233,8 +235,9 @@ public class VesselConfigurationResource {
 										"manufacturer, " +
 										"model, " +
 										"frequency, " +
+										"offsetkeel, " +
 										"angleofbeam)" +
-								" VALUES (?,?,?,?,?,?,?,?,?)");
+								" VALUES (?,?,?,?,?,?,?,?,?,?)");
 				PreparedStatement insertSbasOffset = conn
 						.prepareStatement(
 								"INSERT INTO sbassensor " +
@@ -278,7 +281,8 @@ public class VesselConfigurationResource {
 								insertDepthOffset.setString(6, vesselConfiguration.depthoffset.manufacturer);
 								insertDepthOffset.setString(7, vesselConfiguration.depthoffset.model);
 								insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.frequency);
-								insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.angleofbeam);
+								insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.frequency);
+								insertDepthOffset.setDouble(10, vesselConfiguration.depthoffset.angleofbeam);
 								insertDepthOffset.execute();
 							}
 
@@ -336,7 +340,7 @@ public class VesselConfigurationResource {
 						"SELECT " + 
 								"v.id, v.name, v.description, v.loa, v.breadth, v.draft, v.height, v.displacement, v.mmsi, v.manufacturer, v.model, v.maximumspeed, " +  
 								"s.x, s.y, s.z, s.manufacturer, s.model, s.sensorid, " +  
-								"d.x, d.y, d.z, d.manufacturer, d.model, d.sensorid, d.frequency " + 
+								"d.x, d.y, d.z, d.manufacturer, d.model, d.sensorid, d.frequency, d.offsetkeel " + 
 								"FROM vesselconfiguration v LEFT JOIN depthsensor AS d ON (d.vesselconfigid = v.id) LEFT JOIN sbassensor AS s ON (s.vesselconfigid = v.id)";
 				if (context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 					Statement statement = conn.createStatement();
@@ -394,6 +398,7 @@ public class VesselConfigurationResource {
 				vc.sbasoffset.distanceWaterline = executeQuery.getDouble(15);
 				vc.sbasoffset.manufacturer = executeQuery.getString(16);
 				vc.sbasoffset.model = executeQuery.getString(17);
+				vc.sbasoffset.offsetKeel = executeQuery.getDouble(19);
 				vc.sbasoffset.sensorId = executeQuery.getString(18);
 
 				vc.depthoffset = new DepthSensor();
