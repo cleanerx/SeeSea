@@ -399,22 +399,22 @@ public class VesselConfigurationResource {
 				vc.maximumspeed = executeQuery.getDouble("maximumspeed");
 				vc.vesselType = VesselType.values()[executeQuery.getInt("type")]; 
 				vc.sbasoffset = new SBASSensor();
-				vc.sbasoffset.distanceFromCenter = executeQuery.getDouble(13);
-				vc.sbasoffset.distanceFromStern = executeQuery.getDouble(14);
-				vc.sbasoffset.distanceWaterline = executeQuery.getDouble(15);
-				vc.sbasoffset.manufacturer = executeQuery.getString(16);
-				vc.sbasoffset.model = executeQuery.getString(17);
-				vc.sbasoffset.sensorId = executeQuery.getString(18);
+				vc.sbasoffset.distanceFromCenter = executeQuery.getDouble(14);
+				vc.sbasoffset.distanceFromStern = executeQuery.getDouble(15);
+				vc.sbasoffset.distanceWaterline = executeQuery.getDouble(16);
+				vc.sbasoffset.manufacturer = executeQuery.getString(17);
+				vc.sbasoffset.model = executeQuery.getString(18);
+				vc.sbasoffset.sensorId = executeQuery.getString(19);
 
 				vc.depthoffset = new DepthSensor();
-				vc.depthoffset.distanceFromCenter = executeQuery.getDouble(19);
-				vc.depthoffset.distanceFromStern = executeQuery.getDouble(20);
-				vc.depthoffset.distanceWaterline = executeQuery.getDouble(21);
-				vc.depthoffset.manufacturer = executeQuery.getString(22);
-				vc.depthoffset.model = executeQuery.getString(23);
-				vc.depthoffset.sensorId = executeQuery.getString(24);
-				vc.depthoffset.frequency = executeQuery.getDouble(25);
-				vc.depthoffset.offsetKeel = executeQuery.getDouble(26);
+				vc.depthoffset.distanceFromCenter = executeQuery.getDouble(20);
+				vc.depthoffset.distanceFromStern = executeQuery.getDouble(21);
+				vc.depthoffset.distanceWaterline = executeQuery.getDouble(22);
+				vc.depthoffset.manufacturer = executeQuery.getString(23);
+				vc.depthoffset.model = executeQuery.getString(24);
+				vc.depthoffset.sensorId = executeQuery.getString(25);
+				vc.depthoffset.frequency = executeQuery.getDouble(26);
+				vc.depthoffset.offsetKeel = executeQuery.getDouble(27);
 
 				list.add(vc);
 			}
