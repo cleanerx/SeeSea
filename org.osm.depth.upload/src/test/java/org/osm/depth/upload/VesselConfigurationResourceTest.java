@@ -19,6 +19,7 @@ import org.osm.depth.upload.messages.DepthSensor;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.SBASSensor;
 import org.osm.depth.upload.messages.VesselConfiguration;
+import org.osm.depth.upload.messages.VesselType;
 
 import junit.framework.TestCase;
 
@@ -55,6 +56,7 @@ public class VesselConfigurationResourceTest extends TestCase {
 		vesselConfiguration.height = 7.15;
 		vesselConfiguration.displacement = 0.1;
 		vesselConfiguration.maximumspeed = 8;
+		vesselConfiguration.vesselType = VesselType.RUDDERBOAT;
 		vesselConfiguration.sbasoffset = new SBASSensor();
 		vesselConfiguration.sbasoffset.distanceFromCenter = -1.25;
 		vesselConfiguration.sbasoffset.distanceFromStern = 1;
@@ -96,6 +98,7 @@ public class VesselConfigurationResourceTest extends TestCase {
 			assertEquals(vesselConfiguration.height, vesselConfiguration2.height);
 			assertEquals(vesselConfiguration.displacement, vesselConfiguration2.displacement);
 			assertEquals(vesselConfiguration.maximumspeed, vesselConfiguration2.maximumspeed);
+			assertEquals(vesselConfiguration.vesselType, vesselConfiguration2.vesselType);
 
 			assertNotNull(vesselConfiguration2.sbasoffset);
 			assertEquals(vesselConfiguration.sbasoffset.distanceFromCenter, vesselConfiguration2.sbasoffset.distanceFromCenter);

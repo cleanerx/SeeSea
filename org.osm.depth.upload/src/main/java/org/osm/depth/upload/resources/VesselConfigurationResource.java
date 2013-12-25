@@ -57,6 +57,7 @@ import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.DepthSensor;
 import org.osm.depth.upload.messages.SBASSensor;
 import org.osm.depth.upload.messages.VesselConfiguration;
+import org.osm.depth.upload.messages.VesselType;
 
 @Path("/vesselconfig")
 public class VesselConfigurationResource {
@@ -91,8 +92,9 @@ public class VesselConfigurationResource {
 										"draft, " +
 										"height, " +
 										"displacement, " +
-										"maximumspeed) " +
-								"= (?,?,?,?,?,?,?,?,?,?,?) WHERE user_name = ? AND id = ?");
+										"maximumspeed, " +
+										"type) " +
+								"= (?,?,?,?,?,?,?,?,?,?,?,?) WHERE user_name = ? AND id = ?");
 				PreparedStatement insertDepthOffset = conn
 						.prepareStatement(
 								"UPDATE depthsensor SET" +
@@ -132,8 +134,9 @@ public class VesselConfigurationResource {
 					updateStatement.setDouble(9,  vesselConfiguration.height );
 					updateStatement.setDouble(10,  vesselConfiguration.displacement );
 					updateStatement.setDouble(11,  vesselConfiguration.maximumspeed );
-					updateStatement.setString(12,  username );
-					updateStatement.setLong(13,  vesselConfiguration.id );
+					updateStatement.setInt(12,  vesselConfiguration.vesselType.ordinal() );
+					updateStatement.setString(13,  username );
+					updateStatement.setLong(14,  vesselConfiguration.id );
 					updateStatement.execute();
 					if(vesselConfiguration.depthoffset != null) {
 						insertDepthOffset.setDouble(1, vesselConfiguration.depthoffset.distanceFromCenter);
@@ -221,9 +224,10 @@ public class VesselConfigurationResource {
 										"height, " +
 										"displacement, " +
 										"maximumspeed, " +
+										"type, " +
 										"user_name," +
 										"id)" +
-								" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+								" VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				PreparedStatement insertDepthOffset = conn
 						.prepareStatement(
 								"INSERT INTO depthsensor " +
@@ -268,8 +272,9 @@ public class VesselConfigurationResource {
 							insertvesselstatement.setDouble(9,  vesselConfiguration.height );
 							insertvesselstatement.setDouble(10,  vesselConfiguration.displacement );
 							insertvesselstatement.setDouble(11,  vesselConfiguration.maximumspeed );
-							insertvesselstatement.setString(12,  vesselConfiguration.username );
-							insertvesselstatement.setLong(13,  vesselConfiguration.id);
+							insertvesselstatement.setDouble(12,  vesselConfiguration.vesselType.ordinal() );
+							insertvesselstatement.setString(13,  vesselConfiguration.username );
+							insertvesselstatement.setLong(14,  vesselConfiguration.id);
 							insertvesselstatement.execute();
 
 							if(vesselConfiguration.depthoffset != null) {
@@ -338,7 +343,7 @@ public class VesselConfigurationResource {
 				ResultSet executeQuery;
 				String query = 
 						"SELECT " + 
-								"v.id, v.name, v.description, v.loa, v.breadth, v.draft, v.height, v.displacement, v.mmsi, v.manufacturer, v.model, v.maximumspeed, " +  
+								"v.id, v.name, v.description, v.loa, v.breadth, v.draft, v.height, v.displacement, v.mmsi, v.manufacturer, v.model, v.maximumspeed, v.type, " +  
 								"s.x, s.y, s.z, s.manufacturer, s.model, s.sensorid, " +  
 								"d.x, d.y, d.z, d.manufacturer, d.model, d.sensorid, d.frequency, d.offsetkeel " + 
 								"FROM vesselconfiguration v LEFT JOIN depthsensor AS d ON (d.vesselconfigid = v.id) LEFT JOIN sbassensor AS s ON (s.vesselconfigid = v.id)";
@@ -392,6 +397,7 @@ public class VesselConfigurationResource {
 				vc.manufacturer = executeQuery.getString(10);
 				vc.model = executeQuery.getString(11);
 				vc.maximumspeed = executeQuery.getDouble("maximumspeed");
+				vc.vesselType = VesselType.values()[executeQuery.getInt("type")]; 
 				vc.sbasoffset = new SBASSensor();
 				vc.sbasoffset.distanceFromCenter = executeQuery.getDouble(13);
 				vc.sbasoffset.distanceFromStern = executeQuery.getDouble(14);
