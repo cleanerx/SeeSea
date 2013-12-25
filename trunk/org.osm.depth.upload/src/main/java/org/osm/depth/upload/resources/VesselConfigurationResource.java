@@ -272,7 +272,7 @@ public class VesselConfigurationResource {
 							insertvesselstatement.setDouble(9,  vesselConfiguration.height );
 							insertvesselstatement.setDouble(10,  vesselConfiguration.displacement );
 							insertvesselstatement.setDouble(11,  vesselConfiguration.maximumspeed );
-							insertvesselstatement.setDouble(12,  vesselConfiguration.vesselType.ordinal() );
+							insertvesselstatement.setInt(12,  vesselConfiguration.vesselType.ordinal() );
 							insertvesselstatement.setString(13,  vesselConfiguration.username );
 							insertvesselstatement.setLong(14,  vesselConfiguration.id);
 							insertvesselstatement.execute();
