@@ -38,7 +38,7 @@ public class VesselConfigurationResourceTest extends TestCase {
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
 
-		basePath = client.target("http://localhost:8100").path(TestConstants.PATH).path("api2");
+		basePath = client.target("http://localhost:8080").path(TestConstants.PATH).path("api2");
 	}
 	
 	public void testCreatDeleteRoundtrip() {

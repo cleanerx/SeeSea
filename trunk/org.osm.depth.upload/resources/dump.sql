@@ -178,7 +178,7 @@ CREATE TABLE vesselconfiguration (
     height numeric(4,2),
     displacement numeric(8,1),
     maximumspeed numeric(3,1),
-    type integer
+    type integer DEFAULT 0
 );
 
 
