@@ -43,6 +43,7 @@ public class VesselConfiguration {
 	public double height;
 	public double displacement;
 	public double maximumspeed;
+	public VesselType vesselType;
 	public String username;
 
 	public SBASSensor sbasoffset;
