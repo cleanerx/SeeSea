@@ -24,11 +24,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
+import org.apache.commons.dbcp.DelegatingConnection;
 import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeType;
 import org.postgis.PGgeometry;
 import org.postgis.Point;
+import org.postgresql.PGConnection;
 
 @Path("/gauge")
 public class GaugeResource {
@@ -101,7 +103,8 @@ public class GaugeResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			((org.postgresql.Connection)conn).addDataType("geometry","org.postgis.PGgeometry");
+			PGConnection pgCon =(PGConnection)((DelegatingConnection)conn).getInnermostDelegate();
+			pgCon.addDataType("geometry",org.postgis.PGgeometry.class);
 			try {
 				Statement createIDStatement = conn.createStatement();
 				try {
