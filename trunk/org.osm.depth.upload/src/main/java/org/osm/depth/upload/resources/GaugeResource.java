@@ -69,7 +69,7 @@ public class GaugeResource {
 						gauge.name = executeQuery.getString("name"); //$NON-NLS-1$
 						// this is not the way to do it but the connection pool does not cause problems
 						String geom = executeQuery.getString("geom");
-						String point = geom.substring(geom.indexOf("("), geom.indexOf(")"));
+						String point = geom.substring(geom.indexOf("(") + 1, geom.indexOf(")"));
 						String[] coordinates = point.split(" ");
 						
 //						PGgeometry geom = (PGgeometry)executeQuery.getObject("geom");
