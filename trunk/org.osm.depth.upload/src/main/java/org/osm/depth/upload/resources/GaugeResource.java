@@ -27,6 +27,8 @@ import javax.ws.rs.core.SecurityContext;
 import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeType;
+import org.postgis.PGgeometry;
+import org.postgis.Point;
 
 @Path("/gauge")
 public class GaugeResource {
@@ -55,14 +57,15 @@ public class GaugeResource {
 				Statement statement = conn.createStatement();
 				try {
 					ResultSet executeQuery;
-					executeQuery = statement.executeQuery("SELECT id, name, gaugetype, lat, lon FROM gauge g"); //$NON-NLS-1$
+					executeQuery = statement.executeQuery("SELECT id, name, gaugetype, ST_AsText(geom) as geom FROM gauge g"); //$NON-NLS-1$
 					List<Gauge> list = new ArrayList<Gauge>();
 					while(executeQuery.next()) {
 						Gauge gauge = new Gauge();
 						gauge.id = executeQuery.getLong("id"); //$NON-NLS-1$
 						gauge.name = executeQuery.getString("name"); //$NON-NLS-1$
-						gauge.latitude = executeQuery.getDouble("lat"); //$NON-NLS-1$
-						gauge.longitude = executeQuery.getDouble("lon"); //$NON-NLS-1$
+						PGgeometry geom = (PGgeometry)executeQuery.getObject("geom");
+						gauge.latitude = ((Point)geom.getGeometry()).y; //$NON-NLS-1$
+						gauge.longitude = ((Point)geom.getGeometry()).x; //$NON-NLS-1$
 						try {
 							gauge.gaugeType = GaugeType.valueOf(executeQuery.getString("gaugetype")); //$NON-NLS-1$
 						} catch (IllegalArgumentException e) {
@@ -100,16 +103,16 @@ public class GaugeResource {
 			try {
 				Statement createIDStatement = conn.createStatement();
 				try {
-					PreparedStatement statement = conn.prepareStatement("INSERT INTO gauge (id, name, lat, lon, gaugetype) VALUES (?,?,?,?,?)"); //$NON-NLS-1$
+					PreparedStatement statement = conn.prepareStatement("INSERT INTO gauge (id, name, gaugetype, geom) VALUES (?,?,?, ST_SetSRID(ST_MakePoint(?, ?), 4326))"); //$NON-NLS-1$
 					try {
 						ResultSet executeQuery = createIDStatement.executeQuery("SELECT nextval('gauge_id_seq')"); //$NON-NLS-1$
 						if(executeQuery.next()) {
 							Long id = executeQuery.getLong(1);
 							statement.setLong(1, id);
 							statement.setString(2, gauge.name);
-							statement.setDouble(3, gauge.latitude);
+							statement.setString(3, gauge.gaugeType.toString());
+							statement.setDouble(5, gauge.latitude);
 							statement.setDouble(4, gauge.longitude);
-							statement.setString(5, gauge.gaugeType.toString());
 							statement.execute();
 							return gauge;
 						} else {
