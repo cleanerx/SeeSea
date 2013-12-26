@@ -24,7 +24,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import org.apache.commons.dbcp.DelegatingConnection;
+import org.apache.tomcat.dbcp.dbcp.DelegatingConnection;
 import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeType;
