@@ -53,6 +53,7 @@ public class GaugeResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
+			((org.postgresql.Connection)conn).addDataType("geometry","org.postgis.PGgeometry");
 			try {
 				Statement statement = conn.createStatement();
 				try {
@@ -100,6 +101,7 @@ public class GaugeResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
+			((org.postgresql.Connection)conn).addDataType("geometry","org.postgis.PGgeometry");
 			try {
 				Statement createIDStatement = conn.createStatement();
 				try {
