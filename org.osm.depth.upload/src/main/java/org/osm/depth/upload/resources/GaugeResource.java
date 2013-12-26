@@ -55,8 +55,8 @@ public class GaugeResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
-			PGConnection pgCon =(PGConnection)((DelegatingConnection)conn).getInnermostDelegate();
-			pgCon.addDataType("geometry",org.postgis.PGgeometry.class);
+//			PGConnection pgCon =(PGConnection)((DelegatingConnection)conn).getInnermostDelegate();
+//			pgCon.addDataType("geometry",org.postgis.PGgeometry.class);
 			try {
 				Statement statement = conn.createStatement();
 				try {
@@ -67,9 +67,16 @@ public class GaugeResource {
 						Gauge gauge = new Gauge();
 						gauge.id = executeQuery.getLong("id"); //$NON-NLS-1$
 						gauge.name = executeQuery.getString("name"); //$NON-NLS-1$
-						PGgeometry geom = (PGgeometry)executeQuery.getObject("geom");
-						gauge.latitude = ((Point)geom.getGeometry()).y; //$NON-NLS-1$
-						gauge.longitude = ((Point)geom.getGeometry()).x; //$NON-NLS-1$
+						// this is not the way to do it but the connection pool does not cause problems
+						String geom = executeQuery.getString("geom");
+						String point = geom.substring(geom.indexOf("("), geom.indexOf(")"));
+						String[] coordinates = point.split(" ");
+						
+//						PGgeometry geom = (PGgeometry)executeQuery.getObject("geom");
+//						gauge.latitude = ((Point)geom.getGeometry()).y; //$NON-NLS-1$
+//						gauge.longitude = ((Point)geom.getGeometry()).x; //$NON-NLS-1$
+						gauge.latitude = Double.parseDouble(coordinates[1].trim());
+						gauge.longitude = Double.parseDouble(coordinates[0].trim());
 						try {
 							gauge.gaugeType = GaugeType.valueOf(executeQuery.getString("gaugetype")); //$NON-NLS-1$
 						} catch (IllegalArgumentException e) {
