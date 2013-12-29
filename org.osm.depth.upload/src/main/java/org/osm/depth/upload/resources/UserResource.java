@@ -142,6 +142,12 @@ public class UserResource {
 	public Response createUser(
 			@FormParam("username") String username,
 			@FormParam("password") String password,
+			@FormParam("forename") String forename,
+			@FormParam("surname") String surname,
+			@FormParam("organisation") String organisation,
+			@FormParam("acceptedEmailContact") String acceptedEmailContact,
+			@FormParam("country") String country,
+			@FormParam("language") String language,
 			@FormParam("captcha") String captcha
 			)
 		{
@@ -155,7 +161,7 @@ public class UserResource {
 					conn.setAutoCommit(false);
 					Statement statement = conn.createStatement();
 					try {
-						PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password) VALUES (?,?)");
+						PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password, forname, surname, organisation, acceptedEmailContact, country, language) VALUES (?,?,?,?,?,?,?,?)");
 						try {
 							PreparedStatement insertUserRoleStatement = conn.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
 							try {
@@ -167,6 +173,12 @@ public class UserResource {
 									}
 									insertUserStatement.setString(1, username);
 									insertUserStatement.setString(2, password.toLowerCase());
+									insertUserStatement.setString(3, forename);
+									insertUserStatement.setString(4, surname);
+									insertUserStatement.setString(5, organisation);
+									insertUserStatement.setBoolean(6, "on".equals(acceptedEmailContact) || "true".equals(acceptedEmailContact));
+									insertUserStatement.setString(7, country);
+									insertUserStatement.setString(8, language);
 									insertUserRoleStatement.setString(1, username);
 									insertUserStatement.execute();
 									insertUserRoleStatement.execute();
