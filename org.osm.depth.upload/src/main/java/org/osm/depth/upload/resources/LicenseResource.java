@@ -129,7 +129,7 @@ public class LicenseResource {
 				Connection conn = ds.getConnection();
 				try {
 					ResultSet executeQuery;
-					PreparedStatement statement = depthConn.prepareStatement("SELECT DISTINCT datasetid FROM trackpoints_raw_8 WHERE trackpoints_raw_16.the_geom && ST_MakeEnvelope(?, ?, ?, ?, 4326)"); //$NON-NLS-1$
+					PreparedStatement statement = depthConn.prepareStatement("SELECT DISTINCT datasetid FROM trackpoints_raw_8 WHERE trackpoints_raw_8.the_geom && ST_MakeEnvelope(?, ?, ?, ?, 4326)"); //$NON-NLS-1$
 					try {
 						statement.setDouble(1, Double.parseDouble(lon1));
 						statement.setDouble(2, Double.parseDouble(lat1));
