@@ -26,10 +26,6 @@
  */
 package org.osm.depth.upload.messages;
 
-import java.net.URI;
-import java.util.Date;
-
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="user")
@@ -39,8 +35,17 @@ public class User {
 	
 	public String password;
 	
-	public int attemps;
+	public String forname;
 	
-	public Date lastAttempt;
+	public String surname;
 	
+	public String phone;
+	
+	public String country;
+	
+	public String language;
+	
+	public String organisation;
+	
+	public boolean acceptedEmailContact;
 }
