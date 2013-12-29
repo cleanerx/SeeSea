@@ -23,6 +23,8 @@
           type="javax.sql.DataSource" username="${osmuser}" password="${osmpass}" 
             driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${osmdatabase}" maxActive="150"
             maxIdle="1"/>
+            
+        <Resource auth="Container" name="jdbc/depth" 
           type="javax.sql.DataSource" username="${osmuser}" password="${osmpass}" 
             driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${depthdatabase}" maxActive="150"
             maxIdle="1"/>
