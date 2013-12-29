@@ -216,8 +216,13 @@ public class UserResource {
 						while(executeQuery.next()) {
 							User user = new User();
 							user.user_name = executeQuery.getString("user_name");
-							user.attemps = executeQuery.getInt("attempts");
-							user.lastAttempt = executeQuery.getDate("last_attempt");
+							user.forname = executeQuery.getString("forename");
+							user.surname = executeQuery.getString("surname");
+							user.country = executeQuery.getString("country");
+							user.language = executeQuery.getString("language");
+							user.organisation = executeQuery.getString("organisation");
+							user.phone = executeQuery.getString("phone");
+							user.acceptedEmailContact = executeQuery.getBoolean("acceptedEmailContact");
 							list.add(user);
 						}
 						return list;
@@ -240,6 +245,54 @@ public class UserResource {
 		}
 	}
 	
+	@GET
+	@Path("current")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@RolesAllowed({"ADMIN","USER"})
+	public User getCurrentUser(@javax.ws.rs.core.Context SecurityContext context) {
+		String username = context.getUserPrincipal().getName();
+		Context initContext;
+		try {
+			initContext = new InitialContext();
+			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
+			Connection conn = ds.getConnection();
+			try {
+				PreparedStatement statement = conn.prepareStatement("SELECT * FROM user_profiles WHERE user_name = ?");
+				try {
+					statement.setString(1, username);
+					ResultSet executeQuery = statement.executeQuery();
+					try {
+						while(executeQuery.next()) {
+							User user = new User();
+							user.user_name = executeQuery.getString("user_name");
+							user.forname = executeQuery.getString("forename");
+							user.surname = executeQuery.getString("surname");
+							user.country = executeQuery.getString("country");
+							user.language = executeQuery.getString("language");
+							user.organisation = executeQuery.getString("organisation");
+							user.phone = executeQuery.getString("phone");
+							user.acceptedEmailContact = executeQuery.getBoolean("acceptedEmailContact");
+							return user;
+						}
+						return null;
+					} finally {
+						executeQuery.close();
+					}
+				} finally {
+					statement.close();
+				}
+			} finally {
+				conn.close();
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Internal SQL Error");
+		} catch (NamingException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Database unavailable");
+		}
+	}
 //	@PUT
 //	@Path("{id}/reset")
 //	@RolesAllowed("ADMIN")
