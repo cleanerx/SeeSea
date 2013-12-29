@@ -77,6 +77,20 @@ public class LicenseResourceTest extends TestCase {
         assertTrue(licenses.isEmpty());
         
 		return;
-		
 	}
+	
+//	public void testGetLicenseString() {
+//		Client client = ClientBuilder.newClient();
+//		client.register(new HttpBasicAuthFilter("x", "x"));
+//		client.register(MOXyJsonProvider.class);
+//		client.register(MultiPartFeature.class);
+//
+//		LoggingFilter loggingFilter = new LoggingFilter();
+//		client.register(loggingFilter);
+//		
+//		WebTarget basePath = client.target("http://localhost:8100").path(TestConstants.PATH).path("api2");
+//		WebTarget licensePath = basePath.path("license");
+//		licensePath.queryParam("lat1", 10);
+//		http://localhost:8100/org.osm.depth.upload/api2/license?lat1=10&lon1=10&lat2=20&lon2=20
+//	}
 }

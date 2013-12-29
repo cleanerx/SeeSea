@@ -75,7 +75,7 @@ public class LicenseResource {
 			throw new DatabaseException("Database unavailable");
 		}
 	}
-
+	
 	private List<License> getLicenses(SecurityContext context,
 			ResultSet executeQuery) throws SQLException {
 		List<License> list = new ArrayList<License>();
@@ -104,7 +104,82 @@ public class LicenseResource {
 //				Link self = Link.fromMethod(TrackResource.class,"delete").build(); //$NON-NLS-1$
 //				Response response = Response.ok().entity(entity).links(self).build();
 		return list;
-	}	
+	}
+	
+	
+	/**
+	 * 
+	 * @param lat1
+	 * @param lon1
+	 * @param lat2
+	 * @param lon2
+	 * @return  the license names used for a given bounding box area
+	 */
+	@GET
+	@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({ MediaType.TEXT_PLAIN})
+	public String getLicenses(@QueryParam("lat1") String lat1, @QueryParam("lon1") String lon1, @QueryParam("lat2") String lat2, @QueryParam("lon2") String lon2) {
+		Context initContext;
+		try {
+			initContext = new InitialContext();
+			DataSource dsDepth = (DataSource)initContext.lookup("java:/comp/env/jdbc/depth"); //$NON-NLS-1$
+			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			Connection depthConn = dsDepth.getConnection();
+			try {
+				Connection conn = ds.getConnection();
+				try {
+					ResultSet executeQuery;
+					PreparedStatement statement = depthConn.prepareStatement("SELECT DISTINCT datasetid FROM trackpoints_raw_16 WHERE trackpoints_raw_16.the_geom && ST_MakeEnvelope(?, ?, ?, ?, 4326)"); //$NON-NLS-1$
+					try {
+						statement.setDouble(1, Double.parseDouble(lon1));
+						statement.setDouble(2, Double.parseDouble(lat1));
+						statement.setDouble(3, Double.parseDouble(lon2));
+						statement.setDouble(4, Double.parseDouble(lat2));
+						executeQuery = statement.executeQuery();
+						StringBuffer buffer = new StringBuffer();
+						while(executeQuery.next()) {
+							buffer.append(executeQuery.getString(1));
+							buffer.append(',');
+						}
+						if(buffer.length() > 0) {
+							buffer.deleteCharAt(buffer.length() - 1);
+						}
+						PreparedStatement licenseStatement = conn.prepareStatement("SELECT shortname FROM license INNER JOIN (SELECT DISTINCT license FROM user_tracks WHERE track_id IN (" + buffer.toString() + ") ) l2 ON license.id = l2.license"); //$NON-NLS-1$
+						try {
+							ResultSet licensesResult = licenseStatement.executeQuery();
+							buffer = new StringBuffer();
+							while(licensesResult.next()) {
+								buffer.append(licensesResult.getString(1));
+								buffer.append(',');
+							}
+							if(buffer.length() > 0) {
+								buffer.deleteCharAt(buffer.length() - 1);
+							}
+							return buffer.toString();
+						} finally {
+							licenseStatement.close();
+						}
+					} finally {
+						statement.close();
+					}
+					
+				} finally {
+					conn.close();
+				}
+			} finally {
+				depthConn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Internal SQL Error");
+		} catch (NamingException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Database unavailable");
+		}
+
+	}
+
+
 	
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
