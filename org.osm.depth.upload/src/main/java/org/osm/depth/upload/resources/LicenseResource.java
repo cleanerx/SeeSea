@@ -129,7 +129,7 @@ public class LicenseResource {
 				Connection conn = ds.getConnection();
 				try {
 					ResultSet executeQuery;
-					PreparedStatement statement = depthConn.prepareStatement("SELECT DISTINCT datasetid FROM trackpoints_raw_16 WHERE trackpoints_raw_16.the_geom && ST_MakeEnvelope(?, ?, ?, ?, 4326)"); //$NON-NLS-1$
+					PreparedStatement statement = depthConn.prepareStatement("SELECT DISTINCT datasetid FROM trackpoints_raw_8 WHERE trackpoints_raw_16.the_geom && ST_MakeEnvelope(?, ?, ?, ?, 4326)"); //$NON-NLS-1$
 					try {
 						statement.setDouble(1, Double.parseDouble(lon1));
 						statement.setDouble(2, Double.parseDouble(lat1));
@@ -144,21 +144,26 @@ public class LicenseResource {
 						if(buffer.length() > 0) {
 							buffer.deleteCharAt(buffer.length() - 1);
 						}
-						PreparedStatement licenseStatement = conn.prepareStatement("SELECT shortname FROM license INNER JOIN (SELECT DISTINCT license FROM user_tracks WHERE track_id IN (" + buffer.toString() + ") ) l2 ON license.id = l2.license"); //$NON-NLS-1$
-						try {
-							ResultSet licensesResult = licenseStatement.executeQuery();
-							buffer = new StringBuffer();
-							while(licensesResult.next()) {
-								buffer.append(licensesResult.getString(1));
-								buffer.append(',');
+						// we have trackpoints there
+						if(buffer.length() > 0) {
+							PreparedStatement licenseStatement = conn.prepareStatement("SELECT shortname FROM license INNER JOIN (SELECT DISTINCT license FROM user_tracks WHERE track_id IN (" + buffer.toString() + ") ) l2 ON license.id = l2.license"); //$NON-NLS-1$
+							try {
+								ResultSet licensesResult = licenseStatement.executeQuery();
+								buffer = new StringBuffer();
+								while(licensesResult.next()) {
+									buffer.append(licensesResult.getString(1));
+									buffer.append(',');
+								}
+								if(buffer.length() > 0) {
+									buffer.deleteCharAt(buffer.length() - 1);
+								}
+								return buffer.toString();
+							} finally {
+								licenseStatement.close();
 							}
-							if(buffer.length() > 0) {
-								buffer.deleteCharAt(buffer.length() - 1);
-							}
-							return buffer.toString();
-						} finally {
-							licenseStatement.close();
 						}
+						// return empty string for no licenses
+						return ""; //$NON-NLS-1$
 					} finally {
 						statement.close();
 					}
