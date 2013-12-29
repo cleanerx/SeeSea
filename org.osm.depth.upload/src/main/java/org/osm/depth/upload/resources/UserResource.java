@@ -161,7 +161,7 @@ public class UserResource {
 					conn.setAutoCommit(false);
 					Statement statement = conn.createStatement();
 					try {
-						PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password, forname, surname, organisation, acceptedEmailContact, country, language) VALUES (?,?,?,?,?,?,?,?)");
+						PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password, forename, surname, organisation, acceptedEmailContact, country, language) VALUES (?,?,?,?,?,?,?,?)");
 						try {
 							PreparedStatement insertUserRoleStatement = conn.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
 							try {
