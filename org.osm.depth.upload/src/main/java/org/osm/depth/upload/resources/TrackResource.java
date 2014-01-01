@@ -134,12 +134,11 @@ public class TrackResource {
 				track.compression = executeQuery.getString("compression"); //$NON-NLS-1$
 				track.containertrack = executeQuery.getLong("containertrack"); //$NON-NLS-1$
 				Timestamp timestamp = executeQuery.getTimestamp("uploadDate"); //$NON-NLS-1$
-				if(timestamp != null) {
+				if (timestamp != null) {
 					track.uploadDate = timestamp.getTime();
 				}
 				track.license = executeQuery.getLong("license"); //$NON-NLS-1$
-				track.vesselconfigid = executeQuery
-						.getLong("vesselconfigid"); //$NON-NLS-1$
+				track.vesselconfigid = executeQuery.getLong("vesselconfigid"); //$NON-NLS-1$
 				UriBuilder ub = uriInfo.getBaseUriBuilder();
 				//						track.delete = ub.path("/track/" + track.id).build().toString(); //$NON-NLS-1$
 				list.add(track);
@@ -161,12 +160,83 @@ public class TrackResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("{id}")
-	public Track newTrackWithNullId(@javax.ws.rs.core.Context SecurityContext context,
-			Track track) {
+	public Track newTrackWithNullId(
+			@javax.ws.rs.core.Context SecurityContext context, Track track) {
 		return newTrack(context, track);
 	}
 
-	
+	/**
+	 * creating a step is twofold: Create its id and the update the file
+	 * contents later on through a put request. This way we can show progress of
+	 * the uploaded file.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Track reprocessTrack(@javax.ws.rs.core.Context SecurityContext context,
+			Track track) {
+		String username = context.getUserPrincipal().getName();
+		Context initContext;
+		try {
+			initContext = new InitialContext();
+			DataSource ds = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			Connection conn = ds.getConnection();
+			DataSource depthDS = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/depth"); //$NON-NLS-1$
+			Connection depthConn = depthDS.getConnection();
+			PreparedStatement deleteStatement;
+			try {
+				deleteStatement = conn
+						.prepareStatement("UPDATE user_tracks SET upload_state = 1 WHERE track_id = ? AND user_name = ?"); //$NON-NLS-1$
+				deleteStatement.setLong(1, track.id);
+				deleteStatement.setString(2, username);
+				deleteStatement.execute();
+				try {
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_8 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_10 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_12 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_16 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_8 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_10 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_12 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_16 WHERE datasetid = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+				} finally {
+					deleteStatement.close();
+				}
+			} finally {
+				conn.close();
+				depthConn.close();
+			}
+
+		} catch (SQLException e) {
+			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
+		} catch (NamingException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+		}
+		throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+	}
+
 	/**
 	 * creating a step is twofold: Create its id and the update the file
 	 * contents later on through a put request. This way we can show progress of
@@ -197,7 +267,8 @@ public class TrackResource {
 				Statement createIDStatement = conn.createStatement();
 				try {
 					userOwnsVesselconfiguration.setString(1, username);
-					userOwnsVesselconfiguration.setLong(2, track.vesselconfigid);
+					userOwnsVesselconfiguration
+							.setLong(2, track.vesselconfigid);
 					userMayUseLicense.setString(1, username);
 					userMayUseLicense.setLong(2, track.license);
 					if (userOwnsVesselconfiguration.executeQuery().next()
@@ -218,7 +289,8 @@ public class TrackResource {
 											track.vesselconfigid);
 									insertTrackStatement.setLong(5,
 											track.license);
-									insertTrackStatement.setString(6, track.fileName);
+									insertTrackStatement.setString(6,
+											track.fileName);
 									insertTrackStatement.execute();
 									track.id = id;
 									return track;
@@ -346,7 +418,8 @@ public class TrackResource {
 	@DELETE
 	@Path("{id}")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public void delete(@javax.ws.rs.core.Context SecurityContext context,
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Track delete(@javax.ws.rs.core.Context SecurityContext context,
 			@PathParam(value = "id") String id) {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
@@ -356,6 +429,9 @@ public class TrackResource {
 			DataSource ds = (DataSource) initContext
 					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
+			DataSource depthDS = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/depth"); //$NON-NLS-1$
+			Connection depthConn = depthDS.getConnection();
 			try {
 				PreparedStatement deleteStatement = null;
 				try {
@@ -371,6 +447,31 @@ public class TrackResource {
 						deleteStatement.setString(2, username);
 						deleteStatement.execute();
 					}
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_8 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_10 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_12 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_16 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_8 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_10 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_12 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+						deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_filter_16 WHERE datasetid = ?"); //$NON-NLS-1$
+						deleteStatement.setLong(1, trackId);
+						deleteStatement.execute();
+
 				} finally {
 					if (deleteStatement != null) {
 						deleteStatement.close();
@@ -378,6 +479,7 @@ public class TrackResource {
 				}
 			} finally {
 				conn.close();
+				depthConn.close();
 			}
 			File file = getFile(trackId);
 			if (!file.delete()) {
@@ -395,6 +497,7 @@ public class TrackResource {
 			e.printStackTrace();
 			throw new DatabaseException("Delete file not possible"); //$NON-NLS-1$
 		}
+		return new Track();
 	}
 
 	/**
@@ -405,8 +508,9 @@ public class TrackResource {
 	 */
 	private File getFile(Long trackId) throws IOException {
 		Long dirNumber = trackId / 100L * 100L;
-		String fileDirectoryConfig = config
-				.getInitParameter("org.osm.upload.dataDirectory"); //$NON-NLS-1$
+		String fileDirectoryConfig = ".";
+		// String fileDirectoryConfig = config
+		//				.getInitParameter("org.osm.upload.dataDirectory"); //$NON-NLS-1$
 		File fileDirectory = new File(fileDirectoryConfig + File.separator
 				+ dirNumber.toString());
 		String trackIDString = trackId.toString();
