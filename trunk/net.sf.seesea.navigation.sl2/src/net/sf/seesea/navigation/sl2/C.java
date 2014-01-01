@@ -42,18 +42,18 @@ public class C {
 		 
 //			 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\Sonar0000.sl2"); //$NON-NLS-1$
 //			 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\sonar1.sl2"); //$NON-NLS-1$
-		 File file = new File("S:\\4077.dat"); //$NON-NLS-1$
+		 File file = new File("S:\\7331.dat"); //$NON-NLS-1$
 			RandomAccessFile raf = new RandomAccessFile(file, "r");
 			int i = 0;
 			
 			int k = 0;
 			
 			int lastI = 0;
-			byte[] x = new byte[2064];
+			byte[] x = new byte[65536];
 			while(true) {
-				raf.read(x, 0, 2064);
+				raf.read(x, 0, 65536);
 				raf.seek(i++);
-				
+
 				// longitude - 116 : int but negativly and positively changing arbitrarily 
 				// longitude - 112 : int but negativly and positively changing arbitrarily 
 
@@ -83,7 +83,30 @@ public class C {
 				// longitude - 20 : -1.0 (double)
 				// longitude - 16 : -1.0 (double)
 				// longitude - 12 : 0
-				
+				int a11 = toBigEndianShort(x, 2); // 0
+				int a12 = toBigEndianShort(x, 4); // 0
+				int a121 = toBigEndianShort(x, 6); // 0
+				int a122 = toBigEndianShort(x, 8); // 0
+				int a123 = toBigEndianShort(x, 10); // 0
+				int a124 = toBigEndianShort(x, 12); // 0
+				int a125 = toBigEndianShort(x, 14); // 0
+				int a126 = toBigEndianShort(x, 16); // 0
+				int a127 = toBigEndianShort(x, 18); // 0
+				int a128 = toBigEndianShort(x, 20); // 0
+				int a129 = toBigEndianShort(x, 22); // 0
+				int a130 = toBigEndianShort(x, 24); // 0
+				int a131 = toBigEndianShort(x, 26); // 0
+				int a132 = toBigEndianShort(x, 28); // 0
+
+				int size1 = toBigEndianShort(x, 34); // 0
+				int size = toBigEndianShort(x, 36); // 0
+//				int a131 = toBigEndianShort(x, 144 + 1920); // 0
+//				int a13 = toBigEndianShort(x, 146 + 1920); // 0
+//				int a14 = toBigEndianShort(x, 148 + 1920 ); // 0
+//				int a15 = toBigEndianShort(x, 150 + 1920); // 0
+//				int a16 = toBigEndianShort(x, 152 + 1920); // 0
+//				int a17 = toBigEndianShort(x, 152 + 1920); // 0
+
 				double y = Float.intBitsToFloat(toBigEndianInt(x, 0)); // double -1.0 
 				int c = toBigEndianInt(x, 0);
 
@@ -94,8 +117,8 @@ public class C {
 
 				int sensorid = toBigEndianInt(x, 32);
 
-				double longitude = toLongitude(toBigEndianInt(x, 108));
-				double latitude = toLatitude(toBigEndianInt(x, 112));
+				double longitude = toLongitude(toBigEndianInt(x, 110));
+				double latitude = toLatitude(toBigEndianInt(x, 114));
 				double surfaceDepth = Float.intBitsToFloat(toBigEndianInt(x, 24));
 				double topOfBottomDepth = Float.intBitsToFloat(toBigEndianInt(x, 28)); // strange - double
 
@@ -118,6 +141,16 @@ public class C {
 				
 //				if(longitude > 7 && longitude < 13  && latitude > 40 && latitude < 60) {
 				if(longitude > 103 && longitude < 105  && latitude > 0 && latitude < 2) {
+					System.out.println("Start:   " + a11 + ":" + a12);
+					System.out.println("Next:    " + a121 + ":" + a122);
+					System.out.println("Next:    " + a123 + ":" + a124);
+					System.out.println("Next:    " + a125 + ":" + a126);
+					System.out.println("Next:    " + a127 + ":" + a128);
+					System.out.println("Next:    " + a129 + ":" + a130);
+					System.out.println("Next:    " + a131 + ":" + a132);
+//					System.out.println("EndNext: " + a13 + ":" + a14);
+//					System.out.println("EndNext: " + a15 + ":" + a16);
+//					System.out.println(a11 + ":" + a12 + ":" + a121 +":" + a13 + ":" + a14 + ":" + size);
 					System.out.println(i + ":" + (i - lastI)  + ":" + longitude + " " + latitude + " " + temp + " " + depth);
 //					System.out.println(y + ":" + c + " " + latitude + ":" + longitude);
 //					System.out.println(sensorid);
@@ -136,11 +169,15 @@ public class C {
 //					System.out.println("sd:" +  surfaceDepth + " td:" + topOfBottomDepth + " time:" + timeOffset  + " time:" + timeOffset1  + " speed " + speed + " track:" + track + " track1:" + track1 + " alt:" + altitude1 + " alt:" + altitude + " rate:" + rate);
 					lastI = i;
 				}
+
 			}
 
 	 }
 	 
 	 
+	 	public static int toBigEndianShort(byte[] raw, int offset) {
+			return 0x0000FF00&(raw[offset+1]<<8) | 0x000000FF&raw[offset];
+		}
 	 
 	 	public static int toBigEndianInt(byte[] raw, int offset) {
 			return 0xFF000000&(raw[offset+3]<<24) | 0x00FF0000&(raw[offset+2]<<16) | 0x0000FF00&(raw[offset+1]<<8) | 0x000000FF&raw[offset];
