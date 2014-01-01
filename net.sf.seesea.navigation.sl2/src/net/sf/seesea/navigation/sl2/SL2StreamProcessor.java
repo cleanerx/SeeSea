@@ -74,17 +74,17 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 		}
 		if(state.equals(MessageProcessingState.HEADER_START)) {
 			message[counter++] = c;
-			if(counter == 10) {
+			if(counter == 8) {
 				state = MessageProcessingState.BLOCK_START;
 				counter = 0;
 			}
 		} else {
 			if (state.equals(MessageProcessingState.BLOCK_START)) {
 				message[counter++] = c;
-				if(counter == 28) {
+				if(counter == 30) {
 			 		ByteBuffer allocate = ByteBuffer.allocate(2);
-			 		allocate.put((byte) message[26]);
-			 		allocate.put((byte) message[27]);
+			 		allocate.put((byte) message[28]);
+			 		allocate.put((byte) message[29]);
 			 		allocate.order(ByteOrder.LITTLE_ENDIAN);
 			 		allocate.flip();
 					blockEnd = allocate.getShort();
