@@ -41,7 +41,7 @@ public class SL2Reader implements ISL2Listener {
 
 		short blockSize = getShort(data, 28);
 		short lastBlockSize = getShort(data, 30);
-		Short sensorID = getShort(data, 30);
+		Short sensorID = getShort(data, 32);
 		// // 28
 		// short a1 = toBigEndianShort(dataInputStream.readShort()); // 30
 		// short dataBlockSize = toBigEndianShort(dataInputStream.readShort());
