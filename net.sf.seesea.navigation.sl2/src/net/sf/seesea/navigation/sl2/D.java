@@ -27,13 +27,13 @@ public class D {
 	
 	public static void main(String[] args) throws IOException {
 //				 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\Sonar0000.sl2"); //$NON-NLS-1$
-				 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\sonar1.sl2"); //$NON-NLS-1$
-//		File file = new File("S:\\4077.dat"); //$NON-NLS-1$
+//				 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\sonar1.sl2"); //$NON-NLS-1$
+		File file = new File("S:\\7381.dat"); //$NON-NLS-1$
 		RandomAccessFile raf = new RandomAccessFile(file, "r");
 		DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
 		byte[] x = new byte[4096];
-		// header is 10 bytes;
-		dataInputStream.read(x, 0, 10);
+		// header is 8 bytes;
+		dataInputStream.read(x, 0, 8);
 		
 		
 		 JFrame fr = new JFrame();
@@ -51,98 +51,125 @@ public class D {
 
 		int blockcounter = 0;
 		while(true) {
-			short a11 = toBigEndianShort(dataInputStream.readShort()); // 0
-			short a12 = toBigEndianShort(dataInputStream.readShort()); // 2
-			int a2 = toBigEndianInt(dataInputStream.readInt()); // 4
-//			dataInputStream.read(x, 0, 4);
-//			float a3 = Float.intBitsToFloat(toBigEndianInt(x,0)); // 40
-			short a31 = toBigEndianShort(dataInputStream.readShort()); // 8
-			short a32 = toBigEndianShort(dataInputStream.readShort()); // 10
-//			int a3 = toBigEndianInt(dataInputStream.readInt()); // 36
-			int a4 = toBigEndianInt(dataInputStream.readInt()); // 12
-			int a5 = toBigEndianInt(dataInputStream.readInt()); // 16
-			short a61 = toBigEndianShort(dataInputStream.readShort()); // 20
-			short a62 = toBigEndianShort(dataInputStream.readShort()); // 22
-			short a7 = toBigEndianShort(dataInputStream.readShort()); // 24
-			short blockSize = toBigEndianShort(dataInputStream.readShort()); // 26
-			short lastBlockSize = toBigEndianShort(dataInputStream.readShort()); // 28
-			short a1 = toBigEndianShort(dataInputStream.readShort()); // 30
-			short dataBlockSize = toBigEndianShort(dataInputStream.readShort()); // 32 probably data block size
-			int frameIndex = toBigEndianInt(dataInputStream.readInt()); // 34
-			int c = toBigEndianInt(dataInputStream.readInt()); // 36
-			dataInputStream.read(x, 0, 4);
-			float lowerLimit = Float.intBitsToFloat(toBigEndianInt(x,0)); // 40
-			int e = toBigEndianInt(dataInputStream.readInt()); // 44
-			int f = toBigEndianInt(dataInputStream.readInt()); // 48
+//			short y = toBigEndianShort(dataInputStream.readShort()); // 142
+			int a2 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 0
+			int a11 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 2
+			long position1 = a2 + (a11 * 65536);
 
-			dataInputStream.read(x, 0, 4);
-			float g = Float.intBitsToFloat(toBigEndianInt(x,0)); // 52
-			int time1 = toBigEndianInt(dataInputStream.readInt()); // 56
-			dataInputStream.read(x, 0, 4);
-			float speed = Float.intBitsToFloat(toBigEndianInt(x,0)); // 60
-			dataInputStream.read(x, 0, 4);
-			float j = Float.intBitsToFloat(toBigEndianInt(x,0)); // 64
-			short k1 = toBigEndianShort(dataInputStream.readShort()); // 68
-			short k2 = toBigEndianShort(dataInputStream.readShort()); // 70
+			int a12 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 4
+			int a21 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 6
+			long position2 = a12 + (a21 * 65536);
 
-//			dataInputStream.read(x, 0, 4);
-//			float k = Float.intBitsToFloat(toBigEndianInt(x,0)); // 20
-			int l = toBigEndianInt(dataInputStream.readInt()); // 72
-			dataInputStream.read(x, 0, 4);
-			float m = Float.intBitsToFloat(toBigEndianInt(x,0)); // 76
-			dataInputStream.read(x, 0, 4);
-			float n = Float.intBitsToFloat(toBigEndianInt(x,0)); // 80
-			dataInputStream.read(x, 0, 4);
-			float o = Float.intBitsToFloat(toBigEndianInt(x,0)); // 84
-			dataInputStream.read(x, 0, 4);
-			float p = Float.intBitsToFloat(toBigEndianInt(x,0)); // 88
-			dataInputStream.read(x, 0, 4);
-			float q = Float.intBitsToFloat(toBigEndianInt(x,0)); // 92
-			dataInputStream.read(x, 0, 4);
-			float depth = Float.intBitsToFloat(toBigEndianInt(x,0)); // 96
-			dataInputStream.read(x, 0, 4);
-			float waterTemp = Float.intBitsToFloat(toBigEndianInt(x,0)); // 100
-			double longitude = toLongitude(toBigEndianInt(dataInputStream.readInt())); // 104
-			double latitude = toLatitude(toBigEndianInt(dataInputStream.readInt())); // 108
-			dataInputStream.read(x, 0, 4);
-			float surfaceDepth = Float.intBitsToFloat(toBigEndianInt(x,0)); // 112
-			dataInputStream.read(x, 0, 4);
-			double degrees = Math.toDegrees(Float.intBitsToFloat(toBigEndianInt(x,0))); // 116
-			dataInputStream.read(x, 0, 4);
-			float altitude = Float.intBitsToFloat(toBigEndianInt(x,0)); // 120
-//			dataInputStream.read(x, 0, 4);
-			int u = toBigEndianInt(dataInputStream.readInt()); // 124 getting 8 or 12
-//			float u = Float.intBitsToFloat(toBigEndianInt(x,0)); // 124
-//			dataInputStream.read(x, 0, 4);
-			int v = toBigEndianInt(dataInputStream.readInt()); // 128 getting 8 or 12
-			int w = toBigEndianInt(dataInputStream.readInt()); // 132
-			int time2 = toBigEndianInt(dataInputStream.readInt()); // 136
+			int a31 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 8
+			int a32 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 10
+
+			int a34 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 12
+			int a36 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 14
+			long position3 = a34 + (a36 * 65536);
 			
-			short y = toBigEndianShort(dataInputStream.readShort()); // 26
-
-//			int y = toBigEndianInt(dataInputStream.readInt()); // 140
-//			int h = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int i = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int j = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int k = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int l = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int m = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int n = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int o = toBigEndianInt(dataInputStream.readInt()); // 48
-//			int p = toBigEndianInt(dataInputStream.readInt()); // 48
-//			double i = Float.intBitsToFloat(toBigEndianInt(dataInputStream.read(x, 0, 4))); // 20
+			int a38 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 16
 			
-//			dataInputStream.read(x, 0, 2);;
-//			ByteBuffer buffer = ByteBuffer.allocate(2);
-//					buffer.put
-//			short readShort = x[0] <<  
+			short a5 = toBigEndianShort(dataInputStream.readShort()); // 18
+			short a51 = toBigEndianShort(dataInputStream.readShort()); // 20
+			short a61 = toBigEndianShort(dataInputStream.readShort()); // 22
+			short a62 = toBigEndianShort(dataInputStream.readShort()); // 24
+			short a7 = toBigEndianShort(dataInputStream.readShort()); // 26
+			short blockSize = toBigEndianShort(dataInputStream.readShort()); // 28
+			short lastBlockSize = toBigEndianShort(dataInputStream.readShort()); // 30
+			short sensorType = toBigEndianShort(dataInputStream.readShort()); // 32
+			short dataBlockSize = toBigEndianShort(dataInputStream.readShort()); // 34 probably data block size
+			int frameIndex = toBigEndianInt(dataInputStream.readInt()); // 36
+			dataInputStream.read(x, 0, 4); // 40
+			float upperLimit = Float.intBitsToFloat(toBigEndianInt(x,0));
+			dataInputStream.read(x, 0, 4); // 44
+			float lowerLimit = Float.intBitsToFloat(toBigEndianInt(x,0)); 
+			int c = toBigEndianInt(dataInputStream.readInt()); // 48
+			int f = toBigEndianInt(dataInputStream.readInt()); // 52
+			int byte1 = dataInputStream.readByte(); // 56
+			int frequency = dataInputStream.readByte(); // 57
+			int byte3 = dataInputStream.readByte(); //58
+			int byte4 = dataInputStream.readByte(); //59
+
+			int timeX = toBigEndianInt(dataInputStream.readInt()); // 60
+			dataInputStream.read(x, 0, 4);
+			float depth3 = Float.intBitsToFloat(toBigEndianInt(x,0)) * 0.3048f ; // 64
+//			double cog = (course / Math.PI) * 180;
+			int time1 = toBigEndianInt(dataInputStream.readInt()); // 68
+			int f2 = toBigEndianInt(dataInputStream.readInt()); // 72
+			dataInputStream.read(x, 0, 4); // 76
+			float keelDepth = Float.intBitsToFloat(toBigEndianInt(x,0)); 
+
+			dataInputStream.read(x, 0, 4);
+			float k = Float.intBitsToFloat(toBigEndianInt(x,0)); // 80
+			dataInputStream.read(x, 0, 4);
+			float l = Float.intBitsToFloat(toBigEndianInt(x,0)); // 84
+			dataInputStream.read(x, 0, 4);
+			float m = Float.intBitsToFloat(toBigEndianInt(x,0)); // 88
+			dataInputStream.read(x, 0, 4);
+			float n = Float.intBitsToFloat(toBigEndianInt(x,0)); // 92
+			dataInputStream.read(x, 0, 4);
+			float o = Float.intBitsToFloat(toBigEndianInt(x,0)); // 96
+			dataInputStream.read(x, 0, 4);
+			float speed = Float.intBitsToFloat(toBigEndianInt(x,0)); // 100
+			dataInputStream.read(x, 0, 4);
+			float waterTemp = Float.intBitsToFloat(toBigEndianInt(x,0)); // 104
+			double longitude = toLongitude(toBigEndianInt(dataInputStream.readInt())); // 108
+			double latitude = toLatitude(toBigEndianInt(dataInputStream.readInt())); // 112
+			dataInputStream.read(x, 0, 4);
+			float speedthroughwater = Float.intBitsToFloat(toBigEndianInt(x,0)); // 116
+			dataInputStream.read(x, 0, 4);
+			double cog = Math.toDegrees(Float.intBitsToFloat(toBigEndianInt(x,0))); // 120
+			dataInputStream.read(x, 0, 4);
+			float altitude = Float.intBitsToFloat(toBigEndianInt(x,0)) * 0.3048f; // 124
+			dataInputStream.read(x, 0, 4); // 128
+			double heading = Math.toDegrees(Float.intBitsToFloat(toBigEndianInt(x,0)));
+			int w3 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 130
+			int w4 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 132
+			int w1 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 134
+			int w2 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 136
+			int compare = w3 & 1;
+			boolean trackValid = (compare == 1 ? true : false);
+			compare = w3 & 2;
+			boolean depthValid = (compare == 2 ? true : false);
+			compare = w3 & 4;
+			boolean waterTempValid = (compare == 4 ? true : false);
+			compare = w3 & 8;
+			boolean positionValid = (compare == 8 ? true : false);
+			compare = w3 & 16;
+			boolean cogValid = (compare == 16 ? true : false);
+			compare = w3 & 32;
+			boolean x1Valid = (compare == 32 ? true : false);
+			compare = w3 & 64;
+			boolean speedValid = (compare == 64 ? true : false);
+			compare = w3 & 128;
+			boolean x3Valid = (compare == 128 ? true : false);
+			compare = w3 & 256;
+			boolean x4Valid = (compare == 256 ? true : false);
+			compare = w3 & 512;
+			boolean longitudeValid = (compare == 512 ? true : false);
+			compare = w3 & 1024;
+			boolean x6Valid = (compare == 1024 ? true : false);
+			compare = w3 & 2048;
+			boolean x7Valid = (compare == 2048 ? true : false);
+			compare = w3 & 4096;
+			boolean x8Valid = (compare == 4096 ? true : false);
+			compare = w3 & 8192;
+			boolean altitudeValid = (compare == 8192 ? true : false);
+			compare = w3 & 16384;
+			boolean headingValid = (compare == 16384 ? true : false);
+
+			int time2 = toBigEndianInt(dataInputStream.readInt()); // 140
+			
 			if(frameIndex == 400) {
 				System.out.println("x");
 			}
 //			System.out.println(frameIndex + ":" + y);
-			dataInputStream.read(x, 0, blockSize - 144);
+			dataInputStream.read(x, 0, dataBlockSize);
 
-			if(a1 == 0) {
+//			short y = toBigEndianShort(dataInputStream.readShort()); // 142
+//			int x2 = toBigEndianInt(dataInputStream.readInt()); // 140
+
+			if(sensorType == 0) {
 //				System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
 				for (int row=0; row<dataBlockSize; row++) {
 					if(ox >= wr.getWidth()) {
@@ -158,7 +185,8 @@ public class D {
 				}
 			}
 			blockcounter++;
-			System.out.println(blockcounter + ":" + frameIndex);
+			System.out.println(depth3 + ":" + waterTemp);
+//			System.out.println(blockcounter + ":" + frameIndex);
 
 			
 			// header is 10 bytes;
@@ -166,6 +194,10 @@ public class D {
 		}
 		
 
+	}
+	public static int toBigEndianShortAsInt(int littleendian) {
+		return (int) (((0xFF00&littleendian)>>8)&0x00FF |
+				((0x00FF&littleendian)<<8)&0xFF00);
 	}
 	
 	public static short toBigEndianShort(short littleendian) {

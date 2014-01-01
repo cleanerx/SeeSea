@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -40,8 +39,8 @@ public class SL2Reader implements ISL2Listener {
 		// short a62 = toBigEndianShort(dataInputStream.readShort()); // 22
 		// short a7 = toBigEndianShort(dataInputStream.readShort()); // 24
 
-		short blockSize = getShort(data, 26);
-		short lastBlockSize = getShort(data, 28);
+		short blockSize = getShort(data, 28);
+		short lastBlockSize = getShort(data, 30);
 		Short sensorID = getShort(data, 30);
 		// // 28
 		// short a1 = toBigEndianShort(dataInputStream.readShort()); // 30
@@ -57,7 +56,7 @@ public class SL2Reader implements ISL2Listener {
 		// dataInputStream.read(x, 0, 4);
 		// float g = Float.intBitsToFloat(toBigEndianInt(x,0)); // 52
 		// int time1 = toBigEndianInt(dataInputStream.readInt()); // 56
-		 float speed = Float.intBitsToFloat(getInt(data, 62)); // 60
+//		 float depthValue = Float.intBitsToFloat(getInt(data, 62)) * 0.3048f; // 60
 		// dataInputStream.read(x, 0, 4);
 		// float j = Float.intBitsToFloat(toBigEndianInt(x,0)); // 64
 		// short k1 = toBigEndianShort(dataInputStream.readShort()); // 30
@@ -81,16 +80,15 @@ public class SL2Reader implements ISL2Listener {
 		// float depth = Float.intBitsToFloat(toBigEndianInt(x,0)); // 96
 		// dataInputStream.read(x, 0, 4);
 		// float waterTemp = Float.intBitsToFloat(toBigEndianInt(x,0)); // 100
+		 float surfaceDepth = Float.intBitsToFloat(getInt(data,64)) * 0.3048f;
 
-		 float depthValue = Float.intBitsToFloat(getInt(data,98));
-		 float waterTemperature = Float.intBitsToFloat(getInt(data,102));
-
+		 float waterTemperature = Float.intBitsToFloat(getInt(data,104));
+		 Longitude longitude = GeoParser.parseLongitude(toLongitude(getInt(data, 108))); // 104
+		 Latitude latitude = GeoParser.parseLatitude(toLatitude(getInt(data, 112))); // 104
+		 float speed = Float.intBitsToFloat(getInt(data,116));
+		 float cog = Float.intBitsToFloat(getInt(data,120));
 		 
-		 Longitude longitude = GeoParser.parseLongitude(toLongitude(getInt(data, 106))); // 104
-		 Latitude latitude = GeoParser.parseLatitude(toLatitude(getInt(data, 110))); // 104
-		 float surfaceDepth = Float.intBitsToFloat(getInt(data,114));
-		 
-		 int time = getInt(data,138);
+		 int time = getInt(data,140);
 		 
 		// 112
 		// dataInputStream.read(x, 0, 4);
@@ -117,7 +115,7 @@ public class SL2Reader implements ISL2Listener {
 			geoPosition3D.setTime(new Date(time));
 			Depth depth = GeoFactory.eINSTANCE.createDepth();
 			depth.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
-			depth.setDepth(depthValue);
+			depth.setDepth(surfaceDepth);
 			depth.setSensorID(sensorID.toString());
 			depth.setValid(true);
 			depth.setTime(new Date(time));
