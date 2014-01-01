@@ -190,11 +190,19 @@ public class TrackResource {
 			Connection depthConn = depthDS.getConnection();
 			PreparedStatement deleteStatement;
 			try {
-				deleteStatement = conn
-						.prepareStatement("UPDATE user_tracks SET upload_state = 1 WHERE track_id = ? AND user_name = ?"); //$NON-NLS-1$
-				deleteStatement.setLong(1, track.id);
-				deleteStatement.setString(2, username);
-				deleteStatement.execute();
+				if (context.isUserInRole("ADMIN")) { //$NON-NLS-1$
+					deleteStatement = conn
+							.prepareStatement("UPDATE user_tracks SET upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.execute();
+				} else {
+					deleteStatement = conn
+							.prepareStatement("UPDATE user_tracks SET upload_state = 1 WHERE track_id = ? AND user_name = ?"); //$NON-NLS-1$
+					deleteStatement.setLong(1, track.id);
+					deleteStatement.setString(2, username);
+					deleteStatement.execute();
+				}
+
 				try {
 					deleteStatement = depthConn.prepareStatement("DELETE FROM trackpoints_raw_8 WHERE datasetid = ?"); //$NON-NLS-1$
 					deleteStatement.setLong(1, track.id);
