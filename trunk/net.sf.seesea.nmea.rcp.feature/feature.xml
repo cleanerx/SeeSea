@@ -21,11 +21,11 @@
          version="0.0.0"/>
 
    <includes
-         id="net.sf.seesea.eclipse"
+         id="org.eclipse.help"
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.help"
+         id="net.sf.seesea.eclipse.feature"
          version="0.0.0"/>
 
    <plugin
