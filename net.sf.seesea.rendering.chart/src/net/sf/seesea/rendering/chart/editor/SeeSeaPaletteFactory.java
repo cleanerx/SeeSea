@@ -71,10 +71,10 @@ public class SeeSeaPaletteFactory {
 //		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/Route.gif"); //$NON-NLS-1$
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 //		creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getRoute());
-		ToolEntry anchorToolEntry = new AnchorWarnToolEntry("Anchor Alert", "Defines an area for anchor alert");
-		navigationGroup.add(anchorToolEntry);
-		ToolEntry distanceToolEntry = new DistanceToolEntry();
-		navigationGroup.add(distanceToolEntry);
+//		ToolEntry anchorToolEntry = new AnchorWarnToolEntry("Anchor Alert", "Defines an area for anchor alert");
+//		navigationGroup.add(anchorToolEntry);
+//		ToolEntry distanceToolEntry = new DistanceToolEntry();
+//		navigationGroup.add(distanceToolEntry);
 //		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/NamedPosition.gif"); //$NON-NLS-1$
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 //		CreationFactory creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getNamedPosition());
@@ -87,14 +87,14 @@ public class SeeSeaPaletteFactory {
 //		ConnectionCreationToolEntry connectionCreationToolEntry = new ConnectionCreationToolEntry("Create Route", "Creates a route at each clicked position of the mouse cursor", creationFactory, imageDescriptor, imageDescriptor);
 //		navigationGroup.add(connectionCreationToolEntry);
 		
-		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/Route.gif"); //$NON-NLS-1$
-		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
-//		creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getRoute());
-		ToolEntry cacheToolEntry = new CacheToolEntry("Cache Area", "Caches the chosen area on hard disk");
-		navigationGroup.add(cacheToolEntry);
-
-		ToolEntry cacheToolEntry2 = new Cache2ToolEntry("Cache Area2", "Caches the chosen area on hard disk");
-		navigationGroup.add(cacheToolEntry2);
+//		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/Route.gif"); //$NON-NLS-1$
+//		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
+////		creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getRoute());
+//		ToolEntry cacheToolEntry = new CacheToolEntry("Cache Area", "Caches the chosen area on hard disk");
+//		navigationGroup.add(cacheToolEntry);
+//
+//		ToolEntry cacheToolEntry2 = new Cache2ToolEntry("Cache Area2", "Caches the chosen area on hard disk");
+//		navigationGroup.add(cacheToolEntry2);
 
 		return seeseaPalette;
 	}
