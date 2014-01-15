@@ -50,7 +50,7 @@ import org.osgi.framework.ServiceReference;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
-    private static final String VERSION = "1.0.0 Alpha 5"; //$NON-NLS-1$
+    private static final String VERSION = "1.0.0 Alpha 6"; //$NON-NLS-1$
 
 	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
