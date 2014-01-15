@@ -41,10 +41,6 @@
          version="0.0.0"/>
 
    <includes
-         id="net.sf.seesea.eclipse"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.emf.ecore"
          version="0.0.0"/>
 
@@ -62,6 +58,10 @@
 
    <includes
          id="org.eclipse.emf.edit"
+         version="0.0.0"/>
+
+   <includes
+         id="net.sf.seesea.eclipse.feature"
          version="0.0.0"/>
 
    <requires>
