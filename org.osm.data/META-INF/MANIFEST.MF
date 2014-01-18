@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Openstreetmap Core
+Bundle-SymbolicName: org.osm.data
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.osm.data.OSMActivator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: org.osm.data
+Bundle-ClassPath: lib/gdal.jar,
+ .
