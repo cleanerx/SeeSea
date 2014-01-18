@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Depth Contours
+Bundle-SymbolicName: org.osm.depth.contours;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.osm.depth.contours.DepthContousActivator
+Bundle-Vendor: OpenSeaMap
+Require-Bundle: org.eclipse.core.runtime,
+ org.gdal;bundle-version="1.10.1",
+ net.sf.seesea.data.io.postgis;bundle-version="1.0.0",
+ org.osm.data;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
