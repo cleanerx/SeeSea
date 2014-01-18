@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GDAL Geographic Library
+Bundle-SymbolicName: org.gdal
+Bundle-Version: 1.10.1
+Bundle-Activator: org.gdal.GDALActivator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: lib/gdal.jar,
+ .
