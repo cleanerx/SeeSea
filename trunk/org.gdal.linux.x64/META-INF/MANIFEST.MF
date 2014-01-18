@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GDAL x64 Libraries
+Bundle-SymbolicName: org.gdal.linux.x64
+Bundle-Version: 1.10.1
+Bundle-Vendor: OpenSeaMap
+Fragment-Host: org.gdal;bundle-version="1.10.1"
+Eclipse-PlatformFilter: (&(osgi.os=linux)(osgi.arch=x86_64))
+Bundle-NativeCode: native/libgdalconstijni.so;
+ native/libgdaljni.so;
+ native/libogrjni.so;
+ native/libosrjni.so;
+ native/libgdal.so;
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
