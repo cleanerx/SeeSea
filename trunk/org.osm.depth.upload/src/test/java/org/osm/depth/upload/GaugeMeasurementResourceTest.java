@@ -59,7 +59,7 @@ public class GaugeMeasurementResourceTest extends TestCase {
         for(int i = 0 ; i < 3 ;i++) {
         	GaugeMeasurement gaugeMeasurement = new GaugeMeasurement();
         	gaugeMeasurement.gaugeId = gauge2.id;
-        	gaugeMeasurement.timestamp = calendar.getTime();
+        	gaugeMeasurement.timestamp = calendar.getTime().getTime();
         	gaugeMeasurement.lengthUnit = LengthUnit.METERS;
         	gaugeMeasurement.value = value;
         	calendar.add(Calendar.HOUR, 1);
@@ -76,7 +76,7 @@ public class GaugeMeasurementResourceTest extends TestCase {
         	assertEquals(gauge2.id, gaugeMeasurement.gaugeId);
         	assertEquals(LengthUnit.METERS, gaugeMeasurement.lengthUnit);
         	assertEquals(value, gaugeMeasurement.value, 0.0001);
-        	assertEquals(0,calendar.getTime().compareTo(gaugeMeasurement.timestamp));
+        	assertEquals(0,calendar.getTime().getTime() == gaugeMeasurement.timestamp);
         	calendar.add(Calendar.HOUR, 1);
         	value += 0.1;
         }

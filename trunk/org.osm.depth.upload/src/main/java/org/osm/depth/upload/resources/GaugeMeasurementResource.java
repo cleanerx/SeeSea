@@ -61,21 +61,22 @@ public class GaugeMeasurementResource {
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
 			try {
-				Statement statement = conn.createStatement();
+				PreparedStatement statement = conn.prepareStatement("SELECT gaugeid, value, time FROM gaugemeasurement g WHERE gaugeid = ? ORDER BY time DESC"); //$NON-NLS-1$
 				try {
-					ResultSet executeQuery = statement.executeQuery("SELECT * FROM gaugemeasurement g ORDER BY time"); //$NON-NLS-1$
+					statement.setLong(1, Long.parseLong(id));
+					ResultSet executeQuery = statement.executeQuery();
 					
 					List<GaugeMeasurement> list = new ArrayList<GaugeMeasurement>();
 					while(executeQuery.next()) {
 						GaugeMeasurement gaugeMeasurement = new GaugeMeasurement();
-						gaugeMeasurement.gaugeId = executeQuery.getLong("gaugeid");
-						gaugeMeasurement.value = executeQuery.getFloat("value");
-						gaugeMeasurement.timestamp = new Date(executeQuery.getTimestamp("time").getTime());
+						gaugeMeasurement.gaugeId = executeQuery.getLong("gaugeid"); //$NON-NLS-1$
+						gaugeMeasurement.value = executeQuery.getFloat("value"); //$NON-NLS-1$
+						gaugeMeasurement.timestamp = executeQuery.getTimestamp("time").getTime(); //$NON-NLS-1$
 						try {
 							gaugeMeasurement.lengthUnit = LengthUnit.METERS;
 						} catch (IllegalArgumentException e) {
 //					gaugeMeasurement.gaugeType = GaugeType.UNDEFINED; // no such gauge type
-						}
+						}	
 						list.add(gaugeMeasurement);
 					}
 					return list;
@@ -108,7 +109,7 @@ public class GaugeMeasurementResource {
 				try {
 					statement.setLong(1, gaugeMeasurement.gaugeId);
 					statement.setFloat(2, gaugeMeasurement.value);
-					statement.setTimestamp(3, new Timestamp(gaugeMeasurement.timestamp.getTime()));
+					statement.setTimestamp(3, new Timestamp(gaugeMeasurement.timestamp));
 					statement.execute();
 					
 					throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
