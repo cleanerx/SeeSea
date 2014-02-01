@@ -263,6 +263,7 @@ public class NMEA0183Reader implements IDataReader {
 		PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
 		CompositeMeasurement measurement = physxFactory
 				.createCompositeMeasurement();
+		setSensorID(nmeaContent[0], measurement);
 		List<Measurement> measurements = measurement.getMeasurements();
 		if (nmeaContent.length > 1) {
 			Depth depthBelowTransducer = null;
@@ -280,7 +281,7 @@ public class NMEA0183Reader implements IDataReader {
 					// fail silently
 				}
 			}
-			if (nmeaContent.length > 2 && !nmeaContent[2].isEmpty() && depthBelowTransducer != null) {
+			if (nmeaContent.length > 2 && !nmeaContent[2].isEmpty() && depthBelowTransducer == null) {
 				try {
 					double offset = Double.parseDouble(nmeaContent[2]);
 					if (offset != 0.0) {
