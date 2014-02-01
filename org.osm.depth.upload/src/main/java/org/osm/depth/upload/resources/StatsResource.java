@@ -45,7 +45,7 @@ public class StatsResource {
 				try {
 					statement = depthConn.createStatement();
 					try {
-						statement.execute("SELECT count(datasetid) FROM gebco"); //$NON-NLS-1$
+						statement.execute("SELECT count(datasetid) FROM trackpoints_raw_16"); //$NON-NLS-1$
 						ResultSet resultSet = statement.getResultSet();
 						while(resultSet.next()) {
 							stats.contributedpoints = resultSet.getInt(1);
@@ -55,7 +55,7 @@ public class StatsResource {
 					}
 					statement = depthConn.createStatement();
 					try {
-						statement.execute("SELECT count(DISTINCT datasetid) FROM gebco"); //$NON-NLS-1$
+						statement.execute("SELECT COUNT(datasetid) FROM (SELECT DISTINCT datasetid FROM trackpoints_raw_16) AS temp"); //$NON-NLS-1$
 						ResultSet resultSet = statement.getResultSet();
 						while(resultSet.next()) {
 							stats.trackscount = resultSet.getInt(1);
