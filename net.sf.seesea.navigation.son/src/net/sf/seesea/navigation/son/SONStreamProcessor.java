@@ -100,7 +100,7 @@ public class SONStreamProcessor implements IStreamProcessor {
 	
 	public SONHeader readBlock(int[] block) {
 		System.out.println(block.length);
-		if(block.length < 67) {
+		if(block.length < 62) {
 			return null;
 		}
 		SONHeader sonHeader = new SONHeader();
