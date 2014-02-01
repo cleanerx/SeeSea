@@ -43,7 +43,7 @@ public class StatsResource {
 				}
 				Connection depthConn = dsDepth.getConnection();
 				try {
-					statement = connection.createStatement();
+					statement = depthConn.createStatement();
 					try {
 						statement.execute("SELECT count(datasetid) FROM gebco"); //$NON-NLS-1$
 						ResultSet resultSet = statement.getResultSet();
@@ -53,7 +53,7 @@ public class StatsResource {
 					} finally {
 						statement.close();
 					}
-					statement = connection.createStatement();
+					statement = depthConn.createStatement();
 					try {
 						statement.execute("SELECT count(DISTINCT datasetid) FROM gebco"); //$NON-NLS-1$
 						ResultSet resultSet = statement.getResultSet();
