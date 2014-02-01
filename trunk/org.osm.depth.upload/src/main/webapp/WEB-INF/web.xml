@@ -107,7 +107,13 @@
     </web-resource-collection>
     <web-resource-collection>
       <web-resource-name>Gauges</web-resource-name>
-      <url-pattern>/api2/users/gauge</url-pattern>
+      <url-pattern>/api2/gauge</url-pattern>
+      <http-method>OPTIONS</http-method>
+      <http-method>GET</http-method>
+    </web-resource-collection>
+    <web-resource-collection>
+      <web-resource-name>Status</web-resource-name>
+      <url-pattern>/api2/stats</url-pattern>
       <http-method>OPTIONS</http-method>
       <http-method>GET</http-method>
     </web-resource-collection>

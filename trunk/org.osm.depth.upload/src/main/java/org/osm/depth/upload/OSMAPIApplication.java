@@ -37,6 +37,8 @@ import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.osm.depth.upload.resources.GaugeMeasurementResource;
 import org.osm.depth.upload.resources.GaugeResource;
 import org.osm.depth.upload.resources.LicenseResource;
+import org.osm.depth.upload.resources.StatsResource;
+import org.osm.depth.upload.resources.TideResource;
 import org.osm.depth.upload.resources.TrackResource;
 import org.osm.depth.upload.resources.UserResource;
 import org.osm.depth.upload.resources.VesselConfigurationResource;
@@ -54,6 +56,8 @@ public class OSMAPIApplication extends Application {
 	    set.add(UserResource.class);
 	    set.add(GaugeResource.class);
 	    set.add(LicenseResource.class);
+	    set.add(StatsResource.class);
+//	    set.add(TideResource.class);
 	    set.add(GaugeMeasurementResource.class);
 	    set.add(VesselConfigurationResource.class);
 	    set.add(MultiPartFeature.class);
