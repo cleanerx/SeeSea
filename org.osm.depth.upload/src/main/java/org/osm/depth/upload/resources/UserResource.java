@@ -28,17 +28,28 @@ package org.osm.depth.upload.resources;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.imageio.ImageIO;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -52,24 +63,24 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 
 import jj.play.ns.nl.captcha.Captcha.Builder;
 import jj.play.ns.nl.captcha.gimpy.BlockGimpyRenderer;
 import jj.play.ns.nl.captcha.text.producer.DefaultTextProducer;
-import jj.play.ns.nl.captcha.text.producer.TextProducer;
 
-
-//import org.apache.catalina.util.Base64;
-import org.glassfish.jersey.internal.util.Base64;
 import org.osm.depth.upload.CaptchaManagement;
 import org.osm.depth.upload.exceptions.ConflictException;
 import org.osm.depth.upload.exceptions.DatabaseException;
+import org.osm.depth.upload.exceptions.ErrorCode;
 import org.osm.depth.upload.exceptions.ValidationException;
 import org.osm.depth.upload.messages.Captcha;
 import org.osm.depth.upload.messages.User;
 
+import com.wordnik.swagger.annotations.Api;
+
+@Api(value = "/users", description="This resource is for creating, updating and deleting users")
 @Path("/users")
 public class UserResource {
 
@@ -106,21 +117,36 @@ public class UserResource {
 		return Response.serverError().build();
 	}
 	
-//	@PUT
-	@Consumes({MediaType.MULTIPART_FORM_DATA})
-	public void changePassword(@javax.ws.rs.core.Context SecurityContext context, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword) {
+//	@ApiOperation( value="changepass", description = "Changes the users password. The user must be signed in in order to do that.")
+//	@ApiError(code=500, reason="No old password supplied, no new password supplied or user does no exist")
+	@Path("changepass")
+	@POST
+	public Response changePassword(@javax.ws.rs.core.Context SecurityContext context, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword) {
 		String username = context.getUserPrincipal().getName();
+		if(oldPassword == null) {
+			return Response.serverError().header("Error", ErrorCode.NO_OLD_PASSWORD).build();
+		}
+		if(newPassword == null) {
+			return Response.serverError().header("Error", ErrorCode.NO_NEW_PASSWORD).build();
+		}
 		Context initContext;
 		try {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			Connection conn = ds.getConnection();
 			try {
-				Statement selectstatement = conn.createStatement();
+				PreparedStatement selectstatement = conn.prepareStatement("UPDATE user_profiles SET password = ? WHERE password = ? AND user_name = ?");
 				try {
-					selectstatement.execute(MessageFormat
-							.format("UPDATE user_profiles SET password = '{2}' WHERE password = {0} AND user_name = ''{1}''", //$NON-NLS-1$
-									oldPassword, username, newPassword));
+					
+					selectstatement.setString(1, newPassword);
+					selectstatement.setString(2, oldPassword);
+					selectstatement.setString(3, username);
+					int executeUpdate = selectstatement.executeUpdate();
+					if(executeUpdate == 1) {
+						return Response.ok().build();
+					} else {
+						return Response.serverError().header("Error", ErrorCode.OLD_PASSWORD_MISMATCH).build();
+					}
 				} finally {
 					selectstatement.close();
 				}
@@ -134,6 +160,70 @@ public class UserResource {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable");
 		}
+	}
+	
+	@Path("reset")
+	@POST
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response resetPassword(@QueryParam("user_name") String email) {
+		InitialContext initCtx;
+		try {
+			initCtx = new InitialContext();
+			DataSource ds = (DataSource)initCtx.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			Connection conn = ds.getConnection();
+			try {
+				PreparedStatement selectstatement = conn.prepareStatement("SELECT user_name FROM user_profiles WHERE user_name = ?");
+				try {
+					selectstatement.setString(1, email);
+					selectstatement.execute();
+					ResultSet resultSet = selectstatement.getResultSet();
+					if(resultSet.next()) {
+						SecureRandom random = new SecureRandom();
+						String clearTextPassword = new BigInteger(130, random).toString(32);
+						String newPassword = encryptPassword(clearTextPassword);
+						PreparedStatement setNewPasswordStatement = conn.prepareStatement("UPDATE user_profiles SET password = ? WHERE user_name = ?");
+						try {
+							setNewPasswordStatement.setString(1, newPassword);
+							setNewPasswordStatement.setString(2, email);
+							int executeUpdate = setNewPasswordStatement.executeUpdate();
+							if(executeUpdate == 1) {
+								Context envCtx = (Context) initCtx.lookup("java:comp/env");
+								Session session = (Session) envCtx.lookup("mail/Session");
+								
+								Message message = new MimeMessage(session);
+								message.setFrom(new InternetAddress("support@openseamap.org"));
+								InternetAddress to[] = new InternetAddress[1];
+								to[0] = new InternetAddress(email);
+								message.setRecipients(Message.RecipientType.TO, to);
+								message.setSubject("OpenSeaMap Password Reset");
+								message.setContent("You have requested a password reset.\nYour password has been reset to : " + clearTextPassword + "\n This is an generated email. Do NOT reply to this email.", "text/plain");
+								Transport.send(message);
+							} else {
+								return Response.serverError().header("Error", ErrorCode.NO_SUCH_USER).build();
+							}
+							
+						} finally {
+							setNewPasswordStatement.close();
+						}
+
+					}
+				} finally {
+					selectstatement.close();
+				}
+			} finally {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Internal SQL Error");
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} catch (NamingException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Database unavailable");
+		}
+		return Response.ok().build();
 	}
 	
 	@POST
@@ -307,27 +397,32 @@ public class UserResource {
 			throw new DatabaseException("Database unavailable");
 		}
 	}
-//	@PUT
-//	@Path("{id}/reset")
-//	@RolesAllowed("ADMIN")
-//	public void resetAccount(@PathParam("id") Long id) {
-//		Context initContext;
-//		try {
-//			initContext = new InitialContext();
-//			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-//			Connection conn = ds.getConnection();
-//
-//			Statement selectstatement = conn.createStatement();
-//			selectstatement.execute("UPDATE user_profiles SET attempts = 0");
-//			selectstatement.close();
-//			
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} catch (NamingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	
+	private String encryptPassword(String password) {
+		String sha1 = ""; //$NON-NLS-1$
+		try {
+			MessageDigest crypt = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
+			crypt.reset();
+			crypt.update(password.getBytes("UTF-8")); //$NON-NLS-1$
+			sha1 = byteToHex(crypt.digest());
+			sha1 = sha1.toLowerCase();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return sha1;
+	}
+
+	private static String byteToHex(final byte[] hash) {
+		Formatter formatter = new Formatter();
+		for (byte b : hash) {
+			formatter.format("%02x", b); //$NON-NLS-1$
+		}
+		String result = formatter.toString();
+		formatter.close();
+		return result;
+	}
 
 
 }

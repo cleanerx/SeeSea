@@ -28,6 +28,10 @@
           type="javax.sql.DataSource" username="${osmuser}" password="${osmpass}" 
             driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${depthdatabase}" maxActive="150"
             maxIdle="1"/>
+
+    	<Resource name="mail/Session" auth="Container"
+		            type="javax.mail.Session"
+		            mail.smtp.host="${mailserver}"/>
       
                 <Realm className="org.apache.catalina.realm.LockOutRealm">
         <!-- This Realm uses the UserDatabase configured in the global JNDI
