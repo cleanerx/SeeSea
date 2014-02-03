@@ -7,6 +7,9 @@
 	<packaging>war</packaging>
 	<name>api2</name>
 	<description>OpenSeaMap Depth API</description>
+	<properties>
+	    <lib.directory>${project.build.directory}/so</lib.directory>
+	</properties>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>apache.snapshots</id>
@@ -70,7 +73,26 @@
 						</manifest>
 					</archive>
 				</configuration>
-			</plugin>
+                 <execution>
+                  <id>copy</id>
+                  <phase>process-classes</phase>
+                  <goals>
+                         <goal>copy</goal>
+                  </goals>
+                  <configuration>
+                        <artifactItems>
+                          <artifactItem>
+                                 <groupId>org.osm.tidemodel</groupId>
+                                 <artifactId>dtu10</artifactId>
+                                 <version>1.0</version>
+                                 <type>dll</type>
+                                 <overWrite>true</overWrite>
+                          <outputDirectory>${lib.directory}</outputDirectory>
+                         </artifactItem>
+                         </artifactItems>
+                   </configuration>
+                 </execution>
+             </plugin>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -86,6 +108,12 @@
                     <artifactId>postgresql</artifactId>
                     <version>9.1-901.jdbc4</version>
                     </dependency>
+				    <dependency>
+				      <groupId>javax.mail</groupId>
+				      <artifactId>mail</artifactId>
+				      <version>1.4</version>
+				      <scope>compile</scope>
+				    </dependency>
 				</dependencies>
 				<executions>
 					<execution>
@@ -110,6 +138,7 @@
 					<excludes>
 						<exclude>**/*ResourceTest.java</exclude>
 					</excludes>
+                    <argline>-Djava.library.path=${lib.directory}</argline>
 				</configuration>
 				<executions>
 					<execution>
@@ -128,7 +157,8 @@
 							</includes>
 						</configuration>
 					</execution>
-				</executions>
+
+        	</executions>
 			</plugin>
 			<!-- <plugin> <groupId>org.mortbay.jetty</groupId> <artifactId>maven-jetty-plugin</artifactId> 
 				<configuration> <scanIntervalSeconds>10</scanIntervalSeconds> <stopKey>foo</stopKey> 
@@ -137,6 +167,26 @@
 				<scanIntervalSeconds>0</scanIntervalSeconds> <daemon>true</daemon> </configuration> 
 				</execution> <execution> <id>stop-jetty</id> <phase>post-integration-test</phase> 
 				<goals> <goal>stop</goal> </goals> </execution> </executions> </plugin> -->
+			<plugin>
+			    <groupid>org.dstovall</groupid>
+			    <artifactid>onejar-maven-plugin</artifactid>
+			    <executions>
+			        <execution>
+			            <configuration>
+			                ...
+			                <binlibs>
+			                    <fileset>
+			                        <directory>${lib.directory}</directory>
+			                        <includes>
+			                            <include>${so.name}</include>
+			                        </includes>
+			                    </fileset>
+			                </binlibs>
+			            </configuration>
+			            ...
+			        </execution>
+			    </executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -229,7 +279,18 @@
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
-			<version>1.4</version>
+			<version>1.5.0-b01</version>
+			<scope>provided</scope>
 		</dependency>
-	</dependencies>
+ 		<dependency>
+	    <groupId>com.wordnik</groupId>
+	    <artifactId>swagger-core_2.10</artifactId>
+	    <version>1.3.2</version>
+        </dependency>
+<dependency>
+    <groupId>com.wordnik</groupId>
+    <artifactId>swagger-jersey2-jaxrs_2.10</artifactId>
+    <version>1.3.2</version>
+</dependency>
+            	</dependencies>
 </project>
