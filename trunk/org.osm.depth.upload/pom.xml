@@ -21,6 +21,10 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</pluginRepository>
+        <pluginRepository>
+            <id>onejar-maven-plugin.googlecode.com</id>
+            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+        </pluginRepository>
 	</pluginRepositories>
 	<build>
 		<finalName>org.osm.depth.upload${stage}</finalName>
