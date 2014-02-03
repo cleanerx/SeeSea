@@ -57,7 +57,7 @@ public class OSMAPIApplication extends Application {
 	    set.add(GaugeResource.class);
 	    set.add(LicenseResource.class);
 	    set.add(StatsResource.class);
-//	    set.add(TideResource.class);
+	    set.add(TideResource.class);
 	    set.add(GaugeMeasurementResource.class);
 	    set.add(VesselConfigurationResource.class);
 	    set.add(MultiPartFeature.class);
