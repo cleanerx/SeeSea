@@ -170,22 +170,21 @@
 				</execution> <execution> <id>stop-jetty</id> <phase>post-integration-test</phase> 
 				<goals> <goal>stop</goal> </goals> </execution> </executions> </plugin> -->
 			<plugin>
-			    <groupid>org.dstovall</groupid>
-			    <artifactid>onejar-maven-plugin</artifactid>
-			    <executions>
+                <groupId>org.dstovall</groupId>
+                <artifactId>onejar-maven-plugin</artifactId>
+                <version>1.4.4</version>
+  		        <executions>
 			        <execution>
 			            <configuration>
-			                ...
 			                <binlibs>
 			                    <fileset>
 			                        <directory>${lib.directory}</directory>
 			                        <includes>
-			                            <include>${so.name}</include>
+			                            <include>tidemodel.dll</include>
 			                        </includes>
 			                    </fileset>
 			                </binlibs>
 			            </configuration>
-			            ...
 			        </execution>
 			    </executions>
 			</plugin>
