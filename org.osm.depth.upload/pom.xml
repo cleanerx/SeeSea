@@ -82,8 +82,8 @@
 						</manifest>
 					</archive>
 				</configuration>
-                <executions>
-                 <execution>
+<!--                 <executions>
+                <execution>
                   <id>copy</id>
                   <phase>process-classes</phase>
                   <goals>
@@ -102,7 +102,7 @@
                          </artifactItems>
                    </configuration>
                  </execution>
-                </executions>
+                </executions> -->
              </plugin>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
