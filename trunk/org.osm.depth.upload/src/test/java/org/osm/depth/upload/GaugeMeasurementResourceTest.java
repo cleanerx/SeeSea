@@ -71,7 +71,7 @@ public class GaugeMeasurementResourceTest extends TestCase {
         List<GaugeMeasurement> measurements = measurementResponse.readEntity(new GenericType<List<GaugeMeasurement>>(){});
         calendar.add(Calendar.HOUR, -3);
         value = 4.4f;
-        for(int i = 3 ; i > 0 ;i--) {
+        for(int i = 2 ; i >= 0 ;i--) {
         	GaugeMeasurement gaugeMeasurement = measurements.get(i);
         	assertEquals(gauge2.id, gaugeMeasurement.gaugeId);
         	assertEquals(LengthUnit.METERS, gaugeMeasurement.lengthUnit);
