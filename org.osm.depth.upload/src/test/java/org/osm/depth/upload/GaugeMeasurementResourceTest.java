@@ -76,7 +76,7 @@ public class GaugeMeasurementResourceTest extends TestCase {
         	assertEquals(gauge2.id, gaugeMeasurement.gaugeId);
         	assertEquals(LengthUnit.METERS, gaugeMeasurement.lengthUnit);
         	assertEquals(value, gaugeMeasurement.value, 0.0001);
-        	assertEquals(0,calendar.getTime().getTime() == gaugeMeasurement.timestamp);
+        	assertTrue(calendar.getTime().getTime() == gaugeMeasurement.timestamp);
         	calendar.add(Calendar.HOUR, 1);
         	value += 0.1;
         }
