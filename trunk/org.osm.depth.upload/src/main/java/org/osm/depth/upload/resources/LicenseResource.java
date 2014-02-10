@@ -118,6 +118,7 @@ public class LicenseResource {
 	@GET
 	@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({ MediaType.TEXT_PLAIN})
+	@Path("bbox")
 	public String getLicenses(@QueryParam("lat1") String lat1, @QueryParam("lon1") String lon1, @QueryParam("lat2") String lat2, @QueryParam("lon2") String lon2) {
 		Context initContext;
 		try {
