@@ -105,7 +105,7 @@ public class TrackResourceTest extends TestCase {
 				
 				WebTarget deletePath = trackPath.path("/" + new Long(track.id).toString()); //$NON-NLS-1$
 				response = deletePath.request().delete();
-				assertEquals(204, response.getStatus());
+				assertEquals(200, response.getStatus());
 
 			} finally {
 				deleteLicense(basePath, licenseId);
