@@ -19,13 +19,19 @@ public class FileStreamingOutput implements StreamingOutput {
 	@Override
 	public void write(OutputStream out) throws IOException,
 			WebApplicationException {
-		FileInputStream in = new FileInputStream(file);
-		byte[] buffer = new byte[16384];
-		int len;
-		while ((len = in.read(buffer)) != -1) {
-		    out.write(buffer, 0, len);
-		}
-		in.close();
+		FileInputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			byte[] buffer = new byte[16384];
+			int len;
+			while ((len = in.read(buffer)) != -1) {
+				out.write(buffer, 0, len);
+			}
+ 		} finally {
+ 			if(in != null) {
+ 				in.close();
+ 			}
+ 		}
 	}
 
 }
