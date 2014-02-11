@@ -9,7 +9,8 @@ public enum ErrorCode {
 	NO_NEW_PASSWORD("101:No new password supplied"), 
 	
 	OLD_PASSWORD_MISMATCH("102:Old Password mismatch"), 
-	NO_SUCH_USER("103:No such user");
+	NO_SUCH_USER("103:No such user"), 
+	NO_SUCH_TRACK ("104:No such track");
 	
 	private final String code;
 
