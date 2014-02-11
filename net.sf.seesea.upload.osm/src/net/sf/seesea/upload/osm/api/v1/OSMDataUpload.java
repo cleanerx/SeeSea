@@ -111,4 +111,11 @@ public class OSMDataUpload implements IDataUpload {
 		return multiStatus;
 	}
 
+	@Override
+	public IStatus upload(Long licenseID, Long vesselConfigurationID,
+			List<File> track, IProgressMonitor monitor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

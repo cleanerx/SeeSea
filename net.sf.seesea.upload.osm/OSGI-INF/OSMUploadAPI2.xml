@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="net.sf.seesea.upload.osm">
+   <implementation class="net.sf.seesea.upload.osm.api.v2.OSMUploadAPI2"/>
+   <service>
+      <provide interface="net.sf.seesea.upload.IDataUpload"/>
+      <provide interface="net.sf.seesea.upload.osm.api.v2.IOSMUpload"/>
+   </service>
+</scr:component>
