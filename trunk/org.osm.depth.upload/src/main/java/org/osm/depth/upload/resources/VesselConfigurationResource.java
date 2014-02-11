@@ -342,7 +342,7 @@ public class VesselConfigurationResource {
 			try {
 				ResultSet executeQuery;
 				String query = 
-						"SELECT " + 
+						"SELECT DISTINCT" + 
 								"v.id, v.name, v.description, v.loa, v.breadth, v.draft, v.height, v.displacement, v.mmsi, v.manufacturer, v.model, v.maximumspeed, v.type, " +  
 								"s.x, s.y, s.z, s.manufacturer, s.model, s.sensorid, " +  
 								"d.x, d.y, d.z, d.manufacturer, d.model, d.sensorid, d.frequency, d.offsetkeel " + 
