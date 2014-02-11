@@ -126,19 +126,5 @@
          </state>
       </command>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="net.sf.seesea.nmea.rcp.preferences.UploadOSMPreferenceInitializer">
-      </initializer>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="net.sf.seesea.nmea.rcp.preferences.UploadOSMPreferencePage"
-            id="net.sf.seesea.nmea.rcp.page1"
-            name="Upload">
-      </page>
-   </extension>
 
 </plugin>

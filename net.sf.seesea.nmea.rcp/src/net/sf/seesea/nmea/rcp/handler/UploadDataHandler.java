@@ -27,31 +27,26 @@
 package net.sf.seesea.nmea.rcp.handler;
 
 import net.sf.seesea.lib.ValidatingWizardDialog;
-import net.sf.seesea.nmea.rcp.wizard.DepthWizardPage;
-import net.sf.seesea.nmea.rcp.wizard.ExportNoviceWizardPage;
-import net.sf.seesea.nmea.rcp.wizard.OrganizationWizardPage;
-import net.sf.seesea.nmea.rcp.wizard.SBASWizardPage;
-import net.sf.seesea.nmea.rcp.wizard.UploadWizard;
-import net.sf.seesea.nmea.rcp.wizard.UsernamePasswordWizardPage;
-import net.sf.seesea.nmea.rcp.wizard.VesselWizardPage;
+import net.sf.seesea.nmea.rcp.NMEARCPActivator;
+import net.sf.seesea.upload.IUploadWizardProvider;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 public class UploadDataHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		UploadWizard uploadWizard = new UploadWizard();
-		uploadWizard.addPage(new UsernamePasswordWizardPage());
-		uploadWizard.addPage(new OrganizationWizardPage());
-		uploadWizard.addPage(new VesselWizardPage());
-		uploadWizard.addPage(new DepthWizardPage());
-		uploadWizard.addPage(new SBASWizardPage());
-		uploadWizard.setWindowTitle(Messages.getString("UploadDataHandler.wizardTitle")); //$NON-NLS-1$
+		BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
+		ServiceReference<IUploadWizardProvider> serviceReference = bundleContext.getServiceReference(IUploadWizardProvider.class);
+		IUploadWizardProvider provider = bundleContext.getService(serviceReference);
+		IWizard uploadWizard = provider.getUploadWizard();
 		
 		ValidatingWizardDialog wizardDialog = new ValidatingWizardDialog(HandlerUtil.getActiveShell(event), uploadWizard);
 		if(wizardDialog.open() == Window.OK) {
