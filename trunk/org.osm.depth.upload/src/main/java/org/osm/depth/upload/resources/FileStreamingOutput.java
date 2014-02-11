@@ -25,6 +25,7 @@ public class FileStreamingOutput implements StreamingOutput {
 		while ((len = in.read(buffer)) != -1) {
 		    out.write(buffer, 0, len);
 		}
+		in.close();
 	}
 
 }
