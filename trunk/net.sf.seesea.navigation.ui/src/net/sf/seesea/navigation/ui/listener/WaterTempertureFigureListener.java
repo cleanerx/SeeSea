@@ -26,7 +26,10 @@
  */
 package net.sf.seesea.navigation.ui.listener;
 
+import java.text.DecimalFormat;
+
 import net.sf.seesea.model.core.physx.Temperature;
+import net.sf.seesea.model.core.physx.TemperatureUnit;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
 import net.sf.seesea.services.navigation.listener.IWaterTemperatureListener;
 
@@ -39,10 +42,12 @@ import org.eclipse.swt.widgets.Display;
 public class WaterTempertureFigureListener extends InvalidatingFigureListener<Temperature> implements IWaterTemperatureListener {
 
 	private final DescriptiveInstrumentFigure graphFigure;
+	private DecimalFormat decimalFormat;
 
 	public WaterTempertureFigureListener(DescriptiveInstrumentFigure graphFigure) {
 		super(graphFigure);
 		this.graphFigure = graphFigure;
+		decimalFormat = new DecimalFormat("##0.0");
 	}
 	
 	@Override
@@ -55,7 +60,12 @@ public class WaterTempertureFigureListener extends InvalidatingFigureListener<Te
 			
 			@Override
 			public void run() {
-				graphFigure.setValue(sensorData.getValue() + "\u00B0" + sensorData.getUnit().toString().substring(0 , 1)); //$NON-NLS-1$
+				double value = sensorData.getValue();
+				if(TemperatureUnit.KELVIN.equals(sensorData.getUnit())) {
+					value -= 237.15;
+				}
+				
+				graphFigure.setValue(decimalFormat.format(value) + "\u00B0C"); //$NON-NLS-1$
 				graphFigure.repaint();
 			}
 		});
