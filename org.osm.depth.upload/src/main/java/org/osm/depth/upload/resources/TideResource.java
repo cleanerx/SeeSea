@@ -71,30 +71,41 @@ public class TideResource {
 							double b2 = (y2+1) * 0.125 + Math.floor(lat);
 							
 							List<Double> points = new ArrayList<Double>(4);
-							PreparedStatement preparedStatement = conn.prepareStatement("SELECT latoffset FROM msl2lat WHERE geom = ST_GeomFromText(?, 4326)"); //$NON-NLS-1$
-							preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a1,
-									b1));
-							ResultSet resultSet = preparedStatement.executeQuery();
-							while(resultSet.next()) {
-								points.add(resultSet.getDouble(1)); 
-							}
-							preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a1,
-									b2));
-							resultSet = preparedStatement.executeQuery();
-							while(resultSet.next()) {
-								points.add(resultSet.getDouble(1)); 
-							}
-							preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a2,
-									b1));
-							resultSet = preparedStatement.executeQuery();
-							while(resultSet.next()) {
-								points.add(resultSet.getDouble(1)); 
-							}
-							preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a2,
-									b2));
-							resultSet = preparedStatement.executeQuery();
-							while(resultSet.next()) {
-								points.add(resultSet.getDouble(1)); 
+							PreparedStatement preparedStatement = null;
+							ResultSet resultSet = null;
+							try {
+								preparedStatement = conn.prepareStatement("SELECT latoffset FROM msl2lat WHERE geom = ST_GeomFromText(?, 4326)"); //$NON-NLS-1$
+								preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a1,
+										b1));
+								resultSet = preparedStatement.executeQuery();
+								while(resultSet.next()) {
+									points.add(resultSet.getDouble(1)); 
+								}
+								preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a1,
+										b2));
+								resultSet = preparedStatement.executeQuery();
+								while(resultSet.next()) {
+									points.add(resultSet.getDouble(1)); 
+								}
+								preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a2,
+										b1));
+								resultSet = preparedStatement.executeQuery();
+								while(resultSet.next()) {
+									points.add(resultSet.getDouble(1)); 
+								}
+								preparedStatement.setString(1, MessageFormat.format("Point({0} {1})", a2,
+										b2));
+								resultSet = preparedStatement.executeQuery();
+								while(resultSet.next()) {
+									points.add(resultSet.getDouble(1)); 
+								}
+							} finally {
+								if(preparedStatement != null) {
+									preparedStatement.close();
+								}
+								if(resultSet != null) {
+									resultSet.close();
+								}
 							}
 							double average = 0.0;
 							for (Double point : points) {
