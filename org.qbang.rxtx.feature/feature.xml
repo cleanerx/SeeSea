@@ -16,6 +16,10 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="net.sf.seesea.provider.navigation.nmea.feature" version="0.8.0.qualifier"/>
+   </requires>
+
    <plugin
          id="org.qbang.rxtx"
          download-size="0"
@@ -68,27 +72,6 @@
          install-size="0"
          version="0.0.0"
          fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="net.sf.seesea.provider.navigation.nmea.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.sf.seesea.services.navigation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.sf.seesea.provider.navigation.nmea"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
          unpack="false"/>
 
 </feature>
