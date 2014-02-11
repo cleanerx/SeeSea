@@ -44,4 +44,7 @@ public interface IDataUpload {
 	
 	IStatus upload(List<File> track, IProgressMonitor monitor);
 
+	IStatus upload(Long licenseID, Long vesselConfigurationID,
+			List<File> track, IProgressMonitor monitor);
+
 }
