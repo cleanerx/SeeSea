@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -54,14 +56,18 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.osm.depth.upload.exceptions.DatabaseException;
+import org.osm.depth.upload.exceptions.ErrorCode;
 import org.osm.depth.upload.messages.Track;
 
 @Path("/track")
@@ -415,6 +421,48 @@ public class TrackResource {
 			throw new DatabaseException("Uploaded file not processable"); //$NON-NLS-1$
 		}
 		return bytesRead.toString();
+	}
+	
+	@GET
+	@RolesAllowed("ADMIN")
+	@Path("{id}/download")
+	public Response download(@PathParam(value = "id") String id) {
+		Context initContext;
+		try { long trackId = Long.parseLong(id);
+			initContext = new InitialContext();
+			DataSource ds = (DataSource) initContext
+					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			Connection connection = ds.getConnection();
+
+			try {
+				PreparedStatement statement = connection.prepareStatement("SELECT filetype, file_ref FROM user_tracks u WHERE track_id = ? AND upload_state != 0"); //$NON-NLS-1$
+				try {
+					statement.setLong(1, trackId);
+					ResultSet resultSet = statement.executeQuery();
+					if(resultSet.next()) {
+						String fileType = resultSet.getString(1);
+						String fileName = resultSet.getString(2);
+						StreamingOutput stream = new FileStreamingOutput(getFile(trackId));
+						return Response.ok(stream).type(fileType).header("content-disposition", "attachment; filename = "+ fileName).build();  //$NON-NLS-1$//$NON-NLS-2$
+					} else {
+						return Response.serverError().header("Error", ErrorCode.NO_SUCH_TRACK).build(); //$NON-NLS-1$
+					}
+				} finally {
+					statement.close();
+				}
+			} finally {
+				connection.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return Response.serverError().build();
 	}
 
 	/**
