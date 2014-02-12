@@ -1,4 +1,4 @@
-# This installs two files, app.exe and logo.ico, creates a start menu shortcut, builds an uninstaller, and
+1# This installs two files, app.exe and logo.ico, creates a start menu shortcut, builds an uninstaller, and
 # adds uninstall information to the registry for Add/Remove Programs
  
 # To get started, put this script into a folder with the two files (app.exe, logo.ico, and license.rtf -
@@ -120,7 +120,7 @@ section "install"
     setOutPath $INSTDIR
     # Files added here should be removed by the uninstaller (see section "uninstall")
 #    file "NMEALogger.exe"
-    file /r "/var/lib/hudson/jobs/DataLoggerSingleSF/lastSuccessful/archive/buckminster.output/net.sf.seesea.nmea.datalogger.site_1.0.0-eclipse.feature/nmeaDataLoggger.win32.win32.x86_64/*.*"
+    file /r "/var/lib/hudson/jobs/DataLogger_P2/lastSuccessful/archive/build/I.DataLogger/DataLoggger-win32.win32.x86_64/*.*"
     file "../icons/OpenSeaMapLogo.ico"
     
     # Add any other files for the install directory (license files, app data, etc) here
