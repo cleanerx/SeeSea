@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.seesea.lib.IValidatingPage;
-import net.sf.seesea.provider.navigation.nmea.ui.NMEAWizard;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -100,7 +99,7 @@ public class SelectComPortPage extends WizardPage implements IValidatingPage {
 					setErrorMessage(status.getMessage());
 					return;
 				}
-				((NMEAWizard) getWizard()).getContainer().showPage(getNextPage());
+				getWizard().getContainer().showPage(getNextPage());
 			}
 		});
 		
