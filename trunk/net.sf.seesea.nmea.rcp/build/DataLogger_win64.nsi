@@ -1,4 +1,4 @@
-1# This installs two files, app.exe and logo.ico, creates a start menu shortcut, builds an uninstaller, and
+# This installs two files, app.exe and logo.ico, creates a start menu shortcut, builds an uninstaller, and
 # adds uninstall information to the registry for Add/Remove Programs
  
 # To get started, put this script into a folder with the two files (app.exe, logo.ico, and license.rtf -
