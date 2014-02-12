@@ -39,7 +39,7 @@ import java.util.concurrent.FutureTask;
 import net.sf.seesea.gps.bluetooth.BluetoothInputStreamProvider;
 import net.sf.seesea.gps.bluetooth.ui.wizard.BluetoothDiscoveryPageChangeListener;
 import net.sf.seesea.gps.bluetooth.ui.wizard.DevicesPage;
-import net.sf.seesea.provider.navigation.nmea.ui.DefaultFeedbackMessageConsumer;
+import net.sf.seesea.lib.ui.DefaultFeedbackMessageConsumer;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
 import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 
