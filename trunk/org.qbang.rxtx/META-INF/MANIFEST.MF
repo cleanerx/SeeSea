@@ -6,10 +6,11 @@ Bundle-Version: 2.2.2.20081207
 Bundle-Activator: org.qbang.rxtx.RXTXActivator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- net.sf.seesea.provider.navigation.nmea.ui,
- net.sf.seesea.services.navigation,
  net.sf.seesea.lib,
- net.sf.seesea.provider.navigation.nmea
+ net.sf.seesea.lib.ui,
+ net.sf.seesea.services.navigation,
+ net.sf.seesea.provider.navigation.nmea,
+ net.sf.seesea.provider.navigation.nmea.ui
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: gnu.io,
