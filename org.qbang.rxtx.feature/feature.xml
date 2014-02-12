@@ -74,4 +74,25 @@
          fragment="true"
          unpack="false"/>
 
+   <plugin
+         id="net.sf.seesea.provider.navigation.nmea.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.sf.seesea.services.navigation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.sf.seesea.lib.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
