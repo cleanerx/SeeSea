@@ -87,9 +87,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <feature id="org.eclipse.rcp"/>
       <feature id="org.eclipse.help"/>
       <feature id="net.sf.seesea.eclipse.feature" version="1.0.0.qualifier"/>
+      <feature id="net.sf.seesea.provider.navigation.nmea.feature" version="0.8.0.qualifier"/>
       <feature id="net.sf.seesea.nmea.rcp.feature" version="1.0.0.qualifier"/>
       <feature id="net.sf.seesea.rendering.feature" version="1.0.0.qualifier"/>
-      <feature id="net.sf.seesea.provider.navigation.nmea.feature" version="0.8.0.qualifier"/>
       <feature id="org.qbang.rxtx.feature" version="1.0.0.qualifier"/>
       <feature id="net.sf.seesea.bluetooth.feature" version="1.0.0.qualifier"/>
       <feature id="net.sf.seesea.ip.feature" version="1.0.0"/>
