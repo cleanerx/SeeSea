@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.concurrent.Callable;
 
+import net.sf.seesea.lib.IFeedbackMessageConsumer;
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 
 import org.apache.log4j.Logger;

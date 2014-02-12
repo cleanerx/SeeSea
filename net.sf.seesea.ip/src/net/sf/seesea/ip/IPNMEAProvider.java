@@ -1,6 +1,5 @@
 /**
- * 
- Copyright (c) 2010-2012, Jens K�bler All rights reserved.
+ * Copyright (c) 2010-2012, Jens Kübler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,7 +32,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
-import net.sf.seesea.provider.navigation.nmea.ui.DefaultFeedbackMessageConsumer;
+import net.sf.seesea.lib.ui.DefaultFeedbackMessageConsumer;
 import net.sf.seesea.provider.navigation.nmea.ui.INMEAConnector;
 import net.sf.seesea.services.navigation.ThreadedSerialInputReader;
 

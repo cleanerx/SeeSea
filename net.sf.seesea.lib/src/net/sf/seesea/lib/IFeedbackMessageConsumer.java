@@ -1,4 +1,4 @@
-package net.sf.seesea.services.navigation;
+package net.sf.seesea.lib;
 
 public interface IFeedbackMessageConsumer {
 	

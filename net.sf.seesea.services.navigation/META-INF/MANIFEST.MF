@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.services.navigation.NavigationServicesActivator
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.model.core,
- org.apache.log4j;bundle-version="1.2.16"
+ org.apache.log4j;bundle-version="1.2.16",
+ net.sf.seesea.lib;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.services.navigation,
