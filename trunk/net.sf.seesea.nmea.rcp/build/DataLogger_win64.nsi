@@ -120,7 +120,7 @@ section "install"
     setOutPath $INSTDIR
     # Files added here should be removed by the uninstaller (see section "uninstall")
 #    file "NMEALogger.exe"
-    file /r "/var/lib/hudson/jobs/DataLogger_P2/lastSuccessful/archive/build/I.DataLogger/DataLoggger-win32.win32.x86_64/DataLogger/*.*"
+    file /r "/var/lib/hudson/jobs/DataLogger_P2/lastSuccessful/archive/build/I.DataLogger/DataLogger-win32.win32.x86_64/DataLogger/*.*"
     file "../icons/OpenSeaMapLogo.ico"
     
     # Add any other files for the install directory (license files, app data, etc) here
