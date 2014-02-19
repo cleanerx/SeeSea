@@ -85,6 +85,7 @@ public class GNSSMeasuredPositionItemProvider
 			addHdopPropertyDescriptor(object);
 			addVdopPropertyDescriptor(object);
 			addPdopPropertyDescriptor(object);
+			addAugmentationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -156,6 +157,28 @@ public class GNSSMeasuredPositionItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Augmentation feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAugmentationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_GNSSMeasuredPosition_augmentation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GNSSMeasuredPosition_augmentation_feature", "_UI_GNSSMeasuredPosition_type"),
+				 GeoPackage.Literals.GNSS_MEASURED_POSITION__AUGMENTATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns GNSSMeasuredPosition.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -195,6 +218,7 @@ public class GNSSMeasuredPositionItemProvider
 			case GeoPackage.GNSS_MEASURED_POSITION__HDOP:
 			case GeoPackage.GNSS_MEASURED_POSITION__VDOP:
 			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
+			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

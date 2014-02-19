@@ -58,7 +58,6 @@ public class ShipFigure extends Figure {
 		graphics.setAntialias(SWT.ON);
 		setOpaque(false);
 		
-		
 		graphics.setLineWidth(1);
 		Rectangle localBounds = getBounds().getCopy();
 		graphics.pushState();

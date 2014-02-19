@@ -42,6 +42,7 @@ import net.sf.seesea.navigation.ui.figures.DoubleLinedInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.GraphFigure;
 import net.sf.seesea.navigation.ui.figures.InstrumentContainerFigure;
 import net.sf.seesea.navigation.ui.figures.SingleLinedFigure;
+import net.sf.seesea.navigation.ui.figures.TextDoubleLinedInstrumentFigure;
 import net.sf.seesea.navigation.ui.listener.DepthFigureListener;
 import net.sf.seesea.navigation.ui.listener.HeadingListener;
 import net.sf.seesea.navigation.ui.listener.InvalidatingFigureListener;
@@ -111,7 +112,7 @@ public class SensorDataView extends ViewPart {
 
 		InstrumentContainerFigure instrumentContainerFigure = new InstrumentContainerFigure();
 		int fontSize = 20;
-		DoubleLinedInstrumentFigure positionInstrumentFigure = new DoubleLinedInstrumentFigure();
+		TextDoubleLinedInstrumentFigure positionInstrumentFigure = new TextDoubleLinedInstrumentFigure();
 		positionInstrumentFigure.setUpperLine("--\u00B0 --.-' N"); //$NON-NLS-1$
 		positionInstrumentFigure.setLowerLine("---\u00B0 --.-' E"); //$NON-NLS-1$
 		positionInstrumentFigure.setFontSize(fontSize);

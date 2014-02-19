@@ -27,14 +27,17 @@
  */
 package net.sf.seesea.model.core.geo.impl;
 
+import java.util.Collection;
 import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
 import net.sf.seesea.model.core.geo.GeoPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -46,6 +49,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getHdop <em>Hdop</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getVdop <em>Vdop</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getPdop <em>Pdop</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getAugmentation <em>Augmentation</em>}</li>
  * </ul>
  * </p>
  *
@@ -111,6 +115,16 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * @ordered
 	 */
 	protected double pdop = PDOP_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAugmentation() <em>Augmentation</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAugmentation()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> augmentation;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -199,6 +213,18 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<String> getAugmentation() {
+		if (augmentation == null) {
+			augmentation = new EDataTypeUniqueEList<String>(String.class, this, GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION);
+		}
+		return augmentation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -208,6 +234,8 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 				return getVdop();
 			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
 				return getPdop();
+			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
+				return getAugmentation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -217,6 +245,7 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -228,6 +257,10 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 				return;
 			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
 				setPdop((Double)newValue);
+				return;
+			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
+				getAugmentation().clear();
+				getAugmentation().addAll((Collection<? extends String>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -250,6 +283,9 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
 				setPdop(PDOP_EDEFAULT);
 				return;
+			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
+				getAugmentation().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -268,6 +304,8 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 				return vdop != VDOP_EDEFAULT;
 			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
 				return pdop != PDOP_EDEFAULT;
+			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
+				return augmentation != null && !augmentation.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -288,6 +326,8 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 		result.append(vdop);
 		result.append(", pdop: ");
 		result.append(pdop);
+		result.append(", augmentation: ");
+		result.append(augmentation);
 		result.append(')');
 		return result.toString();
 	}

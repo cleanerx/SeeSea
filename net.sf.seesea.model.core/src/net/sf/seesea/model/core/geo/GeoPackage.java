@@ -1088,13 +1088,22 @@ public interface GeoPackage extends EPackage {
 	int GNSS_MEASURED_POSITION__PDOP = MEASURED_POSITION3_D_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Augmentation</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GNSS_MEASURED_POSITION__AUGMENTATION = MEASURED_POSITION3_D_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>GNSS Measured Position</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GNSS_MEASURED_POSITION_FEATURE_COUNT = MEASURED_POSITION3_D_FEATURE_COUNT + 3;
+	int GNSS_MEASURED_POSITION_FEATURE_COUNT = MEASURED_POSITION3_D_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.impl.AnchorPositionImpl <em>Anchor Position</em>}' class.
@@ -1498,6 +1507,17 @@ public interface GeoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getGNSSMeasuredPosition_Pdop();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getAugmentation <em>Augmentation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Augmentation</em>'.
+	 * @see net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getAugmentation()
+	 * @see #getGNSSMeasuredPosition()
+	 * @generated
+	 */
+	EAttribute getGNSSMeasuredPosition_Augmentation();
 
 	/**
 	 * Returns the meta object for class '{@link net.sf.seesea.model.core.geo.AnchorPosition <em>Anchor Position</em>}'.
@@ -2050,6 +2070,14 @@ public interface GeoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute GNSS_MEASURED_POSITION__PDOP = eINSTANCE.getGNSSMeasuredPosition_Pdop();
+
+		/**
+		 * The meta object literal for the '<em><b>Augmentation</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GNSS_MEASURED_POSITION__AUGMENTATION = eINSTANCE.getGNSSMeasuredPosition_Augmentation();
 
 		/**
 		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.impl.AnchorPositionImpl <em>Anchor Position</em>}' class.

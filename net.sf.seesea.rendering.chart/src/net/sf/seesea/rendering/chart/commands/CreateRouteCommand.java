@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,15 +33,11 @@ import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.NamedPosition;
 import net.sf.seesea.model.core.geo.Route;
 import net.sf.seesea.model.core.geo.RoutingContainer;
-import net.sf.seesea.model.core.geo.Track;
-import net.sf.seesea.model.core.geo.TracksContainer;
 import net.sf.seesea.model.core.geo.osm.World;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
@@ -87,17 +83,6 @@ public class CreateRouteCommand extends AbstractTransactionalCommand {
 			route.getWaypoints().add(namedPosition);
 		}
 		return CommandResult.newOKCommandResult(route);
-		
-//		ConnectionCommand command = (ConnectionCommand)request.getStartCommand();
-//		command.setTarget(getLogicSubpart());
-//		ConnectionAnchor ctor = getLogicEditPart().getTargetConnectionAnchor(request);
-//		if (ctor == null)
-//			return null;
-//		command.setTargetTerminal(getLogicEditPart().mapConnectionAnchorToTerminal(ctor));
-//
-//		
-//		// TODO Auto-generated method stub
-//		return null;
 	}
 
 }

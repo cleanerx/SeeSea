@@ -27,6 +27,8 @@
  */
 package net.sf.seesea.model.core.geo;
 
+import org.eclipse.emf.common.util.EList;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -39,6 +41,7 @@ package net.sf.seesea.model.core.geo;
  *   <li>{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getHdop <em>Hdop</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getVdop <em>Vdop</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getPdop <em>Pdop</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.GNSSMeasuredPosition#getAugmentation <em>Augmentation</em>}</li>
  * </ul>
  * </p>
  *
@@ -124,5 +127,21 @@ public interface GNSSMeasuredPosition extends MeasuredPosition3D {
 	 * @generated
 	 */
 	void setPdop(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Augmentation</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Augmentation</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Augmentation</em>' attribute list.
+	 * @see net.sf.seesea.model.core.geo.GeoPackage#getGNSSMeasuredPosition_Augmentation()
+	 * @model
+	 * @generated
+	 */
+	EList<String> getAugmentation();
 
 } // GNSSMeasuredPosition

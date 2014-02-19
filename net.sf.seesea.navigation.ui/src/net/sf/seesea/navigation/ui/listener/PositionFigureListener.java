@@ -26,9 +26,12 @@
  */
 package net.sf.seesea.navigation.ui.listener;
 
+import java.util.Iterator;
+
+import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.util.GeoPositionFormatter;
-import net.sf.seesea.navigation.ui.figures.DoubleLinedInstrumentFigure;
+import net.sf.seesea.navigation.ui.figures.TextDoubleLinedInstrumentFigure;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
 
 import org.eclipse.swt.widgets.Display;
@@ -38,12 +41,12 @@ import org.eclipse.swt.widgets.Display;
  */
 public class PositionFigureListener extends InvalidatingFigureListener<MeasuredPosition3D> implements IPositionListener {
 
-	private final DoubleLinedInstrumentFigure _doubleLinedInstrumentFigure;
+	private final TextDoubleLinedInstrumentFigure _doubleLinedInstrumentFigure;
 	/**
 	 * @param doubleLinedInstrumentFigure 
 	 * 
 	 */
-	public PositionFigureListener(DoubleLinedInstrumentFigure doubleLinedInstrumentFigure) {
+	public PositionFigureListener(TextDoubleLinedInstrumentFigure doubleLinedInstrumentFigure) {
 		super(doubleLinedInstrumentFigure);
 		_doubleLinedInstrumentFigure = doubleLinedInstrumentFigure;
 	}
@@ -68,6 +71,18 @@ public class PositionFigureListener extends InvalidatingFigureListener<MeasuredP
 				StringBuffer coordinateLon =  new StringBuffer();
 				GeoPositionFormatter.formatCoordinateMinutesWithSphere(coordinateLon, sensorData.getLongitude());
 				_doubleLinedInstrumentFigure.setLowerLine(coordinateLon.toString());
+				if(sensorData instanceof GNSSMeasuredPosition) {
+					GNSSMeasuredPosition gnssMeasuredPosition  = (GNSSMeasuredPosition) sensorData;
+					StringBuffer buffer = new StringBuffer();
+					for (Iterator<String> iterator = gnssMeasuredPosition.getAugmentation().iterator(); iterator
+							.hasNext();) {
+						buffer.append(iterator.next());
+						if(iterator.hasNext()) {
+							buffer.append(" - "); //$NON-NLS-1$
+						}
+					}
+					_doubleLinedInstrumentFigure.setSateliteAugmentation(buffer.toString());
+				}
 				
 				_doubleLinedInstrumentFigure.repaint();
 			}

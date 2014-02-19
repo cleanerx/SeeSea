@@ -69,6 +69,13 @@ public class DoubleLinedInstrumentFigure extends FontFigure implements IInvalida
 
 	@Override
 	protected void paintFigure(Graphics g) {
+		paintDoubleLine(g);
+
+	}
+
+
+
+	protected Rectangle paintDoubleLine(Graphics g) {
 		Rectangle copy = getBounds().getCopy();
 		
 		if(validData) {
@@ -101,7 +108,7 @@ public class DoubleLinedInstrumentFigure extends FontFigure implements IInvalida
 			g.drawLine(copy.x, copy.y, copy.x + copy.width, copy.y + copy.height);
 			g.drawLine(copy.x , copy.y + copy.height, copy.x + copy.width, copy.y);
 		}
-
+		return copy;
 	}
 
 	@Override

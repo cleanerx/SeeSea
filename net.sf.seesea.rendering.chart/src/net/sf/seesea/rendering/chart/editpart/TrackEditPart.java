@@ -43,6 +43,8 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gmf.runtime.draw2d.ui.internal.routers.ObliqueRouter;
 import org.eclipse.swt.widgets.Display;
@@ -53,7 +55,7 @@ import org.osgi.framework.ServiceRegistration;
 /**
  * 
  */
-public class TrackEditPart extends TransactionalEditPart implements Adapter {
+public class TrackEditPart extends TransactionalEditPart implements ConnectionEditPart {
 
 	private ServiceRegistration<IDepthListener> serviceRegistration;
 
@@ -76,9 +78,9 @@ public class TrackEditPart extends TransactionalEditPart implements Adapter {
 	@Override
 	public void activate() {
 		super.activate();
-		((Track)getModel()).eAdapters().add(this);
-		DepthListener positionListener = new DepthListener();
-		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
+//		((Track)getModel()).eAdapters().add(this);
+//		DepthListener positionListener = new DepthListener();
+//		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
 	}
 	
 	@Override
@@ -164,7 +166,7 @@ public class TrackEditPart extends TransactionalEditPart implements Adapter {
 //		});
 	}
 
-	public Notifier getTarget() {
+	public EditPart getTarget() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -177,6 +179,21 @@ public class TrackEditPart extends TransactionalEditPart implements Adapter {
 	public boolean isAdapterForType(Object type) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public EditPart getSource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setSource(EditPart source) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setTarget(EditPart target) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
