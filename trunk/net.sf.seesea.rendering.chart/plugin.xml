@@ -112,6 +112,10 @@
             </with>
          </activeWhen>
       </handler>
+      <handler
+            class="net.sf.seesea.rendering.chart.handler.DeleteHandler"
+            commandId="org.eclipse.ui.edit.delete">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">

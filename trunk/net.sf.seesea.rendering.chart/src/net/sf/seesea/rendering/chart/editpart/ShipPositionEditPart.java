@@ -99,7 +99,7 @@ public class ShipPositionEditPart extends TransactionalEditPart  implements Adap
 	@Override
 	protected void refreshVisuals() {
 		GeoPosition geoPosition = (GeoPosition) getModel();
-		if(geoPosition != null && System.currentTimeMillis() - lastUpdate > 1000) {
+		if(geoPosition != null && System.currentTimeMillis() - lastUpdate > 50) {
 			BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
 			ServiceReference<ITileProvider> serviceReference = bundleContext.getServiceReference(ITileProvider.class);
 			if(serviceReference != null) {

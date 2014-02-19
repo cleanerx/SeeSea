@@ -49,7 +49,13 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.editpolicies.BendpointEditPolicy;
+import org.eclipse.gef.editpolicies.ComponentEditPolicy;
+import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
+import org.eclipse.gef.editpolicies.SelectionEditPolicy;
 import org.eclipse.gmf.runtime.draw2d.ui.internal.routers.ObliqueRouter;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.BundleContext;
@@ -59,7 +65,7 @@ import org.osgi.framework.ServiceRegistration;
 /**
  * 
  */
-public class RouteEditPart extends TransactionalEditPart {
+public class RouteEditPart extends TransactionalEditPart implements ConnectionEditPart {
 
 	private NumberFormat format = new DecimalFormat("0.#");
 	
@@ -144,7 +150,9 @@ public class RouteEditPart extends TransactionalEditPart {
 	 */
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.CONNECTION_ROLE, new RouteEditPolicy());
+//		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new NonResizableEditPolicy());
+//		installEditPolicy(EditPolicy.CONNECTION_ROLE, new RouteEditPolicy());
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new RouteEditPolicy());
 	}
 
 	// public Track getTrack() {
@@ -179,7 +187,7 @@ public class RouteEditPart extends TransactionalEditPart {
 	// });
 	// }
 
-	public Notifier getTarget() {
+	public EditPart getTarget() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -196,7 +204,21 @@ public class RouteEditPart extends TransactionalEditPart {
 
 	@Override
 	public boolean isSelectable() {
+		return true;	
+	}
 
-		return true;
+	public EditPart getSource() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setSource(EditPart source) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setTarget(EditPart target) {
+		// TODO Auto-generated method stub
+		
 	}
 }

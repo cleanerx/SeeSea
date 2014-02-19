@@ -625,6 +625,15 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getGNSSMeasuredPosition_Augmentation() {
+		return (EAttribute)gnssMeasuredPositionEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getAnchorPosition() {
 		return anchorPositionEClass;
 	}
@@ -960,6 +969,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__HDOP);
 		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__VDOP);
 		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__PDOP);
+		createEAttribute(gnssMeasuredPositionEClass, GNSS_MEASURED_POSITION__AUGMENTATION);
 
 		anchorPositionEClass = createEClass(ANCHOR_POSITION);
 		createEAttribute(anchorPositionEClass, ANCHOR_POSITION__XEXTENT);
@@ -1119,6 +1129,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		initEAttribute(getGNSSMeasuredPosition_Hdop(), ecorePackage.getEDouble(), "hdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGNSSMeasuredPosition_Vdop(), ecorePackage.getEDouble(), "vdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGNSSMeasuredPosition_Pdop(), ecorePackage.getEDouble(), "pdop", null, 0, 1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGNSSMeasuredPosition_Augmentation(), ecorePackage.getEString(), "augmentation", null, 0, -1, GNSSMeasuredPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(anchorPositionEClass, AnchorPosition.class, "AnchorPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAnchorPosition_XExtent(), ecorePackage.getEDouble(), "xExtent", null, 0, 1, AnchorPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2012, Jens Kübler All rights reserved.
+ Copyright (c) 2010-2012, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,13 +30,17 @@ import net.sf.seesea.rendering.chart.IViewerGestureListener;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.TargetingTool;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.GestureEvent;
 
 public class ChartSelectionTool extends TargetingTool implements IViewerGestureListener {
@@ -46,6 +50,12 @@ public class ChartSelectionTool extends TargetingTool implements IViewerGestureL
 	@Override
 	protected String getCommandName() {
 		return MOVE_CHART;
+	}
+	
+	@Override
+	protected boolean handleDragStarted() {
+		setTargetRequest(createTargetRequest());
+		return false;
 	}
 	
 	@Override
@@ -61,22 +71,40 @@ public class ChartSelectionTool extends TargetingTool implements IViewerGestureL
 	
 	@Override
 	protected boolean handleButtonDown(int button) {
+		SelectionRequest selectionRequest = new SelectionRequest();
+		selectionRequest.setLastButtonPressed(button);
+		selectionRequest.setLocation(getLocation());
+		selectionRequest.setType(RequestConstants.REQ_SELECTION);
+		setTargetRequest(selectionRequest);
+		updateTargetUnderMouse();
+		EditPart targetEditPart2 = getTargetEditPart();
+		setCurrentCommand(getCommand());
+
 		return super.handleButtonDown(button);
 	}
 	
 	@Override
 	protected boolean handleButtonUp(int button) {
-		executeCurrentCommand();
+		if(getTargetRequest() instanceof SelectionRequest) {
+			getCurrentViewer().setSelection(
+					new StructuredSelection(getTargetEditPart()));
+		} else {
+			executeCurrentCommand();
+		}
+
+		resetFlags();
 		return true;
 	}
 	
 	@Override
 	protected void updateTargetRequest() {
-		Dimension delta = getDragMoveDelta();
-		ChangeBoundsRequest request = (ChangeBoundsRequest) getTargetRequest();
-		request.setMoveDelta(new Point(delta.width, delta.height));
-		request.setLocation(getLocation());
-		request.setType(getCommandName());
+		if(getTargetRequest() instanceof ChangeBoundsRequest) {
+			Dimension delta = getDragMoveDelta();
+			ChangeBoundsRequest request = (ChangeBoundsRequest) getTargetRequest();
+			request.setMoveDelta(new Point(delta.width, delta.height));
+			request.setLocation(getLocation());
+			request.setType(getCommandName());
+		}
 
 //		super.updateTargetRequest();
 	}

@@ -53,6 +53,7 @@ import net.sf.seesea.model.core.weather.WindMeasurement;
 import net.sf.seesea.provider.navigation.nmea.NMEA0183MessageTypes;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.common.util.EList;
 
 public class NMEA0183Reader implements IDataReader {
 
@@ -480,7 +481,7 @@ public class NMEA0183Reader implements IDataReader {
 		CompositeMeasurement measurement = physxFactory
 				.createCompositeMeasurement();
 
-		MeasuredPosition3D geoPosition = geoFactory.createMeasuredPosition3D();
+		GNSSMeasuredPosition geoPosition = geoFactory.createGNSSMeasuredPosition();
 		RelativeSpeed relativeSpeed = physxFactory.createRelativeSpeed();
 		Heading heading = physxFactory.createHeading();
 
@@ -573,6 +574,15 @@ public class NMEA0183Reader implements IDataReader {
 		if(!processRMCWithMeasurements) {
 			return null;
 		}
+		if(nmeaContent.length > 12) {
+			EList<String> augmentation = geoPosition.getAugmentation();
+			if("D".equals(nmeaContent[12])) {
+				augmentation.add("DGPS");
+			} else if("A".equals(nmeaContent[12])) {
+				augmentation.add("GPS");
+			}
+
+		}
 
 		measurement.getMeasurements().add(time);
 
@@ -635,6 +645,17 @@ public class NMEA0183Reader implements IDataReader {
 			}
 //			System.out.println(geoPosition.getLatitude());
 
+			if(nmeaContent.length > 6) {
+				EList<String> augmentation = geoPosition.getAugmentation();
+//				if(true) {
+				if("1".equals(nmeaContent[6])) {
+					augmentation.add("GPS");
+				}
+				if("2".equals(nmeaContent[6])) {
+					augmentation.add("DGPS");
+				}
+			}
+			
 			if(nmeaContent.length > 9) {
 				try {
 					geoPosition.setAltitude(Double.parseDouble(nmeaContent[9]));

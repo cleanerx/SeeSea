@@ -112,12 +112,12 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.NODE_ROLE, new WorldComponentEditPolicy());
+//		installEditPolicy(EditPolicy.NODE_ROLE, new WorldComponentEditPolicy());
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WorldComponentEditPolicy());
 //		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, null);
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SeeSeaDelegatingLayoutEditPolicy());
-		installEditPolicy("EditRoute", new EditRoutePolicy());
+//		installEditPolicy("EditRoute", new EditRoutePolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new EditRoutePolicy());
 //		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SeeSeaDelegatingLayoutEditPolicy());
 //		installEditPolicy(EditPolicyRoles.POPUPBAR_ROLE, new DiagramPopupBarEditPolicy());
@@ -545,6 +545,11 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	
 	public List<AreaMarker> getAreaMarkers() {
 		return areaMarkers;
+	}
+	
+	@Override
+	public boolean isSelectable() {
+		return true;
 	}
 
 }

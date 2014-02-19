@@ -142,6 +142,8 @@
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="hdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="vdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="pdop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="augmentation"
+                  upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
             </eClassifiers>
             <eClassifiers xsi:type="ecore:EClass" name="AnchorPosition" eSuperTypes="#//sf/seesea/model/core/geo/GeoPosition">
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="xExtent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

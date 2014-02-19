@@ -39,6 +39,7 @@ import org.eclipse.draw2d.MidpointLocator;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Geometry;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -221,6 +222,11 @@ public class TrackDataFigure extends PolylineConnection {
 			Point p = new Point(x, y);
 			pointList.addPoint(p);
 		}
+	}
+	
+	@Override
+	protected boolean shapeContainsPoint(int x, int y) {
+		return Geometry.polylineContainsPoint(pointList, x, y, 2);
 	}
 	
 }

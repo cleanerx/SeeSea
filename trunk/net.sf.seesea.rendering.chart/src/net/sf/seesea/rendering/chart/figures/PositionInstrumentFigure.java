@@ -46,6 +46,8 @@ public class PositionInstrumentFigure extends FreeformLayer {
 	private String positionLatitude; 
 
 	private String positionLongitude;
+	
+	private String sateliteAugmentation;
 
 	private RGB rgb2; 
 
@@ -85,6 +87,11 @@ public class PositionInstrumentFigure extends FreeformLayer {
 		Dimension textDimensionLongitude = FigureUtilities.getTextExtents(positionLongitude, font2);
 
 		g.drawText(positionLongitude, copy.x +  copy.width - textDimensionLongitude.width, copy.y + textDimensionLatitude.height);
+		
+		Font small = new Font(Display.getDefault(),"Arial", copy.width / 8, SWT.BOLD);  //$NON-NLS-1$
+		g.setFont(small);
+		g.drawText(sateliteAugmentation, copy.x + 4 , copy.y + 4);
+
 		font2.dispose();
 	}
 
@@ -108,6 +115,16 @@ public class PositionInstrumentFigure extends FreeformLayer {
 	public void setPositionLongitude(String positionLongitude) {
 		this.positionLongitude = positionLongitude;
 	}
+
+	public String getSateliteAugmentation() {
+		return sateliteAugmentation;
+	}
+
+	public void setSateliteAugmentation(String sateliteAugmentation) {
+		this.sateliteAugmentation = sateliteAugmentation;
+	}
+	
+	
 	
 	
 
