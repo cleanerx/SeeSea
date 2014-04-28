@@ -264,6 +264,11 @@
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//sf/seesea/model/core/physx/SpeedType"/>
               <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//sf/seesea/model/core/physx/Speed"/>
             </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="Acceleration" eSuperTypes="#//sf/seesea/model/core/physx/Measurement">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="z" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            </eClassifiers>
           </eSubpackages>
           <eSubpackages name="weather" nsURI="weather" nsPrefix="weather">
             <eClassifiers xsi:type="ecore:EClass" name="WindMeasurement" eSuperTypes="#//sf/seesea/model/core/physx/Measurement #//sf/seesea/model/core/physx/Speed">

@@ -889,6 +889,88 @@ public interface PhysxPackage extends EPackage {
 	int RELATIVE_SPEED_FEATURE_COUNT = MEASUREMENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link net.sf.seesea.model.core.physx.impl.AccelerationImpl <em>Acceleration</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see net.sf.seesea.model.core.physx.impl.AccelerationImpl
+	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getAcceleration()
+	 * @generated
+	 */
+	int ACCELERATION = 11;
+
+	/**
+	 * The feature id for the '<em><b>Sensor ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION__SENSOR_ID = MEASUREMENT__SENSOR_ID;
+
+	/**
+	 * The feature id for the '<em><b>Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION__TIME = MEASUREMENT__TIME;
+
+	/**
+	 * The feature id for the '<em><b>Timezone</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION__TIMEZONE = MEASUREMENT__TIMEZONE;
+
+	/**
+	 * The feature id for the '<em><b>Valid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION__VALID = MEASUREMENT__VALID;
+
+	/**
+	 * The feature id for the '<em><b>X</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION__X = MEASUREMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Y</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION__Y = MEASUREMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Z</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION__Z = MEASUREMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Acceleration</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACCELERATION_FEATURE_COUNT = MEASUREMENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.physx.TemperatureUnit <em>Temperature Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -896,7 +978,7 @@ public interface PhysxPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getTemperatureUnit()
 	 * @generated
 	 */
-	int TEMPERATURE_UNIT = 11;
+	int TEMPERATURE_UNIT = 12;
 
 
 	/**
@@ -907,7 +989,7 @@ public interface PhysxPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getHeadingType()
 	 * @generated
 	 */
-	int HEADING_TYPE = 12;
+	int HEADING_TYPE = 13;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.physx.SpeedUnit <em>Speed Unit</em>}' enum.
@@ -917,7 +999,7 @@ public interface PhysxPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getSpeedUnit()
 	 * @generated
 	 */
-	int SPEED_UNIT = 13;
+	int SPEED_UNIT = 14;
 
 
 	/**
@@ -928,7 +1010,7 @@ public interface PhysxPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getHandOrientation()
 	 * @generated
 	 */
-	int HAND_ORIENTATION = 14;
+	int HAND_ORIENTATION = 15;
 
 
 	/**
@@ -939,7 +1021,7 @@ public interface PhysxPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getLengthUnit()
 	 * @generated
 	 */
-	int LENGTH_UNIT = 15;
+	int LENGTH_UNIT = 16;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.physx.SpeedType <em>Speed Type</em>}' enum.
@@ -949,7 +1031,7 @@ public interface PhysxPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getSpeedType()
 	 * @generated
 	 */
-	int SPEED_TYPE = 16;
+	int SPEED_TYPE = 17;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.physx.DistanceType <em>Distance Type</em>}' enum.
@@ -959,7 +1041,7 @@ public interface PhysxPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getDistanceType()
 	 * @generated
 	 */
-	int DISTANCE_TYPE = 17;
+	int DISTANCE_TYPE = 18;
 
 	/**
 	 * Returns the meta object for class '{@link net.sf.seesea.model.core.physx.Temperature <em>Temperature</em>}'.
@@ -1312,6 +1394,49 @@ public interface PhysxPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRelativeSpeed_Value();
+
+	/**
+	 * Returns the meta object for class '{@link net.sf.seesea.model.core.physx.Acceleration <em>Acceleration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Acceleration</em>'.
+	 * @see net.sf.seesea.model.core.physx.Acceleration
+	 * @generated
+	 */
+	EClass getAcceleration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.physx.Acceleration#getX <em>X</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>X</em>'.
+	 * @see net.sf.seesea.model.core.physx.Acceleration#getX()
+	 * @see #getAcceleration()
+	 * @generated
+	 */
+	EAttribute getAcceleration_X();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.physx.Acceleration#getY <em>Y</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Y</em>'.
+	 * @see net.sf.seesea.model.core.physx.Acceleration#getY()
+	 * @see #getAcceleration()
+	 * @generated
+	 */
+	EAttribute getAcceleration_Y();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.physx.Acceleration#getZ <em>Z</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Z</em>'.
+	 * @see net.sf.seesea.model.core.physx.Acceleration#getZ()
+	 * @see #getAcceleration()
+	 * @generated
+	 */
+	EAttribute getAcceleration_Z();
 
 	/**
 	 * Returns the meta object for enum '{@link net.sf.seesea.model.core.physx.TemperatureUnit <em>Temperature Unit</em>}'.
@@ -1690,6 +1815,40 @@ public interface PhysxPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RELATIVE_SPEED__VALUE = eINSTANCE.getRelativeSpeed_Value();
+
+		/**
+		 * The meta object literal for the '{@link net.sf.seesea.model.core.physx.impl.AccelerationImpl <em>Acceleration</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see net.sf.seesea.model.core.physx.impl.AccelerationImpl
+		 * @see net.sf.seesea.model.core.physx.impl.PhysxPackageImpl#getAcceleration()
+		 * @generated
+		 */
+		EClass ACCELERATION = eINSTANCE.getAcceleration();
+
+		/**
+		 * The meta object literal for the '<em><b>X</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACCELERATION__X = eINSTANCE.getAcceleration_X();
+
+		/**
+		 * The meta object literal for the '<em><b>Y</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACCELERATION__Y = eINSTANCE.getAcceleration_Y();
+
+		/**
+		 * The meta object literal for the '<em><b>Z</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACCELERATION__Z = eINSTANCE.getAcceleration_Z();
 
 		/**
 		 * The meta object literal for the '{@link net.sf.seesea.model.core.physx.TemperatureUnit <em>Temperature Unit</em>}' enum.

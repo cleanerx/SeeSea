@@ -330,6 +330,29 @@ public class PhysxItemProviderAdapterFactory extends PhysxAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.physx.Acceleration} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AccelerationItemProvider accelerationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link net.sf.seesea.model.core.physx.Acceleration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAccelerationAdapter() {
+		if (accelerationItemProvider == null) {
+			accelerationItemProvider = new AccelerationItemProvider(this);
+		}
+
+		return accelerationItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -438,6 +461,7 @@ public class PhysxItemProviderAdapterFactory extends PhysxAdapterFactory impleme
 		if (distanceItemProvider != null) distanceItemProvider.dispose();
 		if (compositeMeasurementItemProvider != null) compositeMeasurementItemProvider.dispose();
 		if (relativeSpeedItemProvider != null) relativeSpeedItemProvider.dispose();
+		if (accelerationItemProvider != null) accelerationItemProvider.dispose();
 	}
 
 }
