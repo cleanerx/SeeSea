@@ -36,7 +36,8 @@ package net.sf.seesea.provider.navigation.nmea;
  */
 public enum NMEA0183MessageTypes {
 
-	AAM, 
+	AAM,
+	ACC,
 	ALM, 
 	APA, 
 	APB, 
@@ -88,7 +89,10 @@ public enum NMEA0183MessageTypes {
 	RSA, 
 	RSD, 
 	RTE, 
-	SFI, 
+	SFI,
+	SMACC,
+	SMGYR,
+	SMVCC,
 	STN, 
 	TLL, 
 	TRF, 
