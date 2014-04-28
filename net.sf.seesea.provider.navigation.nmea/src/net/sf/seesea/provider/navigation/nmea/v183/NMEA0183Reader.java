@@ -403,69 +403,72 @@ public class NMEA0183Reader implements IDataReader {
 	 * @return
 	 */
 	private SatellitesVisible GSV_SatelliteData(String[] nmeaContent) {
-		if (nmeaContent[2].equals("1")) { //$NON-NLS-1$
-			satelliteDataCache.clear();
-			satelliteMessageCounter = 0;
-		}
-
-		satelliteMessageCounter++;
-		for (int i = 1; i < 5; i++) {
-			int index2 = 4 * i;
-			if (index2 < nmeaContent.length) {
-				String id = nmeaContent[4 * i];
-				if (id != null && id.length() > 0) {
-					SatelliteInfo satelliteInfo = PhysxFactory.eINSTANCE
-							.createSatelliteInfo();
-					try {
-						satelliteInfo.setId(Integer.parseInt(id));
-					} catch (NumberFormatException e) {
-						// ignore
-					}
-					try {
-						int index = (4 * i) + 1;
-						if (index < nmeaContent.length) {
-							satelliteInfo.setElevation(Integer
-									.parseInt(nmeaContent[(4 * i) + 1]));
+		if(nmeaContent.length > 3) {
+			
+			if (nmeaContent[2].equals("1")) { //$NON-NLS-1$
+				satelliteDataCache.clear();
+				satelliteMessageCounter = 0;
+			}
+			
+			satelliteMessageCounter++;
+			for (int i = 1; i < 5; i++) {
+				int index2 = 4 * i;
+				if (index2 < nmeaContent.length) {
+					String id = nmeaContent[4 * i];
+					if (id != null && id.length() > 0) {
+						SatelliteInfo satelliteInfo = PhysxFactory.eINSTANCE
+								.createSatelliteInfo();
+						try {
+							satelliteInfo.setId(Integer.parseInt(id));
+						} catch (NumberFormatException e) {
+							// ignore
 						}
-					} catch (NumberFormatException e) {
-						// ignore
-					}
-					try {
-						int index = (4 * i) + 2;
-						if (index < nmeaContent.length) {
-							satelliteInfo.setAzimuth(Integer
-									.parseInt(nmeaContent[(4 * i) + 2]));
+						try {
+							int index = (4 * i) + 1;
+							if (index < nmeaContent.length) {
+								satelliteInfo.setElevation(Integer
+										.parseInt(nmeaContent[(4 * i) + 1]));
+							}
+						} catch (NumberFormatException e) {
+							// ignore
 						}
-					} catch (NumberFormatException e) {
-						// ignore
-					}
-					try {
-						int index = (4 * i) + 3;
-						if (index < nmeaContent.length) {
-							satelliteInfo.setSignalStrength(Integer
-									.parseInt(nmeaContent[index]));
+						try {
+							int index = (4 * i) + 2;
+							if (index < nmeaContent.length) {
+								satelliteInfo.setAzimuth(Integer
+										.parseInt(nmeaContent[(4 * i) + 2]));
+							}
+						} catch (NumberFormatException e) {
+							// ignore
 						}
-					} catch (NumberFormatException e) {
-						// ignore
+						try {
+							int index = (4 * i) + 3;
+							if (index < nmeaContent.length) {
+								satelliteInfo.setSignalStrength(Integer
+										.parseInt(nmeaContent[index]));
+							}
+						} catch (NumberFormatException e) {
+							// ignore
+						}
+						satelliteDataCache.add(satelliteInfo);
 					}
-					satelliteDataCache.add(satelliteInfo);
+					
 				}
-
+			}
+			
+			int totalMessages = Integer.parseInt(nmeaContent[1]);
+			if (totalMessages == satelliteMessageCounter) {
+				SatellitesVisible satellitesVisible = PhysxFactory.eINSTANCE
+						.createSatellitesVisible();
+				satellitesVisible.getSatelliteInfo().addAll(satelliteDataCache);
+				satelliteDataCache.clear();
+				// send
+				return satellitesVisible;
+			} else {
+				return null;
 			}
 		}
-
-		int totalMessages = Integer.parseInt(nmeaContent[1]);
-		if (totalMessages == satelliteMessageCounter) {
-			SatellitesVisible satellitesVisible = PhysxFactory.eINSTANCE
-					.createSatellitesVisible();
-			satellitesVisible.getSatelliteInfo().addAll(satelliteDataCache);
-			satelliteDataCache.clear();
-			// send
-			return satellitesVisible;
-		} else {
-			return null;
-		}
-
+		return null;
 	}
 
 	/**

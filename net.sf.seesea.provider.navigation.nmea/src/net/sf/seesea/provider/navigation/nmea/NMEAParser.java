@@ -37,6 +37,7 @@ import java.util.Map;
 
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.model.core.physx.Acceleration;
 import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Distance;
 import net.sf.seesea.model.core.physx.Heading;
@@ -47,6 +48,7 @@ import net.sf.seesea.model.core.physx.SatellitesVisible;
 import net.sf.seesea.model.core.physx.Temperature;
 import net.sf.seesea.model.core.physx.Time;
 import net.sf.seesea.model.core.weather.WindMeasurement;
+import net.sf.seesea.services.navigation.listener.IAccelerationListener;
 import net.sf.seesea.services.navigation.listener.IDataListener;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
@@ -85,6 +87,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 	protected final Map<Class<?>, Long> sensorHeartbeats;
 	protected final Thread heartbeatThread;
 	protected final Object heartbeatSync;
+	protected final List<IAccelerationListener> _accelerationListeners;
 
 	public NMEAParser() {
 		super();
@@ -113,6 +116,8 @@ IWindDataProvider, IShipMovementVectorProvider {
 				.synchronizedList(new ArrayList<ITotalLogListener>(1));
 		_tripLogListeners = Collections
 				.synchronizedList(new ArrayList<ITripLogListener>(1));
+		_accelerationListeners = Collections
+				.synchronizedList(new ArrayList<IAccelerationListener>(1));
 		// activeReaders = new HashMap<INMEAStreamProvider, Thread>();
 		sensorHeartbeats = new HashMap<Class<?>, Long>();
 		heartbeatSync = new Object();
@@ -151,6 +156,10 @@ IWindDataProvider, IShipMovementVectorProvider {
 					}
 				} else if (dataListener.isAssignableFrom(IDepthListener.class)) {
 					for (IDepthListener listener : _depthListeners) {
+						listener.providerDisabled(getProviderName());
+					}
+				} else if (dataListener.isAssignableFrom(IAccelerationListener.class)) {
+					for (IAccelerationListener listener : _accelerationListeners) {
 						listener.providerDisabled(getProviderName());
 					}
 				} else if (dataListener.isAssignableFrom(IHeadingListener.class)) {
@@ -218,6 +227,11 @@ IWindDataProvider, IShipMovementVectorProvider {
 					} else if (dataListener
 							.isAssignableFrom(IHeadingListener.class)) {
 						for (IHeadingListener listener : _headingListeners) {
+							listener.providerEnabled(getProviderName());
+						}
+					} else if (dataListener
+							.isAssignableFrom(IAccelerationListener.class)) {
+						for (IAccelerationListener listener : _accelerationListeners) {
 							listener.providerEnabled(getProviderName());
 						}
 					} else if (dataListener
@@ -385,6 +399,15 @@ IWindDataProvider, IShipMovementVectorProvider {
 		_tripLogListeners.remove(listener);
 	}
 
+	public synchronized void attachAccelerationListener(IAccelerationListener listener) {
+		_accelerationListeners.add(listener);
+	}
+
+	public synchronized void detachAccelerationListener(IAccelerationListener listener) {
+		listener.providerDisabled(getProviderName());
+		_accelerationListeners.remove(listener);
+	}
+
 	protected abstract String getProviderName();
 
 	protected void notifyListeners(Measurement measurement) {
@@ -405,6 +428,14 @@ IWindDataProvider, IShipMovementVectorProvider {
 				for (IHeadingListener speedVectorListener : _headingListeners) {
 					speedVectorListener.notify(
 							(Heading) measurement, null);
+				}
+			}
+		} else if (measurement instanceof Acceleration) {
+			synchronized (_accelerationListeners) {
+				heartbeat(IAccelerationListener.class);
+				for (IAccelerationListener speedVectorListener : _accelerationListeners) {
+					speedVectorListener.notify(
+							(Acceleration) measurement, null);
 				}
 			}
 		} else if (measurement instanceof RelativeSpeed) {

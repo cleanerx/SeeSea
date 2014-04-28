@@ -96,6 +96,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 			case PhysxPackage.DISTANCE: return createDistance();
 			case PhysxPackage.COMPOSITE_MEASUREMENT: return createCompositeMeasurement();
 			case PhysxPackage.RELATIVE_SPEED: return createRelativeSpeed();
+			case PhysxPackage.ACCELERATION: return createAcceleration();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -253,6 +254,16 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	public RelativeSpeed createRelativeSpeed() {
 		RelativeSpeedImpl relativeSpeed = new RelativeSpeedImpl();
 		return relativeSpeed;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Acceleration createAcceleration() {
+		AccelerationImpl acceleration = new AccelerationImpl();
+		return acceleration;
 	}
 
 	/**

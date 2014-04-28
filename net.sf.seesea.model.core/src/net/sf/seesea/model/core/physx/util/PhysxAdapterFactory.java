@@ -142,6 +142,10 @@ public class PhysxAdapterFactory extends AdapterFactoryImpl {
 				return createRelativeSpeedAdapter();
 			}
 			@Override
+			public Adapter caseAcceleration(Acceleration object) {
+				return createAccelerationAdapter();
+			}
+			@Override
 			public Adapter caseModelObject(ModelObject object) {
 				return createModelObjectAdapter();
 			}
@@ -316,6 +320,20 @@ public class PhysxAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRelativeSpeedAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.physx.Acceleration <em>Acceleration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see net.sf.seesea.model.core.physx.Acceleration
+	 * @generated
+	 */
+	public Adapter createAccelerationAdapter() {
 		return null;
 	}
 

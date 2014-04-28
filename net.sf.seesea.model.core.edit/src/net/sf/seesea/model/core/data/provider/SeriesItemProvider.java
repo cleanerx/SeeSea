@@ -251,6 +251,11 @@ public class SeriesItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(DataPackage.Literals.SERIES__MEASUREMENT,
+				 PhysxFactory.eINSTANCE.createAcceleration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(DataPackage.Literals.SERIES__MEASUREMENT,
 				 WeatherFactory.eINSTANCE.createWindMeasurement()));
 
 		newChildDescriptors.add

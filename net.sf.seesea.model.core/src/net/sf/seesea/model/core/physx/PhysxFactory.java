@@ -140,6 +140,15 @@ public interface PhysxFactory extends EFactory {
 	RelativeSpeed createRelativeSpeed();
 
 	/**
+	 * Returns a new object of class '<em>Acceleration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Acceleration</em>'.
+	 * @generated
+	 */
+	Acceleration createAcceleration();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

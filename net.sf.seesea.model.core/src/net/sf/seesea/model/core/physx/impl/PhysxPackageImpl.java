@@ -40,6 +40,7 @@ import net.sf.seesea.model.core.geo.impl.GeoPackageImpl;
 import net.sf.seesea.model.core.geo.osm.OsmPackage;
 import net.sf.seesea.model.core.geo.osm.impl.OsmPackageImpl;
 import net.sf.seesea.model.core.impl.CorePackageImpl;
+import net.sf.seesea.model.core.physx.Acceleration;
 import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Distance;
 import net.sf.seesea.model.core.physx.DistanceType;
@@ -153,6 +154,13 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * @generated
 	 */
 	private EClass relativeSpeedEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass accelerationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -586,6 +594,42 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAcceleration() {
+		return accelerationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAcceleration_X() {
+		return (EAttribute)accelerationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAcceleration_Y() {
+		return (EAttribute)accelerationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAcceleration_Z() {
+		return (EAttribute)accelerationEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getTemperatureUnit() {
 		return temperatureUnitEEnum;
 	}
@@ -716,6 +760,11 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		createEAttribute(relativeSpeedEClass, RELATIVE_SPEED__KEY);
 		createEReference(relativeSpeedEClass, RELATIVE_SPEED__VALUE);
 
+		accelerationEClass = createEClass(ACCELERATION);
+		createEAttribute(accelerationEClass, ACCELERATION__X);
+		createEAttribute(accelerationEClass, ACCELERATION__Y);
+		createEAttribute(accelerationEClass, ACCELERATION__Z);
+
 		// Create enums
 		temperatureUnitEEnum = createEEnum(TEMPERATURE_UNIT);
 		headingTypeEEnum = createEEnum(HEADING_TYPE);
@@ -769,6 +818,7 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		distanceEClass.getESuperTypes().add(this.getMeasurement());
 		compositeMeasurementEClass.getESuperTypes().add(this.getMeasurement());
 		relativeSpeedEClass.getESuperTypes().add(this.getMeasurement());
+		accelerationEClass.getESuperTypes().add(this.getMeasurement());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(temperatureEClass, Temperature.class, "Temperature", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -814,6 +864,11 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		initEClass(relativeSpeedEClass, RelativeSpeed.class, "RelativeSpeed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRelativeSpeed_Key(), this.getSpeedType(), "key", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRelativeSpeed_Value(), this.getSpeed(), null, "value", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(accelerationEClass, Acceleration.class, "Acceleration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAcceleration_X(), ecorePackage.getEDouble(), "x", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAcceleration_Y(), ecorePackage.getEDouble(), "y", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAcceleration_Z(), ecorePackage.getEDouble(), "z", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(temperatureUnitEEnum, TemperatureUnit.class, "TemperatureUnit");
