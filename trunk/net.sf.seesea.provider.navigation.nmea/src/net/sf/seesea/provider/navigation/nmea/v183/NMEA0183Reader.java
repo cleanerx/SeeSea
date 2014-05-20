@@ -910,7 +910,7 @@ public class NMEA0183Reader implements IDataReader {
 			if (nmeaContent.length > 5 && !nmeaContent[5].isEmpty()) {
 				if(useLastDateFromAnotherSentenceGGA) {
 					Date time = geoPosition.getTime();
-					if(lastDate != null && time != null) {
+					if(lastDate != null && time == null) {
 						Calendar lastTimeCalendar = Calendar.getInstance();
 						lastTimeCalendar.setTime(lastDate);
 						lastTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer
