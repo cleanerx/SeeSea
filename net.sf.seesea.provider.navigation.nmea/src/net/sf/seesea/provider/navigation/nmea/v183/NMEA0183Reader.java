@@ -260,7 +260,7 @@ public class NMEA0183Reader implements IDataReader {
 	private Measurement ZDA_Timestamp(String[] nmeaContent) {
 		PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
 		Time time = physxFactory.createTime();
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance(); 
 		try {
 			if(!nmeaContent[1].isEmpty()) { 
 				calendar.set(Calendar.HOUR_OF_DAY,
@@ -281,6 +281,8 @@ public class NMEA0183Reader implements IDataReader {
 						Calendar.YEAR,
 						Integer.parseInt(nmeaContent[5].trim()) + 2000);
 				calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+			}
+			if(!nmeaContent[1].isEmpty() || !nmeaContent[3].isEmpty()) {
 				time.setTime(calendar.getTime());
 				time.setTimezone("UTC"); //$NON-NLS-1$
 				if(useLastDateFromAnotherSentenceGGA) {
