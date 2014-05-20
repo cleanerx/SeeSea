@@ -200,6 +200,14 @@ public class NMEA0183Reader implements IDataReader {
 									NMEA0183MessageTypes.RMC);
 						}
 						break;
+					case ZDA:
+						measurement = ZDA_Timestamp(nmeaContent);
+						if (measurement != null) {
+							addMeasurmentIfUnfiltered(results,
+									processMessageTypes2SensorIds, measurement,
+									NMEA0183MessageTypes.ZDA);
+						}
+						break;
 					case GSV:
 						measurement = GSV_SatelliteData(nmeaContent);
 						if (measurement != null) {
@@ -247,6 +255,42 @@ public class NMEA0183Reader implements IDataReader {
 			}
 		}
 		return results;
+	}
+
+	private Measurement ZDA_Timestamp(String[] nmeaContent) {
+		PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
+		Time time = physxFactory.createTime();
+		Calendar calendar = Calendar.getInstance();
+		try {
+			if(!nmeaContent[1].isEmpty()) { 
+				calendar.set(Calendar.HOUR_OF_DAY,
+						Integer.parseInt(nmeaContent[1].substring(0, 2).trim()));
+				calendar.set(Calendar.MINUTE,
+						Integer.parseInt(nmeaContent[1].substring(2, 4).trim()));
+				calendar.set(Calendar.SECOND,
+						Integer.parseInt(nmeaContent[1].substring(4, 6).trim()));
+				calendar.set(Calendar.MILLISECOND, 0);
+			}
+
+			if(!nmeaContent[3].isEmpty()) {
+				calendar.set(Calendar.DAY_OF_MONTH,
+						Integer.parseInt(nmeaContent[3].trim()));
+				calendar.set(Calendar.MONTH,
+						Integer.parseInt(nmeaContent[4].trim()));
+				calendar.set(
+						Calendar.YEAR,
+						Integer.parseInt(nmeaContent[5].trim()) + 2000);
+				calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+				time.setTime(calendar.getTime());
+				time.setTimezone("UTC"); //$NON-NLS-1$
+				if(useLastDateFromAnotherSentenceGGA) {
+					lastDate = time.getTime();
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			Logger.getLogger(getClass()).error("Failed to parse timestamp " + nmeaContent);
+		}
+		return null;
 	}
 
 	private void addMeasurmentIfUnfiltered(
