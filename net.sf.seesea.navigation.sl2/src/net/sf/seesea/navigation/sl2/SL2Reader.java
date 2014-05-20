@@ -83,51 +83,55 @@ public class SL2Reader implements ISL2Listener {
 		 float surfaceDepth = Float.intBitsToFloat(getInt(data,64)) * 0.3048f;
 
 		 float waterTemperature = Float.intBitsToFloat(getInt(data,104));
-		 Longitude longitude = GeoParser.parseLongitude(toLongitude(getInt(data, 108))); // 104
-		 Latitude latitude = GeoParser.parseLatitude(toLatitude(getInt(data, 112))); // 104
-		 float speed = Float.intBitsToFloat(getInt(data,116));
-		 float cog = Float.intBitsToFloat(getInt(data,120));
-		 
-		 int time = getInt(data,140);
-		 
-		// 112
-		// dataInputStream.read(x, 0, 4);
-		// double degrees =
-		// Math.toDegrees(Float.intBitsToFloat(toBigEndianInt(x,0))); // 116
-		// dataInputStream.read(x, 0, 4);
-		// float altitude = Float.intBitsToFloat(toBigEndianInt(x,0)); // 120
-		// // dataInputStream.read(x, 0, 4);
-		// int u = toBigEndianInt(dataInputStream.readInt()); // 128 getting 8
-		// or 12
-		// // float u = Float.intBitsToFloat(toBigEndianInt(x,0)); // 124
-		// // dataInputStream.read(x, 0, 4);
-		// int v = toBigEndianInt(dataInputStream.readInt()); // 128 getting 8
-		// or 12
-		// int w = toBigEndianInt(dataInputStream.readInt()); // 132
-		// int time2 = toBigEndianInt(dataInputStream.readInt()); // 136
-		//
-		// short y = toBigEndianShort(dataInputStream.readShort()); // 26
-		 
-			MeasuredPosition3D geoPosition3D = GeoFactory.eINSTANCE.createMeasuredPosition3D();
-			geoPosition3D.setLatitude(latitude);
-			geoPosition3D.setLongitude(longitude);
-			geoPosition3D.setValid(true);
-			geoPosition3D.setTime(new Date(time));
-			Depth depth = GeoFactory.eINSTANCE.createDepth();
-			depth.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
-			depth.setDepth(surfaceDepth);
-			depth.setSensorID(sensorID.toString());
-			depth.setValid(true);
-			depth.setTime(new Date(time));
-			
-			List<Measurement> measurements = new ArrayList<Measurement>(2);
-			measurements.add(geoPosition3D);
-			measurements.add(depth);
-
-		 
-			for (IMeasurementListener measurementListener : listeners) {
-				measurementListener.notify(measurements);
-			}
+		 try {
+			 Longitude longitude = GeoParser.parseLongitude(toLongitude(getInt(data, 108))); // 104
+			 Latitude latitude = GeoParser.parseLatitude(toLatitude(getInt(data, 112))); // 104
+			 float speed = Float.intBitsToFloat(getInt(data,116));
+			 float cog = Float.intBitsToFloat(getInt(data,120));
+			 
+			 int time = getInt(data,140);
+			 
+			 // 112
+			 // dataInputStream.read(x, 0, 4);
+			 // double degrees =
+			 // Math.toDegrees(Float.intBitsToFloat(toBigEndianInt(x,0))); // 116
+			 // dataInputStream.read(x, 0, 4);
+			 // float altitude = Float.intBitsToFloat(toBigEndianInt(x,0)); // 120
+			 // // dataInputStream.read(x, 0, 4);
+			 // int u = toBigEndianInt(dataInputStream.readInt()); // 128 getting 8
+			 // or 12
+			 // // float u = Float.intBitsToFloat(toBigEndianInt(x,0)); // 124
+			 // // dataInputStream.read(x, 0, 4);
+			 // int v = toBigEndianInt(dataInputStream.readInt()); // 128 getting 8
+			 // or 12
+			 // int w = toBigEndianInt(dataInputStream.readInt()); // 132
+			 // int time2 = toBigEndianInt(dataInputStream.readInt()); // 136
+			 //
+			 // short y = toBigEndianShort(dataInputStream.readShort()); // 26
+			 
+			 MeasuredPosition3D geoPosition3D = GeoFactory.eINSTANCE.createMeasuredPosition3D();
+			 geoPosition3D.setLatitude(latitude);
+			 geoPosition3D.setLongitude(longitude);
+			 geoPosition3D.setValid(true);
+			 geoPosition3D.setTime(new Date(time));
+			 Depth depth = GeoFactory.eINSTANCE.createDepth();
+			 depth.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
+			 depth.setDepth(surfaceDepth);
+			 depth.setSensorID(sensorID.toString());
+			 depth.setValid(true);
+			 depth.setTime(new Date(time));
+			 
+			 List<Measurement> measurements = new ArrayList<Measurement>(2);
+			 measurements.add(geoPosition3D);
+			 measurements.add(depth);
+			 
+			 
+			 for (IMeasurementListener measurementListener : listeners) {
+				 measurementListener.notify(measurements);
+			 }
+		 } catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 			
 	}
 
