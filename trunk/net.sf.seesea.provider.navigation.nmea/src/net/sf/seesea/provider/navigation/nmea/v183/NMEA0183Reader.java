@@ -521,7 +521,7 @@ public class NMEA0183Reader implements IDataReader {
 		Time time = physxFactory.createTime();
 		Calendar calendar = Calendar.getInstance();
 		try {
-			if(!nmeaContent[1].isEmpty()) {
+			if(!nmeaContent[1].isEmpty()) { 
 				calendar.set(Calendar.HOUR_OF_DAY,
 						Integer.parseInt(nmeaContent[1].substring(0, 2).trim()));
 				calendar.set(Calendar.MINUTE,
