@@ -577,7 +577,7 @@ public class NMEA0183Reader implements IDataReader {
 				calendar.set(Calendar.MILLISECOND, 0);
 			}
 
-			if(!nmeaContent[1].isEmpty()) {
+			if(!nmeaContent[9].isEmpty()) {
 				calendar.set(Calendar.DAY_OF_MONTH,
 						Integer.parseInt(nmeaContent[9].substring(0, 2).trim()));
 				calendar.set(Calendar.MONTH,
