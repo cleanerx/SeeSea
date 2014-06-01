@@ -586,6 +586,8 @@ public class NMEA0183Reader implements IDataReader {
 						Calendar.YEAR,
 						Integer.parseInt(nmeaContent[9].substring(4, 6).trim()) + 2000);
 				calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+			}
+			if(!nmeaContent[9].isEmpty() || !nmeaContent[1].isEmpty()) {
 				time.setTime(calendar.getTime());
 				time.setTimezone("UTC"); //$NON-NLS-1$
 				heading.setTime(calendar.getTime());
@@ -595,6 +597,7 @@ public class NMEA0183Reader implements IDataReader {
 				geoPosition.setTime(calendar.getTime());
 				geoPosition.setTimezone("UTC"); //$NON-NLS-1$
 			}
+			
 			if(useLastDateFromAnotherSentenceGGA) {
 				lastDate = geoPosition.getTime();
 			}
