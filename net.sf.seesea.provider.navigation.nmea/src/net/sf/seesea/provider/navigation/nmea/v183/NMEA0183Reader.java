@@ -1051,7 +1051,6 @@ public class NMEA0183Reader implements IDataReader {
 		Depth depth = GeoFactory.eINSTANCE.createDepth();
 		depth.setMeasurementPosition(RelativeDepthMeasurementPosition.SURFACE);
 		setDepthFromContent(nmeaContent, depth);
-		depth.setValid(true);
 		return depth;
 	}
 
@@ -1059,7 +1058,6 @@ public class NMEA0183Reader implements IDataReader {
 		Depth depth = GeoFactory.eINSTANCE.createDepth();
 		depth.setMeasurementPosition(RelativeDepthMeasurementPosition.TRANSDUCER);
 		setDepthFromContent(nmeaContent, depth);
-		depth.setValid(true);
 		return depth;
 	}
 
@@ -1070,15 +1068,18 @@ public class NMEA0183Reader implements IDataReader {
 	 * @param depth
 	 */
 	private void setDepthFromContent(String[] nmeaContent, Depth depth) {
-		if (!nmeaContent[3].isEmpty()) {
+		if (nmeaContent.length > 3 && !nmeaContent[3].isEmpty()) {
 			double depthInMeters = Double.parseDouble(nmeaContent[3]);
 			depth.setDepth(depthInMeters);
-		} else if (!nmeaContent[1].isEmpty()) {
+			depth.setValid(true);
+		} else if (nmeaContent.length > 1 && !nmeaContent[1].isEmpty()) {
 			double depthInMeters = Double.parseDouble(nmeaContent[1]) * 0.3048;
 			depth.setDepth(depthInMeters);
-		} else if (!nmeaContent[5].isEmpty()) {
+			depth.setValid(true);
+		} else if (nmeaContent.length > 5 && !nmeaContent[5].isEmpty()) {
 			double depthInMeters = Double.parseDouble(nmeaContent[1]) * 1.8288;
 			depth.setDepth(depthInMeters);
+			depth.setValid(true);
 		}
 		setSensorID(nmeaContent[0], depth);
 	}
