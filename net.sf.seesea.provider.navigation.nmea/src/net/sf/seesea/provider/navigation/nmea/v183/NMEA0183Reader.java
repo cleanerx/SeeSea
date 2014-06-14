@@ -273,7 +273,7 @@ public class NMEA0183Reader implements IDataReader {
 			}
 
 			// zone seems to be optional sometimes. and date follows as day month year
-			if(nmeaContent[4].length() == 4) {
+			if(nmeaContent.length > 3 && nmeaContent[4].length() == 4) {
 				if(!nmeaContent[2].isEmpty()) {
 					calendar.set(Calendar.DAY_OF_MONTH,
 							Integer.parseInt(nmeaContent[2].trim()));
@@ -285,7 +285,7 @@ public class NMEA0183Reader implements IDataReader {
 					calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
 				}
 			} else {
-				if(!nmeaContent[3].isEmpty()) {
+				if(nmeaContent.length > 2 && !nmeaContent[3].isEmpty()) {
 					calendar.set(Calendar.DAY_OF_MONTH,
 							Integer.parseInt(nmeaContent[3].trim()));
 					calendar.set(Calendar.MONTH,
