@@ -272,16 +272,31 @@ public class NMEA0183Reader implements IDataReader {
 				calendar.set(Calendar.MILLISECOND, 0);
 			}
 
-			if(!nmeaContent[3].isEmpty()) {
-				calendar.set(Calendar.DAY_OF_MONTH,
-						Integer.parseInt(nmeaContent[3].trim()));
-				calendar.set(Calendar.MONTH,
-						Integer.parseInt(nmeaContent[4].trim()));
-				calendar.set(
-						Calendar.YEAR,
-						Integer.parseInt(nmeaContent[5].trim()) + 2000);
-				calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+			// zone seems to be optional sometimes. and date follows as day month year
+			if(nmeaContent[4].length() == 4) {
+				if(!nmeaContent[2].isEmpty()) {
+					calendar.set(Calendar.DAY_OF_MONTH,
+							Integer.parseInt(nmeaContent[2].trim()));
+					calendar.set(Calendar.MONTH,
+							Integer.parseInt(nmeaContent[3].trim()));
+					calendar.set(
+							Calendar.YEAR,
+							Integer.parseInt(nmeaContent[4].trim()));
+					calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+				}
+			} else {
+				if(!nmeaContent[3].isEmpty()) {
+					calendar.set(Calendar.DAY_OF_MONTH,
+							Integer.parseInt(nmeaContent[3].trim()));
+					calendar.set(Calendar.MONTH,
+							Integer.parseInt(nmeaContent[4].trim()));
+					calendar.set(
+							Calendar.YEAR,
+							Integer.parseInt(nmeaContent[5].trim()) + 2000);
+					calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+				}
 			}
+			
 			if(!nmeaContent[1].isEmpty() || !nmeaContent[3].isEmpty()) {
 				time.setTime(calendar.getTime());
 				time.setTimezone("UTC"); //$NON-NLS-1$
