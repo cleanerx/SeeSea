@@ -260,7 +260,8 @@ public class NMEA0183Reader implements IDataReader {
 	private Measurement ZDA_Timestamp(String[] nmeaContent) {
 		PhysxFactory physxFactory = PhysxFactory.eINSTANCE;
 		Time time = physxFactory.createTime();
-		Calendar calendar = Calendar.getInstance(); 
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
 		try {
 			if(!nmeaContent[1].isEmpty()) { 
 				calendar.set(Calendar.HOUR_OF_DAY,
@@ -278,7 +279,7 @@ public class NMEA0183Reader implements IDataReader {
 					calendar.set(Calendar.DAY_OF_MONTH,
 							Integer.parseInt(nmeaContent[2].trim()));
 					calendar.set(Calendar.MONTH,
-							Integer.parseInt(nmeaContent[3].trim()));
+							Integer.parseInt(nmeaContent[3].trim()) - 1);
 					calendar.set(
 							Calendar.YEAR,
 							Integer.parseInt(nmeaContent[4].trim()));
@@ -289,7 +290,7 @@ public class NMEA0183Reader implements IDataReader {
 					calendar.set(Calendar.DAY_OF_MONTH,
 							Integer.parseInt(nmeaContent[3].trim()));
 					calendar.set(Calendar.MONTH,
-							Integer.parseInt(nmeaContent[4].trim()));
+							Integer.parseInt(nmeaContent[4].trim()) - 1);
 					calendar.set(
 							Calendar.YEAR,
 							Integer.parseInt(nmeaContent[5].trim()) + 2000);
@@ -689,9 +690,13 @@ public class NMEA0183Reader implements IDataReader {
 					Calendar lastTimeCalendar = Calendar.getInstance();
 					lastTimeCalendar.setTime(lastDate);
 					Calendar measurmentTimeCalendar = Calendar.getInstance();
-					measurmentTimeCalendar.setTime(time);
+					measurmentTimeCalendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+					measurmentTimeCalendar.setTimeInMillis(0);
 					measurmentTimeCalendar.set(Calendar.YEAR, lastTimeCalendar.get(lastTimeCalendar.YEAR));
 					measurmentTimeCalendar.set(Calendar.DAY_OF_YEAR, lastTimeCalendar.get(lastTimeCalendar.DAY_OF_YEAR));
+					measurmentTimeCalendar.set(Calendar.HOUR_OF_DAY, time.getHours());
+					measurmentTimeCalendar.set(Calendar.MINUTE, time.getMinutes());
+					measurmentTimeCalendar.set(Calendar.SECOND, time.getSeconds());
 					geoPosition.setTime(measurmentTimeCalendar.getTime());
 				}
 			}
