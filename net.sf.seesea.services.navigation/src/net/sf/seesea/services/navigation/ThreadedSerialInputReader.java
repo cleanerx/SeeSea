@@ -61,6 +61,8 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 
 	private final IFeedbackMessageConsumer feedbackMessageConsumer;
 
+	private int retryCount;
+
 	/**
 	 * @param in
 	 * @param streamproviderName 
@@ -112,54 +114,60 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 			processingThread = Thread.currentThread();
 			Object[] services = streamTracker.getServices();
 			if(services != null) {
-				IStreamProcessor streamProcessor = StreamProcessorDetection.detectStreamProcessor(pushbackInputStream, services, true);
-				String streamProviderName = streamProvider.getName();
-				if(streamProcessor == null) {
-					feedbackMessageConsumer.noProviderAvailable();
+				while(retryCount < 100) {
+					IStreamProcessor streamProcessor = StreamProcessorDetection.detectStreamProcessor(pushbackInputStream, services, true);
+					String streamProviderName = streamProvider.getName();
+					if(streamProcessor == null) {
+						feedbackMessageConsumer.noProviderAvailable();
+						try {
+							close();
+						} catch (IOException e2) {
+							Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
+						}
+						return null;
+					}
 					try {
-						close();
-					} catch (IOException e2) {
-						Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
-					}
-					return null;
-				}
-				try {
-					int j = 0;
-					boolean continueProcessing = true;
-					for (int i = pushbackInputStream.read();  i != -1 ; i = pushbackInputStream.read()) {
-						continueProcessing = streamProcessor.readByte(i, streamProviderName);
-						if(!continueProcessing) {
-							break;
-						}
-						if(j++ > 1000) {
-							j = 0;
+						int j = 0;
+						boolean continueProcessing = true;
+						for (int i = pushbackInputStream.read();  i != -1 ; i = pushbackInputStream.read()) {
+							continueProcessing = streamProcessor.readByte(i, streamProviderName);
+							if(!continueProcessing) {
+								break;
+							}
+							if(j++ > 1000) {
+								j = 0;
 //							Thread.sleep(1);
-						}
-					}
-					if(!continueProcessing) {
-						feedbackMessageConsumer.processingStopped();
-					} else {
-						feedbackMessageConsumer.processingStopped();
-					}
-
-				} catch (Exception e) {
-					// exception during processing
-					if(!processingThread.interrupted()) {
-						Logger.getLogger(getClass()).error("Exception while reading input stream", e); //$NON-NLS-1$
-						BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
-						Collection<ServiceReference<INMEAReaderFailureNotifier>> serviceReferences = bundleContext.getServiceReferences(INMEAReaderFailureNotifier.class, null);
-						if(serviceReferences != null) {
-							for (ServiceReference<INMEAReaderFailureNotifier> serviceReference : serviceReferences) {
-								INMEAReaderFailureNotifier failureNotifier = bundleContext.getService(serviceReference);
-								failureNotifier.notify(streamProvider, e);
-								bundleContext.ungetService(serviceReference);
 							}
 						}
-					}
-					try {
-						close();
-					} catch (IOException e2) {
-						Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
+						if(!continueProcessing) {
+							feedbackMessageConsumer.processingStopped();
+						} else {
+							feedbackMessageConsumer.processingStopped();
+						}
+					} catch (SocketTimeoutException e) {
+						streamProvider.close();
+						pushbackInputStream = streamProvider.getInputStream();
+						retryCount++;
+					} catch (Exception e) {
+						// exception during processing
+						if(!processingThread.interrupted()) {
+							Logger.getLogger(getClass()).error("Exception while reading input stream", e); //$NON-NLS-1$
+							BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
+							Collection<ServiceReference<INMEAReaderFailureNotifier>> serviceReferences = bundleContext.getServiceReferences(INMEAReaderFailureNotifier.class, null);
+							if(serviceReferences != null) {
+								for (ServiceReference<INMEAReaderFailureNotifier> serviceReference : serviceReferences) {
+									INMEAReaderFailureNotifier failureNotifier = bundleContext.getService(serviceReference);
+									failureNotifier.notify(streamProvider, e);
+									bundleContext.ungetService(serviceReference);
+								}
+							}
+						}
+						try {
+							close();
+						} catch (IOException e2) {
+							Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
+						}
+						retryCount = 100;
 					}
 				}
 			}

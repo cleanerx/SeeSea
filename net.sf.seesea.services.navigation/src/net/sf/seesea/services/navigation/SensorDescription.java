@@ -1,4 +1,4 @@
-package net.sf.seesea.provider.navigation.nmea.v183;
+package net.sf.seesea.services.navigation;
 
 import java.text.MessageFormat;
 
