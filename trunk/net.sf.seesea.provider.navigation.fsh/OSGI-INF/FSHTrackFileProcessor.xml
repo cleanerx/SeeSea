@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" factory="trackfile.fsh" name="net.sf.seesea.provider.navigation.fsh">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" factory="trackfile.x-flashfile" name="net.sf.seesea.provider.navigation.fsh">
    <implementation class="net.sf.seesea.provider.navigation.fsh.FSHTrackFileProcessor"/>
    <service>
       <provide interface="net.sf.seesea.services.navigation.ITrackFileProcessor"/>

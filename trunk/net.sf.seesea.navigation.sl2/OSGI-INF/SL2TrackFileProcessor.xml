@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" factory="trackfile.sl2" name="net.sf.seesea.navigation.sl2">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" factory="trackfile.sl2" name="net.sf.seesea.navigation.sl2.trackfileprocessor">
    <implementation class="net.sf.seesea.navigation.sl2.SL2TrackFileProcessor"/>
    <service>
       <provide interface="net.sf.seesea.services.navigation.ITrackFileProcessor"/>
