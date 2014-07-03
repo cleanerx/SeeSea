@@ -42,7 +42,7 @@ public class C {
 		 
 //			 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\Sonar0000.sl2"); //$NON-NLS-1$
 //			 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\sonar1.sl2"); //$NON-NLS-1$
-		 File file = new File("S:\\7331.dat"); //$NON-NLS-1$
+		 File file = new File("S:\\8774.dat"); //$NON-NLS-1$
 			RandomAccessFile raf = new RandomAccessFile(file, "r");
 			int i = 0;
 			

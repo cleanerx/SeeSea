@@ -10,4 +10,4 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Export-Package: net.sf.seesea.provider.navigation.fsh,
  net.sf.seesea.provider.navigation.fsh.data
-Service-Component: OSGI-INF/FSHStreamProcessor.xml
+Service-Component: OSGI-INF/FSHStreamProcessor.xml, OSGI-INF/FSHTrackFileProcessor.xml

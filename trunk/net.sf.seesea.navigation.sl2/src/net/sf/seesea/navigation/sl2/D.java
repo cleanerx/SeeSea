@@ -28,7 +28,7 @@ public class D {
 	public static void main(String[] args) throws IOException {
 //				 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\Sonar0000.sl2"); //$NON-NLS-1$
 //				 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\sonar1.sl2"); //$NON-NLS-1$
-		File file = new File("S:\\7381.dat"); //$NON-NLS-1$
+		File file = new File("S:\\8774.dat"); //$NON-NLS-1$
 		RandomAccessFile raf = new RandomAccessFile(file, "r");
 		DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
 		byte[] x = new byte[4096];
@@ -72,8 +72,8 @@ public class D {
 			short a5 = toBigEndianShort(dataInputStream.readShort()); // 18
 			short a51 = toBigEndianShort(dataInputStream.readShort()); // 20
 			short a61 = toBigEndianShort(dataInputStream.readShort()); // 22
-			short a62 = toBigEndianShort(dataInputStream.readShort()); // 24
-			short a7 = toBigEndianShort(dataInputStream.readShort()); // 26
+			int a62 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 24
+			int a7 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 26
 			short blockSize = toBigEndianShort(dataInputStream.readShort()); // 28
 			short lastBlockSize = toBigEndianShort(dataInputStream.readShort()); // 30
 			short sensorType = toBigEndianShort(dataInputStream.readShort()); // 32
@@ -96,8 +96,11 @@ public class D {
 //			double cog = (course / Math.PI) * 180;
 			int time1 = toBigEndianInt(dataInputStream.readInt()); // 68
 			int f2 = toBigEndianInt(dataInputStream.readInt()); // 72
-			dataInputStream.read(x, 0, 4); // 76
-			float keelDepth = Float.intBitsToFloat(toBigEndianInt(x,0)); 
+
+			int xxx1 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 0
+			int xxx2 = toBigEndianShortAsInt(dataInputStream.readUnsignedShort()); // 2
+//			dataInputStream.read(x, 0, 4); // 76
+//			float keelDepth = Float.intBitsToFloat(toBigEndianInt(x,0)); 
 
 			dataInputStream.read(x, 0, 4);
 			float k = Float.intBitsToFloat(toBigEndianInt(x,0)); // 80
@@ -185,7 +188,7 @@ public class D {
 				}
 			}
 			blockcounter++;
-			System.out.println(depth3 + ":" + waterTemp);
+			System.out.println(latitude + ":" + longitude + ":" + depth3 + ":" + waterTemp);
 //			System.out.println(blockcounter + ":" + frameIndex);
 
 			
