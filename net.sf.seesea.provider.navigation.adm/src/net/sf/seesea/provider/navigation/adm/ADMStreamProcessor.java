@@ -3,11 +3,20 @@ package net.sf.seesea.provider.navigation.adm;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipException;
 
+import net.sf.seesea.model.core.geo.Depth;
+import net.sf.seesea.model.core.geo.GeoFactory;
+import net.sf.seesea.model.core.geo.Latitude;
+import net.sf.seesea.model.core.geo.Longitude;
+import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.adm.data.FAT;
 import net.sf.seesea.provider.navigation.adm.data.IMGHeader;
 import net.sf.seesea.provider.navigation.adm.data.MetadataDescription;
@@ -22,7 +31,7 @@ import net.sf.seesea.services.navigation.NMEAProcessingException;
 public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
 	private List<IADMListener> listeners;
-	
+
 	private MessageProcessingState state;
 
 	private int[] message = new int[4096];
@@ -34,7 +43,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 	private int blockSize;
 
 	private int fatCounter;
-	
+
 	private int blockCounter;
 
 	private List<FAT> fats;
@@ -55,6 +64,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
 	private int bytesToSkip;
 
+	private int stopHeaderByteCount;
 
 	public ADMStreamProcessor() {
 		blockSize = Integer.MAX_VALUE;
@@ -66,7 +76,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		state = MessageProcessingState.HEADER_START;
 		subfileState = MessageProcessingState.SUBFILE_HEADER;
 	}
-	
+
 	@Override
 	public String getMimeType() {
 		return "application/x-adm"; //$NON-NLS-1$
@@ -81,13 +91,14 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 	@Override
 	public boolean readByte(int c, String streamProvider)
 			throws NMEAProcessingException {
-//		if(counter == message.length) {
-//			throw new NMEAProcessingException("No usable data found within " + counter + "bytes");
-//		}
+		// if(counter == message.length) {
+		// throw new NMEAProcessingException("No usable data found within " +
+		// counter + "bytes");
+		// }
 		totalCount++;
-		if(state.equals(MessageProcessingState.HEADER_START)) {
+		if (state.equals(MessageProcessingState.HEADER_START)) {
 			message[counter++] = c;
-			if(counter == 512) {
+			if (counter == 512) {
 				state = MessageProcessingState.HEADER_END;
 				IMGHeader imgHeader = new IMGHeader(message);
 				for (IADMListener listener : listeners) {
@@ -95,19 +106,24 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				}
 				blockSize = imgHeader.getBlockSize();
 			}
-		} else if(state.equals(MessageProcessingState.HEADER_END)) {
+		} else if (state.equals(MessageProcessingState.HEADER_END)) {
 			counter++;
-//			message[counter++] = c;
-			if(counter == 4096) {
+			if(c == -1 && counter == 512) {
+				stopHeaderByteCount = 4096;
+			} else {
+				stopHeaderByteCount = 512;
+			}
+			if (counter == stopHeaderByteCount) {
 				counter = 0;
 				message = new int[512];
 				message[counter++] = c;
 				state = MessageProcessingState.XSTART;
 			}
-		} else if(state.equals(MessageProcessingState.XSTART)) {
+		} else if (state.equals(MessageProcessingState.XSTART)) {
 			message[counter++] = c;
-			if(counter == 512) {
-				PreFATHeader preFATHeader = new PreFATHeader(Arrays.copyOfRange(message, 0, 512));
+			if (counter == 512) {
+				PreFATHeader preFATHeader = new PreFATHeader(
+						Arrays.copyOfRange(message, 0, 512));
 				for (IADMListener listener : listeners) {
 					listener.notifyPreFATHeader(preFATHeader);
 				}
@@ -116,14 +132,14 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				state = MessageProcessingState.FAT;
 				counter = 0;
 				message = new int[512];
-//				message[counter++] = c;
+				// message[counter++] = c;
 			}
-		} else if(state.equals(MessageProcessingState.FAT)) {
+		} else if (state.equals(MessageProcessingState.FAT)) {
 			message[counter++] = c;
-			if(counter == 512) {
+			if (counter == 512) {
 				FAT fat = new FAT(Arrays.copyOfRange(message, 0, 512));
 				fats.add(fat);
-				if(fat.isSubfile()) {
+				if (fat.isSubfile()) {
 					for (IADMListener listener : listeners) {
 						listener.notifyFATBlock(fat);
 					}
@@ -132,26 +148,26 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				message = new int[512];
 				fatCounter++;
 			}
-			if(totalCount == fatEnd) {
+			if (totalCount == fatEnd) {
 				state = MessageProcessingState.SUBFILE;
 				blockCounter = fatBlocks.get(fatBlocks.size() - 1) + 1;
 				for (FAT fat : fats) {
 					for (Short blockNumber : fat.getBlockNumbers()) {
-						if(blockNumber == blockCounter) {
+						if (blockNumber == blockCounter) {
 							currentFat = fat;
 						}
 					}
 				}
 				counter = 0;
 			}
-		} else if(state.equals(MessageProcessingState.SUBFILE)) {
+		} else if (state.equals(MessageProcessingState.SUBFILE)) {
 			counter++;
-			if(currentFat.getBlockNumbers().size() * blockSize == counter) {
+			if (currentFat.getBlockNumbers().size() * blockSize == counter) {
 				counter = 0;
 				blockCounter += currentFat.getBlockNumbers().size();
 				for (FAT fat : fats) {
 					for (Short blockNumber : fat.getBlockNumbers()) {
-						if(blockNumber == blockCounter) {
+						if (blockNumber == blockCounter) {
 							currentFat = fat;
 							subfileState = MessageProcessingState.SUBFILE_HEADER;
 							break;
@@ -159,10 +175,11 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 					}
 				}
 			}
-			if(currentFat.getSubFileType().equals("TRK")) {
-				if(subfileState.equals(MessageProcessingState.SUBFILE_HEADER)) {
-					if(counter == 89) {
-						trkHeader = new TRKHeader(Arrays.copyOfRange(message, 0, 89));
+			if (currentFat.getSubFileType().equals("TRK")) {
+				if (subfileState.equals(MessageProcessingState.SUBFILE_HEADER)) {
+					if (counter == 89) {
+						trkHeader = new TRKHeader(Arrays.copyOfRange(message,
+								0, 89));
 						for (IADMListener listener : listeners) {
 							listener.notifyTRKHeader(trkHeader);
 						}
@@ -172,26 +189,32 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 						trackPointCount = trkHeader.getTrackppointCount();
 						subfileState = MessageProcessingState.TRACKPOINTS_METADATA;
 						bytesToSkip = 0;
-						List<MetadataDescription> headerDataDescriptions = trkHeader.getHeaderDataDescriptions();
+						List<MetadataDescription> headerDataDescriptions = trkHeader
+								.getHeaderDataDescriptions();
 						for (MetadataDescription metadataDescription : headerDataDescriptions) {
 							bytesToSkip += metadataDescription.getSize();
 						}
-						List<MetadataDescription> dataDescriptions = trkHeader.getDataDescriptions();
+						List<MetadataDescription> dataDescriptions = trkHeader
+								.getDataDescriptions();
 						for (MetadataDescription metadataDescription : dataDescriptions) {
 							bytesToSkip += metadataDescription.getSize();
 						}
 						message = new int[bytesToSkip];
 					}
-				} else if(subfileState.equals(MessageProcessingState.TRACKPOINTS_METADATA)) {
-					if(counter == bytesToSkip) {
+				} else if (subfileState
+						.equals(MessageProcessingState.TRACKPOINTS_METADATA)) {
+					if (counter == bytesToSkip) {
 						subfileState = MessageProcessingState.TRACKPOINTS_DATA;
-						TrackMetadata trackMetadata = new TrackMetadata(message, trkHeader.getHeaderDataDescriptions());
-						trackPointCount = (int)trackMetadata.getTrackppointCount();
+						TrackMetadata trackMetadata = new TrackMetadata(
+								message, trkHeader.getHeaderDataDescriptions());
+						trackPointCount = (int) trackMetadata
+								.getTrackppointCount();
 						message = new int[21];
 						counter = 0;
 					}
-				} else if(subfileState.equals(MessageProcessingState.TRACKPOINTS_DATA)) {
-					if(counter == 21 && currentTrackPoint < trackPointCount) {
+				} else if (subfileState
+						.equals(MessageProcessingState.TRACKPOINTS_DATA)) {
+					if (counter == 21 && currentTrackPoint < trackPointCount) {
 						TrackPointADM trackPointADM = new TrackPointADM(message);
 						for (IADMListener listener : listeners) {
 							listener.notifyTrackPoint(trackPointADM);
@@ -199,7 +222,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 						counter = 0;
 						message = new int[21];
 						currentTrackPoint++;
-					} else if(counter == 21) {
+					} else if (counter == 21) {
 						counter = 0;
 						message = new int[21];
 					}
@@ -207,8 +230,9 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				message[counter] = c;
 			}
 		}
-		
-		return true;	}
+
+		return true;
+	}
 
 	@Override
 	public void close() throws IOException {
@@ -225,13 +249,18 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		totalCount = 0;
 		bytesToSkip = 0;
 	}
-	
+
 	public IMGHeader readHeader(InputStream inputStream) throws IOException {
-		int[] header = new int[512];
-		for(int i = 0 ; i < 512; i++) {
-			header[i] = inputStream.read();
+		byte[] header = new byte[512];
+		int[] intHeader = new int[512];
+		int read = inputStream.read(header);
+		if(read == 512) {
+			for (int i = 0 ; i < 512 ; i++) {
+				intHeader[i] = header[i] & 0xFF;
+			}
+			return new IMGHeader(intHeader);
 		}
-		return new IMGHeader(header);
+		return null;
 	}
 
 	@Override
@@ -248,7 +277,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
 	@Override
 	public void addADMListener(IADMListener listener) {
-		listeners.add(listener);		
+		listeners.add(listener);
 	}
 
 	@Override
@@ -256,5 +285,162 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		listeners.remove(listener);
 	}
 
+	public int readHeaderPadding(InputStream inputStream) throws IOException {
+		byte[] header = new byte[512];
+
+		
+		int read = inputStream.read(header);
+		if(read == 512) {
+			if(header[0] == 0) {
+				// there seems to be a case where the header ends at if 4096 if there are null in this 512 byte
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				return 4096;
+			}
+			// else the header contains all -1 (seems to be the default garmin header)
+		}
+		return 512;
+	}
+
+	public List<FAT> readFats(InputStream inputStream, int bytesRead, int firstSubFileOffset) throws IOException {
+		List<FAT> fats = new ArrayList<>();
+		int totalBytesRead = bytesRead;
+		while(true) {
+			byte[] header = new byte[512];
+			int[] intHeader = new int[512];
+			int read = inputStream.read(header);
+			for (int i = 0 ; i < 512 ; i++) {
+				intHeader[i] = header[i] & 0xFF;
+			}
+			FAT fat = new FAT(intHeader);
+			if(fat.isSubfile()) {
+				fats.add(fat);
+			}
+			totalBytesRead+=512;
+			if(totalBytesRead == firstSubFileOffset) {
+				break;
+			}
+		}
+		return fats;
+	}
+
+	public PreFATHeader readPreFatHeader(InputStream inputStream) throws IOException {
+		byte[] header = new byte[512];
+		int[] intHeader = new int[512];
+		int read = inputStream.read(header);
+		if(read == 512) {
+			for (int i = 0 ; i < 512 ; i++) {
+				intHeader[i] = header[i] & 0xFF;
+			}
+			return new PreFATHeader(intHeader);
+		}
+		return null;
+	}
+
+	public TRKHeader readTRKHeader(InputStream inputStream) throws IOException {
+		int initialBytes = 6;
+		byte[] header = new byte[initialBytes];
+		int[] intHeader = new int[initialBytes];
+		int read = inputStream.read(header);
+		if(read == initialBytes) {
+			for (int i = 0 ; i < initialBytes ; i++) {
+				intHeader[i] = header[i] & 0xFF;
+			}
+			int[] copyOfRange = Arrays.copyOfRange(intHeader, 0, initialBytes);
+			int bytesToBeRead = 89 - initialBytes; //= getInt(intHeader, 2) - initialBytes;
+			header = new byte[bytesToBeRead];
+			intHeader = new int[bytesToBeRead + initialBytes];
+			read = inputStream.read(header);
+			for (int i = 0 ; i < bytesToBeRead ; i++) {
+				intHeader[i + initialBytes] = header[i] & 0xFF;
+			}
+			for (int i = 0; i < copyOfRange.length; i++) {
+				intHeader[i] = copyOfRange[i];
+			}
+			
+			if(read == bytesToBeRead) {
+				return new TRKHeader(intHeader);
+			}
+			
+		}
+		return null;
+	}
+	
+	private int getInt(int[] data, int start) {
+ 		ByteBuffer allocate = ByteBuffer.allocate(4);
+ 		allocate.put((byte) data[start]);
+ 		allocate.put((byte) data[start + 1]);
+ 		allocate.put((byte) data[start + 2]);
+ 		allocate.put((byte) data[start + 3]);
+ 		allocate.order(ByteOrder.LITTLE_ENDIAN);
+ 		allocate.flip();
+		return allocate.getInt();
+	}
+
+
+	public TrackMetadata getTrackMetadata(InputStream inputStream, TRKHeader trkHeader1) throws IOException {
+		List<MetadataDescription> headerDataDescriptions = trkHeader1
+				.getHeaderDataDescriptions();
+		int bytesToSkip1 = 0;
+		for (MetadataDescription metadataDescription : headerDataDescriptions) {
+			bytesToSkip1  += metadataDescription.getSize();
+		}
+		List<MetadataDescription> dataDescriptions = trkHeader1
+				.getDataDescriptions();
+		for (MetadataDescription metadataDescription : dataDescriptions) {
+			bytesToSkip1 += metadataDescription.getSize();
+		}
+		byte[] header = new byte[bytesToSkip1];
+		int[] intHeader = new int[bytesToSkip1];
+		int read = inputStream.read(header);
+		if(read == bytesToSkip1) {
+			for (int i = 0 ; i < bytesToSkip1 ; i++) {
+				intHeader[i] = header[i] & 0xFF;
+			}
+			return new TrackMetadata(intHeader, trkHeader1.getHeaderDataDescriptions());
+		}
+		
+		return null;
+	}
+
+	public List<Measurement> extractMeasurementsFromADM(InputStream inputStream) throws IOException {
+		List<Measurement> measurements = new ArrayList<Measurement>();
+		int bytesToBeRead = 21;
+		byte[] header = new byte[bytesToBeRead];
+		int[] intHeader = new int[bytesToBeRead];
+		int read = inputStream.read(header);
+		for (int i = 0 ; i < bytesToBeRead ; i++) {
+			intHeader[i] = header[i] & 0xFF;
+		}
+		TrackPointADM trackPointADM = new TrackPointADM(intHeader);
+		
+		MeasuredPosition3D position3d = GeoFactory.eINSTANCE.createMeasuredPosition3D();
+		Latitude latitude2 = GeoFactory.eINSTANCE.createLatitude();
+		latitude2.setDecimalDegree(trackPointADM.getLat());
+		position3d.setLatitude(latitude2);
+		Longitude longitude2 = GeoFactory.eINSTANCE.createLongitude();
+		longitude2.setDecimalDegree(trackPointADM.getLon());
+		position3d.setLongitude(longitude2);
+		position3d.setValid(true);
+		
+//		System.out.println(latitude + ":" + longitude + ":" + depth );
+		
+		Depth depth2 = GeoFactory.eINSTANCE.createDepth();
+		depth2.setDepth(((double)trackPointADM.getDepth()) / 100);
+		depth2.setValid(true);
+		
+		measurements.add(position3d);
+		measurements.add(depth2);
+		 
+		return measurements;
+	}
+
+	public void skipBlock(InputStream inputStream, int blockSize2) throws IOException {
+		inputStream.read(new byte[blockSize2]);
+	}
 
 }
