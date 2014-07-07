@@ -7,9 +7,12 @@ import net.sf.seesea.provider.navigation.adm.data.TrackPointADM;
 
 public class TrackPointReader implements IADMListener {
 
+	private boolean trackPointsPresent = false;
+	private boolean validReader = false;
+
 	@Override
 	public void notifyIMGHeader(IMGHeader imgHeader) {
-		// TODO Auto-generated method stub
+		validReader  = true;
 
 	}
 
@@ -33,7 +36,17 @@ public class TrackPointReader implements IADMListener {
 
 	@Override
 	public void notifyTrackPoint(TrackPointADM trackPointADM) {
-		System.out.println("lat:" + trackPointADM.getLat()+ " lon:" + trackPointADM.getLon() + " dpt:" + trackPointADM.getDepth());
+		trackPointsPresent  = true;
 	}
+
+	public boolean isTrackPointsPresent() {
+		return trackPointsPresent;
+	}
+
+	public boolean isValidReader() {
+		return validReader;
+	}
+	
+	
 
 }

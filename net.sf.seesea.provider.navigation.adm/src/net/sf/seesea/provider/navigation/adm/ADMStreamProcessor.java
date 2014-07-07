@@ -67,14 +67,19 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 	private int stopHeaderByteCount;
 
 	public ADMStreamProcessor() {
+		reset();
+	}
+
+	private void reset() {
 		blockSize = Integer.MAX_VALUE;
 		listeners = new ArrayList<>();
 		fatCounter = 0;
 		fats = new ArrayList<>();
 		totalCount = 0;
-		listeners.add(new TrackPointReader());
 		state = MessageProcessingState.HEADER_START;
 		subfileState = MessageProcessingState.SUBFILE_HEADER;
+		currentFat = null;
+		counter = 0;
 	}
 
 	@Override
@@ -85,7 +90,15 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 	@Override
 	public boolean isValidStreamProcessor(int[] buffer)
 			throws NMEAProcessingException {
-		return true; // FIXME
+		reset();
+		TrackPointReader trackPointReader = new TrackPointReader();
+		listeners.add(trackPointReader);
+		for (int i = 0; i < buffer.length; i++) {
+			int j = buffer[i];
+			readByte(j, "ADM");
+		}
+		listeners.remove(trackPointReader);
+		return trackPointReader.isValidReader();
 	}
 
 	@Override
