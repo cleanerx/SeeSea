@@ -69,7 +69,7 @@ import net.sf.seesea.services.navigation.provider.IWindDataProvider;
 
 import org.apache.log4j.Logger;
 
-public abstract class NMEAParser extends NMEAMessageValidator implements  IPositionProvider, IWaterTemperatureDataProvider,
+public abstract class MeasurmentDispatcher implements  IPositionProvider, IWaterTemperatureDataProvider,
 IWindDataProvider, IShipMovementVectorProvider {
 
 	protected final List<IPositionListener> _positionListeners;
@@ -89,7 +89,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 	protected final Object heartbeatSync;
 	protected final List<IAccelerationListener> _accelerationListeners;
 
-	public NMEAParser() {
+	public MeasurmentDispatcher() {
 		super();
 		_positionListeners = Collections
 				.synchronizedList(new ArrayList<IPositionListener>(2));
