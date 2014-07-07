@@ -42,7 +42,7 @@ import net.sf.seesea.services.navigation.provider.IShipMovementVectorProvider;
 import net.sf.seesea.services.navigation.provider.IWaterTemperatureDataProvider;
 import net.sf.seesea.services.navigation.provider.IWindDataProvider;
 
-public class NMEA0183EventProcessor extends NMEAParser implements RawDataEventListener,
+public class NMEA0183EventProcessor extends MeasurmentDispatcher implements RawDataEventListener,
 		IPositionProvider, IWaterTemperatureDataProvider, IWindDataProvider,
 		IShipMovementVectorProvider {
 

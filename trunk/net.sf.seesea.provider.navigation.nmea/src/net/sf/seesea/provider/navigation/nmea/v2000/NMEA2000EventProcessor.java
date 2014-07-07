@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sf.seesea.model.core.physx.Measurement;
-import net.sf.seesea.provider.navigation.nmea.NMEAParser;
+import net.sf.seesea.provider.navigation.nmea.MeasurmentDispatcher;
 import net.sf.seesea.services.navigation.provider.IPositionProvider;
 import net.sf.seesea.services.navigation.provider.IShipMovementVectorProvider;
 import net.sf.seesea.services.navigation.provider.IWaterTemperatureDataProvider;
@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 /**
  * The main event processor for nmea 2000 events
  */
-public class NMEA2000EventProcessor extends NMEAParser implements INMEA2000Listener,
+public class NMEA2000EventProcessor extends MeasurmentDispatcher implements INMEA2000Listener,
 IPositionProvider, IWaterTemperatureDataProvider, IWindDataProvider,
 IShipMovementVectorProvider {
 
