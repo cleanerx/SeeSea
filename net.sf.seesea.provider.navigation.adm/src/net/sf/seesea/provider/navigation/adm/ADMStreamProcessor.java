@@ -109,14 +109,14 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		} else if (state.equals(MessageProcessingState.HEADER_END)) {
 			counter++;
 			if(c == -1 && counter == 512) {
-				stopHeaderByteCount = 4096;
-			} else {
 				stopHeaderByteCount = 512;
+			} else {
+				stopHeaderByteCount = 4096;
 			}
 			if (counter == stopHeaderByteCount) {
 				counter = 0;
 				message = new int[512];
-				message[counter++] = c;
+//				message[counter++] = c;
 				state = MessageProcessingState.XSTART;
 			}
 		} else if (state.equals(MessageProcessingState.XSTART)) {
@@ -138,8 +138,8 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 			message[counter++] = c;
 			if (counter == 512) {
 				FAT fat = new FAT(Arrays.copyOfRange(message, 0, 512));
-				fats.add(fat);
-				if (fat.isSubfile()) {
+				if (fat.isSubfile() && fat.getSubFileSize() != -1) {
+					fats.add(fat);
 					for (IADMListener listener : listeners) {
 						listener.notifyFATBlock(fat);
 					}
@@ -150,6 +150,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 			}
 			if (totalCount == fatEnd) {
 				state = MessageProcessingState.SUBFILE;
+				message = new int[4096];
 				blockCounter = fatBlocks.get(fatBlocks.size() - 1) + 1;
 				for (FAT fat : fats) {
 					for (Short blockNumber : fat.getBlockNumbers()) {
@@ -161,22 +162,30 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				counter = 0;
 			}
 		} else if (state.equals(MessageProcessingState.SUBFILE)) {
+			message[counter] = c;
 			counter++;
-			if (currentFat.getBlockNumbers().size() * blockSize == counter) {
+			if(counter == 4096) {
 				counter = 0;
-				blockCounter += currentFat.getBlockNumbers().size();
-				for (FAT fat : fats) {
-					for (Short blockNumber : fat.getBlockNumbers()) {
-						if (blockNumber == blockCounter) {
-							currentFat = fat;
-							subfileState = MessageProcessingState.SUBFILE_HEADER;
-							break;
-						}
-					}
-				}
 			}
+			FAT fatByBlock = getFatByBlock(fats, totalCount / 4096);
+			if(fatByBlock != null) {
+				currentFat = fatByBlock;
+			}
+//			if (currentFat.getBlockNumbers().size() * 4096 == counter) {
+//				counter = 0;
+//				blockCounter += currentFat.getBlockNumbers().size();
+//				for (FAT fat : fats) {
+//					for (Short blockNumber : fat.getBlockNumbers()) {
+//						if (blockNumber == blockCounter) {
+//							currentFat = fat;
+//							subfileState = MessageProcessingState.SUBFILE_HEADER;
+//							break;
+//						}
+//					}
+//				}
+//			}
 			if (currentFat.getSubFileType().equals("TRK")) {
-				if (subfileState.equals(MessageProcessingState.SUBFILE_HEADER)) {
+//				if (subfileState.equals(MessageProcessingState.SUBFILE_HEADER)) {
 					if (counter == 89) {
 						trkHeader = new TRKHeader(Arrays.copyOfRange(message,
 								0, 89));
@@ -200,7 +209,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 							bytesToSkip += metadataDescription.getSize();
 						}
 						message = new int[bytesToSkip];
-					}
+//					}
 				} else if (subfileState
 						.equals(MessageProcessingState.TRACKPOINTS_METADATA)) {
 					if (counter == bytesToSkip) {
@@ -227,7 +236,6 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 						message = new int[21];
 					}
 				}
-				message[counter] = c;
 			}
 		}
 
@@ -442,5 +450,17 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 	public void skipBlock(InputStream inputStream, int blockSize2) throws IOException {
 		inputStream.read(new byte[blockSize2]);
 	}
+	
+	private FAT getFatByBlock(List<FAT> fats, int startBlock) {
+		for (FAT fat : fats) {
+			for (Short blockNumber : fat.getBlockNumbers()) {
+				if(blockNumber == startBlock) {
+					return fat;
+				}
+			}
+		}
+		return null;
+	}
+
 
 }

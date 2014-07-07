@@ -55,10 +55,6 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 					}
 				}
 			}
-//					TRKHeader trkHeader = streamProcessor.readTRKHeader(inputStream);
-//					trkHeader.getHeaderDataDescriptions().getTrackppointCount()
-//					TrackMetadata trackMetadata = streamProcessor.getTrackMetadata(inputStream, trkHeader);
-//			}
 			return;
 		} catch (InputStreamNotFoundException e) {
 			throw new ProcessingException(e);
