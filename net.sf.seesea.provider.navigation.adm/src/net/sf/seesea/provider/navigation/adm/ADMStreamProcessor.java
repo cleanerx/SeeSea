@@ -80,6 +80,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		subfileState = MessageProcessingState.SUBFILE_HEADER;
 		currentFat = null;
 		counter = 0;
+		message = new int[4096];
 	}
 
 	@Override
