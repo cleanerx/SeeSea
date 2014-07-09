@@ -11,7 +11,7 @@ public class PreFATHeader {
 
 	public PreFATHeader(int[] contents) {
 		firstSubFileOffset = getInt(contents, 0xC);
-		blockNumbers = new ArrayList<>();
+		blockNumbers = new ArrayList<Short>();
 		for(int i = 0x20 ; i < 0x200; i+=2) {
 			short short1 = getShort(contents, i);
 			if(short1 != -1) {
