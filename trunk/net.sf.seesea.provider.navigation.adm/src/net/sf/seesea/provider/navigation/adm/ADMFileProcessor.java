@@ -37,8 +37,7 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 			int firstSubFileOffset = preFatHeader.getFirstSubFileOffset();
 			List<FAT> readFats = streamProcessor.readFats(inputStream, bytesRead, firstSubFileOffset);
 			bytesRead = firstSubFileOffset;
-			int currentBlock = bytesRead / 4096;
-			FAT block = getFatByBlock(readFats, currentBlock);
+			int currentBlock = bytesRead / imgHeader.getBlockSize();
 			for (int i = 0 ; i< readFats.size() ; i++) {
 				FAT currentFATBlock = getFatByBlock(readFats, currentBlock);
 				currentBlock += currentFATBlock.getBlockNumbers().size();
@@ -51,7 +50,7 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 					}
 				} else {
 					for(int j = 0 ; j < currentFATBlock.getBlockNumbers().size() ; j++) {
-						streamProcessor.skipBlock(inputStream, 4096);
+						streamProcessor.skipBlock(inputStream, imgHeader.getBlockSize());
 					}
 				}
 			}
