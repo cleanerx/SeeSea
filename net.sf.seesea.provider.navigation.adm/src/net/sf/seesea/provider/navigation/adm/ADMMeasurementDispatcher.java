@@ -13,7 +13,6 @@ import net.sf.seesea.provider.navigation.adm.data.FAT;
 import net.sf.seesea.provider.navigation.adm.data.IMGHeader;
 import net.sf.seesea.provider.navigation.adm.data.TRKHeader;
 import net.sf.seesea.provider.navigation.adm.data.TrackPointADM;
-import net.sf.seesea.services.navigation.MeasurmentDispatcher;
 
 public class ADMMeasurementDispatcher implements IADMListener {
 
