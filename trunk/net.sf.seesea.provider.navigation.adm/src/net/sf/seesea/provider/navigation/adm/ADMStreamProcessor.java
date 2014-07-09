@@ -330,7 +330,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 	}
 
 	public List<FAT> readFats(InputStream inputStream, int bytesRead, int firstSubFileOffset) throws IOException {
-		List<FAT> fats = new ArrayList<>();
+		List<FAT> fats = new ArrayList<FAT>();
 		int totalBytesRead = bytesRead;
 		while(true) {
 			byte[] header = new byte[512];
