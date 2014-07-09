@@ -72,9 +72,9 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
 	private void reset() {
 		blockSize = Integer.MAX_VALUE;
-		listeners = new ArrayList<>();
+		listeners = new ArrayList<IADMListener>();
 		fatCounter = 0;
-		fats = new ArrayList<>();
+		fats = new ArrayList<FAT>();
 		totalCount = 0;
 		state = MessageProcessingState.HEADER_START;
 		subfileState = MessageProcessingState.SUBFILE_HEADER;
