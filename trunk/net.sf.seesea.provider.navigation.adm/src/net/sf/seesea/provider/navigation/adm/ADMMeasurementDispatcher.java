@@ -15,7 +15,7 @@ import net.sf.seesea.provider.navigation.adm.data.TRKHeader;
 import net.sf.seesea.provider.navigation.adm.data.TrackPointADM;
 import net.sf.seesea.services.navigation.MeasurmentDispatcher;
 
-public class ADMMeasurementDispatcher extends MeasurmentDispatcher implements IADMListener {
+public class ADMMeasurementDispatcher implements IADMListener {
 
 	@Override
 	public void notifyIMGHeader(IMGHeader imgHeader) {
@@ -44,7 +44,7 @@ public class ADMMeasurementDispatcher extends MeasurmentDispatcher implements IA
 	@Override
 	public void notifyTrackPoint(TrackPointADM trackPointADM) {
 		for (Measurement measurement : extractMeasurements(trackPointADM)) {
-			notifyListeners(measurement);
+//			notifyListeners(measurement);
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class ADMMeasurementDispatcher extends MeasurmentDispatcher implements IA
 	}
 
 
-	@Override
+//	@Override
 	protected String getProviderName() {
 		return "ADM"; //$NON-NLS-1$
 	}
