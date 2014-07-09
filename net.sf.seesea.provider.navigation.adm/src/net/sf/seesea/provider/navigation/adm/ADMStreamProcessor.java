@@ -120,12 +120,14 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				blockSize = imgHeader.getBlockSize();
 			}
 		} else if (state.equals(MessageProcessingState.HEADER_END)) {
-			counter++;
-			if(c == -1 && counter == 512) {
-				stopHeaderByteCount = 512;
-			} else {
-				stopHeaderByteCount = 4096;
+			if(counter == 512) {
+				if(c == 255 ) {
+					stopHeaderByteCount = 1024;
+				} else {
+					stopHeaderByteCount = 4096;
+				}
 			}
+			counter++;
 			if (counter == stopHeaderByteCount) {
 				counter = 0;
 				message = new int[512];
@@ -163,7 +165,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 			}
 			if (totalCount == fatEnd) {
 				state = MessageProcessingState.SUBFILE;
-				message = new int[4096];
+				message = new int[blockSize];
 				blockCounter = fatBlocks.get(fatBlocks.size() - 1) + 1;
 				for (FAT fat : fats) {
 					for (Short blockNumber : fat.getBlockNumbers()) {
@@ -177,10 +179,10 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		} else if (state.equals(MessageProcessingState.SUBFILE)) {
 			message[counter] = c;
 			counter++;
-			if(counter == 4096) {
+			if(counter == blockSize) {
 				counter = 0;
 			}
-			FAT fatByBlock = getFatByBlock(fats, totalCount / 4096);
+			FAT fatByBlock = getFatByBlock(fats, totalCount / blockSize);
 			if(fatByBlock != null) {
 				currentFat = fatByBlock;
 			}
@@ -429,7 +431,6 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 	}
 
 	public List<Measurement> extractMeasurementsFromADM(InputStream inputStream) throws IOException {
-		List<Measurement> measurements = new ArrayList<Measurement>();
 		int bytesToBeRead = 21;
 		byte[] header = new byte[bytesToBeRead];
 		int[] intHeader = new int[bytesToBeRead];
@@ -438,7 +439,13 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 			intHeader[i] = header[i] & 0xFF;
 		}
 		TrackPointADM trackPointADM = new TrackPointADM(intHeader);
-		
+		List<Measurement> measurements = extractMeasurements(trackPointADM);
+		 
+		return measurements;
+	}
+
+	private List<Measurement> extractMeasurements(TrackPointADM trackPointADM) {
+		List<Measurement> measurements = new ArrayList<Measurement>();
 		MeasuredPosition3D position3d = GeoFactory.eINSTANCE.createMeasuredPosition3D();
 		Latitude latitude2 = GeoFactory.eINSTANCE.createLatitude();
 		latitude2.setDecimalDegree(trackPointADM.getLat());
@@ -448,15 +455,12 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		position3d.setLongitude(longitude2);
 		position3d.setValid(true);
 		
-//		System.out.println(latitude + ":" + longitude + ":" + depth );
-		
 		Depth depth2 = GeoFactory.eINSTANCE.createDepth();
 		depth2.setDepth(((double)trackPointADM.getDepth()) / 100);
 		depth2.setValid(true);
 		
 		measurements.add(position3d);
 		measurements.add(depth2);
-		 
 		return measurements;
 	}
 

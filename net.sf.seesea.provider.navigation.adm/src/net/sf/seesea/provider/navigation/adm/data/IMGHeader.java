@@ -34,7 +34,7 @@ public class IMGHeader {
         mapDescription = getString(contents, 0x48, 0x5C);
         mapName = getString(contents, 0x64, 0x83);
         
-        blockSize = 1 << contents[0x60] + contents[0x61];
+        blockSize = 1 << contents[0x61] + contents[0x62];
 
         partitionTable = new PartitionTable(Arrays.copyOfRange(contents, 0x1bd, 0x1fd));
         
