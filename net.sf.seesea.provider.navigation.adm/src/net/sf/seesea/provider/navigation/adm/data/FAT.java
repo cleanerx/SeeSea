@@ -30,7 +30,7 @@ public class FAT {
 		subFileSize =  getInt(contents, 0xC);
 		subFilePart = getShort(contents, 0x10);
 		
-		blockNumbers = new ArrayList<>();
+		blockNumbers = new ArrayList<Short>();
 		for(int i = 0x20 ; i < 0x200; i+=2) {
 			short short1 = getShort(contents, i);
 			if(short1 != -1) {
