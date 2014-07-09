@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" factory="trackfile.x-adm" name="net.sf.seesea.provider.navigation.adm.trackfile">
+   <implementation class="net.sf.seesea.provider.navigation.adm.ADMFileProcessor"/>
+   <service>
+      <provide interface="net.sf.seesea.services.navigation.ITrackFileProcessor"/>
+   </service>
+</scr:component>

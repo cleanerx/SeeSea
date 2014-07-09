@@ -9,6 +9,6 @@ Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.services.navigation;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Service-Component: OSGI-INF/ADMStreamProcessor.xml
+Service-Component: OSGI-INF/ADMStreamProcessor.xml, OSGI-INF/ADMMessageDispatcher.xml, OSGI-INF/ADMTrackFileProcessor.xml
 Export-Package: net.sf.seesea.provider.navigation.adm,
  net.sf.seesea.provider.navigation.adm.data
