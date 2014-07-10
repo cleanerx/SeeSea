@@ -460,12 +460,15 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 			position3d.setTime(new Date(trackPointADM.getTimestamp() * 1000L + 688344865000L));
 		}
 		
-		Depth depth2 = GeoFactory.eINSTANCE.createDepth();
-		depth2.setDepth(((double)trackPointADM.getDepth()) / 100);
-		depth2.setValid(true);
+		double depth = (double)trackPointADM.getDepth();
+		if(depth < 1000 && depth >= 0) {
+			Depth depth2 = GeoFactory.eINSTANCE.createDepth();
+			depth2.setDepth(depth);
+			depth2.setValid(true);
+			measurements.add(depth2);
+		}
 		
 		measurements.add(position3d);
-		measurements.add(depth2);
 		return measurements;
 	}
 
