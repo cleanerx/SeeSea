@@ -23,12 +23,12 @@ public class IMGHeader {
 		checksum = contents[0xE];
         signature = getString(contents, 0xF, 0x15);
 		
-		creationYear = getShort(contents, 0x38);
-		creationMonth = contents[0x3A];
-		creationDay = contents[0x3B];
-		creationHour = contents[0x3C];
-		creationMinute = contents[0x3D];
-		creationSecond = contents[0x3E];
+		creationYear = getUnsignedShort(contents, 0x39);
+		creationMonth = contents[0x3B];
+		creationDay = contents[0x3C];
+		creationHour = contents[0x3D];
+		creationMinute = contents[0x3E];
+		creationSecond = contents[0x3F];
 		
         mapFileIdentifier = getString(contents, 0x40, 0x46);
         mapDescription = getString(contents, 0x48, 0x5C);
@@ -130,6 +130,18 @@ public class IMGHeader {
  		allocate.flip();
 		return allocate.getShort();
 	}
+	
+	private int getUnsignedShort(int[] data, int start) {
+ 		ByteBuffer allocate = ByteBuffer.allocate(4);
+ 		allocate.put((byte) data[start]);
+ 		allocate.put((byte) data[start + 1]);
+ 		allocate.put((byte)0);
+ 		allocate.put((byte)0);
+ 		allocate.order(ByteOrder.LITTLE_ENDIAN);
+ 		allocate.flip();
+		return allocate.getInt();
+	}
+
 
 	private int getInt(int[] data, int start) {
  		ByteBuffer allocate = ByteBuffer.allocate(4);

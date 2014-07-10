@@ -8,6 +8,7 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipException;
 
@@ -455,6 +456,9 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		longitude2.setDecimalDegree(trackPointADM.getLon());
 		position3d.setLongitude(longitude2);
 		position3d.setValid(true);
+		if(trackPointADM.getTimestamp() != 0) {
+			position3d.setTime(new Date(trackPointADM.getTimestamp() * 1000L + 688344865000L));
+		}
 		
 		Depth depth2 = GeoFactory.eINSTANCE.createDepth();
 		depth2.setDepth(((double)trackPointADM.getDepth()) / 100);
