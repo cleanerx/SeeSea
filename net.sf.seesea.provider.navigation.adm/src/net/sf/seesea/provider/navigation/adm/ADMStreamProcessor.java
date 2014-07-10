@@ -345,7 +345,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				fats.add(fat);
 			}
 			totalBytesRead+=512;
-			if(totalBytesRead == firstSubFileOffset) {
+			if(totalBytesRead + 512 == firstSubFileOffset) {
 				break;
 			}
 		}
