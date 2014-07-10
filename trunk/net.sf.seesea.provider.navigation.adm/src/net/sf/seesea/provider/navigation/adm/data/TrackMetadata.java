@@ -15,7 +15,7 @@ public class TrackMetadata {
 	private int headerMetadata3;
 	private int headerMetadata4;
 	private int dataBegin;
-	private short trackppointCount;
+	private int trackppointCount;
 
 	
 	public TrackMetadata(int[] contents, List<MetadataDescription> headerDataDescriptions) {
@@ -24,7 +24,7 @@ public class TrackMetadata {
 			if(metadataDescription.getId() == 300) {
 				trackName = getString(contents, startByte, startByte + metadataDescription.getSize());
 			} else if(metadataDescription.getId() == 301) {
-				trackppointCount = getShort(contents, startByte);
+				trackppointCount = getUnsignedShort(contents, startByte);
 			} else if(metadataDescription.getId() == 302) {
 				headerMetadata2 = contents[startByte];
 			} else if(metadataDescription.getId() == 303) {
@@ -45,10 +45,20 @@ public class TrackMetadata {
 
 
 
-	public short getTrackppointCount() {
+	public int getTrackppointCount() {
 		return trackppointCount;
 	}
 
+	private int getUnsignedShort(int[] data, int start) {
+ 		ByteBuffer allocate = ByteBuffer.allocate(4);
+ 		allocate.put((byte) data[start]);
+ 		allocate.put((byte) data[start + 1]);
+ 		allocate.put((byte)0);
+ 		allocate.put((byte)0);
+ 		allocate.order(ByteOrder.LITTLE_ENDIAN);
+ 		allocate.flip();
+		return allocate.getInt();
+	}
 
 
 		private short getShort(int[] data, int start) {
