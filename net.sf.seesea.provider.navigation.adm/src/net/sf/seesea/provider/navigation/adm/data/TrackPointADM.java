@@ -14,11 +14,26 @@ public class TrackPointADM {
 	public TrackPointADM(int[] contents) {
 		lat = getInt(contents,0) / 11930463.0783;
 		lon = getInt(contents,4) / 11930463.0783;
-		timestamp = getInt(contents,8);
+		timestamp = getUnsignedInt(contents,8);
 		depth = Float.intBitsToFloat(getInt(contents,12));
 		waterTemperature = Float.intBitsToFloat(getInt(contents,17));
 	}
-	
+
+	private long getUnsignedInt(int[] data, int start) {
+ 		ByteBuffer allocate = ByteBuffer.allocate(8);
+ 		allocate.put((byte) data[start]);
+ 		allocate.put((byte) data[start + 1]);
+ 		allocate.put((byte) data[start + 2]);
+ 		allocate.put((byte) data[start + 3]);
+ 		allocate.put((byte)0);
+ 		allocate.put((byte)0);
+ 		allocate.put((byte)0);
+ 		allocate.put((byte)0);
+ 		allocate.order(ByteOrder.LITTLE_ENDIAN);
+ 		allocate.flip();
+		return allocate.getLong();
+	}
+
 	private int getInt(int[] data, int start) {
  		ByteBuffer allocate = ByteBuffer.allocate(4);
  		allocate.put((byte) data[start]);
