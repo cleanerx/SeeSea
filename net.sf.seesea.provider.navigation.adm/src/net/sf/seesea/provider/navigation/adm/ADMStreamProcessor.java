@@ -324,7 +324,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				inputStream.read(header);
 				inputStream.read(header);
 				inputStream.read(header);
-				return 4096;
+				return 3584;
 			}
 			// else the header contains all -1 (seems to be the default garmin header)
 		}
@@ -346,7 +346,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 				fats.add(fat);
 			}
 			totalBytesRead+=512;
-			if(totalBytesRead + 512 == firstSubFileOffset) {
+			if((totalBytesRead + 512 )== firstSubFileOffset) {
 				break;
 			}
 		}
