@@ -80,7 +80,7 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 
 	@Override
 	public boolean hasTimedMeasurments() {
-		return true;
+		return false;
 	}
 
 	@Override
