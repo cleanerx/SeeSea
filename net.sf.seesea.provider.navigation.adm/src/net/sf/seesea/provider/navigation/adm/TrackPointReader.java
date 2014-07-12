@@ -12,8 +12,9 @@ public class TrackPointReader implements IADMListener {
 
 	@Override
 	public void notifyIMGHeader(IMGHeader imgHeader) {
-		validReader  = true;
-
+		if("GARMIN".equals(imgHeader.getMapFileIdentifier())) { //$NON-NLS-1$
+			validReader  = true;
+		}
 	}
 
 	@Override

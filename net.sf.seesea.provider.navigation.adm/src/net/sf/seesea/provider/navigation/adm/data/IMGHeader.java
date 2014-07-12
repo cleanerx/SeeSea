@@ -21,7 +21,7 @@ public class IMGHeader {
 		updateMonth = contents[0x9];
 		updateYear = contents[0xA] >= 0x63 ? contents[0xA] + 1900 : contents[0xA] + 2000;
 		checksum = contents[0xE];
-        signature = getString(contents, 0xF, 0x15);
+        signature = getString(contents, 0xF, 0x16);
 		
 		creationYear = getUnsignedShort(contents, 0x39);
 		creationMonth = contents[0x3B];
@@ -30,9 +30,9 @@ public class IMGHeader {
 		creationMinute = contents[0x3E];
 		creationSecond = contents[0x3F];
 		
-        mapFileIdentifier = getString(contents, 0x40, 0x46);
+        mapFileIdentifier = getString(contents, 0x41, 0x47);
         mapDescription = getString(contents, 0x48, 0x5C);
-        mapName = getString(contents, 0x64, 0x83);
+        mapName = getString(contents, 0x65, 0x83);
         
         blockSize = 1 << contents[0x61] + contents[0x62];
 
@@ -152,6 +152,10 @@ public class IMGHeader {
  		allocate.order(ByteOrder.LITTLE_ENDIAN);
  		allocate.flip();
 		return allocate.getInt();
+	}
+
+	public String getMapFileIdentifier() {
+		return mapFileIdentifier;
 	}
 
 }
