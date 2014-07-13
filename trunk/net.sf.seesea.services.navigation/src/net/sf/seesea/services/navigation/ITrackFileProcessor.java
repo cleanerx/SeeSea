@@ -20,4 +20,15 @@ public interface ITrackFileProcessor {
 	boolean hasTimedMeasurments();
 	
 	void setFilter(Set<SensorDescriptionUpdateRate<Measurement>> bestSensors);
+	
+	/**
+	 * @return true if the format does have a consecutive time base which is usually starting at the time of recording  
+	 */
+	boolean hasRelativeTime();
+	
+	/**
+	 * 
+	 * @return true if the format does support a global time base according to UTC
+	 */
+	boolean hasAbsoluteTime();
 }

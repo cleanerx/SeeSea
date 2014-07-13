@@ -92,4 +92,14 @@ public class NMEA0183TrackFileProcessor implements ITrackFileProcessor {
 		nmea0183Reader = new NMEA0183Reader(filter, true);
 	}
 
+	@Override
+	public boolean hasRelativeTime() {
+		return true;
+	}
+
+	@Override
+	public boolean hasAbsoluteTime() {
+		return true;
+	}
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sf.seesea.model.core.physx.Measurement;
-import net.sf.seesea.provider.navigation.nmea.MeasurmentDispatcher;
+import net.sf.seesea.services.navigation.MeasurmentDispatcher;
 import net.sf.seesea.services.navigation.provider.IPositionProvider;
 import net.sf.seesea.services.navigation.provider.IShipMovementVectorProvider;
 import net.sf.seesea.services.navigation.provider.IWaterTemperatureDataProvider;

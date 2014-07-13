@@ -89,4 +89,14 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 		
 	}
 
+	@Override
+	public boolean hasRelativeTime() {
+		return false;
+	}
+
+	@Override
+	public boolean hasAbsoluteTime() {
+		return true;
+	}
+
 }
