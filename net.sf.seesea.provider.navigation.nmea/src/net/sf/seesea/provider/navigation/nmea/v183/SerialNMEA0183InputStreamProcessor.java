@@ -78,8 +78,12 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		aisEventListeners.add(nmea0183StreamDetector);
 		stringBuffer = null;
 		charcounter = 0;
-		for (int i : buf) {
-			readByte(i, "none"); //$NON-NLS-1$
+		try {
+			for (int i : buf) {
+				readByte(i, "none"); //$NON-NLS-1$
+			}
+		} catch (Exception e) {
+			return false;
 		}
 		aisEventListeners.remove(nmea0183StreamDetector);
 		nmeaEventListeners.remove(nmea0183StreamDetector);

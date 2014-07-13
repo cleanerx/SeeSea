@@ -84,4 +84,14 @@ public class NMEA2000TrackFileProcessor implements ITrackFileProcessor,
 		
 	}
 
+	@Override
+	public boolean hasRelativeTime() {
+		return true;
+	}
+
+	@Override
+	public boolean hasAbsoluteTime() {
+		return true;
+	}
+
 }

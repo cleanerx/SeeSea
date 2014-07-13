@@ -80,4 +80,14 @@ public class SL2TrackFileProcessor implements ITrackFileProcessor, IMeasurementL
 		
 	}
 
+	@Override
+	public boolean hasRelativeTime() {
+		return false;
+	}
+
+	@Override
+	public boolean hasAbsoluteTime() {
+		return true;
+	}
+
 }

@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.nmea.v183.NMEA0183Reader;
 import net.sf.seesea.services.navigation.INMEAReader;
+import net.sf.seesea.services.navigation.MeasurmentDispatcher;
 import net.sf.seesea.services.navigation.RawDataEventListener;
 import net.sf.seesea.services.navigation.RawDataEvent;
 import net.sf.seesea.services.navigation.provider.IPositionProvider;

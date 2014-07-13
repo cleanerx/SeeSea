@@ -78,4 +78,14 @@ public class FSHTrackFileProcessor implements ITrackFileProcessor {
 		
 	}
 
+	@Override
+	public boolean hasRelativeTime() {
+		return false;
+	}
+
+	@Override
+	public boolean hasAbsoluteTime() {
+		return false;
+	}
+
 }
