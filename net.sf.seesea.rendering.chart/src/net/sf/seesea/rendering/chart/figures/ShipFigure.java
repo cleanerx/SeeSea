@@ -29,9 +29,14 @@ package net.sf.seesea.rendering.chart.figures;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.seesea.rendering.chart.layout.RelativeLayoutManager;
+
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.DelegatingLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.RelativeLocator;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -49,12 +54,19 @@ public class ShipFigure extends Figure {
 
 	public ShipFigure() {
 		cogOrientation = 0.0;
+//		Label label = new Label();
+//		label.setText("X");
+//		label.setPreferredSize(20, 20);
+//		RelativeLocator locator = new RelativeLocator(this, 0.5, 0.7);
+//		add(label);
+//		setLayoutManager(new DelegatingLayout());
+//		setConstraint(label, locator);
 	}
 	
 	@Override
 	protected void paintFigure(Graphics graphics) {
-		graphics.setForegroundColor(ColorConstants.darkGreen);
-		graphics.setBackgroundColor(ColorConstants.orange);
+		graphics.setForegroundColor(ColorConstants.black);
+		graphics.setBackgroundColor(ColorConstants.black);
 		graphics.setAntialias(SWT.ON);
 		setOpaque(false);
 		
@@ -64,7 +76,9 @@ public class ShipFigure extends Figure {
 		Point center = localBounds.getCenter();
 		graphics.translate(center.x, center.y);
 		graphics.rotate((float)cogOrientation);
-		graphics.fillPolygon(new int[]{ -5, 5, 0, -7  ,  5, 5 });
+//		graphics.fillPolygon(new int[]{ -5, 5, 0, -7  ,  5, 5 });
+		graphics.fillPolygon(new int[]{ -10, 10, 0, -14  ,  10, 10 });
+		graphics.drawLine(0, 0, 0, -160);
 		graphics.popState();
 
 	}
@@ -76,10 +90,10 @@ public class ShipFigure extends Figure {
 		trans.setRotation(cogOrientation);
 		
 		List<Point> points = new ArrayList<Point>(4);
-		points.add(trans.getTransformed(new Point(-10,-22)));
-		points.add(trans.getTransformed(new Point(-10,22)));
-		points.add(trans.getTransformed(new Point(10,-22)));
-		points.add(trans.getTransformed(new Point(10,22)));
+		points.add(trans.getTransformed(new Point(-20,-44)));
+		points.add(trans.getTransformed(new Point(-20,44)));
+		points.add(trans.getTransformed(new Point(20,-44)));
+		points.add(trans.getTransformed(new Point(20,44)));
 
 		int minx = Integer.MAX_VALUE;
 		int maxx = Integer.MIN_VALUE; 
@@ -99,7 +113,7 @@ public class ShipFigure extends Figure {
 				miny = point.y();
 			}
 		}
-//		System.out.println(Math.abs(maxx - minx) + ":" + Math.abs(maxy - miny));
+		System.out.println(Math.abs(maxx - minx) + ":" + Math.abs(maxy - miny));
 		return new Dimension(Math.abs(maxx - minx), Math.abs(maxy - miny));
 //		System.out.println(minx + miny);
 //		return new Dimension(x.intValue(), y.intValue());

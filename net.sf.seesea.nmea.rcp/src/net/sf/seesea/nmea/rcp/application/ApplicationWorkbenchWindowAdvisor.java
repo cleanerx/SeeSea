@@ -81,7 +81,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	    BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
 	    ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
 	    IModel model = bundleContext.getService(serviceReference);
-	    World world = model.createDefaultModel();
+	    World world = model.loadModel();
 	    bundleContext.ungetService(serviceReference);
 	    MapEditorInput mapEditorInput = new MapEditorInput(world, true, true);
 	    IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();

@@ -83,6 +83,9 @@
                   icon="icons/Record.png"
                   label="%ToggleLogging"
                   style="toggle">
+               <visibleWhen
+                     checkEnabled="true">
+               </visibleWhen>
             </command>
             <command
                   commandId="net.sf.seesea.nmea.rcp.log.upload"
@@ -112,7 +115,7 @@
             id="net.sf.seesea.nmea.rcp.log.toggle"
             name="%ToggleLogging">
          <state
-         class="org.eclipse.ui.handlers.RegistryToggleState:false"
+         class="org.eclipse.ui.handlers.RegistryToggleState:true"
          id="org.eclipse.ui.commands.toggleState">
    </state>
       </command>

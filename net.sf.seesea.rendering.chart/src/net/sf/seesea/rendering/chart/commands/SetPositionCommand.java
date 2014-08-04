@@ -28,6 +28,7 @@ package net.sf.seesea.rendering.chart.commands;
 
 import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.osm.Area;
+import net.sf.seesea.model.util.GeoParser;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -60,8 +61,9 @@ public class SetPositionCommand extends AbstractTransactionalCommand {
 	@Override
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		area.getMapCenterPosition().setLatitude(newPosition.getLatitude());
-		area.getMapCenterPosition().setLongitude(newPosition.getLongitude());
+		
+		area.getMapCenterPosition().setLatitude(GeoParser.parseLatitude(newPosition.getLatitude().getDecimalDegree()));
+		area.getMapCenterPosition().setLongitude(GeoParser.parseLongitude(newPosition.getLongitude().getDecimalDegree()));
 		return CommandResult.newOKCommandResult();
 	}
 

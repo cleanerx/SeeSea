@@ -65,6 +65,8 @@ public class MapLayer extends FreeformLayer {
 	private int zoomLevel;
 
 	private List<Rectangle> prevpaintBounds = new ArrayList<Rectangle>(6);
+
+	private String cursorPosition;
 	
 	/**
 	 * paints the figure by requesting the tiles from the tile provider. This is done in asynchronous fashion and the figure is repainted once tiles become available  
@@ -157,6 +159,18 @@ public class MapLayer extends FreeformLayer {
 		copy.expand(textExtents.width, textExtents.height);
 		g.drawText(text , copy.getBottomRight());
 		font2.dispose();
+		
+		copy = paintBounds.getCopy();
+		if(cursorPosition != null) {
+			Font font3 = new Font(Display.getDefault(),"Arial", 20, SWT.BOLD);  //$NON-NLS-1$
+			g.setFont(font3);
+			textExtents = FigureUtilities.getTextExtents(cursorPosition, font3);
+			textExtents.negate();
+			copy.expand(0, textExtents.height);
+			Point bottomLeft = copy.getBottomLeft();
+			g.drawText(cursorPosition, bottomLeft);
+			font3.dispose();
+		}
 //		System.out.println("paint");
 	}
 	
@@ -233,5 +247,11 @@ public class MapLayer extends FreeformLayer {
 	public void setPaintBounds(Rectangle bounds) {
 		paintBounds = bounds;
 		
+	}
+
+
+
+	public void setCursorPosition(String cursorPosition) {
+		this.cursorPosition = cursorPosition;
 	}
 }

@@ -217,13 +217,40 @@ public interface BasePackage extends EPackage {
 	int MARINE_CHART__ANCHOR_POSITION = GeoPackage.CHART_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Cursor Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARINE_CHART__CURSOR_POSITION = GeoPackage.CHART_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Trip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARINE_CHART__TRIP = GeoPackage.CHART_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Total Trip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARINE_CHART__TOTAL_TRIP = GeoPackage.CHART_FEATURE_COUNT + 11;
+
+	/**
 	 * The feature id for the '<em><b>Seamarks</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARINE_CHART__SEAMARKS = GeoPackage.CHART_FEATURE_COUNT + 9;
+	int MARINE_CHART__SEAMARKS = GeoPackage.CHART_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Marine Chart</em>' class.
@@ -232,7 +259,7 @@ public interface BasePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARINE_CHART_FEATURE_COUNT = GeoPackage.CHART_FEATURE_COUNT + 10;
+	int MARINE_CHART_FEATURE_COUNT = GeoPackage.CHART_FEATURE_COUNT + 13;
 
 
 	/**

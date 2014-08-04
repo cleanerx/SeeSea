@@ -32,13 +32,7 @@ package net.sf.seesea.services.navigation.listener;
  * 
  * @param <SensorDataType> the data type this sensor provides
  */
-public interface IDataListener<SensorDataType> {
-	
-	/**
-	 * 
-	 * @param providerID
-	 */
-	public void providerEnabled(String providerID);
+public interface IDataListener<SensorDataType> extends IDataProviderNotification {
 	
 	/**
 	 * notifies this listener that sennsor data is present
@@ -47,11 +41,5 @@ public interface IDataListener<SensorDataType> {
 	 * @param source the data source that contributed this information. This may be used by consumers to listen only to a restricted set of sensors
 	 */
 	public void notify(SensorDataType sensorData, String source);
-
-	/**
-	 * 
-	 * @param providerID
-	 */
-	public void providerDisabled(String providerID);
 
 }

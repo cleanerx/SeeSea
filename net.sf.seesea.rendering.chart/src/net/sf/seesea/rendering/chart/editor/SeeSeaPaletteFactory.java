@@ -73,8 +73,8 @@ public class SeeSeaPaletteFactory {
 //		creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getRoute());
 //		ToolEntry anchorToolEntry = new AnchorWarnToolEntry("Anchor Alert", "Defines an area for anchor alert");
 //		navigationGroup.add(anchorToolEntry);
-//		ToolEntry distanceToolEntry = new DistanceToolEntry();
-//		navigationGroup.add(distanceToolEntry);
+		ToolEntry distanceToolEntry = new DistanceToolEntry();
+		navigationGroup.add(distanceToolEntry);
 //		URL entry = XEditPlugin.getPlugin().getBundle().getEntry("icons/full/obj16/NamedPosition.gif"); //$NON-NLS-1$
 //		ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(entry);
 //		CreationFactory creationFactory = new CreationFactoryImplementation(GeoPackage.eINSTANCE.getNamedPosition());

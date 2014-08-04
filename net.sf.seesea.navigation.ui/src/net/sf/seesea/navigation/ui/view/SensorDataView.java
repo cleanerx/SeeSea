@@ -39,6 +39,7 @@ import net.sf.seesea.navigation.ui.figures.BarFigure;
 import net.sf.seesea.navigation.ui.figures.ChildFigure;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.DoubleLinedInstrumentFigure;
+import net.sf.seesea.navigation.ui.figures.DoubleRowedDescriptiveInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.GraphFigure;
 import net.sf.seesea.navigation.ui.figures.InstrumentContainerFigure;
 import net.sf.seesea.navigation.ui.figures.SingleLinedFigure;
@@ -176,14 +177,15 @@ public class SensorDataView extends ViewPart {
 		BarFigure barFigure = new BarFigure(resourceManager);
 		barFigure.setFontSize(fontSize);
 
-		DescriptiveInstrumentFigure tripFigure = new DescriptiveInstrumentFigure();
+		DoubleRowedDescriptiveInstrumentFigure tripFigure = new DoubleRowedDescriptiveInstrumentFigure();
 		tripFigure.setDescription(Messages.getString("SensorDataView.0")); //$NON-NLS-1$
-		tripFigure.setValue("---.- nm"); //$NON-NLS-1$
+		tripFigure.setValue1("---.- nm"); //$NON-NLS-1$
+		tripFigure.setValue2("---.- nm"); //$NON-NLS-1$
 		tripFigure.setFontSize(fontSize);
 
-		DescriptiveInstrumentFigure totalTripFigure = new DescriptiveInstrumentFigure();
+		DoubleRowedDescriptiveInstrumentFigure totalTripFigure = new DoubleRowedDescriptiveInstrumentFigure();
 		totalTripFigure.setDescription(Messages.getString("SensorDataView.2")); //$NON-NLS-1$
-		totalTripFigure.setValue("---.- nm"); //$NON-NLS-1$
+		totalTripFigure.setValue2("---.- nm"); //$NON-NLS-1$
 		totalTripFigure.setFontSize(fontSize);
 
 		DescriptiveInstrumentFigure waterTemperatureFigure = new DescriptiveInstrumentFigure();

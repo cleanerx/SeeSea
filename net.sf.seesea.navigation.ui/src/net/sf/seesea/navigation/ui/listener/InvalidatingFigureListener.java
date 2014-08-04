@@ -33,9 +33,10 @@ import org.eclipse.swt.widgets.Display;
 
 import net.sf.seesea.navigation.ui.figures.IInvalidatableFigure;
 import net.sf.seesea.services.navigation.listener.IDataListener;
+import net.sf.seesea.services.navigation.listener.IDataProviderNotification;
 
 public abstract class InvalidatingFigureListener<SensorDataType> implements
-		IDataListener<SensorDataType> {
+		IDataProviderNotification {
 
 	private Set<IInvalidatableFigure> invalidatableFigures;
 	protected long lastTimeMillis;

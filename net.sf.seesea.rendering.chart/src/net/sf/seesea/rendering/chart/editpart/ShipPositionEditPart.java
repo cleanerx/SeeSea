@@ -107,7 +107,9 @@ public class ShipPositionEditPart extends TransactionalEditPart  implements Adap
 				org.eclipse.swt.graphics.Point tileSize = tileProvider.getTileSize();
 				int zoom = ((ScalableZoomableRootEditPart) getRoot()).getZoom();
 				org.eclipse.swt.graphics.Point point = tileProvider.getProjection().project(geoPosition, (1<< zoom) *  tileSize.x);
-				getFigure().setBounds(new PrecisionRectangle(point.x - 10, point.y - 10, 20, 20));
+				int width = 320;
+				int height = 320;
+				getFigure().setBounds(new PrecisionRectangle(point.x - width / 2 , point.y - height / 2, width, height));
 //				refreshVisuals();
 			}
 			lastUpdate = System.currentTimeMillis();
@@ -176,5 +178,10 @@ public class ShipPositionEditPart extends TransactionalEditPart  implements Adap
 	}
 	
 	private long lastUpdate;
+	
+	@Override
+	public boolean isSelectable() {
+		return false;
+	}
 	
 }

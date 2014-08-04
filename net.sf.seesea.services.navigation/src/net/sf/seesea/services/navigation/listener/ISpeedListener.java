@@ -29,10 +29,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.services.navigation.listener;
 
 import net.sf.seesea.model.core.physx.RelativeSpeed;
+import net.sf.seesea.model.core.physx.Speed;
 
 /**
  * 
  */
-public interface ISpeedListener extends IDataListener<RelativeSpeed> {
+public interface ISpeedListener {
+	
+	/**
+	 * 
+	 * @param providerID
+	 */
+	public void providerEnabled(String providerID);
+	
+	/**
+	 * notifies this listener that sennsor data is present
+	 * 
+	 * @param sensorData
+	 * @param source the data source that contributed this information. This may be used by consumers to listen only to a restricted set of sensors
+	 */
+	public void notify(RelativeSpeed speed, String source);
+
+	/**
+	 * 
+	 * @param providerID
+	 */
+	public void providerDisabled(String providerID);
 	
 }

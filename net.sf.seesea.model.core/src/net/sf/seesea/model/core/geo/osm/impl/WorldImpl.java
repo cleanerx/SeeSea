@@ -31,6 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.model.core.geo.osm.impl;
 
 import net.sf.seesea.model.core.geo.AnchorPosition;
+import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.osm.OsmPackage;
 import net.sf.seesea.model.core.geo.osm.World;
 
@@ -52,6 +53,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#isLatitudeScale <em>Latitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#getAnchorPosition <em>Anchor Position</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#getCursorPosition <em>Cursor Position</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#getTrip <em>Trip</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#getTotalTrip <em>Total Trip</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,6 +111,56 @@ public class WorldImpl extends AreaImpl implements World {
 	 * @ordered
 	 */
 	protected AnchorPosition anchorPosition;
+
+	/**
+	 * The cached value of the '{@link #getCursorPosition() <em>Cursor Position</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCursorPosition()
+	 * @generated
+	 * @ordered
+	 */
+	protected GeoPosition cursorPosition;
+
+	/**
+	 * The default value of the '{@link #getTrip() <em>Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double TRIP_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getTrip() <em>Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected double trip = TRIP_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getTotalTrip() <em>Total Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double TOTAL_TRIP_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getTotalTrip() <em>Total Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected double totalTrip = TOTAL_TRIP_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -217,11 +271,98 @@ public class WorldImpl extends AreaImpl implements World {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public GeoPosition getCursorPosition() {
+		return cursorPosition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCursorPosition(GeoPosition newCursorPosition, NotificationChain msgs) {
+		GeoPosition oldCursorPosition = cursorPosition;
+		cursorPosition = newCursorPosition;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, OsmPackage.WORLD__CURSOR_POSITION, oldCursorPosition, newCursorPosition);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCursorPosition(GeoPosition newCursorPosition) {
+		if (newCursorPosition != cursorPosition) {
+			NotificationChain msgs = null;
+			if (cursorPosition != null)
+				msgs = ((InternalEObject)cursorPosition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - OsmPackage.WORLD__CURSOR_POSITION, null, msgs);
+			if (newCursorPosition != null)
+				msgs = ((InternalEObject)newCursorPosition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - OsmPackage.WORLD__CURSOR_POSITION, null, msgs);
+			msgs = basicSetCursorPosition(newCursorPosition, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OsmPackage.WORLD__CURSOR_POSITION, newCursorPosition, newCursorPosition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getTrip() {
+		return trip;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTrip(double newTrip) {
+		double oldTrip = trip;
+		trip = newTrip;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OsmPackage.WORLD__TRIP, oldTrip, trip));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getTotalTrip() {
+		return totalTrip;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTotalTrip(double newTotalTrip) {
+		double oldTotalTrip = totalTrip;
+		totalTrip = newTotalTrip;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OsmPackage.WORLD__TOTAL_TRIP, oldTotalTrip, totalTrip));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case OsmPackage.WORLD__ANCHOR_POSITION:
 				return basicSetAnchorPosition(null, msgs);
+			case OsmPackage.WORLD__CURSOR_POSITION:
+				return basicSetCursorPosition(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -240,6 +381,12 @@ public class WorldImpl extends AreaImpl implements World {
 				return isLatitudeScale();
 			case OsmPackage.WORLD__ANCHOR_POSITION:
 				return getAnchorPosition();
+			case OsmPackage.WORLD__CURSOR_POSITION:
+				return getCursorPosition();
+			case OsmPackage.WORLD__TRIP:
+				return getTrip();
+			case OsmPackage.WORLD__TOTAL_TRIP:
+				return getTotalTrip();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -260,6 +407,15 @@ public class WorldImpl extends AreaImpl implements World {
 				return;
 			case OsmPackage.WORLD__ANCHOR_POSITION:
 				setAnchorPosition((AnchorPosition)newValue);
+				return;
+			case OsmPackage.WORLD__CURSOR_POSITION:
+				setCursorPosition((GeoPosition)newValue);
+				return;
+			case OsmPackage.WORLD__TRIP:
+				setTrip((Double)newValue);
+				return;
+			case OsmPackage.WORLD__TOTAL_TRIP:
+				setTotalTrip((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -282,6 +438,15 @@ public class WorldImpl extends AreaImpl implements World {
 			case OsmPackage.WORLD__ANCHOR_POSITION:
 				setAnchorPosition((AnchorPosition)null);
 				return;
+			case OsmPackage.WORLD__CURSOR_POSITION:
+				setCursorPosition((GeoPosition)null);
+				return;
+			case OsmPackage.WORLD__TRIP:
+				setTrip(TRIP_EDEFAULT);
+				return;
+			case OsmPackage.WORLD__TOTAL_TRIP:
+				setTotalTrip(TOTAL_TRIP_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -300,6 +465,12 @@ public class WorldImpl extends AreaImpl implements World {
 				return latitudeScale != LATITUDE_SCALE_EDEFAULT;
 			case OsmPackage.WORLD__ANCHOR_POSITION:
 				return anchorPosition != null;
+			case OsmPackage.WORLD__CURSOR_POSITION:
+				return cursorPosition != null;
+			case OsmPackage.WORLD__TRIP:
+				return trip != TRIP_EDEFAULT;
+			case OsmPackage.WORLD__TOTAL_TRIP:
+				return totalTrip != TOTAL_TRIP_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -318,6 +489,10 @@ public class WorldImpl extends AreaImpl implements World {
 		result.append(longitudeScale);
 		result.append(", latitudeScale: ");
 		result.append(latitudeScale);
+		result.append(", trip: ");
+		result.append(trip);
+		result.append(", totalTrip: ");
+		result.append(totalTrip);
 		result.append(')');
 		return result.toString();
 	}

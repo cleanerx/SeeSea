@@ -286,13 +286,40 @@ public interface OsmPackage extends EPackage {
 	int WORLD__ANCHOR_POSITION = AREA_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Cursor Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORLD__CURSOR_POSITION = AREA_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Trip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORLD__TRIP = AREA_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Total Trip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORLD__TOTAL_TRIP = AREA_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>World</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORLD_FEATURE_COUNT = AREA_FEATURE_COUNT + 3;
+	int WORLD_FEATURE_COUNT = AREA_FEATURE_COUNT + 6;
 
 
 	/**
@@ -380,6 +407,39 @@ public interface OsmPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getWorld_AnchorPosition();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link net.sf.seesea.model.core.geo.osm.World#getCursorPosition <em>Cursor Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Cursor Position</em>'.
+	 * @see net.sf.seesea.model.core.geo.osm.World#getCursorPosition()
+	 * @see #getWorld()
+	 * @generated
+	 */
+	EReference getWorld_CursorPosition();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.osm.World#getTrip <em>Trip</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Trip</em>'.
+	 * @see net.sf.seesea.model.core.geo.osm.World#getTrip()
+	 * @see #getWorld()
+	 * @generated
+	 */
+	EAttribute getWorld_Trip();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.osm.World#getTotalTrip <em>Total Trip</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Total Trip</em>'.
+	 * @see net.sf.seesea.model.core.geo.osm.World#getTotalTrip()
+	 * @see #getWorld()
+	 * @generated
+	 */
+	EAttribute getWorld_TotalTrip();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -470,6 +530,30 @@ public interface OsmPackage extends EPackage {
 		 * @generated
 		 */
 		EReference WORLD__ANCHOR_POSITION = eINSTANCE.getWorld_AnchorPosition();
+
+		/**
+		 * The meta object literal for the '<em><b>Cursor Position</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference WORLD__CURSOR_POSITION = eINSTANCE.getWorld_CursorPosition();
+
+		/**
+		 * The meta object literal for the '<em><b>Trip</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute WORLD__TRIP = eINSTANCE.getWorld_Trip();
+
+		/**
+		 * The meta object literal for the '<em><b>Total Trip</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute WORLD__TOTAL_TRIP = eINSTANCE.getWorld_TotalTrip();
 
 	}
 

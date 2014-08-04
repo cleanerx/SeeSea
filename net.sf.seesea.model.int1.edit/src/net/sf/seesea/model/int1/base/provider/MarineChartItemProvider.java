@@ -103,6 +103,8 @@ public class MarineChartItemProvider
 			addZoomLevelPropertyDescriptor(object);
 			addLongitudeScalePropertyDescriptor(object);
 			addLatitudeScalePropertyDescriptor(object);
+			addTripPropertyDescriptor(object);
+			addTotalTripPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -174,6 +176,50 @@ public class MarineChartItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Trip feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTripPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_World_trip_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_World_trip_feature", "_UI_World_type"),
+				 OsmPackage.Literals.WORLD__TRIP,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Total Trip feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTotalTripPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_World_totalTrip_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_World_totalTrip_feature", "_UI_World_type"),
+				 OsmPackage.Literals.WORLD__TOTAL_TRIP,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -191,6 +237,7 @@ public class MarineChartItemProvider
 			childrenFeatures.add(OsmPackage.Literals.AREA__MAP_CENTER_POSITION);
 			childrenFeatures.add(OsmPackage.Literals.AREA__SUB_AREA);
 			childrenFeatures.add(OsmPackage.Literals.WORLD__ANCHOR_POSITION);
+			childrenFeatures.add(OsmPackage.Literals.WORLD__CURSOR_POSITION);
 			childrenFeatures.add(BasePackage.Literals.MARINE_CHART__SEAMARKS);
 		}
 		return childrenFeatures;
@@ -249,6 +296,8 @@ public class MarineChartItemProvider
 			case BasePackage.MARINE_CHART__ZOOM_LEVEL:
 			case BasePackage.MARINE_CHART__LONGITUDE_SCALE:
 			case BasePackage.MARINE_CHART__LATITUDE_SCALE:
+			case BasePackage.MARINE_CHART__TRIP:
+			case BasePackage.MARINE_CHART__TOTAL_TRIP:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case BasePackage.MARINE_CHART__POI_CONTAINER:
@@ -257,6 +306,7 @@ public class MarineChartItemProvider
 			case BasePackage.MARINE_CHART__MAP_CENTER_POSITION:
 			case BasePackage.MARINE_CHART__SUB_AREA:
 			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
+			case BasePackage.MARINE_CHART__CURSOR_POSITION:
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -362,6 +412,51 @@ public class MarineChartItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 BuoysandbeaconsFactory.eINSTANCE.createBuoy()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 BuoysandbeaconsFactory.eINSTANCE.createBeacon()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 BuoysandbeaconsFactory.eINSTANCE.createSpecialBuoy()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createGeoPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createNamedPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createGeoPosition3D()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createMeasuredPosition3D()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createGNSSMeasuredPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createAnchorPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(BasePackage.Literals.MARINE_CHART__SEAMARKS,
 				 BuoysandbeaconsFactory.eINSTANCE.createBuoy()));
 
@@ -389,6 +484,7 @@ public class MarineChartItemProvider
 
 		boolean qualify =
 			childFeature == OsmPackage.Literals.AREA__MAP_CENTER_POSITION ||
+			childFeature == OsmPackage.Literals.WORLD__CURSOR_POSITION ||
 			childFeature == BasePackage.Literals.MARINE_CHART__SEAMARKS ||
 			childFeature == OsmPackage.Literals.WORLD__ANCHOR_POSITION;
 

@@ -58,6 +58,8 @@ public class SeeSeaGraphicalPartFactory implements EditPartFactory {
 //			child = new BuoyEditPart();
 		} else if(model instanceof AnchorPosition) {
 			child = new AnchorAreaEditPart();
+		} else if(model instanceof GeoPosition && ((EObject)model).eContainer() instanceof World && ((World)((EObject)model).eContainer()).getCursorPosition().equals(model)) {
+			child = new DotEditPart();
 		} else if(model instanceof GeoPosition && ((EObject)model).eContainer() instanceof World) {
 			child = new ShipPositionEditPart();
 		} else if(model instanceof AISMessageTime) {

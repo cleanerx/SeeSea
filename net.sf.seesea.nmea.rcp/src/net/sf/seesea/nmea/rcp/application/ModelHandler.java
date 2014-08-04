@@ -49,6 +49,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 public class ModelHandler implements IModel {
@@ -70,7 +71,8 @@ public class ModelHandler implements IModel {
 						new XMIResourceFactoryImpl());
 
 		// Get the URI of the model file.
-		URI fileURI = URI.createFileURI(new File(System.getProperty("user.home") + File.separator + "NMEALogging" + File.separator + VIEW_CONFIG_CHT) //$NON-NLS-1$ //$NON-NLS-2$
+		File chartConfig = new File(System.getProperty("user.home") + File.separator + "NMEALogging" + File.separator + VIEW_CONFIG_CHT);
+		URI fileURI = URI.createFileURI(chartConfig //$NON-NLS-1$ //$NON-NLS-2$
 				.getAbsolutePath());
 
 		// Create a resource for this file.
@@ -123,8 +125,8 @@ public class ModelHandler implements IModel {
 		if(world == null) {
 			
 			// Get the URI of the model file.
-			File file = new File(VIEW_CONFIG_CHT);
-			if(!file.exists()) {
+			File chartConfig = new File(System.getProperty("user.home") + File.separator + "NMEALogging" + File.separator + VIEW_CONFIG_CHT);
+			if(!chartConfig.exists()) {
 			    world = createDefaultModel();
 			} else {
 				GeoPackage.eINSTANCE.eClass();
@@ -140,7 +142,7 @@ public class ModelHandler implements IModel {
 				.getExtensionToFactoryMap()
 				.put(Resource.Factory.Registry.DEFAULT_EXTENSION,new XMIResourceFactoryImpl());
 				
-				URI fileURI = URI.createFileURI(file.getAbsolutePath());
+				URI fileURI = URI.createFileURI(chartConfig.getAbsolutePath());
 				
 				// Create a resource for this file.
 				Resource resource = resourceSet.getResource(fileURI,true);
@@ -151,6 +153,11 @@ public class ModelHandler implements IModel {
 	}
 
 	public void saveModel() throws IOException {
+		for(Track track : world.getTracksContainer().getTracks()) {
+			if(track.getMeasuredPosition().size() < 2) {
+				EcoreUtil.delete(track);
+			}
+		}
 		Resource resource = world.eResource();
 		resource.save(Collections.EMPTY_MAP);
 	}

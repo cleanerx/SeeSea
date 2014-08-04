@@ -26,7 +26,13 @@
  */
 package net.sf.seesea.rendering.chart.tools;
 
+import net.sf.seesea.model.core.geo.GeoPosition;
+import net.sf.seesea.model.core.geo.osm.World;
+import net.sf.seesea.model.util.IModel;
 import net.sf.seesea.rendering.chart.IViewerGestureListener;
+import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
+import net.sf.seesea.rendering.chart.editpart.WorldEditPart;
+import net.sf.seesea.tileservice.projections.IMapProjection;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -42,6 +48,8 @@ import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.TargetingTool;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.GestureEvent;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 public class ChartSelectionTool extends TargetingTool implements IViewerGestureListener {
 
@@ -86,12 +94,39 @@ public class ChartSelectionTool extends TargetingTool implements IViewerGestureL
 	@Override
 	protected boolean handleButtonUp(int button) {
 		if(getTargetRequest() instanceof SelectionRequest) {
+			EditPart targetEditPart = getTargetEditPart();
 			getCurrentViewer().setSelection(
-					new StructuredSelection(getTargetEditPart()));
+					new StructuredSelection(targetEditPart));
+			if(targetEditPart instanceof WorldEditPart) {
+				BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
+				ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
+				IModel model = bundleContext.getService(serviceReference);
+				World world = model.loadModel();
+				
+				ServiceReference<IMapProjection> serviceReference2 = bundleContext.getServiceReference(IMapProjection.class);
+				IMapProjection mapProjection = bundleContext.getService(serviceReference2);
+				
+				targetEditPart = (EditPart) getCurrentViewer().getRootEditPart().getChildren().iterator().next();
+				if(targetEditPart instanceof WorldEditPart) {
+					WorldEditPart worldEditPart = (WorldEditPart) targetEditPart;
+					Point location = getLocation();
+					worldEditPart.getFigure().translateToRelative(location);
+					org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(location.x, location.y);
+					try {
+						GeoPosition positionCursor = mapProjection.backproject(point, (1 << world.getZoomLevel()) * 256);
+						world.setCursorPosition(positionCursor);
+					} catch (IllegalArgumentException e) {
+						// failed to parse value
+					}
+					
+				}
+			}
+			
 		} else {
 			executeCurrentCommand();
 		}
 
+		
 		resetFlags();
 		return true;
 	}
@@ -138,6 +173,33 @@ public class ChartSelectionTool extends TargetingTool implements IViewerGestureL
 		IViewerGestureListener handler = (IViewerGestureListener) viewer.getProperty(IViewerGestureListener.KEY);
 		if (handler != null)
 			handler.gesturePerformed(gestureEvent, viewer);
+	}
+	
+	@Override
+	protected boolean handleMove() {
+//	    BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
+//	    ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
+//	    IModel model = bundleContext.getService(serviceReference);
+//	    World world = model.loadModel();
+//	    
+//		ServiceReference<IMapProjection> serviceReference2 = bundleContext.getServiceReference(IMapProjection.class);
+//		IMapProjection mapProjection = bundleContext.getService(serviceReference2);
+//
+//		EditPart targetEditPart = (EditPart) getCurrentViewer().getRootEditPart().getChildren().iterator().next();
+//		if(targetEditPart instanceof WorldEditPart) {
+//			WorldEditPart worldEditPart = (WorldEditPart) targetEditPart;
+//			Point location = getLocation();
+//			worldEditPart.getFigure().translateToRelative(location);
+//			org.eclipse.swt.graphics.Point point = new org.eclipse.swt.graphics.Point(location.x, location.y);
+//			try {
+//				GeoPosition positionCursor = mapProjection.backproject(point, (1 << world.getZoomLevel()) * 256);
+//				world.setCursorPosition(positionCursor);
+//			} catch (IllegalArgumentException e) {
+//				// failed to parse value
+//			}
+//			
+//		}
+		return true;
 	}
 
 }

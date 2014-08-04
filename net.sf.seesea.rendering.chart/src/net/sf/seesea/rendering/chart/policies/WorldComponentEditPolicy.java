@@ -37,6 +37,7 @@ import net.sf.seesea.model.core.geo.osm.Area;
 import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.model.util.GeoParser;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
+import net.sf.seesea.rendering.chart.commands.AddAnchorPositionToAreaCommand;
 import net.sf.seesea.rendering.chart.commands.AddPositionToAreaCommand;
 import net.sf.seesea.rendering.chart.commands.CreateNodeCommand;
 import net.sf.seesea.rendering.chart.commands.CreatePositionCommand;
@@ -125,7 +126,7 @@ public class WorldComponentEditPolicy extends ComponentEditPolicy {
 			System.out.println("Rec:Cen/rect" + rectangle.getTopLeft() + ":" + rectangle);
 			System.out.println("Anc:Lat/Lon" + anchorPosition.getLatitude().getDecimalDegree() + ":" + anchorPosition.getLongitude().getDecimalDegree() + "/Ext:" + anchorPosition.getXExtent() + ":" + anchorPosition.getYExtent());
 			EditingDomain editingDomain2 = ((GeospatialGraphicalViewer) getHost().getViewer()).getEditingDomainServiceTracker();
-			AddPositionToAreaCommand createNodeCommand = new AddPositionToAreaCommand((TransactionalEditingDomain) editingDomain2, (World) editPart.getModel(), anchorPosition);
+			AddAnchorPositionToAreaCommand createNodeCommand = new AddAnchorPositionToAreaCommand((TransactionalEditingDomain) editingDomain2, (World) editPart.getModel(), anchorPosition);
 			return new ICommandProxy(createNodeCommand);
 		}
 		return super.getCommand(request);

@@ -7,12 +7,17 @@
  *******************************************************************************/
 package net.sf.seesea.rendering.chart;
 
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.tools.SelectionTool;
 import org.eclipse.swt.events.GestureEvent;
 
 public class GestureSelectionTool extends SelectionTool implements IViewerGestureListener {
 
+	public GestureSelectionTool() {
+		setDefaultCursor(Cursors.CROSS);
+	}
+	
 	public void gesturePerformed(GestureEvent gestureEvent, EditPartViewer viewer) {
 		if (getDragTracker() instanceof IViewerGestureListener) {
 			((IViewerGestureListener) getDragTracker()).gesturePerformed(gestureEvent, viewer);

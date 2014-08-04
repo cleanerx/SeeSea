@@ -31,6 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.model.core.geo.osm;
 
 import net.sf.seesea.model.core.geo.AnchorPosition;
+import net.sf.seesea.model.core.geo.GeoPosition;
 
 
 /**
@@ -44,6 +45,9 @@ import net.sf.seesea.model.core.geo.AnchorPosition;
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#isLatitudeScale <em>Latitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#getAnchorPosition <em>Anchor Position</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.World#getCursorPosition <em>Cursor Position</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.World#getTrip <em>Trip</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.osm.World#getTotalTrip <em>Total Trip</em>}</li>
  * </ul>
  * </p>
  *
@@ -131,5 +135,83 @@ public interface World extends Area {
 	 * @generated
 	 */
 	void setAnchorPosition(AnchorPosition value);
+
+	/**
+	 * Returns the value of the '<em><b>Cursor Position</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cursor Position</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cursor Position</em>' containment reference.
+	 * @see #setCursorPosition(GeoPosition)
+	 * @see net.sf.seesea.model.core.geo.osm.OsmPackage#getWorld_CursorPosition()
+	 * @model containment="true"
+	 * @generated
+	 */
+	GeoPosition getCursorPosition();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.osm.World#getCursorPosition <em>Cursor Position</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cursor Position</em>' containment reference.
+	 * @see #getCursorPosition()
+	 * @generated
+	 */
+	void setCursorPosition(GeoPosition value);
+
+	/**
+	 * Returns the value of the '<em><b>Trip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Trip</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Trip</em>' attribute.
+	 * @see #setTrip(double)
+	 * @see net.sf.seesea.model.core.geo.osm.OsmPackage#getWorld_Trip()
+	 * @model
+	 * @generated
+	 */
+	double getTrip();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.osm.World#getTrip <em>Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Trip</em>' attribute.
+	 * @see #getTrip()
+	 * @generated
+	 */
+	void setTrip(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Total Trip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Total Trip</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Total Trip</em>' attribute.
+	 * @see #setTotalTrip(double)
+	 * @see net.sf.seesea.model.core.geo.osm.OsmPackage#getWorld_TotalTrip()
+	 * @model
+	 * @generated
+	 */
+	double getTotalTrip();
+
+	/**
+	 * Sets the value of the '{@link net.sf.seesea.model.core.geo.osm.World#getTotalTrip <em>Total Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Total Trip</em>' attribute.
+	 * @see #getTotalTrip()
+	 * @generated
+	 */
+	void setTotalTrip(double value);
 
 } // World

@@ -45,6 +45,7 @@ import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 
@@ -101,15 +102,16 @@ public class TrackRecorder implements IPositionListener {
 		World world = _model.loadModel();
 		List<Track> routes = world.getTracksContainer().getTracks();
 		Track currentTrack = routes.get(routes.size() - 1);
-
-//		AddPositionToAreaCommand createPositionCommand = new AddPositionToAreaCommand((TransactionalEditingDomain) domainProvider.getEditingDomain(), currentTrack, sensorData);
-//		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
-//		try {
-//			IStatus status = operationHistory.execute(createPositionCommand, new NullProgressMonitor(), null);
-//		} catch (ExecutionException e) {
-//			e.printStackTrace();
-//		}
-//		currentRoute.getWaypoints().add(e)
+		
+		MeasuredPosition3D position3d = EcoreUtil.copy(sensorData);
+		
+		AddPositionToAreaCommand createPositionCommand = new AddPositionToAreaCommand((TransactionalEditingDomain) domainProvider.getEditingDomain(), currentTrack, position3d);
+		IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
+		try {
+			IStatus status = operationHistory.execute(createPositionCommand, new NullProgressMonitor(), null);
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void providerDisabled(String providerID) {

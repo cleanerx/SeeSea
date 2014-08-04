@@ -95,6 +95,17 @@ public class DistanceTool extends AbstractConnectionCreationTool implements IVie
 		
 	}
 	
+	protected boolean handleMove() {
+		if(isInState(STATE_CONNECTION_STARTED))  {
+			LocationSequenceRequest locationRequest = (LocationSequenceRequest) getTargetRequest();
+			locationRequest.setLocation(getLocation());		
+			showSourceFeedback();
+			showTargetFeedback();
+
+		}
+		return true;
+	}
+	
 	@Override
 	protected boolean handleButtonUp(int button) {
 		if(isInState(STATE_CONNECTION_STARTED)) {
@@ -134,6 +145,7 @@ public class DistanceTool extends AbstractConnectionCreationTool implements IVie
 		if(isInState(STATE_CONNECTION_STARTED)) {
 			executeCurrentCommand();
 			handleFinished();
+			setState(STATE_INITIAL);
 		}
 		// TODO Auto-generated method stub
 		return super.handleDoubleClick(button);
@@ -141,7 +153,6 @@ public class DistanceTool extends AbstractConnectionCreationTool implements IVie
 	
 	@Override
 	protected void updateTargetRequest() {
-		LocationSequenceRequest locationRequest = (LocationSequenceRequest) getTargetRequest();
 //		locationRequest.addLocation(getLocation());
 	}
 	
@@ -176,6 +187,18 @@ public class DistanceTool extends AbstractConnectionCreationTool implements IVie
 		IViewerGestureListener handler = (IViewerGestureListener) viewer.getProperty(IViewerGestureListener.KEY);
 		if (handler != null)
 			handler.gesturePerformed(gestureEvent, viewer);
+	}
+	
+	@Override
+	protected void showTargetFeedback() {
+		// TODO Auto-generated method stub
+		super.showTargetFeedback();
+	}
+	
+	@Override
+	protected void eraseTargetFeedback() {
+		// TODO Auto-generated method stub
+		super.eraseTargetFeedback();
 	}
 
 }

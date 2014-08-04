@@ -27,9 +27,6 @@
 package net.sf.seesea.rendering.chart.commands;
 
 import net.sf.seesea.model.core.geo.AnchorPosition;
-import net.sf.seesea.model.core.geo.GeoPosition;
-import net.sf.seesea.model.core.geo.MeasuredPosition3D;
-import net.sf.seesea.model.core.geo.Track;
 import net.sf.seesea.model.core.geo.osm.World;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -41,20 +38,21 @@ import org.eclipse.gmf.runtime.common.core.command.CommandResult;
 /**
  * 
  */
-public class AddPositionToAreaCommand extends CreateCommand {
+public class AddAnchorPositionToAreaCommand extends CreateCommand {
 	
-	private final MeasuredPosition3D position;
-	private final Track track;
+	private final AnchorPosition position;
+	private final World world;
 
 	/**
 	 * @param editingDomain
 	 * @param viewDescriptor
 	 * @param containerView
 	 */
-	public AddPositionToAreaCommand(TransactionalEditingDomain editingDomain, Track track, MeasuredPosition3D position) {
-		super(editingDomain, "Create Anchor Position", track);
-		this.track = track;
+	public AddAnchorPositionToAreaCommand(TransactionalEditingDomain editingDomain, World world, AnchorPosition position) {
+		super(editingDomain, "Create Anchor Position", world);
+		this.world = world;
 		this.position = position;
+//		System.out.println("anchorpos");
 	}
 
 	/* (non-Javadoc)
@@ -63,7 +61,7 @@ public class AddPositionToAreaCommand extends CreateCommand {
 	@Override
 	protected CommandResult doExecuteWithResult(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		track.getMeasuredPosition().add(position);
+		world.setAnchorPosition(position);
 		return CommandResult.newOKCommandResult(position);
 	}
 
