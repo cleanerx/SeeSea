@@ -26,30 +26,25 @@
  */
 package net.sf.seesea.rendering.chart.editpart;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.Track;
+import net.sf.seesea.model.util.GeoUtil;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.figures.TrackDataFigure;
 import net.sf.seesea.rendering.chart.policies.RouteEditPolicy;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
-import net.sf.seesea.tileservice.ITileProvider;
-import net.sf.seesea.tileservice.projections.IMapProjection;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.draw2d.Label;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gmf.runtime.draw2d.ui.internal.routers.ObliqueRouter;
 import org.eclipse.swt.widgets.Display;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 /**
@@ -58,7 +53,9 @@ import org.osgi.framework.ServiceRegistration;
 public class TrackEditPart extends TransactionalEditPart implements ConnectionEditPart {
 
 	private ServiceRegistration<IDepthListener> serviceRegistration;
+	private TrackPointListener trackPointListener;
 
+	private NumberFormat format = new DecimalFormat("0.#");
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.gef.editparts.AbstractGraphicalEditPart#createFigure()
@@ -73,21 +70,38 @@ public class TrackEditPart extends TransactionalEditPart implements ConnectionEd
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
+		Label label = ((Label)((TrackDataFigure) getFigure()).getToolTip());
+		double totalDistance= 0.0;
+		Track track = (Track) getModel();
+
+		for (int i = 1; i < track.getMeasuredPosition().size() ; i++) {
+			Double distance = GeoUtil.getDistance(track.getMeasuredPosition().get(i -1).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i -1).getLongitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLongitude().getDecimalDegree());
+			totalDistance+= distance;
+		}
+		label.setText(label.getText()  + format.format(totalDistance) + "nm/\n");
+		
 	}
 	
 	@Override
 	public void activate() {
 		super.activate();
-//		((Track)getModel()).eAdapters().add(this);
-//		DepthListener positionListener = new DepthListener();
-//		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
+		trackPointListener = new TrackPointListener(this);
+		Track track = (Track)getModel();
+		for (MeasuredPosition3D measuredPosition3D : track.getMeasuredPosition()) {
+			trackPointListener.addPositionToFigure(measuredPosition3D);
+		}
+		track.eAdapters().add(trackPointListener);
+		DepthListener positionListener = new DepthListener();
+		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
 	}
 	
 	@Override
 	public void deactivate() {
-		((Track)getModel()).eAdapters().remove(this);
+		((Track)getModel()).eAdapters().remove(trackPointListener);
 		super.deactivate();
-//		serviceRegistration.unregister();
+		if(serviceRegistration != null) {
+			serviceRegistration.unregister();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -97,6 +111,11 @@ public class TrackEditPart extends TransactionalEditPart implements ConnectionEd
 	protected void createEditPolicies() {
         installEditPolicy(EditPolicy.CONNECTION_ROLE,
                 new RouteEditPolicy());
+	}
+	
+	@Override
+	public boolean isSelectable() {
+		return true;	
 	}
 
 	private class DepthListener implements IDepthListener {
@@ -143,44 +162,6 @@ public class TrackEditPart extends TransactionalEditPart implements ConnectionEd
 		return (Track)getModel();
 	}
 
-	public void notifyChanged(Notification notification) {
-		if(notification.getNotifier() instanceof Track && notification.getEventType() == Notification.ADD) {
-			MeasuredPosition3D position3d = (MeasuredPosition3D) notification.getNewValue();
-			BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
-			ServiceReference serviceReference = bundleContext.getServiceReference(ITileProvider.class.getName());
-			if(serviceReference != null) {
-				IMapProjection service = ((ITileProvider)bundleContext.getService(serviceReference)).getProjection();
-				org.eclipse.swt.graphics.Point project = service.project(position3d,Integer.MAX_VALUE);
-				((TrackDataFigure)getFigure()).addRelativePoint(new Point(project.x, project.y));
-				bundleContext.ungetService(serviceReference);
-			}
-			
-		}
-//		Display.getDefault().asyncExec(new Runnable() {
-//			
-//			public void run() {
-////				getFigure().getParent().repaint();
-////				getFigure().repaint();
-//				
-//			}
-//		});
-	}
-
-	public EditPart getTarget() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setTarget(Notifier newTarget) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean isAdapterForType(Object type) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public EditPart getSource() {
 		// TODO Auto-generated method stub
 		return null;
@@ -194,6 +175,11 @@ public class TrackEditPart extends TransactionalEditPart implements ConnectionEd
 	public void setTarget(EditPart target) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public EditPart getTarget() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

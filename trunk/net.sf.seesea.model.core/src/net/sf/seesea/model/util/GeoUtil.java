@@ -1,6 +1,12 @@
 package net.sf.seesea.model.util;
 
+import net.sf.seesea.model.core.geo.GeoPosition;
+
 public class GeoUtil {
+
+	public static double getDistance(GeoPosition posA, GeoPosition posB) {
+		return getDistance(posA.getLatitude().getDecimalDegree(), posB.getLatitude().getDecimalDegree(), posA.getLongitude().getDecimalDegree(), posB.getLongitude().getDecimalDegree());
+	}
 
 	public static double getDistance(double latA, double latB,double  lonA,double lonB) {
 		double dLat = Math.toRadians(latB - latA);
@@ -13,9 +19,13 @@ public class GeoUtil {
 		double a = Math.PI/2-lat2;
 		double b = Math.PI/2-lat1;
 		double c = Math.acos(Math.cos(a)*Math.cos(b)+Math.sin(a)*Math.sin(b)*Math.cos(dLon));
-		double d = earthRadius * c * 0.540;
+		double d = earthRadius * c * 0.53957424656670036286731998291163;
 		
 		return d;
+	}
+	
+	public static double getBearing(GeoPosition posA, GeoPosition posB) {
+		return getBearing(posA.getLatitude().getDecimalDegree(), posB.getLatitude().getDecimalDegree(), posA.getLongitude().getDecimalDegree(), posB.getLongitude().getDecimalDegree());
 	}
 	
 	public static double getBearing(double latA,double latB,double lonA,double lonB) {

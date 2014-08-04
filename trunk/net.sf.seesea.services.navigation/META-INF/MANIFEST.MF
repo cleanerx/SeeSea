@@ -13,3 +13,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.services.navigation,
  net.sf.seesea.services.navigation.listener,
  net.sf.seesea.services.navigation.provider
+Service-Component: OSGI-INF/VirtualTotalTrip.xml

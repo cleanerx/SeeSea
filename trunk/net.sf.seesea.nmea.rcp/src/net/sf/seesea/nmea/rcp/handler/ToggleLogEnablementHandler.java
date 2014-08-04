@@ -60,8 +60,7 @@ public class ToggleLogEnablementHandler extends AbstractHandler {
 		IHandlerService handlerService = (IHandlerService) workbench
 				.getService(IHandlerService.class);
 		Command command = event.getCommand();
-		// always toggle back until the service is available
-		HandlerUtil.toggleCommandState(command);
+
 		State state = command.getState(RegistryToggleState.STATE_ID);
 		if ((Boolean) state.getValue()) {
 			try {
@@ -115,6 +114,8 @@ public class ToggleLogEnablementHandler extends AbstractHandler {
 				Logger.getLogger(getClass()).error("Failed filter syntax", e1); //$NON-NLS-1$
 			}
 		}
+		// always toggle back until the service is available
+		HandlerUtil.toggleCommandState(command);
 		return null;
 	}
 

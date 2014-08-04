@@ -168,6 +168,11 @@
                     defaultValueLiteral="true"/>
                 <eStructuralFeatures xsi:type="ecore:EReference" name="anchorPosition"
                     eType="#//sf/seesea/model/core/geo/AnchorPosition" containment="true"/>
+                <eStructuralFeatures xsi:type="ecore:EReference" name="cursorPosition"
+                    eType="#//sf/seesea/model/core/geo/GeoPosition" containment="true"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="trip" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+                <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalTrip"
+                    eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
               </eClassifiers>
             </eSubpackages>
           </eSubpackages>

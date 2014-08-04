@@ -63,11 +63,13 @@ public class ToggleLogRawDataHandler extends AbstractHandler {
 								ICommandService commandService = (ICommandService) PlatformUI
 										.getWorkbench().getService(
 												ICommandService.class);
-								Command command = commandService
-										.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
-								State state = command
-										.getState(RegistryToggleState.STATE_ID);
-								state.setValue(true);
+								if(commandService != null) {
+									Command command = commandService
+											.getCommand("net.sf.seesea.nmea.rcp.log.toggle"); //$NON-NLS-1$
+									State state = command
+											.getState(RegistryToggleState.STATE_ID);
+									state.setValue(true);
+								}
 
 							}
 						});

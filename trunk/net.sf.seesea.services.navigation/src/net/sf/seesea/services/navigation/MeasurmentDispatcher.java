@@ -235,11 +235,6 @@ IWindDataProvider, IShipMovementVectorProvider {
 							listener.providerEnabled(getProviderName());
 						}
 					} else if (dataListener
-							.isAssignableFrom(ISpeedListener.class)) {
-						for (ISpeedListener listener : _speedListeners) {
-							listener.providerEnabled(getProviderName());
-						}
-					} else if (dataListener
 							.isAssignableFrom(IWaterTemperatureListener.class)) {
 						for (IWaterTemperatureListener listener : _waterTemperatureListeners) {
 							listener.providerEnabled(getProviderName());
@@ -440,7 +435,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 			}
 		} else if (measurement instanceof RelativeSpeed) {
 			synchronized (_speedListeners) {
-				heartbeat(ISpeedListener.class);
+				heartbeatSpeed();
 				for (ISpeedListener speedListener : _speedListeners) {
 					speedListener.notify(
 							(RelativeSpeed) measurement, null);
@@ -508,6 +503,17 @@ IWindDataProvider, IShipMovementVectorProvider {
 					listener.notify((Depth) measurement, null);
 				}
 			}
+		}
+	}
+
+	private void heartbeatSpeed() {
+		synchronized (heartbeatSync) {
+			if (!sensorHeartbeats.containsKey(ISpeedListener.class)) {
+				for (ISpeedListener listener : _speedListeners) {
+					listener.providerEnabled(getProviderName());
+				}
+			}
+			sensorHeartbeats.put(ISpeedListener.class, System.currentTimeMillis());
 		}
 	}
 

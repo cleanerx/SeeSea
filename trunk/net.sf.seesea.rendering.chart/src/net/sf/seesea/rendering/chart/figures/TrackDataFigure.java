@@ -71,12 +71,48 @@ public class TrackDataFigure extends PolylineConnection {
 	 */
 	public int addRelativePoint(Point point) {
 		synchronized (syncObject) {
-			if(_relativePoints.size() > 10) {
-				_relativePoints.remove(0);
+//			if(_relativePoints.size() > 10000) {
+//				_relativePoints.remove(0);
+//			}
+			if(_relativePoints.size() > 1) {
+				if(point.equals(_relativePoints.get(_relativePoints.size() - 1))) {
+					return _relativePoints.size() - 1;
+				}
 			}
-			_relativePoints.add(point);
+
+			if(_relativePoints.size() > 7) {
+				List<Point> subList = _relativePoints.subList(_relativePoints.size() - 6, _relativePoints.size() - 1);
+				Point p1 = point;
+				Double averageAngle = 0.0;
+				for (int i = 1; i < subList.size(); i++) {
+					averageAngle += getAngle(subList.get(i), subList.get(i - 1));
+				}
+				averageAngle = averageAngle / (subList.size() - 1);
+				
+				double angle = getAngle(point, _relativePoints.get(_relativePoints.size() - 1));
+				System.out.println(averageAngle + ":" + angle);
+				if(Math.abs(averageAngle - angle) > 2  || averageAngle.isNaN()) {
+					_relativePoints.add(point);
+				} else {
+					_relativePoints.remove(_relativePoints.size() - 1);
+					_relativePoints.add(point);
+				}
+
+			} else {
+				_relativePoints.add(point);
+			}
+//			System.out.println(_relativePoints.size());
+			
 			return _relativePoints.size() - 1;
 		}
+	}
+
+	private double getAngle(Point p2, Point p3) {
+		double x = p3.x - p2.x;
+		double y = p3.y - p2.y;
+		double c = Math.sqrt(x * x + y * y);
+		double alpha = Math.acos(x / c);
+		return Math.toDegrees(alpha);
 	}
 	
 	public void removeRelativePoint(Point point) {
@@ -226,6 +262,9 @@ public class TrackDataFigure extends PolylineConnection {
 	
 	@Override
 	protected boolean shapeContainsPoint(int x, int y) {
+		if(pointList == null) {
+			return false;
+		}
 		return Geometry.polylineContainsPoint(pointList, x, y, 2);
 	}
 	

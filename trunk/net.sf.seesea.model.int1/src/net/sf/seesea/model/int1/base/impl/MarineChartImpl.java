@@ -52,6 +52,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#isLatitudeScale <em>Latitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getAnchorPosition <em>Anchor Position</em>}</li>
+ *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getCursorPosition <em>Cursor Position</em>}</li>
+ *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getTrip <em>Trip</em>}</li>
+ *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getTotalTrip <em>Total Trip</em>}</li>
  *   <li>{@link net.sf.seesea.model.int1.base.impl.MarineChartImpl#getSeamarks <em>Seamarks</em>}</li>
  * </ul>
  * </p>
@@ -167,6 +170,51 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 	 * @ordered
 	 */
 	protected AnchorPosition anchorPosition;
+	/**
+	 * The cached value of the '{@link #getCursorPosition() <em>Cursor Position</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCursorPosition()
+	 * @generated
+	 * @ordered
+	 */
+	protected GeoPosition cursorPosition;
+	/**
+	 * The default value of the '{@link #getTrip() <em>Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double TRIP_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getTrip() <em>Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected double trip = TRIP_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getTotalTrip() <em>Total Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double TOTAL_TRIP_EDEFAULT = 0.0;
+	/**
+	 * The cached value of the '{@link #getTotalTrip() <em>Total Trip</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTotalTrip()
+	 * @generated
+	 * @ordered
+	 */
+	protected double totalTrip = TOTAL_TRIP_EDEFAULT;
 	/**
 	 * The cached value of the '{@link #getSeamarks() <em>Seamarks</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -491,6 +539,91 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public GeoPosition getCursorPosition() {
+		return cursorPosition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCursorPosition(GeoPosition newCursorPosition, NotificationChain msgs) {
+		GeoPosition oldCursorPosition = cursorPosition;
+		cursorPosition = newCursorPosition;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, BasePackage.MARINE_CHART__CURSOR_POSITION, oldCursorPosition, newCursorPosition);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCursorPosition(GeoPosition newCursorPosition) {
+		if (newCursorPosition != cursorPosition) {
+			NotificationChain msgs = null;
+			if (cursorPosition != null)
+				msgs = ((InternalEObject)cursorPosition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - BasePackage.MARINE_CHART__CURSOR_POSITION, null, msgs);
+			if (newCursorPosition != null)
+				msgs = ((InternalEObject)newCursorPosition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - BasePackage.MARINE_CHART__CURSOR_POSITION, null, msgs);
+			msgs = basicSetCursorPosition(newCursorPosition, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BasePackage.MARINE_CHART__CURSOR_POSITION, newCursorPosition, newCursorPosition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getTrip() {
+		return trip;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTrip(double newTrip) {
+		double oldTrip = trip;
+		trip = newTrip;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BasePackage.MARINE_CHART__TRIP, oldTrip, trip));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getTotalTrip() {
+		return totalTrip;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTotalTrip(double newTotalTrip) {
+		double oldTotalTrip = totalTrip;
+		totalTrip = newTotalTrip;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, BasePackage.MARINE_CHART__TOTAL_TRIP, oldTotalTrip, totalTrip));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AbstractSeamark> getSeamarks() {
 		if (seamarks == null) {
 			seamarks = new EObjectContainmentEList<AbstractSeamark>(AbstractSeamark.class, this, BasePackage.MARINE_CHART__SEAMARKS);
@@ -518,6 +651,8 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return ((InternalEList<?>)getSubArea()).basicRemove(otherEnd, msgs);
 			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
 				return basicSetAnchorPosition(null, msgs);
+			case BasePackage.MARINE_CHART__CURSOR_POSITION:
+				return basicSetCursorPosition(null, msgs);
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				return ((InternalEList<?>)getSeamarks()).basicRemove(otherEnd, msgs);
 		}
@@ -550,6 +685,12 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return isLatitudeScale();
 			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
 				return getAnchorPosition();
+			case BasePackage.MARINE_CHART__CURSOR_POSITION:
+				return getCursorPosition();
+			case BasePackage.MARINE_CHART__TRIP:
+				return getTrip();
+			case BasePackage.MARINE_CHART__TOTAL_TRIP:
+				return getTotalTrip();
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				return getSeamarks();
 		}
@@ -592,6 +733,15 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return;
 			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
 				setAnchorPosition((AnchorPosition)newValue);
+				return;
+			case BasePackage.MARINE_CHART__CURSOR_POSITION:
+				setCursorPosition((GeoPosition)newValue);
+				return;
+			case BasePackage.MARINE_CHART__TRIP:
+				setTrip((Double)newValue);
+				return;
+			case BasePackage.MARINE_CHART__TOTAL_TRIP:
+				setTotalTrip((Double)newValue);
 				return;
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				getSeamarks().clear();
@@ -636,6 +786,15 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
 				setAnchorPosition((AnchorPosition)null);
 				return;
+			case BasePackage.MARINE_CHART__CURSOR_POSITION:
+				setCursorPosition((GeoPosition)null);
+				return;
+			case BasePackage.MARINE_CHART__TRIP:
+				setTrip(TRIP_EDEFAULT);
+				return;
+			case BasePackage.MARINE_CHART__TOTAL_TRIP:
+				setTotalTrip(TOTAL_TRIP_EDEFAULT);
+				return;
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				getSeamarks().clear();
 				return;
@@ -669,6 +828,12 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				return latitudeScale != LATITUDE_SCALE_EDEFAULT;
 			case BasePackage.MARINE_CHART__ANCHOR_POSITION:
 				return anchorPosition != null;
+			case BasePackage.MARINE_CHART__CURSOR_POSITION:
+				return cursorPosition != null;
+			case BasePackage.MARINE_CHART__TRIP:
+				return trip != TRIP_EDEFAULT;
+			case BasePackage.MARINE_CHART__TOTAL_TRIP:
+				return totalTrip != TOTAL_TRIP_EDEFAULT;
 			case BasePackage.MARINE_CHART__SEAMARKS:
 				return seamarks != null && !seamarks.isEmpty();
 		}
@@ -703,6 +868,9 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				case BasePackage.MARINE_CHART__LONGITUDE_SCALE: return OsmPackage.WORLD__LONGITUDE_SCALE;
 				case BasePackage.MARINE_CHART__LATITUDE_SCALE: return OsmPackage.WORLD__LATITUDE_SCALE;
 				case BasePackage.MARINE_CHART__ANCHOR_POSITION: return OsmPackage.WORLD__ANCHOR_POSITION;
+				case BasePackage.MARINE_CHART__CURSOR_POSITION: return OsmPackage.WORLD__CURSOR_POSITION;
+				case BasePackage.MARINE_CHART__TRIP: return OsmPackage.WORLD__TRIP;
+				case BasePackage.MARINE_CHART__TOTAL_TRIP: return OsmPackage.WORLD__TOTAL_TRIP;
 				default: return -1;
 			}
 		}
@@ -737,6 +905,9 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 				case OsmPackage.WORLD__LONGITUDE_SCALE: return BasePackage.MARINE_CHART__LONGITUDE_SCALE;
 				case OsmPackage.WORLD__LATITUDE_SCALE: return BasePackage.MARINE_CHART__LATITUDE_SCALE;
 				case OsmPackage.WORLD__ANCHOR_POSITION: return BasePackage.MARINE_CHART__ANCHOR_POSITION;
+				case OsmPackage.WORLD__CURSOR_POSITION: return BasePackage.MARINE_CHART__CURSOR_POSITION;
+				case OsmPackage.WORLD__TRIP: return BasePackage.MARINE_CHART__TRIP;
+				case OsmPackage.WORLD__TOTAL_TRIP: return BasePackage.MARINE_CHART__TOTAL_TRIP;
 				default: return -1;
 			}
 		}
@@ -759,6 +930,10 @@ public class MarineChartImpl extends ChartImpl implements MarineChart {
 		result.append(longitudeScale);
 		result.append(", latitudeScale: ");
 		result.append(latitudeScale);
+		result.append(", trip: ");
+		result.append(trip);
+		result.append(", totalTrip: ");
+		result.append(totalTrip);
 		result.append(')');
 		return result.toString();
 	}

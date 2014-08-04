@@ -28,6 +28,7 @@ package net.sf.seesea.rendering.chart.editpart;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -38,18 +39,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.model.core.geo.osm.Area;
 import net.sf.seesea.model.core.geo.osm.World;
+import net.sf.seesea.model.util.GeoParser;
+import net.sf.seesea.model.util.GeoPositionFormatter;
+import net.sf.seesea.model.util.GeoUtil;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.commands.SetPositionCommand;
 import net.sf.seesea.rendering.chart.commands.SetZoomLevelCommand;
 import net.sf.seesea.rendering.chart.editor.AreaMarker;
+import net.sf.seesea.rendering.chart.editpolicies.CursorPostionEditPolicy;
 import net.sf.seesea.rendering.chart.figures.MapLayer;
 import net.sf.seesea.rendering.chart.policies.SeeSeaDelegatingLayoutEditPolicy;
 import net.sf.seesea.rendering.chart.policies.WorldComponentEditPolicy;
 import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
+import net.sf.seesea.services.navigation.listener.ISpeedListener;
 import net.sf.seesea.tileservice.ITileProvider;
+import net.sf.seesea.tileservice.projections.IMapProjection;
 import nl.esi.metis.aisparser.AISMessage;
 import nl.esi.metis.aisparser.AISMessageClassBPositionReport;
 import nl.esi.metis.aisparser.AISMessagePositionReport;
@@ -97,6 +106,18 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	private List<AreaMarker> areaMarkers;
 
 	private ServiceRegistration<?> positionTrackerRegistration2;
+
+	private long cursorUpdate;
+	
+	private DecimalFormat nauticalMileFormat = new DecimalFormat("0.#");
+
+	private DecimalFormat bearingFormat = new DecimalFormat("0");
+
+	private CursorPositionListener cursorPositionListener;
+
+	private ServiceRegistration<?> cursorPositionServiceRegistration;
+
+	private ServiceRegistration<?> shipPositionServiceRegistration;
 	
 	public WorldEditPart() {
 		aisTracker = new AISTracker();
@@ -119,14 +140,17 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SeeSeaDelegatingLayoutEditPolicy());
 //		installEditPolicy("EditRoute", new EditRoutePolicy());
 		installEditPolicy(EditPolicy.CONNECTION_ROLE, new EditRoutePolicy());
-//		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new SeeSeaDelegatingLayoutEditPolicy());
+		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new CursorPostionEditPolicy());
 //		installEditPolicy(EditPolicyRoles.POPUPBAR_ROLE, new DiagramPopupBarEditPolicy());
 
 	}
 
 	@Override
 	protected void refreshVisuals() {
-		refreshVisuals(true);
+		if(System.currentTimeMillis() - cursorUpdate > 50) {
+			refreshVisuals(true);			
+			cursorUpdate = System.currentTimeMillis();
+		}
 	}
 	
 	@Override
@@ -155,6 +179,8 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		if(trackPosition) {
 			modelChildren.add(getWorld().getMapCenterPosition());
 		}
+		modelChildren.add(getWorld().getCursorPosition());
+
 		return modelChildren; 
 //		Buoy buoy = BuoysandbeaconsFactory.eINSTANCE.createBuoy();
 //		buoy.getLightcolor().add(Color.GREEN);
@@ -245,6 +271,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	@Override
 	public void activate() {
 		super.activate();
+		cursorUpdate = System.currentTimeMillis();
 		propertyChangeListener = new UpdateMapZoomLevelPropertyChangeListener();
 		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().addPropertyChangeListener(propertyChangeListener);
 		((GeospatialGraphicalViewer)getViewer()).getVerticalRangeModel().addPropertyChangeListener(propertyChangeListener);
@@ -252,24 +279,43 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
 		serviceRegistration = bundleContext.registerService(HandleAISMessage.class, aisTracker, null);
 
-		positionTrackerRegistration2 = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), new CenterPositionListener(), null);
+		positionTrackerRegistration2 = bundleContext.registerService(IPositionListener.class.getName(), new CenterPositionListener(), null);
 		getWorld().eAdapters().add(this);
 		getWorld().getTracksContainer().eAdapters().add(this);
 		enablePositionTracking(true);
 		aisTracker.start();
+		
+		cursorPositionListener = new CursorPositionListener(this);
+		getWorld().eAdapters().add(cursorPositionListener);
+		cursorPositionServiceRegistration = bundleContext.registerService(ISpeedListener.class.getName(), cursorPositionListener, null);
+		shipPositionServiceRegistration = bundleContext.registerService(IPositionListener.class.getName(), cursorPositionListener, null);
+
 	}
 
 	@Override
 	public void deactivate() {
+		getWorld().eAdapters().remove(cursorPositionListener);
 		getWorld().eAdapters().remove(this);
 		getWorld().getTracksContainer().eAdapters().remove(this);
-		serviceRegistration.unregister();
+		if(serviceRegistration != null) {
+			serviceRegistration.unregister();
+		}
+		if(cursorPositionServiceRegistration != null) {
+			cursorPositionServiceRegistration.unregister();
+		}
+		if(shipPositionServiceRegistration != null) {
+			shipPositionServiceRegistration.unregister();
+		}
 		super.deactivate();
 		((GeospatialGraphicalViewer)getViewer()).getHorizontalRangeModel().removePropertyChangeListener(propertyChangeListener);
 		((GeospatialGraphicalViewer)getViewer()).getVerticalRangeModel().removePropertyChangeListener(propertyChangeListener);
 		disablePositionTracking();
-		positionTrackerRegistration2.unregister();
-		aisTracker.dispose();
+		if(positionTrackerRegistration2 != null) {
+			positionTrackerRegistration2.unregister();
+		}
+		if(aisTracker != null) {
+			aisTracker.dispose();
+		}
 //		getWorld().eAdapters().remove(this);
 //		positionTrackerRegistration.unregister();
 	}
@@ -330,7 +376,9 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	 * 
 	 */
 	public void disablePositionTracking() {
-		positionTrackerRegistration.unregister();
+		if(positionTrackerRegistration != null) {
+			positionTrackerRegistration.unregister();
+		}
 	}
 
 	private class PositionListener implements IPositionListener {
@@ -550,6 +598,35 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	@Override
 	public boolean isSelectable() {
 		return true;
+	}
+
+	public void setCursorPosition(org.eclipse.draw2d.geometry.Point location) {
+//		if(System.currentTimeMillis() - cursorUpdate > 50) {
+//			BundleContext bundleContext = SeeSeaUIActivator.getDefault().getBundle().getBundleContext();
+//			ServiceReference<IMapProjection> serviceReference2 = bundleContext.getServiceReference(IMapProjection.class);
+//			IMapProjection mapProjection = bundleContext.getService(serviceReference2);
+//			
+//			getFigure().translateToRelative(location);
+//			Point point = new Point(location.x, location.y);
+//			GeoPosition positionCursor = mapProjection.backproject(point, (1 << getWorld().getZoomLevel()) * 256);
+//			MapLayer mapLayer = (MapLayer) getFigure();
+//			StringBuffer coordinateLat = new StringBuffer(); 
+//			GeoPositionFormatter.formatCoordinateMinutesWithSphere(coordinateLat, positionCursor.getLatitude());
+//			coordinateLat.append("\n");
+//			GeoPositionFormatter.formatCoordinateMinutesWithSphere(coordinateLat, positionCursor.getLongitude());
+//			GeoPosition mapCenterPosition = getWorld().getMapCenterPosition();
+//			double distance = GeoUtil.getDistance(mapCenterPosition.getLatitude().getDecimalDegree(), positionCursor.getLatitude().getDecimalDegree(), mapCenterPosition.getLongitude().getDecimalDegree(), positionCursor.getLongitude().getDecimalDegree());
+//			coordinateLat.append("\n");
+//			coordinateLat.append(nauticalMileFormat.format(distance));
+//			coordinateLat.append("nm");
+//			double bearing = GeoUtil.getBearing(mapCenterPosition.getLatitude().getDecimalDegree(), positionCursor.getLatitude().getDecimalDegree(), mapCenterPosition.getLongitude().getDecimalDegree(), positionCursor.getLongitude().getDecimalDegree());
+//			coordinateLat.append("\n");
+//			coordinateLat.append(bearingFormat.format(bearing));
+//			coordinateLat.append("\u00B0");
+//			mapLayer.setCursorPosition(coordinateLat.toString());
+//			refreshVisuals();
+////			cursorUpdate = System.currentTimeMillis();
+//		}
 	}
 
 }

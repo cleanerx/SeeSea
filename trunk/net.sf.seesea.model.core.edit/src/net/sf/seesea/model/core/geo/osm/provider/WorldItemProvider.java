@@ -89,6 +89,8 @@ public class WorldItemProvider
 
 			addLongitudeScalePropertyDescriptor(object);
 			addLatitudeScalePropertyDescriptor(object);
+			addTripPropertyDescriptor(object);
+			addTotalTripPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -138,6 +140,50 @@ public class WorldItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Trip feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTripPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_World_trip_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_World_trip_feature", "_UI_World_type"),
+				 OsmPackage.Literals.WORLD__TRIP,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Total Trip feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTotalTripPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_World_totalTrip_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_World_totalTrip_feature", "_UI_World_type"),
+				 OsmPackage.Literals.WORLD__TOTAL_TRIP,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -150,6 +196,7 @@ public class WorldItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OsmPackage.Literals.WORLD__ANCHOR_POSITION);
+			childrenFeatures.add(OsmPackage.Literals.WORLD__CURSOR_POSITION);
 		}
 		return childrenFeatures;
 	}
@@ -206,9 +253,12 @@ public class WorldItemProvider
 		switch (notification.getFeatureID(World.class)) {
 			case OsmPackage.WORLD__LONGITUDE_SCALE:
 			case OsmPackage.WORLD__LATITUDE_SCALE:
+			case OsmPackage.WORLD__TRIP:
+			case OsmPackage.WORLD__TOTAL_TRIP:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case OsmPackage.WORLD__ANCHOR_POSITION:
+			case OsmPackage.WORLD__CURSOR_POSITION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -230,6 +280,36 @@ public class WorldItemProvider
 			(createChildParameter
 				(OsmPackage.Literals.WORLD__ANCHOR_POSITION,
 				 GeoFactory.eINSTANCE.createAnchorPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createGeoPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createNamedPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createGeoPosition3D()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createMeasuredPosition3D()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createGNSSMeasuredPosition()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(OsmPackage.Literals.WORLD__CURSOR_POSITION,
+				 GeoFactory.eINSTANCE.createAnchorPosition()));
 	}
 
 	/**
@@ -245,6 +325,7 @@ public class WorldItemProvider
 
 		boolean qualify =
 			childFeature == OsmPackage.Literals.AREA__MAP_CENTER_POSITION ||
+			childFeature == OsmPackage.Literals.WORLD__CURSOR_POSITION ||
 			childFeature == OsmPackage.Literals.WORLD__ANCHOR_POSITION;
 
 		if (qualify) {

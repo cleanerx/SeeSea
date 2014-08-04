@@ -31,6 +31,8 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Properties;
 
+import net.sf.seesea.model.core.geo.osm.World;
+import net.sf.seesea.model.util.IModel;
 import net.sf.seesea.nmea.rcp.NMEARCPActivator;
 
 import org.apache.log4j.Logger;
@@ -122,6 +124,20 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public void postStartup() {
 		super.postStartup();
+	}
+	
+	@Override
+	public boolean preShutdown() {
+		BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext(); 
+		ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
+		IModel model = bundleContext.getService(serviceReference);
+		try {
+			model.saveModel();
+		} catch (IOException e) {
+			Logger.getLogger(getClass()).error("failed to save model", e);
+		}
+		bundleContext.ungetService(serviceReference);
+		return super.preShutdown();
 	}
 	
 }
