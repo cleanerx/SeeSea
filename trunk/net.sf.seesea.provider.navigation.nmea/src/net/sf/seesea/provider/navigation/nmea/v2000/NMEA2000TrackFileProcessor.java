@@ -54,6 +54,8 @@ public class NMEA2000TrackFileProcessor implements ITrackFileProcessor,
 			}
 		} catch (InputStreamNotFoundException e) {
 			throw new ProcessingException(e);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			Logger.getLogger(getClass()).error("Failed to process track : " + trackFile.getTrackId() + ":");
 		}
 	}
 
