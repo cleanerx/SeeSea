@@ -262,6 +262,7 @@ public class NMEA0183Reader implements IDataReader {
 		Time time = physxFactory.createTime();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+		if(nmeaContent.length > 1) {
 		try {
 			if(!nmeaContent[1].isEmpty()) { 
 				calendar.set(Calendar.HOUR_OF_DAY,
@@ -307,6 +308,7 @@ public class NMEA0183Reader implements IDataReader {
 			}
 		} catch (IllegalArgumentException e) {
 			Logger.getLogger(getClass()).error("Failed to parse timestamp " + nmeaContent);
+		}
 		}
 		return null;
 	}
