@@ -6,7 +6,7 @@ import net.sf.seesea.model.core.physx.Measurement;
 
 public interface IMeasurmentProcessor {
 	
-	void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier) throws ProcessingException;
+	void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier, IGeoBoundingBox boundingBox) throws ProcessingException;
 
 	public void finish() throws ProcessingException;
 

@@ -46,7 +46,7 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 					TrackMetadata trackMetadata = streamProcessor.getTrackMetadata(inputStream, trkHeader);
 					for (int k = 0 ; k < trackMetadata.getTrackppointCount() ; k++) {
 						List<Measurement> measurements = streamProcessor.extractMeasurementsFromADM(inputStream);
-						measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId());
+						measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId(), trackFile.getBoundingBox());
 					}
 				} else {
 					for(int j = 0 ; j < currentFATBlock.getBlockNumbers().size() ; j++) {
