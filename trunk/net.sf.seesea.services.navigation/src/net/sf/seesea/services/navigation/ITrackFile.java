@@ -10,5 +10,7 @@ public interface ITrackFile {
 	long getTrackId();
 
 	CompressionType getCompression();
+	
+	IGeoBoundingBox getBoundingBox();
 
 }

@@ -124,7 +124,7 @@ public class SONTrackFileProcessor implements ITrackFileProcessor {
 								results.add(geoPosition);
 								results.add(heading);
 								results.add(depth);
-								measurmentProcessor.processMeasurements(results, "xxx", trackFile.getTrackId());
+								measurmentProcessor.processMeasurements(results, "xxx", trackFile.getTrackId(), trackFile.getBoundingBox());
 							}
 							dataInputStream.close();
 						}
