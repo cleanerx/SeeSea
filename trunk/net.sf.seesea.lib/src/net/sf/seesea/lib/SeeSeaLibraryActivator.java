@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package net.sf.seesea.lib;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class SeeSeaLibraryActivator extends AbstractUIPlugin {
+public class SeeSeaLibraryActivator extends Plugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "net.sf.seesea.lib"; //$NON-NLS-1$
