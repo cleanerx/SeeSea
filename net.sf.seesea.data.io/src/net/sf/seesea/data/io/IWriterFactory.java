@@ -7,6 +7,6 @@ import java.util.Map;
  */
 public interface IWriterFactory {
 
-	IDataWriter createWriter(Map<String, String> parameters) throws WriterException;
+	IDataWriter createWriter(Map<String, Object> parameters) throws WriterException;
 
 }

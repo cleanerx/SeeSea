@@ -1,6 +1,7 @@
 package net.sf.seesea.data.io;
 
 import java.util.Collection;
+import java.util.Date;
 
 import net.sf.seesea.model.core.physx.Measurement;
 
@@ -27,4 +28,6 @@ public interface IDataWriter {
 	
 	void closeOutput() throws WriterException;
 	
+	void write(double lat, double lon, double depth, long sourceTrackIdentifier, double latVariance, double lonVariance, double depthVariance, Date time) throws WriterException;
+
 }

@@ -18,5 +18,5 @@ Export-Package: net.sf.seesea.provider.navigation.nmea,
  net.sf.seesea.provider.navigation.nmea.v2000,
  net.sf.seesea.provider.navigation.nmea.v2000.datadictionary,
  net.sf.seesea.provider.navigation.nmea.v2000.pgn
-Service-Component: OSGI-INF/nmeaDataProvider.xml, OSGI-INF/nmeaDataLogger.xml, OSGI-INF/ActisenseStreamProcessor.xml, OSGI-INF/SerialStreamProcessor.xml, OSGI-INF/Nmea2000DataProvider.xml, OSGI-INF/NMEA0183TrackFileProcessor.xml, OSGI-INF/NMEA2000TrackFileProcessor.xml
+Service-Component: OSGI-INF/nmeaDataProvider.xml, OSGI-INF/nmeaDataLogger.xml, OSGI-INF/ActisenseStreamProcessor.xml, OSGI-INF/SerialStreamProcessor.xml, OSGI-INF/Nmea2000DataProvider.xml, OSGI-INF/NMEA0183TrackFileProcessor.xml, OSGI-INF/NMEA2000TrackFileProcessor.xml, OSGI-INF/CSVDataWriterFactory.xml, OSGI-INF/NMEADataWriterFactory.xml
 Import-Package: org.osgi.service.component;version="1.1.0"
