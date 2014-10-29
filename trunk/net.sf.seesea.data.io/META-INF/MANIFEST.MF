@@ -9,3 +9,4 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.data.io
+Service-Component: OSGI-INF/MemoryDataWriterFactory.xml

@@ -14,11 +14,11 @@ public class NMEA0183WriterFactory implements IWriterFactory {
 	private long fileCounter = 1;
 
 	@Override
-	public IDataWriter createWriter(Map<String,String> parameters) throws WriterException {
+	public IDataWriter createWriter(Map<String,Object> parameters) throws WriterException {
 		FileOutputStream outputStream;
 		try {
-			String fileprefix = parameters.get("fileprefix"); //$NON-NLS-1$
-			String filesuffix = parameters.get("filesuffix"); //$NON-NLS-1$
+			String fileprefix = (String) parameters.get("fileprefix"); //$NON-NLS-1$
+			String filesuffix = (String) parameters.get("filesuffix"); //$NON-NLS-1$
 			String filename = fileprefix + fileCounter++ + filesuffix;
 			outputStream = new FileOutputStream(filename);
 			return new NMEA0183Writer(outputStream);
