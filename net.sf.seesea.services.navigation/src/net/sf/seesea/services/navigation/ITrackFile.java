@@ -13,4 +13,8 @@ public interface ITrackFile {
 	
 	IGeoBoundingBox getBoundingBox();
 
+	boolean isHasAbsoluteTimedMeasurements();
+
+	boolean isHasRelativeTimedMeasurements();
+
 }
