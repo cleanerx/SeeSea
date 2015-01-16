@@ -316,16 +316,16 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		
 		int read = inputStream.read(header);
 		if(read == 512) {
-			if(header[0] == 0) {
-				// there seems to be a case where the header ends at if 4096 if there are null in this 512 byte
-				inputStream.read(header);
-				inputStream.read(header);
-				inputStream.read(header);
-				inputStream.read(header);
-				inputStream.read(header);
-				inputStream.read(header);
-				return 3584;
-			}
+//			if(header[0] == 0) {
+//				// there seems to be a case where the header ends at if 4096 if there are null in this 512 byte
+//				inputStream.read(header);
+//				inputStream.read(header);
+//				inputStream.read(header);
+//				inputStream.read(header);
+//				inputStream.read(header);
+//				inputStream.read(header);
+//				return 3584;
+//			}
 			// else the header contains all -1 (seems to be the default garmin header)
 		}
 		return 512;

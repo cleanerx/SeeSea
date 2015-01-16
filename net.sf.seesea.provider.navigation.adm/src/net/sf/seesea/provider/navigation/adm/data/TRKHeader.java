@@ -9,7 +9,7 @@ import java.util.List;
 public class TRKHeader {
 
 	private int length;
-	private int unknown1;
+	private int trackCount;
 	private int blockCount;
 	private int unknown3;
 	private short unknown4;
@@ -46,7 +46,7 @@ public class TRKHeader {
 	public TRKHeader(int[] contents) {
 		length = getInt(contents, 2);
 		blockCount = contents[6];
-		unknown1 = getInt(contents, 7);
+		trackCount = getInt(contents, 7);
 		unknown3 = getInt(contents, 11);
 		unknown4 = getShort(contents, 15);
 		length2 = getInt(contents, 17);
@@ -134,5 +134,11 @@ public class TRKHeader {
 		String string = x.toString();
 		return string.trim();
 	}
+
+	public int getTrackCount() {
+		return trackCount;
+	}
+	
+	
 
 }
