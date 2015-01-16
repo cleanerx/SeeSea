@@ -90,5 +90,11 @@ public class TrackMetadata {
 			String string = x.toString();
 			return string.trim();
 		}
+
+
+
+		public long getBegin() {
+			return dataBegin;
+		}
 	
 }

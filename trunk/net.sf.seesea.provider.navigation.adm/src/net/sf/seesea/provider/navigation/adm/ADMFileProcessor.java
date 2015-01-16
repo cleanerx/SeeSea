@@ -44,11 +44,19 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 				currentBlock += currentFATBlock.getBlockNumbers().size();
 				if(currentFATBlock.getSubFileType().equals("TRK")) {
 					TRKHeader trkHeader = streamProcessor.readTRKHeader(inputStream);
-					for(int l = 0 ; l < trkHeader.getTrackCount() ; l++) {
+					long limit = trkHeader.getLength();
+					
+					x: while(true) {
 						TrackMetadata trackMetadata = streamProcessor.getTrackMetadata(inputStream, trkHeader);
-						for (int k = 0 ; k < trackMetadata.getTrackppointCount() - 1 ; k++) {
-							List<Measurement> measurements = streamProcessor.extractMeasurementsFromADM(inputStream);
-							measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId(), trackFile.getBoundingBox());
+						long size = (21L * trackMetadata.getTrackppointCount()) + trackMetadata.getBegin();
+						if(size <= limit) {
+							for (int k = 0 ; k < trackMetadata.getTrackppointCount() - 1 ; k++) {
+								List<Measurement> measurements = streamProcessor.extractMeasurementsFromADM(inputStream);
+								measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId(), trackFile.getBoundingBox());
+							}
+							if(size >= limit) {
+								break x;
+							}
 						}
 					}
 				} else {
@@ -104,7 +112,9 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 	
 	public static void main(String args[]) throws IOException {
 		ADMFileProcessor admFileProcessor = new ADMFileProcessor();
+//		InputStream inputStream = new FileInputStream("C:\\pv5\\15249.dat");
 		InputStream inputStream = new FileInputStream("S:\\Segeln\\Data\\15249.dat");
+//		InputStream inputStream = new FileInputStream("S:\\Segeln\\Data\\9152.dat");
 		ADMStreamProcessor streamProcessor = new ADMStreamProcessor();
 		IMGHeader imgHeader = streamProcessor.readHeader(inputStream);
 		int bytesRead = streamProcessor.readHeaderPadding(inputStream);
@@ -119,19 +129,30 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 			currentBlock += currentFATBlock.getBlockNumbers().size();
 			if(currentFATBlock.getSubFileType().equals("TRK")) {
 				TRKHeader trkHeader = streamProcessor.readTRKHeader(inputStream);
-				for(int l = 0 ; l < trkHeader.getTrackCount() ; l++) {
+				long limit = trkHeader.getLength();
+				
+				x: while(true) {
 					TrackMetadata trackMetadata = streamProcessor.getTrackMetadata(inputStream, trkHeader);
-					for (int k = 0 ; k < trackMetadata.getTrackppointCount() - 1 ; k++) {
-						List<Measurement> measurements = streamProcessor.extractMeasurementsFromADM(inputStream);
-						for (Iterator iterator = measurements.iterator(); iterator
-								.hasNext();) {
-							Measurement measurement = (Measurement) iterator.next();
-							System.out.println("k" + k + ":" + measurement.toString());
+					long size = (21L * trackMetadata.getTrackppointCount()) + trackMetadata.getBegin();
+//					trackMetadata.getTrackppointCount()
+					if(size <= limit) {
+						for (int k = 0 ; k < trackMetadata.getTrackppointCount() - 1 ; k++) {
+							List<Measurement> measurements = streamProcessor.extractMeasurementsFromADM(inputStream);
+							for (Iterator iterator = measurements.iterator(); iterator
+									.hasNext();) {
+								Measurement measurement = (Measurement) iterator.next();
+								System.out.println("k" + k + ":" + measurement.toString());
+							}
 						}
-						continue;
-//					measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId(), trackFile.getBoundingBox());
+//							continue;
+						if(size >= limit) {
+							break x;
+						}
 					}
 				}
+//				for(int l = 0 ; l < trkHeader.getTrackCount() ; l++) {
+//					measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId(), trackFile.getBoundingBox());
+//				}
 			} else {
 				for(int j = 0 ; j < currentFATBlock.getBlockNumbers().size() ; j++) {
 					streamProcessor.skipBlock(inputStream, imgHeader.getBlockSize());
