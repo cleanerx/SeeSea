@@ -138,6 +138,10 @@ public class TRKHeader {
 	public int getTrackCount() {
 		return trackCount;
 	}
+
+	public long getLength() {
+		return length;
+	}
 	
 	
 
