@@ -47,6 +47,8 @@ public class SL2TrackFileProcessor implements ITrackFileProcessor, IMeasurementL
 					sl2StreamProcessor.readByte(c, "none");
 				}
 			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new ProcessingException(e);
 		} catch (InputStreamNotFoundException e) {
 			throw new ProcessingException(e);
 		} catch (NMEAProcessingException e) {
