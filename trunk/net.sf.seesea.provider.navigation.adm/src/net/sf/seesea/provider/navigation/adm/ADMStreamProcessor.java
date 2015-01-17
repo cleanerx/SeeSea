@@ -310,21 +310,21 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 		listeners.remove(listener);
 	}
 
-	public int readHeaderPadding(InputStream inputStream) throws IOException {
+	public int readHeaderPadding(InputStream inputStream, int blocksize) throws IOException {
 		byte[] header = new byte[512];
 
 		
 		int read = inputStream.read(header);
 		if(read == 512) {
-			if(header[0] == 0) {
+			if(blocksize > 8192) {
 				// there seems to be a case where the header ends at if 4096 if there are null in this 512 byte
-//				inputStream.read(header);
-//				inputStream.read(header);
-//				inputStream.read(header);
-//				inputStream.read(header);
-//				inputStream.read(header);
-//				inputStream.read(header);
-//				return 3584;
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				inputStream.read(header);
+				return 3584;
 //				return 1024;
 			}
 			// else the header contains all -1 (seems to be the default garmin header)
