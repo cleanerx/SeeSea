@@ -32,7 +32,7 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 			InputStream inputStream = trackFile.getInputStream();
 			ADMStreamProcessor streamProcessor = new ADMStreamProcessor();
 			IMGHeader imgHeader = streamProcessor.readHeader(inputStream);
-			int bytesRead = streamProcessor.readHeaderPadding(inputStream);
+			int bytesRead = streamProcessor.readHeaderPadding(inputStream, imgHeader.getBlockSize());
 			PreFATHeader preFatHeader = streamProcessor.readPreFatHeader(inputStream);
 			bytesRead+=512;
 			int firstSubFileOffset = preFatHeader.getFirstSubFileOffset();
@@ -113,11 +113,12 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 	public static void main(String args[]) throws IOException {
 		ADMFileProcessor admFileProcessor = new ADMFileProcessor();
 //		InputStream inputStream = new FileInputStream("C:\\pv5\\15249.dat");
+//		InputStream inputStream = new FileInputStream("S:\\Segeln\\Data\\8921.dat");
 		InputStream inputStream = new FileInputStream("S:\\Segeln\\Data\\15249.dat");
 //		InputStream inputStream = new FileInputStream("S:\\Segeln\\Data\\9152.dat");
 		ADMStreamProcessor streamProcessor = new ADMStreamProcessor();
 		IMGHeader imgHeader = streamProcessor.readHeader(inputStream);
-		int bytesRead = streamProcessor.readHeaderPadding(inputStream);
+		int bytesRead = streamProcessor.readHeaderPadding(inputStream, imgHeader.getBlockSize());
 		PreFATHeader preFatHeader = streamProcessor.readPreFatHeader(inputStream);
 		bytesRead+=512;
 		int firstSubFileOffset = preFatHeader.getFirstSubFileOffset();
