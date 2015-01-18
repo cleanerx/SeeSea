@@ -20,7 +20,7 @@
         </pluginRepository>
     </pluginRepositories>
     <build>
-        <finalName>org.osm.depth.upload2</finalName>
+        <finalName>org.osm.depth.upload${stage}</finalName>
 <!--         <resources>
             <resource>
                 <directory>${basedir}/src/main/tomcatconf</directory>
