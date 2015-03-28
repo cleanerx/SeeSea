@@ -139,7 +139,7 @@ public class NMEA0183Reader implements IDataReader {
 		if (rawContent != null) {
 			String[] nmeaContent = rawContent.split(","); //$NON-NLS-1$
 			try {
-
+				if(nmeaContent.length > 1 && nmeaContent[0].length() > 2) { 
 				NMEA0183MessageTypes messageType = NMEA0183MessageTypes
 						.valueOf(nmeaContent[0].substring(2));
 				Measurement measurement = null;
@@ -249,6 +249,7 @@ public class NMEA0183Reader implements IDataReader {
 						break;
 					}
 				}
+			}
 			} catch (IllegalArgumentException e) {
 				Logger.getLogger(getClass()).error(
 						"Unknown message is being ignored " + e.getMessage());
@@ -264,7 +265,7 @@ public class NMEA0183Reader implements IDataReader {
 		calendar.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
 		if(nmeaContent.length > 1) {
 		try {
-			if(!nmeaContent[1].isEmpty()) { 
+			if(!nmeaContent[1].isEmpty() && nmeaContent[1].length() >= 6) { 
 				calendar.set(Calendar.HOUR_OF_DAY,
 						Integer.parseInt(nmeaContent[1].substring(0, 2).trim()));
 				calendar.set(Calendar.MINUTE,
@@ -585,7 +586,7 @@ public class NMEA0183Reader implements IDataReader {
 		Time time = physxFactory.createTime();
 		Calendar calendar = Calendar.getInstance();
 		try {
-			if(!nmeaContent[1].isEmpty()) { 
+			if(!nmeaContent[1].isEmpty() && nmeaContent[1].length() > 5) { 
 				calendar.set(Calendar.HOUR_OF_DAY,
 						Integer.parseInt(nmeaContent[1].substring(0, 2).trim()));
 				calendar.set(Calendar.MINUTE,
@@ -595,7 +596,7 @@ public class NMEA0183Reader implements IDataReader {
 				calendar.set(Calendar.MILLISECOND, 0);
 			}
 
-			if(!nmeaContent[9].isEmpty()) {
+			if(!nmeaContent[9].isEmpty() && nmeaContent[9].length() > 5) {
 				calendar.set(Calendar.DAY_OF_MONTH,
 						Integer.parseInt(nmeaContent[9].substring(0, 2).trim()));
 				calendar.set(Calendar.MONTH,
