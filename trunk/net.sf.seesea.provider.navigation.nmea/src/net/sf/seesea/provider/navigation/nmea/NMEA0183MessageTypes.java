@@ -95,6 +95,7 @@ public enum NMEA0183MessageTypes {
 	SMVCC,
 	SMST,
 	SMSO,
+	SOG,
 	STN, 
 	TLL, 
 	TRF, 
