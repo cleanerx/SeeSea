@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Triangulation
+Bundle-SymbolicName: net.sf.seesea.triangulation
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.triangulation.TriangulationActivator
+Require-Bundle: org.eclipse.core.runtime,
+ net.sf.seesea.geometry;bundle-version="1.0.0",
+ net.sf.seesea.data.io;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Export-Package: net.sf.seesea.triangulation
