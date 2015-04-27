@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Postgis Triangulation
+Bundle-SymbolicName: net.sf.seesea.triangulation.postgis
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.triangulation.postgis.PostgisTriangulationActivator
+Require-Bundle: org.eclipse.core.runtime,
+ net.sf.seesea.data.io;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: net.sf.seesea.contour,
+ net.sf.seesea.data.io.postgis,
+ net.sf.seesea.geometry,
+ net.sf.seesea.geometry.impl,
+ net.sf.seesea.triangulation,
+ org.apache.log4j
+Service-Component: OSGI-INF/PostgisTriangulationPersistence.xml

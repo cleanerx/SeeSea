@@ -109,8 +109,6 @@ public interface ITriangulationPersistence {
 	
 	List<IPolygon> getCostalBorderBoundaryHoles(IPolygon boundary100m);
 	
-	List<ITriangle> getExistingTriangulation(IPolygon area);
-
 	List<ITriangulationDescription> getPartitionizedTriangulations(Long trackId, String trackpointTable) throws PersistenceException;
 
 
