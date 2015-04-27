@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.waterlevel.gaugecorrection">
+   <implementation class="net.sf.seesea.waterlevel.GaugeWaterLevelCorrection"/>
+   <reference bind="bindConnection" cardinality="1..1" interface="java.sql.Connection" name="Connection" policy="dynamic" target="(db=gauge)" unbind="unbindConnection"/>
+   <service>
+      <provide interface="net.sf.seesea.data.postprocessing.filter.waterlevel.IWaterLevelCorrection"/>
+   </service>
+   <property name="type" type="String" value="gauge"/>
+</scr:component>
