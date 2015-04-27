@@ -27,9 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.triangulation.postgis;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,7 +45,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 
 import net.sf.seesea.contour.ContourLine;
@@ -57,7 +53,6 @@ import net.sf.seesea.data.io.PersistenceException;
 import net.sf.seesea.geometry.IEdge;
 import net.sf.seesea.geometry.IPoint;
 import net.sf.seesea.geometry.IPolygon;
-import net.sf.seesea.geometry.IRectangle;
 import net.sf.seesea.geometry.ITriangle;
 import net.sf.seesea.geometry.impl.Point;
 import net.sf.seesea.geometry.impl.Polygon;
