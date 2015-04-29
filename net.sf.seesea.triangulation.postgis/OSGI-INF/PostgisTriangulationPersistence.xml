@@ -6,5 +6,5 @@
    </service>
    <reference bind="bindInshoreConnection" cardinality="1..1" interface="java.sql.Connection" name="OSMConnection" policy="dynamic" target="(db=osm)" unbind="unbindInshoreConnection"/>
    <reference bind="bindTriangulationConnection" cardinality="1..1" interface="java.sql.Connection" name="Connection" policy="dynamic" target="(db=coastline)" unbind="unbindTriangulationConnection"/>
-   <reference bind="bindTriangulationFactory" cardinality="1..1" interface="net.sf.seesea.triangulation.ITriangulationFactory" name="ITriangulationFactory" policy="static" unbind="unbindTriangulationFactory"/>
+   <reference bind="bindTriangulationFactory" cardinality="1..1" interface="net.sf.seesea.triangulation.ITriangulationFactory" name="ITriangulationFactory" policy="dynamic" unbind="unbindTriangulationFactory"/>
 </scr:component>
