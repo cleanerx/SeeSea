@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.contour.triangulation">
+   <implementation class="net.sf.seesea.contour.triangulation.TriangulationBasedContourLineGeneration"/>
+   <reference bind="bindTriangulationPersistence" cardinality="1..1" interface="net.sf.seesea.triangulation.ITriangulationPersistence" name="ITriangulationPersistence" policy="static" unbind="unbindTriangulationPersistence"/>
+   <service>
+      <provide interface="net.sf.seesea.contour.IContourLineGeneration"/>
+   </service>
+</scr:component>
