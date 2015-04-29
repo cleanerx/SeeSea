@@ -647,16 +647,16 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 				ITriangle outertriangle = trianglePair.getTriangleB();
 				String triangleB = PostgisHelper.getPostgisPolygon2DTriangle(outertriangle);
 
-				List<ContourLine> contourLinesA = readContourLines(triangleA, boundaryString, true);
-				List<ContourLine> contourLinesB = readContourLines(triangleB, boundaryString, false);
+				List<IContourLine> contourLinesA = readContourLines(triangleA, boundaryString, true);
+				List<IContourLine> contourLinesB = readContourLines(triangleB, boundaryString, false);
 				
-				List<ContourLine> mergedContourLines = new ArrayList<ContourLine>();
+				List<IContourLine> mergedContourLines = new ArrayList<IContourLine>();
 				
 				// there must be only one contour line per depth in the given triangles
 				for (IContourLine contourLineA : contourLinesA) {
 					for (IContourLine contourLineB : contourLinesB) {
 						if(contourLineA.getDepth() == contourLineB.getDepth()) {
-							ContourLine mergedContourLine = new ContourLine();
+							IContourLine mergedContourLine = new ContourLine();
 							mergedContourLines.add(mergedContourLine);
 							mergedContourLine.setDepth(contourLineA.getDepth());
 							List<IPoint> pointsA = contourLineA.getPoints();
@@ -733,8 +733,8 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	 * @return a list of contour lines that intersect the given triangle
 	 * @throws SQLException
 	 */
-	private List<ContourLine> readContourLines(String triangleA, String boundingPolygon, Boolean positiveSearch) throws SQLException {
-		List<ContourLine> contourLines = new ArrayList<ContourLine>();
+	private List<IContourLine> readContourLines(String triangleA, String boundingPolygon, Boolean positiveSearch) throws SQLException {
+		List<IContourLine> contourLines = new ArrayList<IContourLine>();
 		String queryString = "SELECT id, m, ST_X(geom), ST_Y(geom) FROM (SELECT id, (ST_DUMPPOINTS(the_geom)).*, m FROM contoursplit WHERE ST_INTERSECTS(the_geom, " + triangleA +  ") AND ST_Contains(" + boundingPolygon + ", the_geom) IS " + positiveSearch.toString() + ") AS g";
 		PreparedStatement contourStatement = triangulationConnection.prepareStatement(queryString);
 		ResultSet query = contourStatement.executeQuery();

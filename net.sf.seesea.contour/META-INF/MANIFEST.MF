@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Contour
+Bundle-SymbolicName: net.sf.seesea.contour
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.contour.ContourActivator
+Require-Bundle: org.eclipse.core.runtime,
+ net.sf.seesea.geometry;bundle-version="1.0.0",
+ net.sf.seesea.services.navigation;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Export-Package: net.sf.seesea.contour
