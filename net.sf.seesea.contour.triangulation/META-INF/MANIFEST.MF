@@ -7,7 +7,6 @@ Bundle-Activator: net.sf.seesea.contour.triangulation.ContourTriangulationActiva
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.contour;bundle-version="1.0.0",
  net.sf.seesea.geometry;bundle-version="1.0.0",
- org.osm.depth.contours;bundle-version="1.0.0",
  net.sf.seesea.triangulation;bundle-version="1.0.0",
  net.sf.seesea.data.io;bundle-version="1.0.0",
  net.sf.seesea.services.navigation;bundle-version="1.0.0",
