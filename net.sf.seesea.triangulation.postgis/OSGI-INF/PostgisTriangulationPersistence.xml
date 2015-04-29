@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.data.io.postgis.PostgisTriangulationPersistence">
-   <implementation class="net.sf.seesea.data.io.postgis.PostgisTriangulationPersistence"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.triangulation.postgis.PostgisTriangulationPersistence">
+   <implementation class="net.sf.seesea.triangulation.postgis.PostgisTriangulationPersistence"/>
    <service>
-      <provide interface="net.sf.seesea.data.postprocessing.triangulation.persistence.ITriangulationPersistence"/>
+      <provide interface="net.sf.seesea.triangulation.ITriangulationPersistence"/>
    </service>
    <reference bind="bindInshoreConnection" cardinality="1..1" interface="java.sql.Connection" name="OSMConnection" policy="dynamic" target="(db=osm)" unbind="unbindInshoreConnection"/>
    <reference bind="bindTriangulationConnection" cardinality="1..1" interface="java.sql.Connection" name="Connection" policy="dynamic" target="(db=coastline)" unbind="unbindTriangulationConnection"/>
