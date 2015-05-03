@@ -76,7 +76,7 @@ public interface ITriangulationPersistence {
 	 * @param boundary the boundary of the contour line
 	 * @throws PersistenceException if a persistence error occurs
 	 */
-	void splitMergedContourLines(Long trackId, IPolygon boundary) throws PersistenceException;
+	void splitMergedContourLines(Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException;
 
 	/**
 	 * This method creates a new contour line with the given points or updates
@@ -85,9 +85,10 @@ public interface ITriangulationPersistence {
 	 * @param depth the depth of the contour line
 	 * @param trackId the track id causing the update
 	 * @param boundary the partition boundary 
+	 * @param boundaryTrianglePairs 
 	 * @throws PersistenceException
 	 */
-	void addOrUpdateContourLine(List<IPoint> points, Integer depth, Long trackId, IPolygon boundary) throws PersistenceException;
+	void addOrUpdateContourLine(List<IPoint> points, Integer depth, Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException;
 
 	/**
 	 * Removes contours lines in the given polygon with holes
@@ -110,6 +111,10 @@ public interface ITriangulationPersistence {
 	List<IPolygon> getCostalBorderBoundaryHoles(IPolygon boundary100m);
 	
 	List<ITriangulationDescription> getPartitionizedTriangulations(Long trackId, String trackpointTable) throws PersistenceException;
+
+	List<NeighboringTrianglesOnBoundary> getBoundaryTrianglePairs(IPolygon boundaryPolygon) throws PersistenceException;
+
+	void finishAddOrUpdateContourLines() throws PersistenceException;
 
 
 

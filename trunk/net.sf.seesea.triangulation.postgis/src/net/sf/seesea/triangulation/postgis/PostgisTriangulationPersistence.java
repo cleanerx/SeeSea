@@ -61,6 +61,7 @@ import net.sf.seesea.triangulation.ITriangulationDescription;
 import net.sf.seesea.triangulation.ITriangulationFactory;
 import net.sf.seesea.triangulation.ITriangulationPersistence;
 import net.sf.seesea.triangulation.ITriangulator;
+import net.sf.seesea.triangulation.NeighboringTrianglesOnBoundary;
 import net.sf.seesea.triangulation.TriangulationDescription;
 
 import org.apache.log4j.Logger;
@@ -75,7 +76,14 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	private Connection inshoreConnection;
 	
 	private ITriangulationFactory triangulationFactory;
+	
+	private int batchCounter;
+	private PreparedStatement lastStatement;
 
+	public PostgisTriangulationPersistence() {
+		batchCounter = 0;
+	}
+	
 	@Override
 	public Iterator<List<IPolygon>> getRiverBoundaryPolygonsIterator() {
 		// List<IPolygon> boundaries = new ArrayList<IPolygon>();
@@ -530,11 +538,10 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	}
 	
 	@Override
-	public void splitMergedContourLines(Long trackId, IPolygon boundary) throws PersistenceException {
+	public void splitMergedContourLines(Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException {
 		PreparedStatement existingBoundaryCrossingContourLineStatement;
 		try {
 			// check for an existing contour line to reattach to
-			List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs = getBoundaryTrianglePairs(boundary);
 			List<ContourLine> existingBoundaryCrossingContourLines = new ArrayList<ContourLine>();
 			for (NeighboringTrianglesOnBoundary neighboringTrianglesOnBoundary : boundaryTrianglePairs) {
 				ITriangle outerTriangle = neighboringTrianglesOnBoundary.getTriangleB();
@@ -614,7 +621,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	}
 
 	@Override
-	public void addOrUpdateContourLine(List<IPoint> points, Integer depth, Long trackId, IPolygon boundary) throws PersistenceException {
+	public void addOrUpdateContourLine(List<IPoint> points, Integer depth, Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException {
 		PreparedStatement statement;
 		try {
 			// check for an existing contour line to reattach to
@@ -634,11 +641,15 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 
 			Logger.getLogger(getClass()).debug(MessageFormat.format("INSERT INTO contoursplit (m, the_geom, source) VALUES ({0}, {1}, " + trackId + ")", //$NON-NLS-1$
 					depth, postgisMultiLineString.toString()));
-			statement.executeUpdate();
+			statement.addBatch();
+			lastStatement = statement;
+			batchCounter++;
+			if(batchCounter > 2000) {
+				statement.executeBatch();
+			}
 			
 			String boundaryString = PostgisHelper.getMultipolygonString(boundary, Collections.<IPolygon> emptyList());
 			
-			List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs = getBoundaryTrianglePairs(boundary);
 			for (NeighboringTrianglesOnBoundary trianglePair : boundaryTrianglePairs) {
 				// expecting only one shared edge causes only one single pair per boundary
 				ITriangle innertriangle = trianglePair.getTriangleA();
@@ -766,7 +777,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	 * @return
 	 * @throws PersistenceException
 	 */
-	private List<NeighboringTrianglesOnBoundary> getBoundaryTrianglePairs(IPolygon boundaryPolygon) throws PersistenceException {
+	public List<NeighboringTrianglesOnBoundary> getBoundaryTrianglePairs(IPolygon boundaryPolygon) throws PersistenceException {
 		List<NeighboringTrianglesOnBoundary> pairwiseTriangles = new ArrayList<NeighboringTrianglesOnBoundary>();
 
 		String multipolygonString = createMultipolygonString(boundaryPolygon, Collections.EMPTY_LIST);
@@ -781,10 +792,39 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 //					+ multipolygonString + ", a.geom) IS TRUE AND ST_Contains(" + multipolygonString + ", b.geom) IS FALSE";System.out.println(query);
 //			String query = "SELECT a.id, b.id, ST_ASText(a.geom), ST_ASText(b.geom) FROM triangulation AS a JOIN triangulation AS b ON ST_Touches(a.geom, b.geom) AND a.geom && b.geom AND a.id != b.id AND ST_Contains("
 //							+ multipolygonString + ", a.geom) IS TRUE AND ST_Contains(ST_InteriorRingN(" + multipolygonString + ", 1), b.geom) IS FALSE";System.out.println(query);
-			String query = "SELECT a.id, b.id, ST_ASText(a.geom), ST_ASText(b.geom) FROM (SELECT id,geom FROM triangulation WHERE ST_Touches(" + boundaryLineString + ", geom)) AS a JOIN (SELECT id,geom FROM triangulation WHERE ST_Touches(" + boundaryLineString + ", geom)) AS b ON ST_Touches(a.geom, b.geom) AND a.geom && b.geom AND a.id != b.id AND ST_Contains("
-									+ multipolygonString + ", a.geom) IS TRUE AND ST_Contains(" + multipolygonString + ", b.geom) IS FALSE";System.out.println("SELECT id,geom FROM triangulation WHERE ST_Touches(ST_InteriorRingN(" + multipolygonString + ",1))");
-			PreparedStatement prepareStatement = triangulationConnection.prepareStatement(query);
-			ResultSet resultSet = prepareStatement.executeQuery();
+			String dropPolygon = "DROP TABLE big_polygon";
+			String dumpPolygon = "CREATE TABLE big_polygon as SELECT (ST_Dump(" + boundaryLineString + ")).geom as geom";
+			String addPrimaryKey = "ALTER table big_polygon ADD Column gid serial PRIMARY KEY";
+			String createIndex = "CREATE INDEX idx_big_polygon_geom on big_polygon USING gist(geom)";
+			String analyze = "analyze big_polygon";
+			try {
+				triangulationConnection.createStatement().execute(dropPolygon);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			triangulationConnection.createStatement().execute(dumpPolygon);
+			triangulationConnection.createStatement().execute(addPrimaryKey);
+			triangulationConnection.createStatement().execute(createIndex);
+			triangulationConnection.createStatement().execute(analyze);
+
+			String dropPolygon2 = "DROP TABLE big_polygon2";
+			String dumpPolygon2 = "CREATE TABLE big_polygon2 as SELECT (ST_Dump(" + multipolygonString + ")).geom as geom";
+			String addPrimaryKey2 = "ALTER table big_polygon2 ADD Column gid serial PRIMARY KEY";
+			String createIndex2 = "CREATE INDEX idx_big_polygon_geom2 on big_polygon2 USING gist(geom)";
+			String analyze2 = "analyze big_polygon2";
+			try {
+				triangulationConnection.createStatement().execute(dropPolygon2);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			triangulationConnection.createStatement().execute(dumpPolygon2);
+			triangulationConnection.createStatement().execute(addPrimaryKey2);
+			triangulationConnection.createStatement().execute(createIndex2);
+			triangulationConnection.createStatement().execute(analyze2);
+
+//			String query = "SELECT a.id, b.id, ST_ASText(a.geom), ST_ASText(b.geom) FROM triangulation AS a JOIN triangulation AS b ON ST_Touches(a.geom, b.geom) AND a.geom && b.geom AND a.id != b.id AND ST_Contains("
+//			+ multipolygonString + ", a.geom) IS TRUE AND ST_Contains(" + multipolygonString + ", b.geom) IS FALSE";
+
 
 			Map<String, ITriangle> innerTris = new HashMap<String, ITriangle>();
 			Map<String, ITriangle> outerTris = new HashMap<String, ITriangle>();
@@ -793,29 +833,50 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 			List<ITriangle> innerTriangles = new ArrayList<ITriangle>();
 			List<ITriangle> outerTriangles = new ArrayList<ITriangle>();
 
+			String query = "SELECT id, ST_ASText(triangulation.geom) from triangulation, big_polygon, big_polygon2 WHERE ST_Intersects(big_polygon.geom, triangulation.geom) AND ST_Contains(big_polygon2.geom, triangulation.geom)";
+//			String query = "SELECT a.id, b.id, ST_ASText(a.geom), ST_ASText(b.geom) FROM (SELECT id,geom FROM triangulation, big_polygon WHERE ST_Touches(big_polygon.geom, geom)) AS a JOIN (SELECT id,geom FROM triangulation, big_polygon WHERE ST_Touches(" + boundaryLineString + ", geom)) AS b ON ST_Touches(a.geom, b.geom) AND a.geom && b.geom AND a.id != b.id AND ST_Contains("
+//									+ multipolygonString + ", a.geom) IS TRUE AND ST_Contains(" + multipolygonString + ", b.geom) IS FALSE";
+			PreparedStatement prepareStatement = triangulationConnection.prepareStatement(query);
+			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) {
 				if (!innerids.contains(resultSet.getString(1))) {
 					innerids.add(resultSet.getString(1));
-					ITriangle triangleFromPolygon = PostgisHelper.getTriangleFromPostgisPolygon2D(resultSet.getString(3));
+					ITriangle triangleFromPolygon = PostgisHelper.getTriangleFromPostgisPolygon2D(resultSet.getString(2));
 					innerTriangles.add(triangleFromPolygon);
 					innerTris.put(resultSet.getString(1), triangleFromPolygon);
 				}
-				if (!outerids.contains(resultSet.getString(2))) {
-					outerids.add(resultSet.getString(2));
-					ITriangle triangleFromPolygon = PostgisHelper.getTriangleFromPostgisPolygon2D(resultSet.getString(4));
+
+			}
+			String queryOuter = "SELECT id, ST_ASText(triangulation.geom) from triangulation, big_polygon, big_polygon2 WHERE ST_Intersects(big_polygon.geom, triangulation.geom) AND ST_Contains(big_polygon2.geom, triangulation.geom) IS FALSE";
+//			String query = "SELECT a.id, b.id, ST_ASText(a.geom), ST_ASText(b.geom) FROM (SELECT id,geom FROM triangulation, big_polygon WHERE ST_Touches(big_polygon.geom, geom)) AS a JOIN (SELECT id,geom FROM triangulation, big_polygon WHERE ST_Touches(" + boundaryLineString + ", geom)) AS b ON ST_Touches(a.geom, b.geom) AND a.geom && b.geom AND a.id != b.id AND ST_Contains("
+//									+ multipolygonString + ", a.geom) IS TRUE AND ST_Contains(" + multipolygonString + ", b.geom) IS FALSE";
+			PreparedStatement outerStatement = triangulationConnection.prepareStatement(queryOuter);
+			resultSet = outerStatement.executeQuery();
+			while (resultSet.next()) {
+				if (!outerids.contains(resultSet.getString(1))) {
+					outerids.add(resultSet.getString(1));
+					ITriangle triangleFromPolygon = PostgisHelper.getTriangleFromPostgisPolygon2D(resultSet.getString(2));
 					outerTriangles.add(triangleFromPolygon);
-					outerTris.put(resultSet.getString(2), triangleFromPolygon);
+					outerTris.put(resultSet.getString(1), triangleFromPolygon);
 				}
 
 			}
+			Map<String, String> reverseMap = new HashMap<>();
 			// now check the pairs for a common edge
 			for (Entry<String, ITriangle> outerTriangle : outerTris.entrySet()) {
 				for (Entry<String, ITriangle> innerTriangle : innerTris.entrySet()) {
-					IEdge sharedEdge = innerTriangle.getValue().getSharedEdge(outerTriangle.getValue());
-					if (sharedEdge != null) {
-						NeighboringTrianglesOnBoundary neighboringTrianglesOnBoundary = new NeighboringTrianglesOnBoundary(innerTriangle.getKey(), outerTriangle.getKey(), innerTriangle.getValue(),
-								outerTriangle.getValue());
-						pairwiseTriangles.add(neighboringTrianglesOnBoundary);
+					if(!outerTriangle.getKey().equals(innerTriangle.getKey())) {
+						IEdge sharedEdge = innerTriangle.getValue().getSharedEdge(outerTriangle.getValue());
+						String oppositeTriangelId = reverseMap.get(innerTriangle.getKey());
+//						for (int i = 0 ; i < boundaryPolygon.getPoints().size() - 1 ; i++) {
+//							System.out.println(							boundaryPolygon.getPoints().get(0).getDistance(sharedEdge.getOrigin()));
+//						}
+						if (sharedEdge != null && (oppositeTriangelId == null || !oppositeTriangelId.equals(outerTriangle.getKey()))) {
+							reverseMap.put(outerTriangle.getKey(), innerTriangle.getKey());
+							NeighboringTrianglesOnBoundary neighboringTrianglesOnBoundary = new NeighboringTrianglesOnBoundary(innerTriangle.getKey(), outerTriangle.getKey(), innerTriangle.getValue(),
+									outerTriangle.getValue());
+							pairwiseTriangles.add(neighboringTrianglesOnBoundary);
+						}
 					}
 				}
 			}
@@ -1011,6 +1072,18 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 
 	public void unbindTriangulationFactory(ITriangulationFactory triangulationFactory) {
 		this.triangulationFactory = null;
+	}
+
+	@Override
+	public void finishAddOrUpdateContourLines() throws PersistenceException {
+		try {
+			if(lastStatement != null) {
+				lastStatement.executeBatch();
+				lastStatement = null;
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e);
+		}
 	}
 
 }

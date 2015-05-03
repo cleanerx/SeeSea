@@ -29,10 +29,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.contour.triangulation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 
@@ -45,6 +49,7 @@ import net.sf.seesea.geometry.impl.Point;
 import net.sf.seesea.services.navigation.IGeoBoundingBox;
 import net.sf.seesea.triangulation.ITriangulationDescription;
 import net.sf.seesea.triangulation.ITriangulationPersistence;
+import net.sf.seesea.triangulation.NeighboringTrianglesOnBoundary;
 
 /**
  * This class generates contour lines from a triangulation and persists the resulting contour lines
@@ -78,17 +83,20 @@ public class TriangulationBasedContourLineGeneration implements IContourLineGene
 	 * @return
 	 * @throws PersistenceException
 	 */
-	private List<List<IPoint>> updateDatabaseContourLines(ITriangulationDescription triangulationDescription, List<Integer> depths, Long trackId) throws PersistenceException {
-		List<List<IPoint>> contourLines = new ArrayList<List<IPoint>>();
+	private List<List<IPoint>> updateDatabaseContourLines(final ITriangulationDescription triangulationDescription, List<Integer> depths, final Long trackId) throws PersistenceException {
+		final List<List<IPoint>> contourLines = Collections.synchronizedList(new ArrayList<List<IPoint>>());
 
+		final List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs = triangulationPersistence.getBoundaryTrianglePairs(triangulationDescription.getBorder());
+		
 		// split boundary crossing contour lines again to reflect the partitionized state
-		triangulationPersistence.splitMergedContourLines(trackId, triangulationDescription.getBorder());
+		triangulationPersistence.splitMergedContourLines(trackId, triangulationDescription.getBorder(), boundaryTrianglePairs);
 
 		// remove all contour lines that are completely contained in this area since a new triangulation is present
 		triangulationPersistence.removeContourLines(triangulationDescription.getBorder(), triangulationDescription.getHoles());
 
+		ExecutorService threadPool = Executors.newFixedThreadPool(4);
 		// for each depth write the contour line
-		for (Integer depth : depths) {
+		for (final Integer depth : depths) {
 			Set<ITriangle> visitedTriangles = new HashSet<ITriangle>();
 			for (Iterator<ITriangle> iterator = triangulationDescription.getTriangulation().iterator(); iterator.hasNext();) {
 				ITriangle triangle = (ITriangle) iterator.next();
@@ -96,11 +104,19 @@ public class TriangulationBasedContourLineGeneration implements IContourLineGene
 					List<IPoint> points = new ArrayList<IPoint>();
 					recursiveContourlineGeneration(visitedTriangles, triangle, null, null, points, depth);
 					if (points.size() > 3) {
-						triangulationPersistence.addOrUpdateContourLine(points, depth, trackId, triangulationDescription.getBorder());
+						triangulationPersistence.addOrUpdateContourLine(points, depth, trackId, triangulationDescription.getBorder(), boundaryTrianglePairs);
 						contourLines.add(points);
 					}
 				}
 			}
+			triangulationPersistence.finishAddOrUpdateContourLines();
+//			threadPool.submit(new Callable<Void>() {
+//
+//				@Override
+//				public Void call() throws Exception {
+//					return null;
+//				}
+//			});
 		}
 		return contourLines;
 	}
