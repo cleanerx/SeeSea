@@ -861,7 +861,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 				}
 
 			}
-			Map<String, String> reverseMap = new HashMap<>();
+			Map<String, String> reverseMap = new HashMap<String, String>();
 			// now check the pairs for a common edge
 			for (Entry<String, ITriangle> outerTriangle : outerTris.entrySet()) {
 				for (Entry<String, ITriangle> innerTriangle : innerTris.entrySet()) {
