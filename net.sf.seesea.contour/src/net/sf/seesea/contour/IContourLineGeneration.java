@@ -28,9 +28,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package net.sf.seesea.contour;
 
+import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Set;
 
-import net.sf.seesea.services.navigation.IGeoBoundingBox;
 
 /**
  * An interface to generate contour lines 
@@ -39,11 +40,11 @@ public interface IContourLineGeneration {
 
 	/**
 	 * 
-	 * @param trackId the track id to generate contour lines for
+	 * @param trackIds the track id to generate contour lines for
 	 * @param depths the depths to create contour lines for
-	 * @param trackBoundingBox the bounding box of the given track
 	 * @param trackpointTable the table where to read filtered points from
+	 * @param markTrackFileTriangulated 
 	 */
-	void updateContourLines(Long trackId, List<Integer> depths, IGeoBoundingBox trackBoundingBox, String trackpointTable);
+	void updateContourLines(Set<Long> trackIds, List<Integer> depths, String trackpointTable, PreparedStatement markTrackFileTriangulated);
 	
 }

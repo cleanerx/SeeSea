@@ -29,6 +29,7 @@ package net.sf.seesea.triangulation;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.seesea.data.io.PersistenceException;
 import net.sf.seesea.geometry.IPoint;
@@ -46,7 +47,7 @@ public interface ITriangulationPersistence {
 	 * @return A {@link PolygonIterator} that iterates over the existing partitions
 	 * @throws PersistenceException
 	 */
-	Iterator<List<IPolygon>> getHitPartitionizedPolygons(Long trackId, String trackpointTable)
+	Iterator<List<IPolygon>> getHitPartitionizedPolygons(Set<Long> trackId, String trackpointTable)
 			throws PersistenceException;
 
 	/**
@@ -71,24 +72,22 @@ public interface ITriangulationPersistence {
 	/**
 	 * This method is used to split contour line that were merged over delaunay triangulation partitions. 
 	 * The result of the operation is that no contour line crosses the given boundary. 
-	 * 
-	 * @param trackId
 	 * @param boundary the boundary of the contour line
+	 * 
 	 * @throws PersistenceException if a persistence error occurs
 	 */
-	void splitMergedContourLines(Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException;
+	void splitMergedContourLines(IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException;
 
 	/**
 	 * This method creates a new contour line with the given points or updates
 	 * 
 	 * @param points the points of the contour line
 	 * @param depth the depth of the contour line
-	 * @param trackId the track id causing the update
 	 * @param boundary the partition boundary 
 	 * @param boundaryTrianglePairs 
 	 * @throws PersistenceException
 	 */
-	void addOrUpdateContourLine(List<IPoint> points, Integer depth, Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException;
+	void addOrUpdateContourLine(List<IPoint> points, Integer depth, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException;
 
 	/**
 	 * Removes contours lines in the given polygon with holes
@@ -115,6 +114,8 @@ public interface ITriangulationPersistence {
 	List<NeighboringTrianglesOnBoundary> getBoundaryTrianglePairs(IPolygon boundaryPolygon) throws PersistenceException;
 
 	void finishAddOrUpdateContourLines() throws PersistenceException;
+
+	void mergeBorderCrossingContours(IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException;
 
 
 
