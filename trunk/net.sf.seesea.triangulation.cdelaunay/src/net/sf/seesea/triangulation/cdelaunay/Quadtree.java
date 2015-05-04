@@ -78,7 +78,7 @@ public class Quadtree<T extends IBoxExtends> {
 	    * Splits the node into 4 subnodes
 	    */
 	    private void split() {
-	    	   System.out.println("split:" + bounds);
+//	    	   System.out.println("split:" + bounds);
 
 	      double subWidth = (bounds.getWidth() / 2);
 	      double subHeight = (bounds.getHeight() / 2);

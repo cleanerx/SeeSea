@@ -147,6 +147,14 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		}
 		
 		List<IPoint> boundaryPoints = boundary.getPoints();
+//		for (IPoint a : boundaryPoints) {
+//			System.out.println(a);
+//			for (IPoint b : boundaryPoints) {
+//				if(b.equals(a) && a != b) {
+//					System.out.println("what ?" + boundaryPoints.indexOf(a) + ":" + boundaryPoints.lastIndexOf(b));
+//				}
+//			}
+//		}
 		for (int i = 0; i < boundaryPoints.size() - 1; i++) {
 			IPoint point = boundaryPoints.get(i);
 			IPoint point2 = boundaryPoints.get(i + 1);
