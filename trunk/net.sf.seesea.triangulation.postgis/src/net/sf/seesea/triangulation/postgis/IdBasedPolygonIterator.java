@@ -56,7 +56,7 @@ public class IdBasedPolygonIterator implements Iterator<List<IPolygon>> {
 		this.offshoreIds = offshoreIds;
 		this.inshoreConnection = inshoreConnection;
 		this.offshoreConnection = offshoreConnection;
-		this.combinedIds = new ArrayList<>();
+		this.combinedIds = new ArrayList<String>();
 		combinedIds.addAll(inshoreOSMids);
 		combinedIds.addAll(offshoreIds);
 		idIterator = combinedIds.iterator();
