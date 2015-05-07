@@ -423,8 +423,8 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	public Iterator<List<IPolygon>> getHitPartitionizedPolygons(Set<Long> trackIds, String trackpointTable) throws PersistenceException {
 		PreparedStatement boundaryStatement;
 		try {
-			Set<String> inshoreOSMids = new HashSet<>();
-			Set<String> offshoreIds = new HashSet<>();
+			Set<String> inshoreOSMids = new HashSet<String>();
+			Set<String> offshoreIds = new HashSet<String>();
 			for (Long trackId : trackIds) {
 				// the bounding box of the points for the track
 				boundaryStatement = triangulationConnection
@@ -916,7 +916,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 		List<ITriangulationDescription> descriptions = new ArrayList<ITriangulationDescription>();
 		List<IPolygon> boundaryAndHoles = null;
 		ExecutorService threadPool = Executors.newFixedThreadPool(4);
-		List<Future<TriangulationDescription>> futures = new ArrayList<>();
+		List<Future<TriangulationDescription>> futures = new ArrayList<Future<TriangulationDescription>>();
 		while ((boundaryAndHoles = polygonIterator.next()) != null) {
 			final List<IPolygon> x = boundaryAndHoles;  
 			Callable<TriangulationDescription> callable = new Callable<TriangulationDescription>() {
@@ -970,7 +970,9 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 				if(triangulationDescription != null) {
 					descriptions.add(triangulationDescription);
 				}
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (InterruptedException e) {
+				Logger.getLogger(getClass()).error("Failed", e);
+			} catch (ExecutionException e) {
 				Logger.getLogger(getClass()).error("Failed", e);
 			}
 		}
