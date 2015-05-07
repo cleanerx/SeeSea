@@ -119,7 +119,7 @@ public class IdBasedPolygonIterator implements Iterator<List<IPolygon>> {
 				if (!coordinates.isEmpty()) {
 					coordinates.add(coordinates.get(0));
 					boundariesAndHoles.add(new Polygon(coordinates));
-					coordinates = new ArrayList<>();
+					coordinates = new ArrayList<IPoint>();
 					lastLayer = layer;
 				}
 			}
