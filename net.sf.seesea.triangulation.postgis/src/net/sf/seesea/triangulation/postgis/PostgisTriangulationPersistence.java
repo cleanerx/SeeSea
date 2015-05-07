@@ -46,6 +46,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import net.sf.seesea.contour.ContourLine;
 import net.sf.seesea.contour.IContourLine;
@@ -415,16 +420,19 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 		return descriptions;
 	}
 
-	public PolygonIterator getHitPartitionizedPolygons(Long trackId, String trackpointTable) throws PersistenceException {
+	public Iterator<List<IPolygon>> getHitPartitionizedPolygons(Set<Long> trackIds, String trackpointTable) throws PersistenceException {
 		PreparedStatement boundaryStatement;
 		try {
-			// the bounding box of the points for the track
-			boundaryStatement = triangulationConnection
-					.prepareStatement("SELECT st_xmin(ST_Extent(the_geom)), st_xmax(ST_Extent(the_geom)), st_ymin(ST_Extent(the_geom)), st_ymax(ST_Extent(the_geom)) FROM " + trackpointTable
-							+ " WHERE datasetid = ?");
-			boundaryStatement.setLong(1, trackId);
-			ResultSet query = boundaryStatement.executeQuery();
-			if (query.next()) {
+			Set<String> inshoreOSMids = new HashSet<>();
+			Set<String> offshoreIds = new HashSet<>();
+			for (Long trackId : trackIds) {
+				// the bounding box of the points for the track
+				boundaryStatement = triangulationConnection
+						.prepareStatement("SELECT st_xmin(ST_Extent(the_geom)), st_xmax(ST_Extent(the_geom)), st_ymin(ST_Extent(the_geom)), st_ymax(ST_Extent(the_geom)) FROM " + trackpointTable
+								+ " WHERE datasetid = ?");
+				boundaryStatement.setLong(1, trackId);
+				ResultSet query = boundaryStatement.executeQuery();
+				if (query.next()) {
 //				 double xmin = 7.7;
 //				 double xmax = 7.8;
 //				 double ymin = 54.6;
@@ -433,41 +441,52 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 //				 double xmax = 8.18705;
 //				 double ymin = 48.906;
 //				 double ymax = 48.94058;
-				double xmin = query.getDouble(1);
-				double xmax = query.getDouble(2);
-				double ymin = query.getDouble(3);
-				double ymax = query.getDouble(4);
-
-				// select all polygons of that bounding box
-				Statement inshoreStatement = inshoreConnection.createStatement();
-				Statement offshoreStatement = triangulationConnection.createStatement();
-				// formatter:off
-
-				// SELECT (ST_DUMPPOINTS(way)).* FROM planet_osm_polygon WHERE way && ST_Transform(ST_MakeEnvelope(8.0, 48.0, 9, 49, 4326), 900913);
-
-				// FIXME - test for onshore, offshore could reveal the necessary
-				// polygons
-
-				NumberFormat format = DecimalFormat.getNumberInstance(Locale.ENGLISH);
-				String envelope = MessageFormat.format("ST_MakeEnvelope({0}, {1}, {2}, {3}, 4326)",  format.format(xmin), format.format(ymin), format.format(xmax), format.format(ymax));
-				ResultSet inshorePartionizedPolygonResultSet = inshoreStatement.executeQuery(
-						"SELECT path, ST_X(ST_TRANSFORM(geom,4326)) AS lon, ST_Y(ST_TRANSFORM(geom,4326)) as lat, osm_id FROM " 
-				     + "(SELECT * FROM ("
-						+ "SELECT (ST_DUMPPOINTS(way)).*, * FROM planet_osm_polygon AS poly WHERE " +
-						"(ST_Overlaps(way, ST_Transform(" + envelope +", 900913)) OR ST_Contains(ST_Transform(" + envelope + ", 900913), way) OR ST_Contains(way, ST_Transform(" + envelope + ", 900913)))  AND (\"natural\" = 'water' OR waterway IS NOT NULL OR water IS NOT NULL) ) AS xx  " + 
-				// UNION SELECT (ST_DUMPPOINTS(way)).*, * FROM planet_osm_polygon AS poly WHERE way && ST_Transform(ST_MakeEnvelope(" +  xmin +
-		        //  ", "  +  ymin +  ", " + xmax + ", " + ymax + ", 4326), 900913) AND (\"natural\" = 'water' OR waterway IS NOT NULL OR water IS NOT NULL) ) AS xx  "  +
-						") as g ");
-				// formatter:on
-				
-				ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT path, ST_X(geom) AS lon, ST_Y(geom) as lat, gid FROM (SELECT (ST_DUMPPOINTS(geom)).*, gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
-				
-				return new PolygonIterator(inshorePartionizedPolygonResultSet, offshorePartionizedPolygonResultSet);
+					double xmin = query.getDouble(1);
+					double xmax = query.getDouble(2);
+					double ymin = query.getDouble(3);
+					double ymax = query.getDouble(4);
+					
+					// select all polygons of that bounding box
+					Statement inshoreStatement = inshoreConnection.createStatement();
+					Statement offshoreStatement = triangulationConnection.createStatement();
+					// formatter:off
+					
+					NumberFormat format = DecimalFormat.getNumberInstance(Locale.ENGLISH);
+					String envelope = MessageFormat.format("ST_MakeEnvelope({0}, {1}, {2}, {3}, 4326)",  format.format(xmin), format.format(ymin), format.format(xmax), format.format(ymax));
+//				ResultSet inshorePartionizedPolygonResultSet = inshoreStatement.executeQuery(
+//						"SELECT path, ST_X(ST_TRANSFORM(geom,4326)) AS lon, ST_Y(ST_TRANSFORM(geom,4326)) as lat, osm_id FROM " 
+//				     + "(SELECT * FROM ("
+//						+ "SELECT (ST_DUMPPOINTS(way)).*, * FROM planet_osm_polygon AS poly WHERE " +
+//						"(ST_Overlaps(way, ST_Transform(" + envelope +", 900913)) OR ST_Contains(ST_Transform(" + envelope + ", 900913), way) OR ST_Contains(way, ST_Transform(" + envelope + ", 900913)))  AND (\"natural\" = 'water' OR waterway IS NOT NULL OR water IS NOT NULL) ) AS xx  " + 
+//						") as g ");
+					// formatter:on
+					
+					ResultSet inshorePartionizedPolygonResultSet = inshoreStatement.executeQuery("SELECT osm_id FROM " 
+							+ "(SELECT * FROM ("
+							+ "SELECT osm_id FROM planet_osm_polygon AS poly WHERE " +
+							"(ST_Overlaps(way, ST_Transform(" + envelope +", 900913)) OR ST_Contains(ST_Transform(" + envelope + ", 900913), way) OR ST_Contains(way, ST_Transform(" + envelope + ", 900913)))  AND (\"natural\" = 'water' OR waterway IS NOT NULL OR water IS NOT NULL) ) AS xx  " + 
+							") as g ");
+					while(inshorePartionizedPolygonResultSet.next()) {
+						inshoreOSMids.add(inshorePartionizedPolygonResultSet.getString(1));
+					}
+					ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT gid FROM (SELECT gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
+					while(offshorePartionizedPolygonResultSet.next()) {
+						offshoreIds.add(offshorePartionizedPolygonResultSet.getString(1));
+					}
+					Logger.getLogger(getClass()).info((inshoreOSMids.size() + offshoreIds.size()) + "areas are considered for triangulation");
+//				ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT path, ST_X(geom) AS lon, ST_Y(geom) as lat, gid FROM (SELECT (ST_DUMPPOINTS(geom)).*, gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
+					
+					
+//				return new PolygonIterator(inshorePartionizedPolygonResultSet, offshorePartionizedPolygonResultSet);
+				}
 			}
+			if(inshoreOSMids.isEmpty() && offshoreIds.isEmpty()) {
+				return null;
+			}
+			return new IdBasedPolygonIterator(inshoreOSMids, offshoreIds, inshoreConnection, triangulationConnection);
 		} catch (SQLException e) {
 			throw new PersistenceException(e);
 		}
-		return null;
 	}
 
 	private String createMultipolygonString(IPolygon boundary, List<IPolygon> holes) {
@@ -524,7 +543,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 			statement2 = triangulationConnection.createStatement();
 			String multipolygonString = createMultipolygonString(boundary, holes);
 			ResultSet executeQuery = statement2
-					.executeQuery("SELECT ST_Y(ST_ASText(the_geom)), ST_X(ST_ASText(the_geom)), dbs FROM " + trackpointTable + " WHERE ST_Contains(" + multipolygonString + ", the_geom)"); //$NON-NLS-1$
+					.executeQuery("SELECT DISTINCT ST_Y(ST_ASText(the_geom)), ST_X(ST_ASText(the_geom)), dbs FROM " + trackpointTable + " WHERE ST_Contains(" + multipolygonString + ", the_geom)"); //$NON-NLS-1$
 			while (executeQuery.next()) {
 				double lat = executeQuery.getDouble(1);
 				double lon = executeQuery.getDouble(2);
@@ -538,7 +557,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	}
 	
 	@Override
-	public void splitMergedContourLines(Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException {
+	public void splitMergedContourLines(IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException {
 		PreparedStatement existingBoundaryCrossingContourLineStatement;
 		try {
 			// check for an existing contour line to reattach to
@@ -621,7 +640,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	}
 
 	@Override
-	public void addOrUpdateContourLine(List<IPoint> points, Integer depth, Long trackId, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException {
+	public void addOrUpdateContourLine(List<IPoint> points, Integer depth, IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException {
 		PreparedStatement statement;
 		try {
 			// check for an existing contour line to reattach to
@@ -637,27 +656,33 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 			}
 			
 			statement.setInt(1, depth);
-			statement.setLong(2, trackId);
+			statement.setLong(2, 100L); // no unique id available since it may be set by several tracks - we set a non null value to identify this is our contour line
 
-			Logger.getLogger(getClass()).debug(MessageFormat.format("INSERT INTO contoursplit (m, the_geom, source) VALUES ({0}, {1}, " + trackId + ")", //$NON-NLS-1$
+			Logger.getLogger(getClass()).debug(MessageFormat.format("INSERT INTO contoursplit (m, the_geom, source) VALUES ({0}, {1}, " + 100L + ")", //$NON-NLS-1$
 					depth, postgisMultiLineString.toString()));
 			statement.addBatch();
 			lastStatement = statement;
 			batchCounter++;
-			if(batchCounter > 2000) {
+			if(batchCounter > 50) {
 				statement.executeBatch();
 			}
 			
+//			mergeBorderCrossingContours(boundary, boundaryTrianglePairs);
+		} catch (SQLException e) {
+			throw new PersistenceException(e);
+		}
+	}
+	public void mergeBorderCrossingContours(IPolygon boundary, List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs) throws PersistenceException {
+		try {
 			String boundaryString = PostgisHelper.getMultipolygonString(boundary, Collections.<IPolygon> emptyList());
-			
 			for (NeighboringTrianglesOnBoundary trianglePair : boundaryTrianglePairs) {
 				// expecting only one shared edge causes only one single pair per boundary
 				ITriangle innertriangle = trianglePair.getTriangleA();
 				String triangleA = PostgisHelper.getPostgisPolygon2DTriangle(innertriangle);
-
+				
 				ITriangle outertriangle = trianglePair.getTriangleB();
 				String triangleB = PostgisHelper.getPostgisPolygon2DTriangle(outertriangle);
-
+				
 				List<IContourLine> contourLinesA = readContourLines(triangleA, boundaryString, true);
 				List<IContourLine> contourLinesB = readContourLines(triangleB, boundaryString, false);
 				
@@ -725,7 +750,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 							String postgisLineString = PostgisHelper.getPostgisLineString(mergedContourLine.getPoints());
 							updateStatement.executeUpdate("DELETE FROM contoursplit WHERE id = " + contourLineA.getId());
 							updateStatement.executeUpdate("DELETE FROM contoursplit WHERE id = " + contourLineB.getId());
-							updateStatement.executeUpdate("INSERT INTO contoursplit (the_geom, m) VALUES (" + postgisLineString +", " + depth + ")");
+							updateStatement.executeUpdate("INSERT INTO contoursplit (the_geom, m) VALUES (" + postgisLineString +", " + contourLineA.getDepth() + ")");
 						}
 					}
 				}
@@ -887,43 +912,66 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	}
 
 	@Override
-	public List<ITriangulationDescription> updateContainedTriangulations(Iterator<List<IPolygon>> polygonIterator, String trackpointTable) throws PersistenceException {
+	public List<ITriangulationDescription> updateContainedTriangulations(Iterator<List<IPolygon>> polygonIterator, final String trackpointTable) throws PersistenceException {
 		List<ITriangulationDescription> descriptions = new ArrayList<ITriangulationDescription>();
 		List<IPolygon> boundaryAndHoles = null;
+		ExecutorService threadPool = Executors.newFixedThreadPool(4);
+		List<Future<TriangulationDescription>> futures = new ArrayList<>();
 		while ((boundaryAndHoles = polygonIterator.next()) != null) {
-			IPolygon boundary = boundaryAndHoles.get(0);
-			if (boundary.getPoints().size() > 2) {
-				List<IPolygon> holes = Collections.<IPolygon> emptyList();
-				if (boundaryAndHoles.size() > 1) {
-					holes = boundaryAndHoles.subList(1, boundaryAndHoles.size());
-				}
-				// select all triangles that are contained in the boundary excluded by the holes
+			final List<IPolygon> x = boundaryAndHoles;  
+			Callable<TriangulationDescription> callable = new Callable<TriangulationDescription>() {
 
-				// this method should be responsible for picking the right points and remove duplicates or do any postprocessing for
-				// duplicate points based on confidence
-				List<IPoint> measuredDepthPoints = getMeasuredDepthPoints(boundary, holes, trackpointTable);
-				if (!measuredDepthPoints.isEmpty()) {
-					ITriangulator triangulator = triangulationFactory.createTriangulator();
+				@Override
+				public TriangulationDescription call() throws Exception {
+					IPolygon boundary = x.get(0);
 					if (boundary.getPoints().size() > 2) {
-						triangulator.addBoundary(boundary);
-						if (boundaryAndHoles.size() > 1) {
-							triangulator.addHoles(boundaryAndHoles.subList(1, boundaryAndHoles.size()));
+						List<IPolygon> holes = Collections.<IPolygon> emptyList();
+						if (x.size() > 1) {
+							holes = x.subList(1, x.size());
 						}
-						try {
-							for (IPoint point : measuredDepthPoints) {
-								triangulator.addPoint(point);
+						// select all triangles that are contained in the boundary excluded by the holes
+						
+						// this method should be responsible for picking the right points and remove duplicates or do any postprocessing for
+						// duplicate points based on confidence
+						List<IPoint> measuredDepthPoints = getMeasuredDepthPoints(boundary, holes, trackpointTable);
+						if (!measuredDepthPoints.isEmpty()) {
+							ITriangulator triangulator = triangulationFactory.createTriangulator();
+							if (boundary.getPoints().size() > 2) {
+								triangulator.addBoundary(boundary);
+								if (x.size() > 1) {
+									triangulator.addHoles(x.subList(1, x.size()));
+								}
+								try {
+									for (IPoint point : measuredDepthPoints) {
+										triangulator.addPoint(point);
+									}
+									// execute the triangulation and persist it
+									triangulator.triangulate(PostgisTriangulationPersistence.this);
+									List<ITriangle> triangulation = triangulator.getTriangulation();
+									TriangulationDescription triangulationDescription = new TriangulationDescription(boundary, holes, triangulation);
+									persistTriangulation(triangulation, triangulationDescription);
+									return triangulationDescription;
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
-							// execute the triangulation and persist it
-							triangulator.triangulate(this);
-							List<ITriangle> triangulation = triangulator.getTriangulation();
-							TriangulationDescription triangulationDescription = new TriangulationDescription(boundary, holes, triangulation);
-							persistTriangulation(triangulation, triangulationDescription);
-							descriptions.add(triangulationDescription);
-						} catch (Exception e) {
-							e.printStackTrace();
 						}
 					}
+					return null;
 				}
+			};
+			Future<TriangulationDescription> future = threadPool.submit(callable);
+			futures.add(future);
+		}
+		for (Future<TriangulationDescription> future : futures) {
+			TriangulationDescription triangulationDescription;
+			try {
+				triangulationDescription = future.get();
+				if(triangulationDescription != null) {
+					descriptions.add(triangulationDescription);
+				}
+			} catch (InterruptedException | ExecutionException e) {
+				Logger.getLogger(getClass()).error("Failed", e);
 			}
 		}
 		return descriptions;
