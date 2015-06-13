@@ -201,7 +201,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 //					}
 //				}
 //			}
-			if (currentFat.getSubFileType().equals("TRK")) {
+			if (currentFat != null && currentFat.getSubFileType().equals("TRK")) {
 //				if (subfileState.equals(MessageProcessingState.SUBFILE_HEADER)) {
 					if (counter == 89) {
 						trkHeader = new TRKHeader(Arrays.copyOfRange(message,
