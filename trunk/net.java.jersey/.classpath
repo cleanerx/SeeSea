@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="lib/javax.json-1.0.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.persistence.asm-2.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.persistence.moxy-2.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.persistence.core-2.6.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-entity-filtering-2.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.ws.rs-api-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/aopalliance-repackaged-2.4.0-b12.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/asm-debug-all-5.0.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javassist-3.18.1-GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.annotation-api-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.inject-2.4.0-b12.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.servlet-api-3.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jaxb-api-2.2.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-guava-2.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.osgi.core-4.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/osgi-resource-locator-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/persistence-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/validation-api-1.1.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hk2-api-2.4.0-b12.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hk2-locator-2.4.0-b12.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hk2-utils-2.4.0-b12.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javax.json-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-media-moxy-2.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-media-json-jackson-2.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-client.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-common.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
