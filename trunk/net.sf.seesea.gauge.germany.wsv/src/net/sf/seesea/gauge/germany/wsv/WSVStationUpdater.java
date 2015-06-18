@@ -68,7 +68,7 @@ public class WSVStationUpdater implements IStationProvider {
 				for (Station station : readEntity) {
 					statement.setString(1, station.longname);
 					statement.setString(2, "RIVER");
-					statement.setString(3, "Wasser und Schifffahrsdirektion Germany");
+					statement.setString(3, "Wasser und Schifffahrtsdirektion Germany");
 					statement.setString(4, station.water);
 					statement.setString(5, station.number);
 					statement.setDouble(7, station.latitude);

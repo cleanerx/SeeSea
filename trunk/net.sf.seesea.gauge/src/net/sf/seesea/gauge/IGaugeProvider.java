@@ -42,6 +42,13 @@ public interface IGaugeProvider {
 	 * @param startDate
 	 * @param endDate
 	 */
-	void updateGaugeMeasurements(String localID, String remoteID, Date startDate, Date endDate);
+	void updateSingleGaugeMeasurements(String localID, String remoteID, Date startDate, Date endDate);
+
+	/**
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 */
+	void updateAllGaugeMeasurements(Date startDate, Date endDate);
 
 }
