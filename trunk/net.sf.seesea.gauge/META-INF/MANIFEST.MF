@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Gauge
+Bundle-SymbolicName: net.sf.seesea.gauge
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.gauge.GaugeActivator
+Bundle-Vendor: OpenSeaMap
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Export-Package: net.sf.seesea.gauge
