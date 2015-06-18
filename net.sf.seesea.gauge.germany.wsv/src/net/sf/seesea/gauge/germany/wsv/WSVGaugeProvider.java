@@ -59,39 +59,39 @@ public class WSVGaugeProvider implements IGaugeProvider {
 
 	@Override
 	public void updateGaugeMeasurements(String localId, String remoteID, Date startDate, Date endDate) {
-		try {
+		try (Statement statementLastEntry = gaugeConnection.createStatement();
+			PreparedStatement statement = gaugeConnection.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)")){
 			Timestamp lastGaugeValueTimestamp = null;
-			Statement statementLastEntry = gaugeConnection.createStatement();
-			ResultSet resultSet = statementLastEntry.executeQuery("SELECT gaugeid, MAX(time) AS maxtime FROM gaugemeasurement WHERE gaugeid = " + localId + " GROUP BY gaugeid");
-			if(resultSet.next()) {
-				lastGaugeValueTimestamp = resultSet.getTimestamp(2);
-			}
-
-			List<WSVGaugeMeasurement> measurements = getRemoteMeasurements(remoteID);
-			PreparedStatement statement = gaugeConnection.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)");
-			for (WSVGaugeMeasurement gaugeMeasurement : measurements) {
-				SimpleDateFormat mdyFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-				Date parse = mdyFormat.parse(gaugeMeasurement.timestamp);
-				Timestamp timestamp = new Timestamp(parse.getTime());
+			try (ResultSet resultSet = statementLastEntry.executeQuery("SELECT gaugeid, MAX(time) AS maxtime FROM gaugemeasurement WHERE gaugeid = " + localId + " GROUP BY gaugeid")) {
+				if(resultSet.next()) {
+					lastGaugeValueTimestamp = resultSet.getTimestamp(2);
+				}
 				
-				boolean doInsert = false;
-				if(lastGaugeValueTimestamp != null) {
-					if(timestamp.after(lastGaugeValueTimestamp)) {
+				List<WSVGaugeMeasurement> measurements = getRemoteMeasurements(remoteID);
+				for (WSVGaugeMeasurement gaugeMeasurement : measurements) {
+					SimpleDateFormat mdyFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+					Date parse = mdyFormat.parse(gaugeMeasurement.timestamp);
+					Timestamp timestamp = new Timestamp(parse.getTime());
+					
+					boolean doInsert = false;
+					if(lastGaugeValueTimestamp != null) {
+						if(timestamp.after(lastGaugeValueTimestamp)) {
+							doInsert = true;
+						}
+					} else {
 						doInsert = true;
 					}
-				} else {
-					doInsert = true;
+					if(doInsert) {
+						statement.setInt(1, Integer.parseInt(localId));
+						statement.setDouble(2, gaugeMeasurement.value / 100);
+						statement.setTimestamp(3, timestamp);
+						statement.addBatch();
+					}
 				}
-				if(doInsert) {
-					statement.setInt(1, Integer.parseInt(localId));
-					statement.setDouble(2, gaugeMeasurement.value / 100);
-					statement.setTimestamp(3, timestamp);
-					statement.addBatch();
-				}
+				statement.executeBatch();
 			}
-			statement.executeBatch();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logger.getLogger(getClass()).error("Database failure", e);
 		} catch (ParseException e) {
 			Logger.getLogger(getClass()).error("Failed to parse gauge date", e);
 		}
