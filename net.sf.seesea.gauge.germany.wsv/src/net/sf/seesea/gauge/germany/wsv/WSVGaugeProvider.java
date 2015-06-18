@@ -28,6 +28,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package net.sf.seesea.gauge.germany.wsv;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -47,6 +51,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.seesea.data.io.postgis.PostgresConnectionFactory;
 import net.sf.seesea.gauge.IGaugeProvider;
 
 import org.apache.log4j.Logger;
@@ -58,7 +63,22 @@ public class WSVGaugeProvider implements IGaugeProvider {
 	private Connection gaugeConnection;
 
 	@Override
-	public void updateGaugeMeasurements(String localId, String remoteID, Date startDate, Date endDate) {
+	public void updateAllGaugeMeasurements(Date startDate, Date endDate) {
+		try (Statement statement = gaugeConnection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT id, remoteid FROM gauge WHERE provider = 'Wasser und Schifffahrsdirektion Germany'")){
+			while(resultSet.next()) {
+				String localId = resultSet.getString(1);
+				String remoteId = resultSet.getString(2);
+				updateSingleGaugeMeasurements(localId, remoteId, startDate, endDate);
+			}
+		} catch (SQLException e) {
+			Logger.getLogger(getClass()).error("Database failure", e);
+		}
+	}
+
+	
+	@Override
+	public void updateSingleGaugeMeasurements(String localId, String remoteID, Date startDate, Date endDate) {
 		try (Statement statementLastEntry = gaugeConnection.createStatement();
 			PreparedStatement statement = gaugeConnection.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)")){
 			Timestamp lastGaugeValueTimestamp = null;
@@ -122,12 +142,12 @@ public class WSVGaugeProvider implements IGaugeProvider {
         return Collections.EMPTY_LIST;
 	}
 	
-//	public static void main(String args[]) throws FileNotFoundException, IOException, SQLException {
-//		Properties properties = new Properties();
-//		properties.load(new FileInputStream("config.cfg"));
-//		Connection connection = PostgresConnectionFactory.getConnection(properties, "database");
-//		WSVGaugeProvider wsvGaugeProvider = new WSVGaugeProvider();
-//		wsvGaugeProvider.bindConnection(connection);
-//		wsvGaugeProvider.updateGaugeMeasurements("5906","47900129", null, null);
-//	}
+	public static void main(String args[]) throws FileNotFoundException, IOException, SQLException {
+		Properties properties = new Properties();
+		properties.load(new FileInputStream("config.cfg"));
+		Connection connection = PostgresConnectionFactory.getConnection(properties, "database");
+		WSVGaugeProvider wsvGaugeProvider = new WSVGaugeProvider();
+		wsvGaugeProvider.bindConnection(connection);
+		wsvGaugeProvider.updateAllGaugeMeasurements(null, null);
+	}
 }
