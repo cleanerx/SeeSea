@@ -4,9 +4,12 @@ Bundle-Name: Gaugeocean
 Bundle-SymbolicName: net.sf.seesea.waterlevel.gaugeocean
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: SeeSea
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: net.sf.seesea.services.navigation,
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: net.sf.seesea.gauge,
+ net.sf.seesea.services.navigation,
  net.sf.seesea.waterlevel,
  net.sf.seesea.waterlevel.ocean,
- org.apache.log4j
+ org.apache.log4j,
+ org.osgi.framework;version="1.8.0",
+ org.osgi.service.component;version="1.2.2"
 Service-Component: OSGI-INF/GaugeCorrection.xml, OSGI-INF/OceanGauageWaterlevelCorrection.xml
