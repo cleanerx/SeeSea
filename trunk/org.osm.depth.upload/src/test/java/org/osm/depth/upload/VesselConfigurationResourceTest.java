@@ -38,7 +38,7 @@ public class VesselConfigurationResourceTest extends TestCase {
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
 
-		basePath = client.target("http://localhost:8100").path(TestConstants.PATH).path("api2");
+		basePath = client.target("http://localhost:8080").path(TestConstants.PATH).path("api2");
 	}
 	
 	public void testCreatDeleteRoundtrip() {
@@ -72,6 +72,7 @@ public class VesselConfigurationResourceTest extends TestCase {
 		vesselConfiguration.depthoffset.model = "P39";
 		vesselConfiguration.depthoffset.sensorId = "DBT";
 		vesselConfiguration.depthoffset.frequency = 235.0;
+		vesselConfiguration.depthoffset.offsetType = "transducer";
 
 		// post
 		Response response = path.request(MediaType.APPLICATION_JSON).post(Entity.entity(vesselConfiguration, MediaType.APPLICATION_JSON));
@@ -116,6 +117,7 @@ public class VesselConfigurationResourceTest extends TestCase {
 			assertEquals(vesselConfiguration.depthoffset.model, vesselConfiguration2.depthoffset.model);
 			assertEquals(vesselConfiguration.depthoffset.sensorId, vesselConfiguration2.depthoffset.sensorId);
 			assertEquals(vesselConfiguration.depthoffset.frequency, vesselConfiguration2.depthoffset.frequency);
+			assertEquals(vesselConfiguration.depthoffset.offsetType, vesselConfiguration2.depthoffset.offsetType);
 
         }
 		} finally {
