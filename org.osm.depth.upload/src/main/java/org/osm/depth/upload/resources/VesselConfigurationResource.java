@@ -345,7 +345,7 @@ public class VesselConfigurationResource {
 						"SELECT DISTINCT " + 
 								"v.id, v.name, v.description, v.loa, v.breadth, v.draft, v.height, v.displacement, v.mmsi, v.manufacturer, v.model, v.maximumspeed, v.type, " +  
 								"s.x, s.y, s.z, s.manufacturer, s.model, s.sensorid, " +  
-								"d.x, d.y, d.z, d.manufacturer, d.model, d.sensorid, d.frequency, d.offsetkeel " + 
+								"d.x, d.y, d.z, d.manufacturer, d.model, d.sensorid, d.frequency, d.offsetkeel, d.offsettype " + 
 								"FROM vesselconfiguration v LEFT JOIN depthsensor AS d ON (d.vesselconfigid = v.id) LEFT JOIN sbassensor AS s ON (s.vesselconfigid = v.id)";
 				if (context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 					Statement statement = conn.createStatement();
@@ -415,6 +415,7 @@ public class VesselConfigurationResource {
 				vc.depthoffset.sensorId = executeQuery.getString(25);
 				vc.depthoffset.frequency = executeQuery.getDouble(26);
 				vc.depthoffset.offsetKeel = executeQuery.getDouble(27);
+				vc.depthoffset.offsetType = executeQuery.getString(28);
 
 				list.add(vc);
 			}
