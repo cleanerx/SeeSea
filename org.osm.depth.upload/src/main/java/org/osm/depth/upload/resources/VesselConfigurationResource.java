@@ -290,8 +290,8 @@ public class VesselConfigurationResource {
 								insertDepthOffset.setString(7, vesselConfiguration.depthoffset.model);
 								insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.frequency);
 								insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.offsetKeel);
-							    insertDepthOffset.setString(9, vesselConfiguration.depthoffset.offsetType);
-								insertDepthOffset.setDouble(10, vesselConfiguration.depthoffset.angleofbeam);
+							    insertDepthOffset.setString(10, vesselConfiguration.depthoffset.offsetType);
+								insertDepthOffset.setDouble(11, vesselConfiguration.depthoffset.angleofbeam);
 								insertDepthOffset.execute();
 							}
 
