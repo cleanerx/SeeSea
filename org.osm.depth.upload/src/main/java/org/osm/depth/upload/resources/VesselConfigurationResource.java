@@ -1,6 +1,6 @@
 /**
  * 
- Copyright (c) 2010-2013, Jens K�bler All rights reserved.
+ Copyright (c) 2010-2013, Jens Kï¿½bler All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -107,8 +107,9 @@ public class VesselConfigurationResource {
 										"model, " +
 										"frequency, " +
 										"offsetkeel, " +
+										"offsettype, " +
 										"angleofbeam ) " +
-								" = (?,?,?,?,?,?,?,?,?) WHERE vesselconfigid = ?");
+								" = (?,?,?,?,?,?,?,?,?,?) WHERE vesselconfigid = ?");
 				PreparedStatement insertSbasOffset = conn
 						.prepareStatement(
 								"UPDATE sbassensor SET" +
@@ -147,8 +148,9 @@ public class VesselConfigurationResource {
 						insertDepthOffset.setString(6, vesselConfiguration.depthoffset.model);
 						insertDepthOffset.setDouble(7, vesselConfiguration.depthoffset.frequency);
 						insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.offsetKeel);
-						insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.angleofbeam);
-						insertDepthOffset.setLong(10, vesselConfiguration.id);
+						insertDepthOffset.setString(9, vesselConfiguration.depthoffset.offsetType);
+						insertDepthOffset.setDouble(10, vesselConfiguration.depthoffset.angleofbeam);
+						insertDepthOffset.setLong(11, vesselConfiguration.id);
 						insertDepthOffset.execute();
 					}
 
@@ -240,8 +242,9 @@ public class VesselConfigurationResource {
 										"model, " +
 										"frequency, " +
 										"offsetkeel, " +
+										"offsettype, " +
 										"angleofbeam)" +
-								" VALUES (?,?,?,?,?,?,?,?,?,?)");
+								" VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 				PreparedStatement insertSbasOffset = conn
 						.prepareStatement(
 								"INSERT INTO sbassensor " +
@@ -286,7 +289,8 @@ public class VesselConfigurationResource {
 								insertDepthOffset.setString(6, vesselConfiguration.depthoffset.manufacturer);
 								insertDepthOffset.setString(7, vesselConfiguration.depthoffset.model);
 								insertDepthOffset.setDouble(8, vesselConfiguration.depthoffset.frequency);
-								insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.frequency);
+								insertDepthOffset.setDouble(9, vesselConfiguration.depthoffset.offsetKeel);
+							    insertDepthOffset.setString(9, vesselConfiguration.depthoffset.offsetType);
 								insertDepthOffset.setDouble(10, vesselConfiguration.depthoffset.angleofbeam);
 								insertDepthOffset.execute();
 							}
