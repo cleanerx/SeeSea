@@ -179,7 +179,9 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		if(trackPosition) {
 			modelChildren.add(getWorld().getMapCenterPosition());
 		}
-		modelChildren.add(getWorld().getCursorPosition());
+		if(getWorld().getCursorPosition() != null) {
+			modelChildren.add(getWorld().getCursorPosition());
+		}
 
 		return modelChildren; 
 //		Buoy buoy = BuoysandbeaconsFactory.eINSTANCE.createBuoy();
