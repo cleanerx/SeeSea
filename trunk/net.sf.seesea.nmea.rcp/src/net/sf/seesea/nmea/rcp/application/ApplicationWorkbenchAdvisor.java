@@ -29,6 +29,7 @@ package net.sf.seesea.nmea.rcp.application;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.util.Hashtable;
 import java.util.Properties;
 
 import net.sf.seesea.model.core.geo.osm.World;
@@ -107,7 +108,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 			if(serviceReference != null) {
 				ConfigurationAdmin configurationAdmin = bundleContext.getService(serviceReference);
 				Configuration configuration = configurationAdmin.getConfiguration("net.sf.seesea.provider.navigation.nmea.datalogger"); //$NON-NLS-1$
-				Properties properties = new Properties();
+				Hashtable<String, Object> properties = new Hashtable<String, Object>();
 				properties.put("rotateFileName", true); //$NON-NLS-1$
 				properties.put("loggingDirectory", logFolder.getLocationURI().toURL().toString()); //$NON-NLS-1$
 				properties.put("cacheDirectory", URLDecoder.decode(cacheFolder.getLocationURI().toURL().toString())); //$NON-NLS-1$
