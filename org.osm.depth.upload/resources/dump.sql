@@ -104,11 +104,18 @@ ALTER TABLE public.trackdata OWNER TO osm;
 --
 
 CREATE TABLE user_profiles (
-    user_name character varying(40) NOT NULL,
+    user_name character varying(256) NOT NULL,
     password character varying(40),
     salt character varying(10),
     attempts smallint DEFAULT 0 NOT NULL,
-    last_attempt timestamp without time zone
+    last_attempt timestamp without time zone,
+    forename character varying,
+    surname character varying,
+    country character varying,
+    language character varying,
+    organisation character varying,
+    phone character varying,
+    acceptedemailcontact boolean DEFAULT false
 );
 
 
@@ -119,20 +126,21 @@ ALTER TABLE public.user_profiles OWNER TO osm;
 --
 
 CREATE TABLE user_tracks (
-    track_id integer NOT NULL,
+    track_id bigint NOT NULL,
     user_name character varying(40) NOT NULL,
     file_ref character varying(255),
     upload_state smallint DEFAULT 0,
     filetype character varying(80),
     compression character varying(80),
-    starttime timestamp without time zone,
-    endtime timestamp without time zone,
     containertrack integer,
     vesselconfigid integer,
-    license integer
-      CONSTRAINT license_fkey FOREIGN KEY (license)
-      REFERENCES license (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+    license integer,
+    comment character varying,
+    uploaddate timestamp without time zone,
+    bbox geometry,
+    CONSTRAINT enforce_dims_bbox CHECK ((st_ndims(bbox) = 2)),
+    CONSTRAINT enforce_geotype_bbox CHECK (((geometrytype(bbox) = 'POLYGON'::text) OR (bbox IS NULL))),
+    CONSTRAINT enforce_srid_bbox CHECK ((st_srid(bbox) = 4326))
 );
 
 
@@ -291,18 +299,22 @@ ALTER TABLE ONLY user_tracks
 
 
 
-CREATE TABLE gauge
-(
-  id integer NOT NULL,
-  name character varying(255) NOT NULL,
-  gaugetype character varying(10) DEFAULT 'UNKNOWN'::character varying,
-  lat numeric(11,3),
-  lon numeric(11,3),
-  CONSTRAINT gauge_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
+CREATE TABLE gauge (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    gaugetype character varying(10) DEFAULT 'UNKNOWN'::character varying,
+    lat numeric(11,3),
+    lon numeric(11,3),
+    geom geometry,
+    provider character varying,
+    water character varying,
+    remoteid character varying,
+    waterlevel numeric(6,2),
+    CONSTRAINT enforce_dims_geom CHECK ((st_ndims(geom) = 2)),
+    CONSTRAINT enforce_geotype_geom CHECK (((geometrytype(geom) = 'POINT'::text) OR (geom IS NULL))),
+    CONSTRAINT enforce_srid_geom CHECK ((st_srid(geom) = 4326))
 );
+
 ALTER TABLE gauge
   OWNER TO osm;
 
