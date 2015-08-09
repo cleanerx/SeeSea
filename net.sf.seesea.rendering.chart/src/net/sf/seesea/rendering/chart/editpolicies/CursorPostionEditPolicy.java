@@ -13,7 +13,7 @@ public class CursorPostionEditPolicy extends AbstractEditPolicy implements
 
 	@Override
 	public void showTargetFeedback(Request request) {
-		System.out.println("targetFeedback");
+//		System.out.println("targetFeedback" + request);
 		if(request instanceof SelectionRequest) {
 			SelectionRequest selectionRequest = (SelectionRequest) request;
 			Point location = selectionRequest.getLocation();
