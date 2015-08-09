@@ -132,7 +132,7 @@ IWindDataProvider, IShipMovementVectorProvider {
 								Class<?> dataListener = iterator.next();
 								Long date = sensorHeartbeats.get(dataListener);
 								long c = System.currentTimeMillis() - date;
-								if (c > 2500) {
+								if (c > 4000) {
 									notifyDataListeners(dataListener);
 									iterator.remove();
 								}
