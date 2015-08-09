@@ -39,13 +39,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
-import net.sf.seesea.model.core.geo.osm.Area;
+import net.sf.seesea.model.core.geo.osm.OsmPackage;
 import net.sf.seesea.model.core.geo.osm.World;
-import net.sf.seesea.model.util.GeoParser;
-import net.sf.seesea.model.util.GeoPositionFormatter;
-import net.sf.seesea.model.util.GeoUtil;
 import net.sf.seesea.rendering.chart.SeeSeaUIActivator;
 import net.sf.seesea.rendering.chart.commands.SetPositionCommand;
 import net.sf.seesea.rendering.chart.commands.SetZoomLevelCommand;
@@ -58,7 +54,6 @@ import net.sf.seesea.rendering.chart.view.GeospatialGraphicalViewer;
 import net.sf.seesea.services.navigation.listener.IPositionListener;
 import net.sf.seesea.services.navigation.listener.ISpeedListener;
 import net.sf.seesea.tileservice.ITileProvider;
-import net.sf.seesea.tileservice.projections.IMapProjection;
 import nl.esi.metis.aisparser.AISMessage;
 import nl.esi.metis.aisparser.AISMessageClassBPositionReport;
 import nl.esi.metis.aisparser.AISMessagePositionReport;
@@ -66,12 +61,10 @@ import nl.esi.metis.aisparser.HandleAISMessage;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.XYLayout;
-import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -165,12 +158,11 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	protected List getModelChildren() {
 		List<Object> modelChildren = new ArrayList<Object>();
 		// show the target if we are tracking
-		modelChildren.addAll(aisTracker.getAISMessagePositionReport());
 //		modelChildren.add(getWorld().getMapCenterPosition());
 		modelChildren.addAll(getWorld().getTracksContainer().getTracks());
-		if(getWorld().getRoutingContainer() != null) {
-			modelChildren.addAll(getWorld().getRoutingContainer().getRoutes());
-		}
+//		if(getWorld().getRoutingContainer() != null) {
+//			modelChildren.addAll(getWorld().getRoutingContainer().getRoutes());
+//		}
 		
 		modelChildren.addAll(areaMarkers);
 		if(getWorld().getAnchorPosition() != null) {
@@ -182,6 +174,7 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 		if(getWorld().getCursorPosition() != null) {
 			modelChildren.add(getWorld().getCursorPosition());
 		}
+		modelChildren.addAll(aisTracker.getAISMessagePositionReport());
 
 		return modelChildren; 
 //		Buoy buoy = BuoysandbeaconsFactory.eINSTANCE.createBuoy();
@@ -343,6 +336,9 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 	}
 
 	public void notifyChanged(Notification notification) {
+		if(notification.getFeatureID(World.class) == OsmPackage.WORLD__TOTAL_TRIP){
+			return;
+		}
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			public void run() {
@@ -514,24 +510,24 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 								if(aisMessage instanceof AISMessagePositionReport) {
 									AISMessagePositionReport aisMessagePositionReport = (AISMessagePositionReport) aisMessage;
 									int navState = aisMessagePositionReport.getNavigationalStatus();
-									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_POSITION_UPDATE_RATE + 10000) && (navState == 0 || navState == 3 || navState == 4 || navState == 7 || navState == 8)) {
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_POSITION_UPDATE_RATE + 60000) && (navState == 0 || navState == 3 || navState == 4 || navState == 7 || navState == 8)) {
 //										System.out.println(aisMessage);
 										removePosition(iterator);
-									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 5000) && (navState == 1 || navState == 2 || navState == 5 || navState == 6)) {
+									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 370000) && (navState == 1 || navState == 2 || navState == 5 || navState == 6)) {
 //										System.out.println(aisMessage);
 										removePosition(iterator);
-									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 5000)) {
+									} else if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_A_ANCHOR_UPDATE_RATE + 370000)) {
 //										System.out.println(aisMessage);
 										removePosition(iterator);
 									}
 								} else if(aisMessage instanceof AISMessageClassBPositionReport) {
-									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 5000)) {
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 370000)) {
 //										System.out.println(aisMessage);
 										removePosition(iterator);
 									}
 								} else {
 //									System.out.println(aisMessage);
-									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 5000)) {
+									if((currentTime  - aisMessageTime.getUtcTime()) > (CLASS_B_POSITION_UPDATE_RATE + 370000)) {
 										removePosition(iterator);
 									}
 								}
@@ -570,7 +566,22 @@ public class WorldEditPart extends TransactionalEditPart implements Adapter {
 						AISMessage positionReport = (AISMessage) message;
 						long time = Calendar.getInstance().getTime().getTime();
 						synchronized (AISTracker.this) {
-							shipIdentifications.put(positionReport.getUserID(), new AISMessageTime(positionReport, time));
+							AISMessageTime aisMessageTime = shipIdentifications.get(positionReport.getUserID());
+							if(aisMessageTime != null) {
+								aisMessageTime.setPosition(positionReport);
+								aisMessageTime.setUtcTime(time);
+								List modelChildren = getChildren();
+								for (Object object : modelChildren) {
+									if(object instanceof AISEditPart) {
+										AISEditPart ep = (AISEditPart) object;
+										if(ep.getModel().equals(aisMessageTime)) {
+											ep.refreshVisuals();
+										}
+									}
+								}
+							} else {
+								shipIdentifications.put(positionReport.getUserID(), new AISMessageTime(positionReport, time));
+							}
 							refreshChildren();
 						}
 					

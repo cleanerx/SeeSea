@@ -48,6 +48,14 @@ public class AISMessageTime {
 		return position;
 	}
 
+	public void setPosition(AISMessage position) {
+		this.position = position;
+	}
+
+	public void setUtcTime(long utcTime) {
+		this.utcTime = utcTime;
+	}
+
 	public long getUtcTime() {
 		return utcTime;
 	}
