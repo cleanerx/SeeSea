@@ -114,7 +114,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 			processingThread = Thread.currentThread();
 			Object[] services = streamTracker.getServices();
 			if(services != null) {
-				while(retryCount < 100) {
+//				while(retryCount < 100) {
 					IStreamProcessor streamProcessor = StreamProcessorDetection.detectStreamProcessor(pushbackInputStream, services, true);
 					String streamProviderName = streamProvider.getName();
 					if(streamProcessor == null) {
@@ -144,10 +144,10 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 						} else {
 							feedbackMessageConsumer.processingStopped();
 						}
-					} catch (SocketTimeoutException e) {
-						streamProvider.close();
-						pushbackInputStream = streamProvider.getInputStream();
-						retryCount++;
+//					} catch (SocketTimeoutException e) {
+//						streamProvider.close();
+//						pushbackInputStream = streamProvider.getInputStream();
+//						retryCount++;
 					} catch (Exception e) {
 						// exception during processing
 						if(!processingThread.interrupted()) {
@@ -167,10 +167,10 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 						} catch (IOException e2) {
 							Logger.getLogger(getClass()).error("Failed to close reader", e2); //$NON-NLS-1$
 						}
-						retryCount = 100;
+//						retryCount = 100;
 					}
 				}
-			}
+//			}
 		} catch (SocketTimeoutException e) {
 			feedbackMessageConsumer.timeout();
 			Logger.getLogger(getClass()).error("Fail", e); //$NON-NLS-1$
