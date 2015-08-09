@@ -42,8 +42,6 @@ public interface IDataUpload {
 	
 	IStatus logout(String username);
 	
-	IStatus upload(List<File> track, IProgressMonitor monitor);
-
 	IStatus upload(Long licenseID, Long vesselConfigurationID,
 			List<File> track, IProgressMonitor monitor);
 
