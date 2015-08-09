@@ -33,4 +33,9 @@ public interface IOceanTideProvider {
 
 	double getTideHeight(TideLevel level, LengthUnit unit, double lat, double lon, Date date);
 	
+	static final String LATDISTANCECACHED =  "latdistance";
+
+	static final String LONDISTANCECACHED =  "londistance";
+
+	static final String TIMEDISTANCECACHED =  "timedistance";
 }
