@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-apache-connector-2.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/mimepull-1.9.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jersey-media-multipart-2.18.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/javax.json-1.0.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.persistence.asm-2.6.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.eclipse.persistence.moxy-2.6.0.jar"/>
