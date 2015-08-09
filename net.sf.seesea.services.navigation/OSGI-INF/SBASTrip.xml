@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" name="net.sf.seesea.services.navigation.sbastrip">
+   <implementation class="net.sf.seesea.services.navigation.SBASTripListener"/>
+   <reference bind="bindModel" cardinality="1..1" interface="net.sf.seesea.model.util.IModel" name="IModel" policy="dynamic" unbind="unbindModel"/>
+   <reference bind="attachTripLogListener" cardinality="0..n" interface="net.sf.seesea.services.navigation.listener.ITripLogListener" name="ITripLogListener" policy="dynamic" unbind="detachTripLogListener"/>
+</scr:component>
