@@ -111,10 +111,11 @@ public class IPNMEAProvider implements INMEAConnector {
 		int port = selectHostPage.getPort();
 		int timeout = selectHostPage.getTimeout();
 		inputStreamProvider = new TCPIPInputStreamProvider(host, port, timeout);
+		ExecutorService es = null;
 		try {
 			reader = new ThreadedSerialInputReader(inputStreamProvider, new DefaultFeedbackMessageConsumer());
 			FutureTask<Void> futureTask = new FutureTask<Void>(reader);
-			ExecutorService es = Executors.newSingleThreadExecutor ();
+			es = Executors.newSingleThreadExecutor ();
 			es.submit (futureTask);
 		} catch (Exception e) {
 			if(reader != null) {
@@ -133,6 +134,10 @@ public class IPNMEAProvider implements INMEAConnector {
 			}
 			MessageDialog.openError(Display.getDefault().getActiveShell(), "", "" + e.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			Logger.getLogger(getClass()).error("Failed to connect to device", e); //$NON-NLS-1$
+			if (es != null) {
+				es.shutdownNow();
+			}
+			return false;
 		}
 		return true;
 	}

@@ -76,14 +76,15 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		
 		Label lblHost = new Label(container, SWT.NONE);
 		FormData fd_lblHost = new FormData();
+		fd_lblHost.top = new FormAttachment(0, 13);
 		fd_lblHost.left = new FormAttachment(0, 10);
 		lblHost.setLayoutData(fd_lblHost);
 		lblHost.setText(Messages.getString("SelectHostPage.host")); //$NON-NLS-1$
 		
 		text = new Text(container, SWT.BORDER);
-		fd_lblHost.top = new FormAttachment(text, 3, SWT.TOP);
+		fd_lblHost.right = new FormAttachment(text, -6);
 		FormData fd_text = new FormData();
-		fd_text.left = new FormAttachment(100, -476);
+		fd_text.left = new FormAttachment(100, -437);
 		fd_text.top = new FormAttachment(0, 10);
 		fd_text.right = new FormAttachment(100, -10);
 		text.setLayoutData(fd_text);
@@ -104,15 +105,17 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		
 		Label lblPort = new Label(container, SWT.NONE);
 		FormData fd_lblPort = new FormData();
-		fd_lblPort.left = new FormAttachment(lblHost, 0, SWT.LEFT);
+		fd_lblPort.top = new FormAttachment(lblHost, 12);
+		fd_lblPort.left = new FormAttachment(0, 10);
 		lblPort.setLayoutData(fd_lblPort);
 		lblPort.setText(Messages.getString("SelectHostPage.port")); //$NON-NLS-1$
 		
 		text_1 = new Text(container, SWT.BORDER);
-		fd_lblPort.top = new FormAttachment(text_1, 3, SWT.TOP);
+		fd_lblPort.right = new FormAttachment(text_1, -6);
 		FormData fd_text_1 = new FormData();
-		fd_text_1.top = new FormAttachment(text, 6);
+		fd_text_1.right = new FormAttachment(text, 76);
 		fd_text_1.left = new FormAttachment(text, 0, SWT.LEFT);
+		fd_text_1.top = new FormAttachment(text, 6);
 		text_1.setLayoutData(fd_text_1);
 		
 		Label lblTimeout = new Label(container, SWT.NONE);
@@ -123,6 +126,7 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		lblTimeout.setText(Messages.getString("SelectHostPage.lblTimeout.text")); //$NON-NLS-1$
 		
 		text_2 = new Text(container, SWT.BORDER);
+		fd_lblTimeout.right = new FormAttachment(text_2, -6);
 		try {
 			int lasttimeout = settings.getInt("timeout"); //$NON-NLS-1$
 			if(timeout != 0) {
@@ -144,8 +148,9 @@ public class SelectHostPage extends WizardPage implements IValidatingPage {
 		});
 		
 		FormData fd_text_2 = new FormData();
-		fd_text_2.top = new FormAttachment(text_1, 6);
+		fd_text_2.right = new FormAttachment(text, 76);
 		fd_text_2.left = new FormAttachment(text, 0, SWT.LEFT);
+		fd_text_2.top = new FormAttachment(text_1, 6);
 		text_2.setLayoutData(fd_text_2);
 		try {
 			int lastPort = settings.getInt("lastPort"); //$NON-NLS-1$
