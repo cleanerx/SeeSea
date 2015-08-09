@@ -28,6 +28,8 @@ package net.sf.seesea.rendering.chart.editpart;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
@@ -38,6 +40,10 @@ import net.sf.seesea.rendering.chart.figures.TrackDataFigure;
 import net.sf.seesea.rendering.chart.policies.RouteEditPolicy;
 import net.sf.seesea.services.navigation.listener.IDepthListener;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.gef.ConnectionEditPart;
@@ -74,25 +80,45 @@ public class TrackEditPart extends TransactionalEditPart implements ConnectionEd
 		double totalDistance= 0.0;
 		Track track = (Track) getModel();
 
-		for (int i = 1; i < track.getMeasuredPosition().size() ; i++) {
-			Double distance = GeoUtil.getDistance(track.getMeasuredPosition().get(i -1).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i -1).getLongitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLongitude().getDecimalDegree());
-			totalDistance+= distance;
-		}
-		label.setText(label.getText()  + format.format(totalDistance) + "nm/\n");
+//		for (int i = 1; i < track.getMeasuredPosition().size() ; i++) {
+//			Double distance = GeoUtil.getDistance(track.getMeasuredPosition().get(i -1).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i -1).getLongitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLongitude().getDecimalDegree());
+//			totalDistance+= distance;
+//		}
+//		label.setText(label.getText()  + format.format(totalDistance) + "nm/\n");
 		
 	}
 	
 	@Override
 	public void activate() {
 		super.activate();
-		trackPointListener = new TrackPointListener(this);
-		Track track = (Track)getModel();
-		for (MeasuredPosition3D measuredPosition3D : track.getMeasuredPosition()) {
-			trackPointListener.addPositionToFigure(measuredPosition3D);
-		}
-		track.eAdapters().add(trackPointListener);
-		DepthListener positionListener = new DepthListener();
-		serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
+
+		Label label = ((Label)getFigure().getToolTip());
+		NumberFormat format = new DecimalFormat("0.#");
+		
+		double totalDistance= 0.0;
+
+//		for (int i = 1; i < track.getMeasuredPosition().size() ; i++) {
+//			Double distance = GeoUtil.getDistance(track.getMeasuredPosition().get(i -1).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLatitude().getDecimalDegree(), track.getMeasuredPosition().get(i -1).getLongitude().getDecimalDegree(), track.getMeasuredPosition().get(i).getLongitude().getDecimalDegree());
+//			totalDistance+= distance;
+//		}
+//		label.setText(format.format(totalDistance) + "nm/\n");
+		Job job = new Job("Rendering recorded tracks") {
+			
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				trackPointListener = new TrackPointListener(TrackEditPart.this);
+				Track track = (Track)getModel();
+				track.eAdapters().add(trackPointListener);
+				List<MeasuredPosition3D> list = new ArrayList<MeasuredPosition3D>(track.getMeasuredPosition());
+				trackPointListener.init(list);
+
+				DepthListener positionListener = new DepthListener();
+				serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.DECORATE);
+		job.schedule();
 	}
 	
 	@Override
