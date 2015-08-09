@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.services.navigation.totaltrip">
-   <implementation class="net.sf.seesea.services.navigation.VirtualTotalTrip"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.services.navigation.trip">
+   <implementation class="net.sf.seesea.services.navigation.VirtualTrip"/>
    <reference bind="bindModel" cardinality="1..1" interface="net.sf.seesea.model.util.IModel" name="IModel" policy="dynamic" unbind="unbindModel"/>
    <service>
       <provide interface="net.sf.seesea.services.navigation.listener.IPositionListener"/>
