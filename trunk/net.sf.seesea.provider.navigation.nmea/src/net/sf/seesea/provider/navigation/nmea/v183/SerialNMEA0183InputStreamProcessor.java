@@ -100,7 +100,7 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 				stringBuffer.append((char) i);
 				String line = stringBuffer.toString();
 				try {
-					if(line.startsWith("!") && line.endsWith("\r\n")) { //$NON-NLS-1$ //$NON-NLS-2$
+					if(line.startsWith("!") && line.endsWith("\n")) { //$NON-NLS-1$ //$NON-NLS-2$
 						RawDataEvent nmeaEvent = new RawDataEvent(stringBuffer.toString(), streamProvider);
 						for(RawDataEventListener aisEventListener : aisEventListeners) {
 							aisEventListener.receiveRawDataEvent(nmeaEvent);
@@ -118,6 +118,7 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 				stringBuffer = null;
 				charcounter = 0;
 			}
+			stringBuffer = new StringBuffer();
 			break;
 		case '$':
 		case '!':
