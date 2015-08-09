@@ -55,6 +55,7 @@ public class DepthFigureListener extends InvalidatingFigureListener<Depth> imple
 			
 			@Override
 			public void run() {
+				graphFigure.setVisible(true);
 				graphFigure.addValue(sensorData.getDepth());
 				graphFigure.repaint();
 			}

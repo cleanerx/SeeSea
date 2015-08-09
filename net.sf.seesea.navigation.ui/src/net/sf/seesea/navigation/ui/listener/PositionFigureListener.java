@@ -59,30 +59,31 @@ public class PositionFigureListener extends InvalidatingFigureListener<MeasuredP
 		if(isSensorUpdateFast()) {
 			return;
 		}
+		StringBuffer coordinateLat =  new StringBuffer();
+		GeoPositionFormatter.formatCoordinateMinutesWithSphere(coordinateLat, sensorData.getLatitude());
+		_doubleLinedInstrumentFigure.setUpperLine(coordinateLat.toString());
+		
+		StringBuffer coordinateLon =  new StringBuffer();
+		GeoPositionFormatter.formatCoordinateMinutesWithSphere(coordinateLon, sensorData.getLongitude());
+		_doubleLinedInstrumentFigure.setLowerLine(coordinateLon.toString());
+		if(sensorData instanceof GNSSMeasuredPosition) {
+			GNSSMeasuredPosition gnssMeasuredPosition  = (GNSSMeasuredPosition) sensorData;
+			StringBuffer buffer = new StringBuffer();
+			for (Iterator<String> iterator = gnssMeasuredPosition.getAugmentation().iterator(); iterator
+					.hasNext();) {
+				buffer.append(iterator.next());
+				if(iterator.hasNext()) {
+					buffer.append(" - "); //$NON-NLS-1$
+				}
+			}
+			_doubleLinedInstrumentFigure.setSateliteAugmentation(buffer.toString());
+		}
+
 		
 		Display.getDefault().asyncExec(new Runnable() {
 			
 			@Override
 			public void run() {
-				StringBuffer coordinateLat =  new StringBuffer();
-				GeoPositionFormatter.formatCoordinateMinutesWithSphere(coordinateLat, sensorData.getLatitude());
-				_doubleLinedInstrumentFigure.setUpperLine(coordinateLat.toString());
-				
-				StringBuffer coordinateLon =  new StringBuffer();
-				GeoPositionFormatter.formatCoordinateMinutesWithSphere(coordinateLon, sensorData.getLongitude());
-				_doubleLinedInstrumentFigure.setLowerLine(coordinateLon.toString());
-				if(sensorData instanceof GNSSMeasuredPosition) {
-					GNSSMeasuredPosition gnssMeasuredPosition  = (GNSSMeasuredPosition) sensorData;
-					StringBuffer buffer = new StringBuffer();
-					for (Iterator<String> iterator = gnssMeasuredPosition.getAugmentation().iterator(); iterator
-							.hasNext();) {
-						buffer.append(iterator.next());
-						if(iterator.hasNext()) {
-							buffer.append(" - "); //$NON-NLS-1$
-						}
-					}
-					_doubleLinedInstrumentFigure.setSateliteAugmentation(buffer.toString());
-				}
 				
 				_doubleLinedInstrumentFigure.repaint();
 			}

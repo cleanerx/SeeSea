@@ -85,6 +85,8 @@ public class RelativeSpeedListener extends InvalidatingFigureListener<RelativeSp
 						} else if(SpeedUnit.M.equals(sensorData.getValue().getSpeedUnit())) {
 							speedUnit = "m/h"; //$NON-NLS-1$
 						} 
+						speedOverGround.setVisible(true);
+						speedOverGround.getParent().setVisible(true);
 						speedOverGround.setValue(speedDecimalFormat.format(sensorData.getValue().getSpeed()) + speedUnit);
 						speedOverGround.repaint();
 					}

@@ -65,6 +65,9 @@ public class WindSpeedFigureListener extends InvalidatingFigureListener<WindMeas
 			
 			@Override
 			public void run() {
+				windSpeed.setVisible(true);
+				windDirection.setVisible(true);
+				windSpeed.getParent().setVisible(true);
 				windSpeed.setValue(speedFormat.format(sensorData.getSpeed()) + "kn");
 				windSpeed.repaint();
 				windDirection.setValue(directionFormat.format(sensorData.getAngle()) + "\u00B0");

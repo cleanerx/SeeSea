@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" deactivate="deactivate" name="net.sf.seesea.navigation.ui.preflistener">
+   <implementation class="net.sf.seesea.navigation.ui.preferences.GeneralPreferenceChangedListener"/>
+   <reference bind="bindModel" cardinality="1..1" interface="net.sf.seesea.model.util.IModel" name="IModel" policy="dynamic" unbind="unbindModel"/>
+   <reference bind="bindAdmin" cardinality="1..1" interface="org.osgi.service.cm.ConfigurationAdmin" name="ConfigurationAdmin" policy="dynamic" unbind="unbindAdmin"/>
+</scr:component>

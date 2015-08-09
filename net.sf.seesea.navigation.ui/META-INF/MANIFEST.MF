@@ -10,6 +10,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  net.sf.seesea.services.navigation,
  net.sf.seesea.model.core,
- net.sf.seesea.lib
+ net.sf.seesea.lib,
+ net.sf.seesea.waterlevel;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Service-Component: OSGI-INF/TideListener.xml, OSGI-INF/GeneralPreferencesListener.xml
+Import-Package: org.eclipse.equinox.internal.ds.impl,
+ org.osgi.service.cm;version="1.3.0"

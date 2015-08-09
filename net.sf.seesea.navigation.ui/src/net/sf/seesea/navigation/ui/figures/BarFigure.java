@@ -78,6 +78,8 @@ public class BarFigure extends Figure implements IInvalidatableFigure {
 		int startx = copy.x + legendOffset;
 		g.drawText(Messages.getString("BarFigure.signalStrength"), new Point(copy.x, copy.y)); //$NON-NLS-1$
 
+		if(description2heights.size() > 0) {
+			
 		int offset = copy.width / description2heights.size();
 		for (Entry<Integer, Double> entry : description2heights.entrySet()) {
 			int heightY = (int) ((copy.height) * Math.ceil(entry.getValue())) / 100;
@@ -95,7 +97,7 @@ public class BarFigure extends Figure implements IInvalidatableFigure {
 			x+=offset;
 		}
 		g.drawLine(0, copy.y + copy.height - 21, copy.width + 10, copy.y + copy.height - 21);
-		
+		}
 		if(!validData) {
 			g.setForegroundColor(ColorConstants.red);
 			g.drawLine(copy.x, copy.y, copy.x + copy.width, copy.y + copy.height);
