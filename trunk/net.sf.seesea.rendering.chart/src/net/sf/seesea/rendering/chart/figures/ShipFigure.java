@@ -54,8 +54,9 @@ public class ShipFigure extends Figure {
 
 	public ShipFigure() {
 		cogOrientation = 0.0;
-//		Label label = new Label();
-//		label.setText("X");
+		Label label = new Label();
+		setToolTip(label);
+//		label.setText("X");--
 //		label.setPreferredSize(20, 20);
 //		RelativeLocator locator = new RelativeLocator(this, 0.5, 0.7);
 //		add(label);
@@ -66,7 +67,7 @@ public class ShipFigure extends Figure {
 	@Override
 	protected void paintFigure(Graphics graphics) {
 		graphics.setForegroundColor(ColorConstants.black);
-		graphics.setBackgroundColor(ColorConstants.black);
+		graphics.setBackgroundColor(ColorConstants.darkGray);
 		graphics.setAntialias(SWT.ON);
 		setOpaque(false);
 		
