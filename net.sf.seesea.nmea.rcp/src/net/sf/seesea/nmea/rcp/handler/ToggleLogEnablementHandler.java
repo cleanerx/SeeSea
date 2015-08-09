@@ -69,7 +69,8 @@ public class ToggleLogEnablementHandler extends AbstractHandler {
 						null);
 				if (returnedObject.equals(Window.CANCEL)) {
 					// revoke pressed state
-					HandlerUtil.toggleCommandState(command);
+//					HandlerUtil.toggleCommandState(command);
+					return null;
 				}
 			} catch (NotDefinedException e) {
 				state.setValue(false);
