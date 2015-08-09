@@ -126,7 +126,7 @@ public class ModelHandler implements IModel {
 			
 			// Get the URI of the model file.
 			File chartConfig = new File(System.getProperty("user.home") + File.separator + "NMEALogging" + File.separator + VIEW_CONFIG_CHT);
-			if(!chartConfig.exists()) {
+			if(!chartConfig.exists() || chartConfig.length() == 0) {
 			    world = createDefaultModel();
 			} else {
 				GeoPackage.eINSTANCE.eClass();
