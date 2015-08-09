@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="net.sf.seesea.upload.osm">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" configuration-policy="require" immediate="true" modified="modified" activate="activate" deactivate="deactivate" name="net.sf.seesea.upload.osm.upload">
    <implementation class="net.sf.seesea.upload.osm.api.v2.OSMUploadAPI2"/>
    <service>
       <provide interface="net.sf.seesea.upload.IDataUpload"/>

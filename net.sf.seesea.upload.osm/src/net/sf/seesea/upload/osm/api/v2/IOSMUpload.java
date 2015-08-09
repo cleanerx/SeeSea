@@ -14,4 +14,7 @@ public interface IOSMUpload extends IDataUpload {
 
 	boolean isLoggedIn();
 
+//	static final String HOSTNAME = "hostname";
+	static final String URL = "url";
+	
 }

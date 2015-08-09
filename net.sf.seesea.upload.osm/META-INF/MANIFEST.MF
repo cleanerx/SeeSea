@@ -11,28 +11,13 @@ Require-Bundle: org.eclipse.ui,
  org.apache.commons.collections,
  org.apache.commons.httpclient,
  net.sf.seesea.lib;bundle-version="1.0.0",
- net.sf.seesea.upload;bundle-version="1.0.0"
+ net.sf.seesea.upload;bundle-version="1.0.0",
+ org.apache.httpcomponents.httpclient;bundle-version="4.3.6",
+ org.apache.httpcomponents.httpcore;bundle-version="4.3.3",
+ net.java.jersey;bundle-version="2.18.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: net.sf.seesea.upload.osm.api.v1,
- net.sf.seesea.upload.osm.api.v2,
+Export-Package: net.sf.seesea.upload.osm.api.v2,
  net.sf.seesea.upload.osm.api.v2.messages
-Bundle-ClassPath: .,
- lib/eclipselink.jar,
- lib/guava-14.0.1.jar,
- lib/hk2-api-2.1.88.jar,
- lib/cglib-2.1.88.jar,
- lib/hk2-locator-2.1.88.jar,
- lib/hk2-utils-2.1.88.jar,
- lib/javax.annotation-api-1.2.jar,
- lib/javax.inject-2.1.88.jar,
- lib/javax.ws.rs-api-2.0.jar,
- lib/jersey-client.jar,
- lib/jersey-common.jar,
- lib/jersey-media-multipart-2.2.jar,
- lib/jersey-server.jar,
- lib/mimepull-1.6.jar,
- lib/commons-beanutils-1.8.3.jar,
- lib/json-lib-2.4-jdk15.jar,
- lib/ezmorph-1.0.6.jar
+Bundle-ClassPath: .
 Service-Component: OSGI-INF/OSMUploadAPI2.xml
