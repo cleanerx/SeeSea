@@ -90,7 +90,6 @@ public class TrackDataFigure extends PolylineConnection {
 				averageAngle = averageAngle / (subList.size() - 1);
 				
 				double angle = getAngle(point, _relativePoints.get(_relativePoints.size() - 1));
-				System.out.println(averageAngle + ":" + angle);
 				if(Math.abs(averageAngle - angle) > 2  || averageAngle.isNaN()) {
 					_relativePoints.add(point);
 				} else {
