@@ -27,6 +27,7 @@
 package net.sf.seesea.nmea.rcp.application;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Hashtable;
@@ -44,7 +45,10 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
@@ -129,15 +133,29 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	
 	@Override
 	public boolean preShutdown() {
-		BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext(); 
-		ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
-		IModel model = bundleContext.getService(serviceReference);
+		ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(getWorkbenchConfigurer().getWorkbench().getActiveWorkbenchWindow().getShell());
 		try {
-			model.saveModel();
-		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("failed to save model", e);
+			progressMonitorDialog.run(false, false, new IRunnableWithProgress() {
+				
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Saving tracks", IProgressMonitor.UNKNOWN);
+					BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext(); 
+					ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
+					IModel model = bundleContext.getService(serviceReference);
+					try {
+						model.saveModel();
+					} catch (IOException e) {
+						Logger.getLogger(getClass()).error("failed to save model", e);
+					}
+					bundleContext.ungetService(serviceReference);
+				}
+			});
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		bundleContext.ungetService(serviceReference);
 		return super.preShutdown();
 	}
 	

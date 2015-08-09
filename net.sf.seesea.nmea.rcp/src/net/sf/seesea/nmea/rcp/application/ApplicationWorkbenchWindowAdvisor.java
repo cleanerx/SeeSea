@@ -26,7 +26,9 @@
  */
 package net.sf.seesea.nmea.rcp.application;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.concurrent.atomic.AtomicReference;
 
 import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.model.util.IModel;
@@ -35,8 +37,12 @@ import net.sf.seesea.nmea.rcp.NMEARCPActivator;
 import net.sf.seesea.rendering.chart.editor.MapEditorInput;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PartInitException;
@@ -70,35 +76,58 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setTitle(MessageFormat.format(Messages.getString("ApplicationWorkbenchWindowAdvisor.title"), VERSION) ); //$NON-NLS-1$
         configurer.setShowMenuBar(false);
         configurer.setShowCoolBar(true);
-        configurer.setShowStatusLine(false);
+        configurer.setShowStatusLine(true);
         configurer.setShowPerspectiveBar(true);
-        configurer.setShowProgressIndicator(false);
+        configurer.setShowProgressIndicator(true);
         configurer.setShellStyle(SWT.SHELL_TRIM);
     }
     
     @Override
     public void postWindowOpen() {
-	    BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
-	    ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
-	    IModel model = bundleContext.getService(serviceReference);
-	    World world = model.loadModel();
-	    bundleContext.ungetService(serviceReference);
-	    MapEditorInput mapEditorInput = new MapEditorInput(world, true, true);
-	    IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
-	    boolean editorPresent = false;
-	    for (IEditorReference editorReference : editorReferences) {
-			if(editorReference.getId().equals("net.sf.seesea.ui.editor.map")) { //$NON-NLS-1$
-				editorPresent = true;
-				break;
-			}
+    	final BundleContext bundleContext = NMEARCPActivator.getDefault().getBundle().getBundleContext();
+    	ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(getWindowConfigurer().getWindow().getShell());
+    	final AtomicReference<World> atomicReference = new AtomicReference<World>();
+    	try {
+			progressMonitorDialog.run(true, false, new IRunnableWithProgress() {
+				
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Loading recorded tracks", IProgressMonitor.UNKNOWN);
+				    ServiceReference<IModel> serviceReference = bundleContext.getServiceReference(IModel.class);
+				    IModel model = bundleContext.getService(serviceReference);
+				    World world = model.loadModel();
+				    atomicReference.set(world);
+				    bundleContext.ungetService(serviceReference);
+				    Display.getDefault().asyncExec(new Runnable() {
+						
+						@Override
+						public void run() {
+						    MapEditorInput mapEditorInput = new MapEditorInput(atomicReference.get(), true, true);
+						    IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
+						    boolean editorPresent = false;
+						    for (IEditorReference editorReference : editorReferences) {
+								if(editorReference.getId().equals("net.sf.seesea.ui.editor.map")) { //$NON-NLS-1$
+									editorPresent = true;
+									break;
+								}
+							}
+						    if(!editorPresent) {
+						    	try {
+						    		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(mapEditorInput, "net.sf.seesea.ui.editor.map", true); //$NON-NLS-1$
+						    	} catch (PartInitException e) {
+						    		Logger.getRootLogger().error("Failed to open editor", e); //$NON-NLS-1$
+						    	}
+						    }
+							
+						}
+					});
+				}
+			});
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-	    if(!editorPresent) {
-	    	try {
-	    		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(mapEditorInput, "net.sf.seesea.ui.editor.map", true); //$NON-NLS-1$
-	    	} catch (PartInitException e) {
-	    		Logger.getRootLogger().error("Failed to open editor", e); //$NON-NLS-1$
-	    	}
-	    }
     }
     
     @Override
