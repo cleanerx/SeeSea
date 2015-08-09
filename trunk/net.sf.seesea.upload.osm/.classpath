@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/cglib-2.1.88.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/eclipselink.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/guava-14.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/hk2-api-2.1.88.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/hk2-locator-2.1.88.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/hk2-utils-2.1.88.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javax.annotation-api-1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javax.inject-2.1.88.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javax.ws.rs-api-2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jersey-client.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jersey-common.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jersey-media-multipart-2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jersey-server.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/mimepull-1.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.8.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ezmorph-1.0.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
