@@ -3,6 +3,7 @@ package net.sf.seesea.navigation.ui.listener;
 import java.text.DecimalFormat;
 
 import net.sf.seesea.model.core.physx.Distance;
+import net.sf.seesea.model.core.physx.DistanceType;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.DoubleRowedDescriptiveInstrumentFigure;
 import net.sf.seesea.services.navigation.listener.ITotalLogListener;
@@ -14,11 +15,13 @@ public class LogFigureListener extends InvalidatingFigureListener<Distance> impl
 
 	private final DoubleRowedDescriptiveInstrumentFigure figure;
 	private DecimalFormat logDecimalFormat;
+	private final DistanceType type;
 
 	
-	public LogFigureListener(DoubleRowedDescriptiveInstrumentFigure figure) {
+	public LogFigureListener(DoubleRowedDescriptiveInstrumentFigure figure, DistanceType type) {
 		super(figure);
 		this.figure = figure;
+		this.type = type;
 		logDecimalFormat = new DecimalFormat("##0.0"); //$NON-NLS-1$
 	}
 	
@@ -31,13 +34,15 @@ public class LogFigureListener extends InvalidatingFigureListener<Distance> impl
 			
 			@Override
 			public void run() {
-				String nm = logDecimalFormat.format(sensorData.getValue()) + Messages.getString("LogFigureListener.nauticalMile");
-				if(sensorData.getSensorID().equals("GPS")) {
-					figure.setValue1(nm); //$NON-NLS-1$
-				} else {
-					figure.setValue2(nm); //$NON-NLS-1$
+				if(type.equals(sensorData.getDistanceType())) {
+					String nm = logDecimalFormat.format(sensorData.getValue()) + Messages.getString("LogFigureListener.nauticalMile");
+					if(sensorData.getSensorID().equals("GPS")) {
+						figure.setValue1(nm); //$NON-NLS-1$
+					} else {
+						figure.setValue2(nm); //$NON-NLS-1$
+					}
+					figure.repaint();
 				}
-				figure.repaint();
 			}
 		});
 	}

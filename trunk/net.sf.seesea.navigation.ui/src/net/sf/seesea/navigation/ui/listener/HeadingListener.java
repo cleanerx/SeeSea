@@ -74,6 +74,8 @@ public class HeadingListener extends InvalidatingFigureListener<Heading> impleme
 				if(headingType.equals(sensorData.getHeadingType())) {
 					Double mgkValue = sensorData.getDegrees();
 					if(heading != null && mgkValue != null) {
+						heading.setVisible(true);
+						heading.getParent().setVisible(true);
 						heading.setValue(degreeDecimalFormat.format(mgkValue) + "\u00B0"); //$NON-NLS-1$
 						heading.repaint();
 					}

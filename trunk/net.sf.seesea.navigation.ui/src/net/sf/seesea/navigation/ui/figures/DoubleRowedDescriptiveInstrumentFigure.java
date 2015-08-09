@@ -42,7 +42,11 @@ import org.eclipse.swt.widgets.Display;
 public class DoubleRowedDescriptiveInstrumentFigure extends FontFigure implements IInvalidatableFigure {
 
 	private String description;
-	
+
+	private String valueDescription1;
+
+	private String valueDescription2;
+
 	private String value1;
 
 	private String value2;
@@ -93,6 +97,16 @@ public class DoubleRowedDescriptiveInstrumentFigure extends FontFigure implement
 		g.drawText(value1, copy.x , copy.y + textDimensionLatitude.height);
 		font2.dispose();
 
+		Font font3 = new Font(Display.getDefault(),"Times", 6, SWT.NONE);  //$NON-NLS-1$
+		g.setFont(font3);
+		Dimension extents = FigureUtilities.getTextExtents(valueDescription2, font3);
+		g.drawText(valueDescription2, copy.x +  copy.width - 2 - extents.width , copy.y + copy.height / 2 - extents.height + 0);
+		
+		extents = FigureUtilities.getTextExtents(valueDescription1, font3);
+		g.drawText(valueDescription1, copy.x , copy.y + copy.height / 2 - extents.height + 0);
+
+		font3.dispose();
+		
 		if(!validData) {
 			g.setForegroundColor(ColorConstants.red);
 			g.drawLine(copy.x, copy.y, copy.x + copy.width, copy.y + copy.height);
@@ -151,5 +165,23 @@ public class DoubleRowedDescriptiveInstrumentFigure extends FontFigure implement
 	public void setValidData(boolean validData) {
 		this.validData = validData;
 	}
+
+	public String getValueDescription1() {
+		return valueDescription1;
+	}
+
+	public void setValueDescription1(String valueDescription1) {
+		this.valueDescription1 = valueDescription1;
+	}
+
+	public String getValueDescription2() {
+		return valueDescription2;
+	}
+
+	public void setValueDescription2(String valueDescription2) {
+		this.valueDescription2 = valueDescription2;
+	}
+	
+	
 
 }

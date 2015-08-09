@@ -11,5 +11,19 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="net.sf.seesea.navigation.ui.preferences.GeneralPreferencePage"
+            id="net.sf.seesea.navigation.ui.settings"
+            name="General">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="net.sf.seesea.navigation.ui.preferences.GeneralPreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

@@ -32,13 +32,13 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.model.core.physx.DistanceType;
 import net.sf.seesea.model.core.physx.HeadingType;
 import net.sf.seesea.model.core.physx.SpeedType;
 import net.sf.seesea.navigation.ui.NavigationUIActivator;
 import net.sf.seesea.navigation.ui.figures.BarFigure;
 import net.sf.seesea.navigation.ui.figures.ChildFigure;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
-import net.sf.seesea.navigation.ui.figures.DoubleLinedInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.DoubleRowedDescriptiveInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.GraphFigure;
 import net.sf.seesea.navigation.ui.figures.InstrumentContainerFigure;
@@ -46,6 +46,7 @@ import net.sf.seesea.navigation.ui.figures.SingleLinedFigure;
 import net.sf.seesea.navigation.ui.figures.TextDoubleLinedInstrumentFigure;
 import net.sf.seesea.navigation.ui.listener.DepthFigureListener;
 import net.sf.seesea.navigation.ui.listener.HeadingListener;
+import net.sf.seesea.navigation.ui.listener.ITideListener;
 import net.sf.seesea.navigation.ui.listener.InvalidatingFigureListener;
 import net.sf.seesea.navigation.ui.listener.LogFigureListener;
 import net.sf.seesea.navigation.ui.listener.PositionFigureListener;
@@ -71,12 +72,14 @@ import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.ScrollPane;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * 
@@ -98,6 +101,7 @@ public class SensorDataView extends ViewPart {
 	private ServiceRegistration<?> mgkRegistration;
 	private ServiceRegistration<?> fdwSpeedListenerRegistration;
 	private ServiceRegistration<?> temperatureRegistration;
+	private ServiceTracker<ITideListener, ITideListener> tideServiceTracker;
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -139,21 +143,25 @@ public class SensorDataView extends ViewPart {
 		cog.setDescription(Messages.getString("SensorDataView.4")); //$NON-NLS-1$
 		cog.setValue("---\u00B0"); //$NON-NLS-1$
 		cog.setFontSize(fontSize);
+		cog.setVisible(false);
 
 		DescriptiveInstrumentFigure sog = new DescriptiveInstrumentFigure();
 		sog.setDescription(Messages.getString("SensorDataView.6")); //$NON-NLS-1$
 		sog.setValue("-.- kn"); //$NON-NLS-1$
 		sog.setFontSize(fontSize);
+		sog.setVisible(false);
 
 		DescriptiveInstrumentFigure mgk = new DescriptiveInstrumentFigure();
 		mgk.setDescription(Messages.getString("SensorDataView.8")); //$NON-NLS-1$
 		mgk.setValue("---\u00B0"); //$NON-NLS-1$
 		mgk.setFontSize(fontSize);
+		mgk.setVisible(false);
 
 		DescriptiveInstrumentFigure fdw = new DescriptiveInstrumentFigure();
 		fdw.setDescription(Messages.getString("SensorDataView.10")); //$NON-NLS-1$
 		fdw.setValue("-.- kn"); //$NON-NLS-1$
 		fdw.setFontSize(fontSize);
+		fdw.setVisible(false);
 
 //		DoubleLinedInstrumentFigure windFigure = new DoubleLinedInstrumentFigure();
 //		positionInstrumentFigure.setUpperLine("---\u00B0"); //$NON-NLS-1$
@@ -164,16 +172,24 @@ public class SensorDataView extends ViewPart {
 		windSpeed.setDescription("Wind SPD"); //$NON-NLS-1$
 		windSpeed.setValue("-.- kn"); //$NON-NLS-1$
 		windSpeed.setFontSize(fontSize);
+		windSpeed.setVisible(false);
 
 		DescriptiveInstrumentFigure windDirection = new DescriptiveInstrumentFigure();
 		windDirection.setDescription("Wind DIR"); //$NON-NLS-1$
 		windDirection.setValue("---\u00B0"); //$NON-NLS-1$
 		windDirection.setFontSize(fontSize);
+		windDirection.setVisible(false);
 
+		final DescriptiveInstrumentFigure latoffset = new DescriptiveInstrumentFigure();
+		latoffset.setDescription(Messages.getString("SensorDataView.tideOffset"));  //$NON-NLS-1$
+		latoffset.setFontSize(fontSize);
+		latoffset.setVisible(false);
+		
 		GraphFigure graphFigure = new GraphFigure(resourceManager);
 		graphFigure.setFontSize(fontSize);
 		graphFigure.setDescription(Messages.getString("SensorDataView.depthDescription")); //$NON-NLS-1$
-
+		graphFigure.setVisible(false);
+		
 		BarFigure barFigure = new BarFigure(resourceManager);
 		barFigure.setFontSize(fontSize);
 
@@ -181,17 +197,22 @@ public class SensorDataView extends ViewPart {
 		tripFigure.setDescription(Messages.getString("SensorDataView.0")); //$NON-NLS-1$
 		tripFigure.setValue1("---.- nm"); //$NON-NLS-1$
 		tripFigure.setValue2("---.- nm"); //$NON-NLS-1$
+		tripFigure.setValueDescription1(Messages.getString("SensorDataView.GPS")); //$NON-NLS-1$
+		tripFigure.setValueDescription2(Messages.getString("SensorDataView.LOG")); //$NON-NLS-1$
 		tripFigure.setFontSize(fontSize);
 
 		DoubleRowedDescriptiveInstrumentFigure totalTripFigure = new DoubleRowedDescriptiveInstrumentFigure();
 		totalTripFigure.setDescription(Messages.getString("SensorDataView.2")); //$NON-NLS-1$
 		totalTripFigure.setValue2("---.- nm"); //$NON-NLS-1$
+		totalTripFigure.setValueDescription1(Messages.getString("SensorDataView.GPS")); //$NON-NLS-1$
+		totalTripFigure.setValueDescription2(Messages.getString("SensorDataView.LOG")); //$NON-NLS-1$
 		totalTripFigure.setFontSize(fontSize);
 
 		DescriptiveInstrumentFigure waterTemperatureFigure = new DescriptiveInstrumentFigure();
-		waterTemperatureFigure.setDescription("Water Temp"); 
+		waterTemperatureFigure.setDescription(Messages.getString("SensorDataView.WaterTemperature"));  //$NON-NLS-1$
 		waterTemperatureFigure.setValue("---.- \u00B0"); //$NON-NLS-1$
 		waterTemperatureFigure.setFontSize(fontSize);
+		waterTemperatureFigure.setVisible(false);
 
 //		CompassFigure compassFigure = new CompassFigure();
 		
@@ -204,6 +225,7 @@ public class SensorDataView extends ViewPart {
 		ChildFigure childFigure = new ChildFigure();
 		childFigure.add(cog);
 		childFigure.add(sog);
+		childFigure.setVisible(false);
 		childArea.add(childFigure);
 		GridLayout gridLayout = new GridLayout(2, true);
 		gridLayout.verticalSpacing = 0;
@@ -223,6 +245,7 @@ public class SensorDataView extends ViewPart {
 		childFigure = new ChildFigure();
 		childFigure.add(mgk);
 		childFigure.add(fdw);
+		childFigure.setVisible(false);
 		childArea.add(childFigure);
 		gridLayout = new GridLayout(2, true);
 		gridLayout.verticalSpacing = 0;
@@ -244,6 +267,7 @@ public class SensorDataView extends ViewPart {
 		childFigure = new ChildFigure();
 		childFigure.add(windSpeed);
 		childFigure.add(windDirection);
+		childFigure.setVisible(false);
 		childArea.add(childFigure);
 		gridLayout = new GridLayout(2, true);
 		gridLayout.verticalSpacing = 0;
@@ -260,6 +284,8 @@ public class SensorDataView extends ViewPart {
 		gridData.grabExcessHorizontalSpace = true;
 		gridLayout.setConstraint(windDirection, gridData);
 		
+		instrumentContainerFigure.getChildArea().add(latoffset);
+		
 		instrumentContainerFigure.getChildArea().add(barFigure);
 		instrumentContainerFigure.getChildArea().add(tripFigure);
 		instrumentContainerFigure.getChildArea().add(totalTripFigure);
@@ -270,9 +296,28 @@ public class SensorDataView extends ViewPart {
 		
 		InvalidatingFigureListener<MeasuredPosition3D> positionFigureListener = new PositionFigureListener(positionInstrumentFigure);
 		positionRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IPositionListener.class.getName(), positionFigureListener, null);
-		
-//		timeUpdateThread = new Thread(new TimeUpdater(timeFigure, timeFigureUTC, dateFigure));
-//		timeUpdateThread.start();
+
+		tideServiceTracker = new ServiceTracker<>(NavigationUIActivator.getDefault().getBundle().getBundleContext(), ITideListener.class, new ServiceTrackerCustomizer<ITideListener, ITideListener>() {
+
+			@Override
+			public ITideListener addingService(ServiceReference<ITideListener> reference) {
+				ITideListener tideListener = NavigationUIActivator.getDefault().getBundle().getBundleContext().getService(reference);
+				tideListener.setFigure(latoffset);
+				return tideListener;
+			}
+
+			@Override
+			public void modifiedService(ServiceReference<ITideListener> reference, ITideListener service) {
+				
+			}
+
+			@Override
+			public void removedService(ServiceReference<ITideListener> reference, ITideListener service) {
+				
+			}
+		});
+		tideServiceTracker.open();
+
 		
 		HeadingListener shipMovementListener = new HeadingListener(cog, HeadingType.COG);
 		shipMovementRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(IHeadingListener.class.getName(), shipMovementListener, null);
@@ -298,10 +343,10 @@ public class SensorDataView extends ViewPart {
 		TimeFigureListener timeListener = new TimeFigureListener(timeFigure, timeFigureUTC, dateFigure);
 		timeRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ITimeListener.class.getName(), timeListener, null);
 		
-		LogFigureListener logFigureListener = new LogFigureListener(totalTripFigure);
+		LogFigureListener logFigureListener = new LogFigureListener(totalTripFigure, DistanceType.TOTAL);
 		tripRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ITotalLogListener.class.getName(), logFigureListener, null);
 
-		LogFigureListener tripFigureListener = new LogFigureListener(tripFigure);
+		LogFigureListener tripFigureListener = new LogFigureListener(tripFigure, DistanceType.TRIP);
 		totalTripRegistration = NavigationUIActivator.getDefault().getBundle().getBundleContext().registerService(ITripLogListener.class.getName(), tripFigureListener, null);
 
 		WaterTempertureFigureListener tempertureFigureListener = new WaterTempertureFigureListener(waterTemperatureFigure);
@@ -328,6 +373,7 @@ public class SensorDataView extends ViewPart {
 		windRegistration.unregister();
 		sateliteRegistration.unregister();
 		timeRegistration.unregister();
+//		latOffsetRegistration.unregister();
 		if(timeUpdateThread != null) {
 			timeUpdateThread.interrupt();
 		}
@@ -335,6 +381,7 @@ public class SensorDataView extends ViewPart {
 		totalTripRegistration.unregister();
 		temperatureRegistration.unregister();
 		resourceManager.dispose();
+		tideServiceTracker.close();
 		super.dispose();
 	}
 	

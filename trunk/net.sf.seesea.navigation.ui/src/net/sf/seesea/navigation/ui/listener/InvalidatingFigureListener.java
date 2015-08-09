@@ -29,6 +29,7 @@ package net.sf.seesea.navigation.ui.listener;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.swt.widgets.Display;
 
 import net.sf.seesea.navigation.ui.figures.IInvalidatableFigure;
@@ -40,6 +41,7 @@ public abstract class InvalidatingFigureListener<SensorDataType> implements
 
 	private Set<IInvalidatableFigure> invalidatableFigures;
 	protected long lastTimeMillis;
+	private long fastTimeoutMilliseconds;
 
 	public InvalidatingFigureListener(IInvalidatableFigure... figures) {
 		invalidatableFigures = new LinkedHashSet<IInvalidatableFigure>();
@@ -47,6 +49,11 @@ public abstract class InvalidatingFigureListener<SensorDataType> implements
 			invalidatableFigures.add(invalidatableFigure);
 		}
 		lastTimeMillis = System.currentTimeMillis();
+		fastTimeoutMilliseconds = 250L;
+	}
+	
+	public InvalidatingFigureListener() {
+		invalidatableFigures = new LinkedHashSet<IInvalidatableFigure>();
 	}
 	
 	@Override
@@ -81,11 +88,24 @@ public abstract class InvalidatingFigureListener<SensorDataType> implements
 
 	protected boolean isSensorUpdateFast() {
 		long currentTimeMillis = System.currentTimeMillis();
-		if(currentTimeMillis - lastTimeMillis < 250) {
+		if(currentTimeMillis - lastTimeMillis < fastTimeoutMilliseconds) {
 			return true;
 		}
 		lastTimeMillis = currentTimeMillis;
 		return false;
 	}
+	
+	public long getFastTimeoutMilliseconds() {
+		return fastTimeoutMilliseconds;
+	}
 
+	public void setFastTimeoutMilliseconds(long fastTimeoutMilliseconds) {
+		this.fastTimeoutMilliseconds = fastTimeoutMilliseconds;
+	}
+
+	public void addFigure(IInvalidatableFigure figure) {
+		invalidatableFigures.add(figure);
+	}
+	
+	
 }
