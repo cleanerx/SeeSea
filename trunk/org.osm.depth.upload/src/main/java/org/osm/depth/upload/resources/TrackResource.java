@@ -195,18 +195,27 @@ public class TrackResource {
 					.lookup("java:/comp/env/jdbc/depth"); //$NON-NLS-1$
 			Connection depthConn = depthDS.getConnection();
 			PreparedStatement deleteStatement;
+			PreparedStatement deleteContainerStatement;
 			try {
 				if (context.isUserInRole("ADMIN")) { //$NON-NLS-1$
 					deleteStatement = conn
-							.prepareStatement("UPDATE user_tracks SET upload_state = 1 WHERE track_id = ?"); //$NON-NLS-1$
+							.prepareStatement("UPDATE user_tracks SET upload_state = 1, filetype='null', compression='null' WHERE track_id = ?"); //$NON-NLS-1$
 					deleteStatement.setLong(1, track.id);
 					deleteStatement.execute();
+					deleteContainerStatement = conn
+					.prepareStatement("DELETE FROM user_tracks WHERE containertrack = ? "); //$NON-NLS-1$
+					deleteContainerStatement.setLong(1, track.id);
+					deleteContainerStatement.execute();
 				} else {
 					deleteStatement = conn
-							.prepareStatement("UPDATE user_tracks SET upload_state = 1 WHERE track_id = ? AND user_name = ?"); //$NON-NLS-1$
+							.prepareStatement("UPDATE user_tracks SET upload_state = 1, filetype='null', compression='null' WHERE track_id = ? AND user_name = ?"); //$NON-NLS-1$
 					deleteStatement.setLong(1, track.id);
 					deleteStatement.setString(2, username);
 					deleteStatement.execute();
+					deleteContainerStatement = conn
+					.prepareStatement("DELETE FROM user_tracks WHERE containertrack = ? "); //$NON-NLS-1$
+					deleteContainerStatement.setLong(1, track.id);
+					deleteContainerStatement.execute();
 				}
 
 				try {
