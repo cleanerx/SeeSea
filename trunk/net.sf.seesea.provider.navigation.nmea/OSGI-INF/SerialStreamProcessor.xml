@@ -6,4 +6,5 @@
       <provide interface="net.sf.seesea.services.navigation.INMEAReader"/>
    </service>
    <property name="type" type="String" value="ascii"/>
+   <property name="provider" type="String" value="sensor"/>
 </scr:component>
