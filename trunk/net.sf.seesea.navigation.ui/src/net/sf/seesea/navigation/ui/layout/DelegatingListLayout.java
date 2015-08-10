@@ -62,9 +62,9 @@ public class DelegatingListLayout extends DelegatingLayout {
     int width = 0;
     int height = 0;
 
-    List children = container.getChildren();
+    List<?> children = container.getChildren();
 
-    for (Iterator iter = children.iterator(); iter.hasNext();) {
+    for (Iterator<?> iter = children.iterator(); iter.hasNext();) {
       IFigure child = (IFigure) iter.next();
       if (child.isVisible()) {
         Dimension childSize = getChildSize(child);
