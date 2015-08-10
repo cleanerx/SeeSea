@@ -61,7 +61,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 
 	private final IFeedbackMessageConsumer feedbackMessageConsumer;
 
-	private int retryCount;
+//	private int retryCount;
 
 	/**
 	 * @param in
@@ -150,7 +150,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 //						retryCount++;
 					} catch (Exception e) {
 						// exception during processing
-						if(!processingThread.interrupted()) {
+						if(!Thread.interrupted()) {
 							Logger.getLogger(getClass()).error("Exception while reading input stream", e); //$NON-NLS-1$
 							BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
 							Collection<ServiceReference<INMEAReaderFailureNotifier>> serviceReferences = bundleContext.getServiceReferences(INMEAReaderFailureNotifier.class, null);
