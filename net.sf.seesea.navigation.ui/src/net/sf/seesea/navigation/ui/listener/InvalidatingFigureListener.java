@@ -29,11 +29,9 @@ package net.sf.seesea.navigation.ui.listener;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.swt.widgets.Display;
 
 import net.sf.seesea.navigation.ui.figures.IInvalidatableFigure;
-import net.sf.seesea.services.navigation.listener.IDataListener;
 import net.sf.seesea.services.navigation.listener.IDataProviderNotification;
 
 public abstract class InvalidatingFigureListener<SensorDataType> implements
