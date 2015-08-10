@@ -28,14 +28,8 @@ package net.sf.seesea.nmea.rcp.application;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Hashtable;
-import java.util.Properties;
-
-import net.sf.seesea.model.core.geo.osm.World;
-import net.sf.seesea.model.util.IModel;
-import net.sf.seesea.nmea.rcp.NMEARCPActivator;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFolder;
@@ -57,6 +51,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+
+import net.sf.seesea.model.util.IModel;
+import net.sf.seesea.nmea.rcp.NMEARCPActivator;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
