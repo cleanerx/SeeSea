@@ -28,14 +28,13 @@ package net.sf.seesea.navigation.ui.listener;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.swt.widgets.Display;
+
 import net.sf.seesea.model.core.physx.RelativeSpeed;
-import net.sf.seesea.model.core.physx.Speed;
 import net.sf.seesea.model.core.physx.SpeedType;
 import net.sf.seesea.model.core.physx.SpeedUnit;
 import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
 import net.sf.seesea.services.navigation.listener.ISpeedListener;
-
-import org.eclipse.swt.widgets.Display;
 
 /**
  * 
