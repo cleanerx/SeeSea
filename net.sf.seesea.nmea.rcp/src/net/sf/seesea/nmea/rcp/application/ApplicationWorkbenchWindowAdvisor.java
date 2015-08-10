@@ -30,14 +30,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicReference;
 
-import net.sf.seesea.model.core.geo.osm.World;
-import net.sf.seesea.model.util.IModel;
-import net.sf.seesea.nmea.rcp.Messages;
-import net.sf.seesea.nmea.rcp.NMEARCPActivator;
-import net.sf.seesea.rendering.chart.editor.MapEditorInput;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -51,12 +47,19 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.internal.WorkbenchWindow;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import net.sf.seesea.model.core.geo.osm.World;
+import net.sf.seesea.model.util.IModel;
+import net.sf.seesea.nmea.rcp.Messages;
+import net.sf.seesea.nmea.rcp.NMEARCPActivator;
+import net.sf.seesea.rendering.chart.editor.MapEditorInput;
+
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
-    private static final String VERSION = "1.0.0 Alpha 6"; //$NON-NLS-1$
+    private static final String VERSION = "1.0.0 Alpha 7"; //$NON-NLS-1$
 
 	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
@@ -102,6 +105,14 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 						
 						@Override
 						public void run() {
+					    	WorkbenchWindow workbenchWin = (WorkbenchWindow)PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					    	MenuManager menuManager = workbenchWin.getMenuManager();
+					    	IContributionItem[] items = menuManager.getItems();
+
+					    	for(IContributionItem item : items) {
+					    	  item.setVisible(false);
+					    	}
+
 						    MapEditorInput mapEditorInput = new MapEditorInput(atomicReference.get(), true, true);
 						    IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
 						    boolean editorPresent = false;
