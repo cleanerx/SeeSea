@@ -3,7 +3,10 @@ package net.sf.seesea.services.navigation;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.seesea.model.core.geo.GeoPackage;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
+
 import net.sf.seesea.model.core.geo.osm.OsmPackage;
 import net.sf.seesea.model.core.geo.osm.World;
 import net.sf.seesea.model.core.physx.Distance;
@@ -12,11 +15,6 @@ import net.sf.seesea.model.core.physx.LengthUnit;
 import net.sf.seesea.model.core.physx.PhysxFactory;
 import net.sf.seesea.model.util.IModel;
 import net.sf.seesea.services.navigation.listener.ITotalLogListener;
-import net.sf.seesea.services.navigation.listener.ITripLogListener;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 
 public class SBASTotalTripListener implements Adapter {
 

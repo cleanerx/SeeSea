@@ -2,6 +2,11 @@ package net.sf.seesea.services.navigation;
 
 public class InputStreamNotFoundException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4963872873532672516L;
+
 	public InputStreamNotFoundException() {
 		// TODO Auto-generated constructor stub
 	}
