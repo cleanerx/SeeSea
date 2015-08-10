@@ -3,18 +3,16 @@ package net.sf.seesea.navigation.ui.preferences;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
-import net.sf.seesea.model.util.IModel;
-import net.sf.seesea.navigation.ui.NavigationUIActivator;
-import net.sf.seesea.waterlevel.ocean.IOceanTideProvider;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+
+import net.sf.seesea.model.util.IModel;
+import net.sf.seesea.navigation.ui.NavigationUIActivator;
+import net.sf.seesea.waterlevel.ocean.IOceanTideProvider;
 
 public class GeneralPreferenceChangedListener {
 
