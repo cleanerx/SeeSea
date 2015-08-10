@@ -2,14 +2,13 @@ package net.sf.seesea.navigation.ui.listener;
 
 import java.text.DecimalFormat;
 
+import org.eclipse.swt.widgets.Display;
+
 import net.sf.seesea.model.core.physx.Distance;
 import net.sf.seesea.model.core.physx.DistanceType;
-import net.sf.seesea.navigation.ui.figures.DescriptiveInstrumentFigure;
 import net.sf.seesea.navigation.ui.figures.DoubleRowedDescriptiveInstrumentFigure;
 import net.sf.seesea.services.navigation.listener.ITotalLogListener;
 import net.sf.seesea.services.navigation.listener.ITripLogListener;
-
-import org.eclipse.swt.widgets.Display;
 
 public class LogFigureListener extends InvalidatingFigureListener<Distance> implements ITotalLogListener, ITripLogListener {
 
