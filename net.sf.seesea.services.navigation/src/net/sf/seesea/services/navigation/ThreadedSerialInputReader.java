@@ -144,6 +144,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 						} else {
 							feedbackMessageConsumer.processingStopped();
 						}
+						close();
 //					} catch (SocketTimeoutException e) {
 //						streamProvider.close();
 //						pushbackInputStream = streamProvider.getInputStream();
