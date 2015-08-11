@@ -103,6 +103,7 @@ public class NMEA0183Reader implements IDataReader {
 			processMessageTypes2SensorIds.put(nmea0183MessageTypes,
 					Collections.<String> emptySet());
 		}
+		this.useLastDateFromAnotherSentenceGGA = true;
 		simpleDateFormat = new SimpleDateFormat("HHmmss"); //$NON-NLS-1$
 
 	}
