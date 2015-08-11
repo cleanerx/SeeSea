@@ -107,15 +107,8 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 			if (!directory.exists()) {
 				directory.mkdirs();
 			}
-			File file = new File(URLDecoder.decode(url.getFile()),
-					getRotateFileName());
-			FileOutputStream fileOutputStream = new FileOutputStream(file);
-			gzipOutputStream = new GZIPOutputStream(fileOutputStream);
 			nextLogRotationcalendar = Calendar.getInstance();
 			nextLogRotationcalendar.add(INTERVAL_UNIT, 30);
-			Logger.getRootLogger().info(
-					MessageFormat.format(
-							"Storing file to {0}", file.getAbsolutePath())); //$NON-NLS-1$
 		} catch (IOException e) {
 			Logger.getRootLogger()
 					.error("Failed to read admin service for configuring data logger", e); //$NON-NLS-1$
@@ -129,6 +122,7 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 		if (gzipOutputStream != null) {
 			try {
 				gzipOutputStream.close();
+				gzipOutputStream = null;
 			} catch (IOException e) {
 				Logger.getRootLogger().error(
 						MessageFormat.format("Storing file to {0}", e)); //$NON-NLS-1$
@@ -148,8 +142,11 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 		nmeaReader.removeAISEventListener(this);
 		if (nmeaReaders.isEmpty()) {
 			try {
-				gzipOutputStream.close();
-				Logger.getRootLogger().info("Closed nmea log file"); //$NON-NLS-1$
+				if(gzipOutputStream != null) {
+					gzipOutputStream.close();
+					gzipOutputStream = null;
+				}
+				Logger.getRootLogger().info("Closed nmea log file in " + loggingDirectory); //$NON-NLS-1$
 			} catch (IOException e) {
 				Logger.getRootLogger().error("Unable to unbind reader", e); //$NON-NLS-1$
 			}
@@ -168,12 +165,13 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 			throws NMEAProcessingException {
 		if (persistentLogging) {
 			if (rotateFileName
-					&& nextLogRotationcalendar.before(Calendar.getInstance())) {
+					&& nextLogRotationcalendar.before(Calendar.getInstance()) || gzipOutputStream == null ) {
 				nextLogRotationcalendar = Calendar.getInstance();
 				nextLogRotationcalendar.add(INTERVAL_UNIT, INTERVAL_VALUE);
 				try {
 					if (gzipOutputStream != null) {
 						gzipOutputStream.close();
+						gzipOutputStream = null;
 					}
 
 					URL url = new URL(loggingDirectory);
@@ -215,8 +213,14 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 	}
 
 	public void modified(Map<String, Object> config) {
-		rotateFileName = Boolean.valueOf((String) config.get("rotateFileName")); //$NON-NLS-1$
+		try {
+			suspendPersistentLogging();
+		} catch (NMEAProcessingException e) {
+			Logger.getLogger(getClass()).error("Failed to suspend logging", e);
+		}
+		rotateFileName = (Boolean) config.get("rotateFileName"); //$NON-NLS-1$
 		loggingDirectory = (String) config.get("loggingDirectory"); //$NON-NLS-1$
+		resumePersistentLogging();
 	}
 
 	@Override
@@ -229,7 +233,10 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 			throws NMEAProcessingException {
 		persistentLogging = false;
 		try {
-			gzipOutputStream.close();
+			if(gzipOutputStream != null) {
+				gzipOutputStream.close();
+				gzipOutputStream = null;
+			}
 		} catch (IOException e1) {
 			throw new NMEAProcessingException(e1);
 

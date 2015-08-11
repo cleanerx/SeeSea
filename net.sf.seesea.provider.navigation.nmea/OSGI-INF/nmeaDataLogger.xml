@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" configuration-policy="require" deactivate="deactivate" modified="modified" name="net.sf.seesea.provider.navigation.nmea.datalogger">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" configuration-policy="require" deactivate="deactivate" immediate="true" modified="modified" name="net.sf.seesea.provider.navigation.nmea.datalogger">
    <implementation class="net.sf.seesea.provider.navigation.nmea.NMEA0183DataLogger"/>
    <reference bind="bindReader" cardinality="0..n" interface="net.sf.seesea.services.navigation.INMEAReader" name="NMEAReader" policy="dynamic" target="(provider=sensor)" unbind="unbindReader"/>
    <service>
