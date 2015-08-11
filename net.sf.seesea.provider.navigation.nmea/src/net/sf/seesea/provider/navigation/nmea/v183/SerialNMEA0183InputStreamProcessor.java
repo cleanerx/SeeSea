@@ -84,9 +84,10 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 			}
 		} catch (Exception e) {
 			return false;
+		} finally {
+			aisEventListeners.remove(nmea0183StreamDetector);
+			nmeaEventListeners.remove(nmea0183StreamDetector);
 		}
-		aisEventListeners.remove(nmea0183StreamDetector);
-		nmeaEventListeners.remove(nmea0183StreamDetector);
 		return nmea0183StreamDetector.isNmea0183Stream();
 		
 	}
@@ -187,19 +188,5 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 	public boolean isBinary() {
 		return false;
 	}
-	
-	private List<ZipEntry> getZipEntries(File file, String charset) throws IOException {
-		ZipFile zipFile = new ZipFile(file, Charset.forName(charset));
-		List<ZipEntry> zipEntries = new ArrayList<ZipEntry>();
-		Enumeration<? extends ZipEntry> entries = zipFile.entries();
-		while(entries.hasMoreElements()) {
-			ZipEntry nextElement = entries.nextElement();
-			if(!nextElement.isDirectory()) {
-				zipEntries.add(nextElement);
-			}
-		}
-		return zipEntries;
-}
-
 	
 }
