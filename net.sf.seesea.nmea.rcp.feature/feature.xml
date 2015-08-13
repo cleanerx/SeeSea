@@ -76,4 +76,18 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="net.sf.seesea.upload.osm.gui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.sf.seesea.services.navigation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
