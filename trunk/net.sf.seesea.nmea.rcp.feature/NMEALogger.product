@@ -30,9 +30,12 @@ Apache Software Foundation http://apache.org/
    </configIni>
 
    <launcherArgs>
-      <programArgs>-clean -data @user.home -configuration @user.home/NMEALogging</programArgs>
-      <vmArgs>-Xmx256M</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <programArgs>-clean -data @user.home -configuration @user.home/NMEALogging
+      </programArgs>
+      <vmArgs>-Xmx1024M -Dequinox.ds.block_timeout=1000
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/net.sf.seesea.nmea.rcp/icons/OpenSeaMapLogo_16.png" i32="/net.sf.seesea.nmea.rcp/icons/OpenSeaMapLogo_32.png" i48="/net.sf.seesea.nmea.rcp/icons/osm48x48.png" i64="/net.sf.seesea.nmea.rcp/icons/osm64x64.png" i128="/net.sf.seesea.nmea.rcp/icons/osm128x128.png"/>
