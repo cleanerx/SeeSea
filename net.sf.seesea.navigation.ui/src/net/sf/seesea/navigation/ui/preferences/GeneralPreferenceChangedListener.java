@@ -1,6 +1,7 @@
 package net.sf.seesea.navigation.ui.preferences;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -43,9 +44,15 @@ public void propertyChange(PropertyChangeEvent event) {
 			Logger.getLogger(getClass()).error("Failed to read configuration",e);
 		}
 	} else if(event.getProperty().equals(IGeneralPreferences.TOTAL_TRIP)) {
-		NumberFormat numberInstance = NumberFormat.getNumberInstance(Locale.getDefault());
+		DecimalFormat decimalFormat = new DecimalFormat("#.#", new DecimalFormatSymbols(Locale.getDefault()));
 		try {
-			model.loadModel().setTotalTrip((Double) numberInstance.parse((String) event.getNewValue()));
+			Number parse = decimalFormat.parse((String) event.getNewValue());
+			if(parse instanceof Long) {
+				Long ll = (Long) parse;
+				model.loadModel().setTotalTrip((Double) ll.doubleValue());
+			} else {
+				model.loadModel().setTotalTrip((Double) parse);
+			}
 		} catch (ParseException e) {
 			Logger.getLogger(getClass()).error("Failed to parse value", e);
 		}
@@ -85,3 +92,4 @@ public void propertyChange(PropertyChangeEvent event) {
 	}
 
 }
+;
