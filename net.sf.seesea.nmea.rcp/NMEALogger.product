@@ -10,7 +10,7 @@
 
 Version: 1.0
 
-(c) Copyright Jens Kübler 2010, 2013.  All rights reserved.
+(c) Copyright Jens Kübler 2010, 2015.  All rights reserved.
 Visit http://seesea.sourceforge.net/
 
 This product is licensed as FreeBSD. 
@@ -30,12 +30,16 @@ Apache Software Foundation http://apache.org/
    </configIni>
 
    <launcherArgs>
-      <programArgs>-clean -data @user.home -configuration @user.home/NMEALogging</programArgs>
-      <vmArgs>-Xmx256M</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <programArgs>-clean -data @user.home -configuration @user.home/NMEALogging
+      </programArgs>
+      <vmArgs>-Xmx1156M -Dequinox.ds.block_timeout=1000
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/net.sf.seesea.nmea.rcp/icons/OpenSeaMapLogo_16.png" i32="/net.sf.seesea.nmea.rcp/icons/OpenSeaMapLogo_32.png" i48="/net.sf.seesea.nmea.rcp/icons/osm48x48.png" i64="/net.sf.seesea.nmea.rcp/icons/osm64x64.png" i128="/net.sf.seesea.nmea.rcp/icons/osm128x128.png"/>
+
 
    <launcher name="DataLogger">
       <solaris/>
@@ -47,13 +51,14 @@ Apache Software Foundation http://apache.org/
       </win>
    </launcher>
 
+
    <vm>
-      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</windows>
+      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
 
    <license>
         <text>
-   Copyright (c) 2011-2013, Jens Kübler
+   Copyright (c) 2011-2015, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -106,5 +111,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <plugin id="org.eclipse.equinox.util" autoStart="true" startLevel="0" />
       <plugin id="org.qbang.rxtx" autoStart="true" startLevel="0" />
    </configurations>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
 
 </product>
