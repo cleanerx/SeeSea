@@ -83,7 +83,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	public void preStartup() {
 		super.preStartup();
 		System.setProperty("logDirectory", System.getProperty("user.home")); //$NON-NLS-1$ //$NON-NLS-2$
-		Logger.getRootLogger().info("Initializing Application"); //$NON-NLS-1$
+		try {
+			Logger.getRootLogger().info("Initializing Application"); //$NON-NLS-1$
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 		try {
