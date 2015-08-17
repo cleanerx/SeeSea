@@ -36,7 +36,7 @@ public class GeneralPreferenceInitializer extends AbstractPreferenceInitializer 
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore preferenceStore = NavigationUIActivator.getDefault().getPreferenceStore();
-		preferenceStore.setDefault(IGeneralPreferences.TIDE_PREDICTION, true);
+		preferenceStore.setDefault(IGeneralPreferences.TIDE_PREDICTION, false);
 		preferenceStore.setDefault(IGeneralPreferences.TIDE_UPDATE_RATE, 300);
 		preferenceStore.setDefault(IGeneralPreferences.TOTAL_TRIP, "0.0");
 
