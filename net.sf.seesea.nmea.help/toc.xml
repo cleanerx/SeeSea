@@ -2,10 +2,8 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Table of Contents">
-	<topic label="Logging Data"  href="html/maintopic.html"> 
+	<topic label="Logging Data"  href="html/Logging.html"> 
 		<topic label="Visualization" href="html/subtopic.html"/>
-  <topic href="html/DataSources.html" label="Data Sources">
-  </topic> 
 	</topic>
 	<topic href="html/Upload.html" label="Uploading Data"/>
 </toc>

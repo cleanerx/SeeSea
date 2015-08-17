@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Logging Data</title>
+	<link rel="stylesheet" href="nmea.css" type="text/css" />
+</head>
+
+<body>
+<h1>Logging Data</h1>
+You may enable data logging through pressing the on button in the main menu bar.<br>
+<img src="images/Record.png" width="640px"><br><br>
+
+This opens up a wizard that lets you choose the data provider you want to use.
+Supported Providers are Bluetooth, TCP/IP, Serial Interfaces.
+Support for Linux GPSd is still experimental.
+<img src="images/RecordWizard.png" width="500px"><br><br>
+
+
+<h2><img src="images/stock_bluetooth_48x48.png"/>Bluetooth</h2>
+You may use Bluetooth to retrieve NMEA data if your device is capable to send Bluetooth over a data protocol called Radio Frequency Communication (RFCOMM).
+In order to use it you must enable the Bluetooth receiver on your computer as well. It may be required to provide a Bluetooth password in order to connect to your device.<br/>
+<b>Note: This is being requested by the operating system and does not appear within the application.</b><br/>
+Hint: Many Bluetooth devices use 0000 or 1234 as inital password.<br/>
+<b>Note: Bluetooth on Linux is currently not supported</b>
+
+
+
+<h2>Serial Provider</h2>
+Serial Ports may be used to retrieve NMEA data. This interface is also known as RS232 or COM Ports and usually consists of a nine pole plug you put into your computer.<br/>
+<b>Note: On linux this provider may fail, if the device it not a true serial device causing the application to crash.</b><br/>
+On some rare laptops the automatic detection for serial port may fail causing the application to hang. You can circumvent this situation by setting manual ports within the
+preferences.<br/>
+<img src="images/IPProvider.png" width="500px"><br><br>
+
+<h3>Connecting Serial Marine Equipment</h3>
+For the NMEA 0183 unfortunately no standardized connector exists which is why every company uses its own connector.
+Most of them offer adapter cables that have the manufacturer plug on one side and a 9 pole plug for the computer on the other side.
+There is no electrical voodoo involved in these kinds of cables but all of them cost a fair amount of money probably due to their robustness.
+You may find these cables by searching on the Internet as some marine shops offer them. The following section outlines what kind of connectors the manufacturer use for NMEA-0183.
+<br/>
+<b>Note that neither NMEA2000 nor ethernet based networks are supported and your device may offer only connectors for these. This includes manufacturer protocols such as SeaTalk or NavNet.</b>
+
+<h2>USB</h2>
+USB is not directly supported. However many devices are capable to emulate a serial port through a native driver in which case you have a chance your device may work.
+
+<br>
+<br>
+<i>Hint: If you want to see the software's output with your hand held GPS device this may be done by setting the device to output NMEA 2.3 sentences and connecting afterwards.</i>
+
+<h2>IP Provider</h2>
+Many devices and gateways aboard offer an IP connection. It needs to output NMEA0183 sentences which many of them do.
+The Port is opened via TCP. UDP is currently not supported.
+Enter the hostname, the port and an appropriate timeout. The timeout is used to detect a stale connection where no data is beeing transferred in given in milliseconds.
+<img src="images/IPProvider.png" width="500px"><br><br>
+
+By configuring the data provider and pressing finish in the wizard the data will be logged to your local disk.
+</body>
+</html>
