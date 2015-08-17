@@ -60,7 +60,7 @@ public class NMEAReaderFailedProcessor implements INMEAReaderFailureNotifier {
 				}
 
 				MessageDialog.openInformation(Display.getDefault().getActiveShell(), Messages.getString("NMEAReaderFailedProcessor.stopedHeader"), //$NON-NLS-1$
-						Messages.getString("NMEAReaderFailedProcessor.toppedMessage") + streamProvider.getName()); //$NON-NLS-1$
+						Messages.getString("NMEAReaderFailedProcessor.toppedMessage")); //$NON-NLS-1$
 			}
 		});
 		Logger.getLogger(getClass()).error("Stopped stream processing", throwable); //$NON-NLS-1$

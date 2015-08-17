@@ -9,11 +9,6 @@
             name="Connect NMEA Device">
       </command>
       <command
-            defaultHandler="net.sf.seesea.provider.navigation.nmea.ui.DisconnectHandler"
-            id="net.sf.seesea.provider.navigation.nmea.ui.disconnect"
-            name="Disconnect">
-      </command>
-      <command
             id="net.sf.seesea.provider.navigation.nmea.ui.startSimulation"
             name="Start Simulation">
       </command>
