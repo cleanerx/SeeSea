@@ -59,7 +59,7 @@ import net.sf.seesea.rendering.chart.editor.MapEditorInput;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
-    private static final String VERSION = "1.0.0 Alpha 7"; //$NON-NLS-1$
+    private static final String VERSION = "1.0.0 Beta 1"; //$NON-NLS-1$
 
 	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
