@@ -20,7 +20,7 @@ public class TideFigureListener extends InvalidatingFigureListener<MeasuredPosit
 	private DecimalFormat tideFormat;
 
 	public TideFigureListener() {
-		setFastTimeoutMilliseconds(30000);
+//		setFastTimeoutMilliseconds(250);
 		tideFormat = new DecimalFormat("##.##");
 	}
 
