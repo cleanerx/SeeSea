@@ -45,7 +45,7 @@ public void propertyChange(PropertyChangeEvent event) {
 	} else if(event.getProperty().equals(IGeneralPreferences.TOTAL_TRIP)) {
 		NumberFormat numberInstance = NumberFormat.getNumberInstance(Locale.getDefault());
 		try {
-			model.loadModel().setTotalTrip((double) numberInstance.parse((String) event.getNewValue()));
+			model.loadModel().setTotalTrip((Double) numberInstance.parse((String) event.getNewValue()));
 		} catch (ParseException e) {
 			Logger.getLogger(getClass()).error("Failed to parse value", e);
 		}
