@@ -65,11 +65,11 @@ public class ChartContextMenuProvider extends ContextMenuProvider {
 //		action = getActionRegistry().getAction(ActionFactory.REDO.getId());
 //		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, action);
 //		
-		action = new AttachPositionAction(getViewer());
-		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
-
-		action = new DetachPositionAction(getViewer());
-		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
+//		action = new AttachPositionAction(getViewer());
+//		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
+//
+//		action = new DetachPositionAction(getViewer());
+//		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);
 
 	//		action = new DetachPositionAction(getViewer());
 //		menu.appendToGroup(GEFActionConstants.GROUP_VIEW, action);

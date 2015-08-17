@@ -106,14 +106,14 @@ public class TrackEditPart extends TransactionalEditPart implements ConnectionEd
 			
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				trackPointListener = new TrackPointListener(TrackEditPart.this);
-				Track track = (Track)getModel();
-				track.eAdapters().add(trackPointListener);
-				List<MeasuredPosition3D> list = new ArrayList<MeasuredPosition3D>(track.getMeasuredPosition());
-				trackPointListener.init(list);
-
-				DepthListener positionListener = new DepthListener();
-				serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
+//				trackPointListener = new TrackPointListener(TrackEditPart.this);
+//				Track track = (Track)getModel();
+//				track.eAdapters().add(trackPointListener);
+//				List<MeasuredPosition3D> list = new ArrayList<MeasuredPosition3D>(track.getMeasuredPosition());
+//				trackPointListener.init(list);
+//
+//				DepthListener positionListener = new DepthListener();
+//				serviceRegistration = SeeSeaUIActivator.getDefault().getBundle().getBundleContext().registerService(IDepthListener.class, positionListener, null);
 				return Status.OK_STATUS;
 			}
 		};
