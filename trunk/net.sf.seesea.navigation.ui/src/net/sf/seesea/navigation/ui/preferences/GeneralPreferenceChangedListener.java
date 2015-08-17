@@ -1,7 +1,11 @@
 package net.sf.seesea.navigation.ui.preferences;
 
 import java.io.IOException;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -39,7 +43,12 @@ public void propertyChange(PropertyChangeEvent event) {
 			Logger.getLogger(getClass()).error("Failed to read configuration",e);
 		}
 	} else if(event.getProperty().equals(IGeneralPreferences.TOTAL_TRIP)) {
-		model.loadModel().setTotalTrip(Double.parseDouble((String) event.getNewValue()));
+		NumberFormat numberInstance = NumberFormat.getNumberInstance(Locale.getDefault());
+		try {
+			model.loadModel().setTotalTrip((double) numberInstance.parse((String) event.getNewValue()));
+		} catch (ParseException e) {
+			Logger.getLogger(getClass()).error("Failed to parse value", e);
+		}
 	}
 }
 	}
