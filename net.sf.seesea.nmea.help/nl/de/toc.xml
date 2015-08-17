@@ -2,10 +2,8 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Inhalte">
-	<topic label="Daten Aufzeichnen"  href="html/maintopic.html"> 
+	<topic label="Daten Aufzeichnen"  href="html/Logging.html"> 
 		<topic label="Visualisierung" href="html/subtopic.html"/>
-  <topic href="html/DataSources.html" label="Datenquellen">
-  </topic> 
 	</topic>
 	<topic href="html/Upload.html" label="Daten hochladen"/>
 </toc>
