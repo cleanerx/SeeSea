@@ -48,6 +48,9 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 					
 					x: while(true) {
 						TrackMetadata trackMetadata = streamProcessor.getTrackMetadata(inputStream, trkHeader);
+						if(trackMetadata == null) {
+							throw new ProcessingException("No track metadata for track " + trackFile.getTrackId());
+						}
 						long size = (21L * trackMetadata.getTrackppointCount()) + trackMetadata.getBegin();
 						if(size <= limit) {
 							for (int k = 0 ; k < trackMetadata.getTrackppointCount() - 1 ; k++) {
@@ -91,7 +94,7 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 
 	@Override
 	public boolean hasTimedMeasurments() {
-		return false;
+		return true;
 	}
 
 	@Override
