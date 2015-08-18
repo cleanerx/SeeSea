@@ -445,6 +445,9 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 					double xmax = query.getDouble(2);
 					double ymin = query.getDouble(3);
 					double ymax = query.getDouble(4);
+					if(xmin == 0.0 && xmax==0.0 || ymin == 0.0 && ymax == 0.0) {
+						continue;
+					}
 					
 					// select all polygons of that bounding box
 					Statement inshoreStatement = inshoreConnection.createStatement();
