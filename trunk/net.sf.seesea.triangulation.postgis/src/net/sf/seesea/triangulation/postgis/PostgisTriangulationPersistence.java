@@ -446,6 +446,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 					double ymin = query.getDouble(3);
 					double ymax = query.getDouble(4);
 					if(xmin == 0.0 && xmax==0.0 || ymin == 0.0 && ymax == 0.0) {
+						Logger.getLogger(getClass()).info("Skipping track id because no bounding box exists : " + trackId);
 						continue;
 					}
 					
@@ -476,7 +477,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 					while(offshorePartionizedPolygonResultSet.next()) {
 						offshoreIds.add(offshorePartionizedPolygonResultSet.getString(1));
 					}
-					Logger.getLogger(getClass()).info((inshoreOSMids.size() + offshoreIds.size()) + "areas are considered for triangulation");
+					Logger.getLogger(getClass()).info((inshoreOSMids.size() + offshoreIds.size()) + "areas are considered for triangulation for track id " + trackId);
 //				ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT path, ST_X(geom) AS lon, ST_Y(geom) as lat, gid FROM (SELECT (ST_DUMPPOINTS(geom)).*, gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
 					
 					
