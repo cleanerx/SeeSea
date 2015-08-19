@@ -58,6 +58,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -222,6 +223,44 @@ public class UserResource {
 			throw new DatabaseException("Database unavailable");
 		}
 		return Response.ok().build();
+	}
+	
+	@PUT
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	public Response updateUser(@javax.ws.rs.core.Context SecurityContext context, User user) {
+			String username = context.getUserPrincipal().getName();
+			Context initContext;
+			try {
+				initContext = new InitialContext();
+				DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+				Connection conn = ds.getConnection();
+				try {
+					conn.setAutoCommit(false);
+					PreparedStatement insertUserStatement = conn.prepareStatement("UPDATE user_profiles (forename, surname, organisation, acceptedEmailContact, country, language, phone) VALUES (?,?,?,?,?,?,?) WHERE user_name = ?");
+					try {
+					insertUserStatement.setString(1, user.forname);
+					insertUserStatement.setString(2, user.surname);
+					insertUserStatement.setString(3, user.organisation);
+					insertUserStatement.setBoolean(4, "on".equals(user.acceptedEmailContact) || "true".equals(user.acceptedEmailContact));
+					insertUserStatement.setString(5, user.country);
+					insertUserStatement.setString(6, user.language);
+					insertUserStatement.setString(7, user.phone);
+					insertUserStatement.setString(8, username);
+					return Response.status(204).build();
+					} finally {
+						insertUserStatement.close();
+					}
+				} finally {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
+			} catch (NamingException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+			}
 	}
 	
 	@POST
