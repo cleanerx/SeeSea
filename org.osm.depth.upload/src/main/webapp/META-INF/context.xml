@@ -42,6 +42,11 @@
             dataSourceName="jdbc/postgres"
             userTable="user_profiles" userNameCol="user_name" userCredCol="password"
    userRoleTable="userroles" roleNameCol="role" localDataSource="true" digest="SHA" />
+   
+   
+		  <Resource name="mail/Session" auth="Container"
+            type="javax.mail.Session"
+            mail.smtp.host="rachael.franken.de"/>
       </Realm>
             
 </Context>
