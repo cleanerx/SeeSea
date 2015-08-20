@@ -175,8 +175,7 @@ public class UserResource {
 				PreparedStatement selectstatement = conn.prepareStatement("SELECT user_name FROM user_profiles WHERE user_name = ?");
 				try {
 					selectstatement.setString(1, email);
-					selectstatement.execute();
-					ResultSet resultSet = selectstatement.getResultSet();
+					ResultSet resultSet = selectstatement.executeQuery();
 					if(resultSet.next()) {
 						SecureRandom random = new SecureRandom();
 						String clearTextPassword = new BigInteger(130, random).toString(32);
