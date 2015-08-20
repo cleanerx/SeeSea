@@ -227,9 +227,10 @@
             <version>2.4</version>
         </dependency>
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4</version>
+    <groupId>javax.mail</groupId>
+    <artifactId>javax.mail-api</artifactId>
+    <version>1.5.4</version>
+    <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
