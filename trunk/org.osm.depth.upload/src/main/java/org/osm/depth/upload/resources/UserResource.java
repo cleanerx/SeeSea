@@ -190,11 +190,11 @@ public class UserResource {
 								Session session = (Session) envCtx.lookup("mail/Session");
 								
 								Message message = new MimeMessage(session);
-								message.setFrom(new InternetAddress("support@openseamap.org"));
+								message.setFrom(new InternetAddress("openseamap-depth@rachael.franken.de"));
 								InternetAddress to[] = new InternetAddress[1];
 								to[0] = new InternetAddress(email);
 								message.setRecipients(Message.RecipientType.TO, to);
-								message.setSubject("OpenSeaMap Password Reset");
+								message.setSubject("[NO REPLY] OpenSeaMap Password Reset");
 								message.setContent("You have requested a password reset.\nYour password has been reset to : " + clearTextPassword + "\n This is an generated email. Do NOT reply to this email.", "text/plain");
 								Transport.send(message);
 							} else {
