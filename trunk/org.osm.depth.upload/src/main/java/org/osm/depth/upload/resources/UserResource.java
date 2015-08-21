@@ -163,9 +163,10 @@ public class UserResource {
 	
 	@Path("reset")
 	@POST
-	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response resetPassword(@QueryParam("user_name") String email) {
+	public Response resetPassword(@FormParam("user_name") String email, @FormParam("user_name") String captcha) {
+		if(CaptchaManagement.getInstance().unregisterCaptcha(captcha)) {
 		InitialContext initCtx;
 		try {
 			initCtx = new InitialContext();
@@ -222,6 +223,8 @@ public class UserResource {
 			throw new DatabaseException("Database unavailable");
 		}
 		return Response.ok().build();
+		}
+		throw new ValidationException(Status.BAD_REQUEST);
 	}
 	
 	@PUT
