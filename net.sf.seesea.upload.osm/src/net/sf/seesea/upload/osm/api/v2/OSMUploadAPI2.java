@@ -26,7 +26,6 @@ import net.sf.seesea.upload.osm.api.v2.messages.License;
 import net.sf.seesea.upload.osm.api.v2.messages.Track;
 import net.sf.seesea.upload.osm.api.v2.messages.VesselConfiguration;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -145,7 +144,7 @@ public class OSMUploadAPI2 implements IOSMUpload {
 		WebTarget path = basePath.path("vesselconfig"); //$NON-NLS-1$
         try {
     		Response response = path.request(MediaType.APPLICATION_JSON).get();
-            if(response.getStatus() == HttpStatus.SC_OK) {
+            if(response.getStatus() == 200) {
             	loggedIn = true;
             	return Status.OK_STATUS;
             }
@@ -183,7 +182,7 @@ public class OSMUploadAPI2 implements IOSMUpload {
 			track3.fileName = file.getName();
 			monitor.subTask(file.getName());
 			Response response = trackPath.request(MediaType.APPLICATION_JSON).post(Entity.entity(track3, MediaType.APPLICATION_JSON));
-	        if(response.getStatus() == HttpStatus.SC_OK) {
+	        if(response.getStatus() == 200) {
 				Track partiallyPersistedTrack = response.readEntity(Track.class);
 	        	FormDataMultiPart multipart = new FormDataMultiPart();
 	        	multipart.field("id", new Long(partiallyPersistedTrack.id).toString());
@@ -194,7 +193,7 @@ public class OSMUploadAPI2 implements IOSMUpload {
 					multipart.bodyPart(formDataBodyPart).bodyPart(streamDataBodyPart).type(new MediaType("multipart", "form-data",
 							Collections.singletonMap(Boundary.BOUNDARY_PARAMETER, Boundary.createBoundary())));
 					response = filePath.request(MediaType.APPLICATION_JSON).put(Entity.entity(multipart, multipart.getMediaType()));
-					if(response.getStatus() == HttpStatus.SC_OK) {
+					if(response.getStatus() == 200) {
 						multiStatus.add(new ResultStatus<File>(file, IStatus.OK,
 								OSMUploadActivator.PLUGIN_ID, "Uploaded file " + file.getName()));
 					} else {
@@ -218,7 +217,7 @@ public class OSMUploadAPI2 implements IOSMUpload {
 	public List<VesselConfiguration> getVesselConfigurations() {
 		WebTarget vesselPath = basePath.path("vesselconfig"); //$NON-NLS-1$
         Response response = vesselPath.request(MediaType.APPLICATION_JSON).get();
-        if(response.getStatus() == HttpStatus.SC_OK) {
+        if(response.getStatus() == 200) {
         	return response.readEntity(new GenericType<List<VesselConfiguration>>(){});
         }
         return Collections.emptyList();
@@ -227,7 +226,7 @@ public class OSMUploadAPI2 implements IOSMUpload {
 	public List<License> getLicenses() {
 		WebTarget licensePath = basePath.path("license"); //$NON-NLS-1$
         Response response = licensePath.request(MediaType.APPLICATION_JSON).get();
-        if(response.getStatus() == HttpStatus.SC_OK) {
+        if(response.getStatus() == 200) {
         	return response.readEntity(new GenericType<List<License>>(){});
         }
         return Collections.emptyList();

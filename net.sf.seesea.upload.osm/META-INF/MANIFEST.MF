@@ -4,17 +4,10 @@ Bundle-Name: Open Sea Map Upload Provider
 Bundle-SymbolicName: net.sf.seesea.upload.osm
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.upload.osm.OSMUploadActivator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.apache.commons.logging,
- org.apache.commons.lang,
- org.apache.commons.collections,
- org.apache.commons.httpclient,
- net.sf.seesea.lib;bundle-version="1.0.0",
+Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.upload;bundle-version="1.0.0",
- org.apache.httpcomponents.httpclient;bundle-version="4.3.6",
- org.apache.httpcomponents.httpcore;bundle-version="4.3.3",
- net.java.jersey;bundle-version="2.18.0"
+ net.java.jersey;bundle-version="2.18.0",
+ net.sf.seesea.lib;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.upload.osm.api.v2,

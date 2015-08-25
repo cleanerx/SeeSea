@@ -26,13 +26,13 @@
  */
 package net.sf.seesea.upload.osm;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class OSMUploadActivator extends AbstractUIPlugin {
+public class OSMUploadActivator extends Plugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "net.sf.seesea.upload.osm"; //$NON-NLS-1$
