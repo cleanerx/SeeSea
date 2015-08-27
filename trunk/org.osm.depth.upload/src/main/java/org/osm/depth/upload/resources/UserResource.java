@@ -196,7 +196,7 @@ public class UserResource {
 								to[0] = new InternetAddress(email);
 								message.setRecipients(Message.RecipientType.TO, to);
 								message.setSubject("[NO REPLY] OpenSeaMap Password Reset");
-								message.setContent("You have requested a password reset.\nYour password has been reset to : " + clearTextPassword + "\n This is an generated email. Do NOT reply to this email.", "text/plain");
+								message.setContent("You have requested a password reset.\n\nYour password has been reset to : " + clearTextPassword + "\n\n This is a generated email. Do NOT reply to this email.\n\nThe OpenSeaMap Team", "text/plain");
 								Transport.send(message);
 							} else {
 								return Response.serverError().header("Error", ErrorCode.NO_SUCH_USER).build();
