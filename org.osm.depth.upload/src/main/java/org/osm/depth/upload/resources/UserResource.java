@@ -314,6 +314,18 @@ public class UserResource {
 									insertUserStatement.execute();
 									insertUserRoleStatement.execute();
 									conn.commit();
+									Context envCtx = (Context) initContext.lookup("java:comp/env");
+									Session session = (Session) envCtx.lookup("mail/Session");
+									
+									Message message = new MimeMessage(session);
+									message.setFrom(new InternetAddress("openseamap-depth@rachael.franken.de"));
+									InternetAddress to[] = new InternetAddress[1];
+									to[0] = new InternetAddress(username);
+									message.setRecipients(Message.RecipientType.TO, to);
+									message.setSubject("[NO REPLY] Welcome to OpenSeaMap ");
+									message.setContent("You have successfully registered to the OpenSeaMap Depth Project.\n\nYour username is " + username + ".\n\nPlease regard the upload instructions http://depth.openseamap.org/#instructions and create a vessel configuration http://depth.openseamap.org/#vessels\n\nThis is a generated email. Do NOT reply to this email.\n\nThe OpenSeaMap Team", "text/plain");
+									Transport.send(message);
+
 									return Response.status(204).build();
 								} finally {
 									usernameExists.close();
@@ -336,6 +348,9 @@ public class UserResource {
 			} catch (NamingException e) {
 				e.printStackTrace();
 				throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+			} catch (MessagingException e) {
+				e.printStackTrace();
+				return Response.status(204).build();
 			}
 		}
 		throw new ValidationException(Status.BAD_REQUEST);
