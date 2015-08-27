@@ -165,7 +165,7 @@ public class UserResource {
 	@POST
 	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response resetPassword(@FormParam("user_name") String email, @FormParam("user_name") String captcha) {
+	public Response resetPassword(@FormParam("username") String email, @FormParam("captcha") String captcha) {
 		if(CaptchaManagement.getInstance().unregisterCaptcha(captcha)) {
 		InitialContext initCtx;
 		try {
