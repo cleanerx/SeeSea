@@ -35,17 +35,20 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
-import net.sf.seesea.gauge.IGaugeProvider;
 import net.sf.seesea.services.navigation.IGeoBoundingBox;
 
-
+@Component(property = "type=gauge")
 public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 	
 	private Connection connection;
@@ -197,6 +200,7 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 		
 	}
 	
+	@Reference(policy = ReferencePolicy.DYNAMIC, target = "(db=gauge)", cardinality = ReferenceCardinality.MANDATORY)
 	public synchronized void bindConnection(Connection connection) {
 		this.connection = connection;
 	}
@@ -211,10 +215,12 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 		
 	}
 
+	@Activate
 	public void actviate(ComponentContext componentContext) {
 		this.componentContext = componentContext;
 	}
-	
+
+	@Deactivate
 	public void deactivate(ComponentContext componentContext) {
 		this.componentContext = null;
 	}
