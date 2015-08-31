@@ -50,14 +50,8 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 	
 	private Connection connection;
 	
-	private List<ServiceReference<IGaugeProvider>> gaugeProviderRefereneces;
-
 	private ComponentContext componentContext;
 	
-	public void actviate(ComponentContext componentContext) {
-		this.componentContext = componentContext;
-	}
-
 	//
 	@SuppressWarnings("null")
 	private void updateGaugeValues4Track(Long trackID, Date startTime, Date endTime) {
@@ -74,7 +68,7 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 				areGaugesUserDefined = true;
 				// ideally the gauges have a location and an area for which they are responsible
 				// then a fast decision for the appropriate gauge is possible
-				retrieveLatestGaugeValues(startTime, endTime, gaugeId);
+//				retrieveLatestGaugeValues(startTime, endTime, gaugeId);
 				
 			}
 		} catch (SQLException e) {
@@ -98,28 +92,6 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 		
 	}
 
-	private void retrieveLatestGaugeValues(Date startTime, Date endTime, int gaugeId) throws SQLException {
-		// which gauge provider is responsible for that location ?
-		try (PreparedStatement gaugeProviderStatement = connection.prepareStatement("SELECT remoteid, provider FROM gauge WHERE id = ?");) {
-			gaugeProviderStatement.setInt(1, gaugeId);
-			ResultSet queryRemoteGauge = gaugeProviderStatement.executeQuery();
-			while(queryRemoteGauge.next()) {
-				String remoteId = queryRemoteGauge.getString(1);
-				String provider = queryRemoteGauge.getString(2);
-				for (ServiceReference<IGaugeProvider> gaugeProviderReference : gaugeProviderRefereneces) {
-					if(gaugeProviderReference.getProperty("provider").equals(provider)) {
-						try {
-							IGaugeProvider gaugeProvider = componentContext.getBundleContext().getService(gaugeProviderReference);
-							gaugeProvider.updateSingleGaugeMeasurements(Integer.toString(gaugeId), remoteId, startTime, endTime);
-							// TODO: return something in case it fails
-						} finally {
-							componentContext.getBundleContext().ungetService(gaugeProviderReference);
-						}
-					}
-				}
-			}
-		}
-	}
 	
 	
 	@Override
@@ -238,5 +210,14 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void actviate(ComponentContext componentContext) {
+		this.componentContext = componentContext;
+	}
+	
+	public void deactivate(ComponentContext componentContext) {
+		this.componentContext = null;
+	}
+
 
 }
