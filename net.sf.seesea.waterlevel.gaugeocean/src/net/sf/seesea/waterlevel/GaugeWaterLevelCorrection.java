@@ -38,10 +38,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
-import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -52,50 +49,6 @@ import net.sf.seesea.services.navigation.IGeoBoundingBox;
 public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 	
 	private Connection connection;
-	
-	private ComponentContext componentContext;
-	
-	//
-	@SuppressWarnings("null")
-	private void updateGaugeValues4Track(Long trackID, Date startTime, Date endTime) {
-		boolean areGaugesUserDefined = false;
-		// are gauges predefined by the user, then use them
-		try (PreparedStatement userDefinedGaugeTrackStatement = connection.prepareStatement("SELECT gaugeid FROM gaugemeasurement WHERE trackid = ? AND source = ?");) {
-			userDefinedGaugeTrackStatement.setLong(1, trackID);
-			userDefinedGaugeTrackStatement.setInt(2, GaugeTrackSource.USERDEFINED.ordinal());
-			ResultSet query = userDefinedGaugeTrackStatement.executeQuery();
-			// multiple gauges. which one to pick for which location / area
-			// easiest solution is distance (per point ?) Store it for each track point to determine errors ?
-			while(query.next()) {
-				int gaugeId = query.getInt(1);
-				areGaugesUserDefined = true;
-				// ideally the gauges have a location and an area for which they are responsible
-				// then a fast decision for the appropriate gauge is possible
-//				retrieveLatestGaugeValues(startTime, endTime, gaugeId);
-				
-			}
-		} catch (SQLException e) {
-			Logger.getLogger(getClass()).error("Failed to query for user gauges", e);
-		}
-
-		if(!areGaugesUserDefined) {
-			// determine which water polygons may have been hit by the track
-//			ITriangulationPersistence p;
-//			p.getHitPartitionizedPolygons(Long trackId, "trackpoints_16_raw");
-			// ideally the gauges know their responsible areas - can be formulated coarse - no area means distance based determination
-			// query which gauges intersect the track bounding box
-			
-			// determine which gauges are present for the given polygons and their providers
-//			retrieveLatestGaugeValues(startTime, endTime, gaugeId);
-		}
-		
-		// determine the associated time frame for a single or multiple tracks - proper clustering required, global time required, if not provided anyway
-		// download the data for that track and store it locally
-		// save the water polygon id for later reference ?
-		
-	}
-
-	
 	
 	@Override
 	public double getCorrection(double lat, double lon, Date time2) {
@@ -108,14 +61,13 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 //		long timeX = time.getTime();
 		Gauge gauge = getGauge(lat, lon);
 		
-		PreparedStatement minStatement = null;
-		PreparedStatement maxStatement = null;
-		try {
+		try (PreparedStatement minStatement = connection.prepareStatement("SELECT time, value from GAUGEMEASUREMENT WHERE time = (SELECT MIN(time) FROM gaugemeasurement WHERE time >= ?) AND gaugeid = ?");
+			 PreparedStatement maxStatement = connection.prepareStatement("SELECT time, value from GAUGEMEASUREMENT WHERE time = (SELECT MAX(time) FROM gaugemeasurement WHERE time <= ?) AND gaugeid = ?")
+				){
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(time);
 			calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
 			
-			minStatement = connection.prepareStatement("SELECT time, value from GAUGEMEASUREMENT WHERE time = (SELECT MIN(time) FROM gaugemeasurement WHERE time >= ?) AND gaugeid = ?");
 			minStatement.setTimestamp(1, new Timestamp(time), calendar);
 			minStatement.setLong(2, gauge.getId());
 			ResultSet resultSet = minStatement.executeQuery();
@@ -126,7 +78,6 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 				endValue = resultSet.getDouble(2);
 			}
 			
-			maxStatement = connection.prepareStatement("SELECT time, value from GAUGEMEASUREMENT WHERE time = (SELECT MAX(time) FROM gaugemeasurement WHERE time <= ?) AND gaugeid = ?");
 			maxStatement.setTimestamp(1, new Timestamp(time), calendar);
 			maxStatement.setLong(2, gauge.getId());
 			ResultSet resultSet2 = maxStatement.executeQuery();
@@ -155,23 +106,7 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 			
 
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} finally {
-			if(minStatement != null) {
-				try {
-					minStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if(maxStatement != null) {
-				try {
-					maxStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			Logger.getLogger(getClass()).error("Failed to retrieve gauge values for LAT: " + lat + " LON:" + lon + " Date:" + time2);
 		}
 		
 		return 0;
@@ -213,16 +148,6 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 	public void setBoundingBox(IGeoBoundingBox boundingBox) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Activate
-	public void actviate(ComponentContext componentContext) {
-		this.componentContext = componentContext;
-	}
-
-	@Deactivate
-	public void deactivate(ComponentContext componentContext) {
-		this.componentContext = null;
 	}
 
 

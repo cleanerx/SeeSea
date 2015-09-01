@@ -5,7 +5,8 @@ Bundle-SymbolicName: net.sf.seesea.data.io
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.data.io.DataIOActivator
 Require-Bundle: org.eclipse.core.runtime,
- net.sf.seesea.model.core;bundle-version="1.0.0"
+ net.sf.seesea.model.core;bundle-version="1.0.0",
+ net.sf.seesea.services.navigation;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.data.io
