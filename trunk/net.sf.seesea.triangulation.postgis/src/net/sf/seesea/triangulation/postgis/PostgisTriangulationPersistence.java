@@ -421,75 +421,82 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	}
 
 	public Iterator<List<IPolygon>> getHitPartitionizedPolygons(Set<Long> trackIds, String trackpointTable) throws PersistenceException {
-		PreparedStatement boundaryStatement;
 		try {
 			Set<String> inshoreOSMids = new HashSet<String>();
 			Set<String> offshoreIds = new HashSet<String>();
-			for (Long trackId : trackIds) {
-				// the bounding box of the points for the track
-				boundaryStatement = triangulationConnection
-						.prepareStatement("SELECT st_xmin(ST_Extent(the_geom)), st_xmax(ST_Extent(the_geom)), st_ymin(ST_Extent(the_geom)), st_ymax(ST_Extent(the_geom)) FROM " + trackpointTable
-								+ " WHERE datasetid = ?");
-				boundaryStatement.setLong(1, trackId);
-				ResultSet query = boundaryStatement.executeQuery();
-				if (query.next()) {
-//				 double xmin = 7.7;
-//				 double xmax = 7.8;
-//				 double ymin = 54.6;
-//				 double ymax = 54.7;
-//				 double xmin = 8.16490;
-//				 double xmax = 8.18705;
-//				 double ymin = 48.906;
-//				 double ymax = 48.94058;
-					double xmin = query.getDouble(1);
-					double xmax = query.getDouble(2);
-					double ymin = query.getDouble(3);
-					double ymax = query.getDouble(4);
-					if(xmin == 0.0 && xmax==0.0 || ymin == 0.0 && ymax == 0.0) {
-						Logger.getLogger(getClass()).info("Skipping track id because no bounding box exists : " + trackId);
-						continue;
-					}
-					
-					// select all polygons of that bounding box
-					Statement inshoreStatement = inshoreConnection.createStatement();
-					Statement offshoreStatement = triangulationConnection.createStatement();
-					// formatter:off
-					
-					NumberFormat format = DecimalFormat.getNumberInstance(Locale.ENGLISH);
-					String envelope = MessageFormat.format("ST_MakeEnvelope({0}, {1}, {2}, {3}, 4326)",  format.format(xmin), format.format(ymin), format.format(xmax), format.format(ymax));
-//				ResultSet inshorePartionizedPolygonResultSet = inshoreStatement.executeQuery(
-//						"SELECT path, ST_X(ST_TRANSFORM(geom,4326)) AS lon, ST_Y(ST_TRANSFORM(geom,4326)) as lat, osm_id FROM " 
-//				     + "(SELECT * FROM ("
-//						+ "SELECT (ST_DUMPPOINTS(way)).*, * FROM planet_osm_polygon AS poly WHERE " +
-//						"(ST_Overlaps(way, ST_Transform(" + envelope +", 900913)) OR ST_Contains(ST_Transform(" + envelope + ", 900913), way) OR ST_Contains(way, ST_Transform(" + envelope + ", 900913)))  AND (\"natural\" = 'water' OR waterway IS NOT NULL OR water IS NOT NULL) ) AS xx  " + 
-//						") as g ");
-					// formatter:on
-					
-					ResultSet inshorePartionizedPolygonResultSet = inshoreStatement.executeQuery("SELECT osm_id FROM " 
-							+ "(SELECT * FROM ("
-							+ "SELECT osm_id FROM planet_osm_polygon AS poly WHERE " +
-							"(ST_Overlaps(way, ST_Transform(" + envelope +", 900913)) OR ST_Contains(ST_Transform(" + envelope + ", 900913), way) OR ST_Contains(way, ST_Transform(" + envelope + ", 900913)))  AND (\"natural\" = 'water' OR waterway IS NOT NULL OR water IS NOT NULL) ) AS xx  " + 
-							") as g ");
-					while(inshorePartionizedPolygonResultSet.next()) {
-						inshoreOSMids.add(inshorePartionizedPolygonResultSet.getString(1));
-					}
-					ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT gid FROM (SELECT gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
-					while(offshorePartionizedPolygonResultSet.next()) {
-						offshoreIds.add(offshorePartionizedPolygonResultSet.getString(1));
-					}
-					Logger.getLogger(getClass()).info((inshoreOSMids.size() + offshoreIds.size()) + "areas are considered for triangulation for track id " + trackId);
-//				ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT path, ST_X(geom) AS lon, ST_Y(geom) as lat, gid FROM (SELECT (ST_DUMPPOINTS(geom)).*, gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
-					
-					
-//				return new PolygonIterator(inshorePartionizedPolygonResultSet, offshorePartionizedPolygonResultSet);
-				}
-			}
+			getHitPartitionizedPolygons(trackIds, trackpointTable, inshoreOSMids, offshoreIds);
 			if(inshoreOSMids.isEmpty() && offshoreIds.isEmpty()) {
 				return null;
 			}
 			return new IdBasedPolygonIterator(inshoreOSMids, offshoreIds, inshoreConnection, triangulationConnection);
 		} catch (SQLException e) {
 			throw new PersistenceException(e);
+		}
+	}
+	
+//	public Set<Long> getHitPartitionizedPolygonIds(Set<Long> trackIds, String trackpointTable) throws PersistenceException {
+//		Set<String> inshoreOSMids = new HashSet<String>();
+//		Set<String> offshoreIds = new HashSet<String>();
+//		try {
+//			getHitPartitionizedPolygons(trackIds, trackpointTable, inshoreOSMids, offshoreIds);
+//		} catch (SQLException e1) {
+//			throw new PersistenceException("Failed to retrieve partitionized polygons", e1);
+//		}
+//		
+//		Set<Long> polygonIds = new HashSet<Long>();
+//		for (String string : offshoreIds) {
+//			try {
+//				polygonIds.add(Long.parseLong(string));
+//			} catch (NumberFormatException e) {
+//				// do nothing
+//			}
+//		}
+//		return polygonIds;
+//		
+//	}
+
+	public void getHitPartitionizedPolygons(Set<Long> trackIds, String trackpointTable, Set<String> inshoreOSMids,
+			Set<String> offshoreIds) throws SQLException {
+		PreparedStatement boundaryStatement;
+		for (Long trackId : trackIds) {
+			// the bounding box of the points for the track
+			boundaryStatement = triangulationConnection
+					.prepareStatement("SELECT st_xmin(ST_Extent(the_geom)), st_xmax(ST_Extent(the_geom)), st_ymin(ST_Extent(the_geom)), st_ymax(ST_Extent(the_geom)) FROM " + trackpointTable
+							+ " WHERE datasetid = ?");
+			boundaryStatement.setLong(1, trackId);
+			ResultSet query = boundaryStatement.executeQuery();
+			if (query.next()) {
+				double xmin = query.getDouble(1);
+				double xmax = query.getDouble(2);
+				double ymin = query.getDouble(3);
+				double ymax = query.getDouble(4);
+				if(xmin == 0.0 && xmax==0.0 || ymin == 0.0 && ymax == 0.0) {
+					Logger.getLogger(getClass()).info("Skipping track id because no bounding box exists : " + trackId);
+					continue;
+				}
+				
+				// select all polygons of that bounding box
+				Statement inshoreStatement = inshoreConnection.createStatement();
+				Statement offshoreStatement = triangulationConnection.createStatement();
+				// formatter:off
+				
+				NumberFormat format = DecimalFormat.getNumberInstance(Locale.ENGLISH);
+				String envelope = MessageFormat.format("ST_MakeEnvelope({0}, {1}, {2}, {3}, 4326)",  format.format(xmin), format.format(ymin), format.format(xmax), format.format(ymax));
+				ResultSet inshorePartionizedPolygonResultSet = inshoreStatement.executeQuery("SELECT osm_id FROM " 
+						+ "(SELECT * FROM ("
+						+ "SELECT osm_id FROM planet_osm_polygon AS poly WHERE " +
+						"(ST_Overlaps(way, ST_Transform(" + envelope +", 900913)) OR ST_Contains(ST_Transform(" + envelope + ", 900913), way) OR ST_Contains(way, ST_Transform(" + envelope + ", 900913)))  AND (\"natural\" = 'water' OR waterway IS NOT NULL OR water IS NOT NULL) ) AS xx  " + 
+						") as g ");
+				while(inshorePartionizedPolygonResultSet.next()) {
+					inshoreOSMids.add(inshorePartionizedPolygonResultSet.getString(1));
+				}
+				ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT gid FROM (SELECT gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
+				while(offshorePartionizedPolygonResultSet.next()) {
+					offshoreIds.add(offshorePartionizedPolygonResultSet.getString(1));
+				}
+				Logger.getLogger(getClass()).info((inshoreOSMids.size() + offshoreIds.size()) + "areas are considered for triangulation for track id " + trackId);
+//				ResultSet offshorePartionizedPolygonResultSet = offshoreStatement.executeQuery("SELECT path, ST_X(geom) AS lon, ST_Y(geom) as lat, gid FROM (SELECT (ST_DUMPPOINTS(geom)).*, gid FROM gebco_poly_100 WHERE ST_Overlaps(geom," + envelope + ") OR ST_Contains(" + envelope +", geom) OR ST_Contains(geom," + envelope +") ) AS g");
+			}
 		}
 	}
 

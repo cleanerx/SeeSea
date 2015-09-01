@@ -39,6 +39,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -51,19 +52,25 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import net.sf.seesea.data.io.postgis.PostgresConnectionFactory;
-import net.sf.seesea.gauge.IGaugeProvider;
-
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
+import net.sf.seesea.data.io.postgis.PostgresConnectionFactory;
+import net.sf.seesea.gauge.GaugeUpdateException;
+import net.sf.seesea.gauge.IGaugeProvider;
+
+@Component(property = {"provider=Wasser und Schifffahrsdirektion Germany"})
 public class WSVGaugeProvider implements IGaugeProvider {
 
 	private Connection gaugeConnection;
 
 	@Override
-	public void updateAllGaugeMeasurements(Date startDate, Date endDate) {
+	public void updateAllGaugeMeasurements(Date startDate, Date endDate) throws GaugeUpdateException {
 		try (Statement statement = gaugeConnection.createStatement();
 			ResultSet resultSet = statement.executeQuery("SELECT id, remoteid FROM gauge WHERE provider = 'Wasser und Schifffahrsdirektion Germany'")){
 			while(resultSet.next()) {
@@ -72,13 +79,21 @@ public class WSVGaugeProvider implements IGaugeProvider {
 				updateSingleGaugeMeasurements(localId, remoteId, startDate, endDate);
 			}
 		} catch (SQLException e) {
-			Logger.getLogger(getClass()).error("Database failure", e);
+			throw new GaugeUpdateException(e);
 		}
 	}
 
 	
 	@Override
-	public void updateSingleGaugeMeasurements(String localId, String remoteID, Date startDate, Date endDate) {
+	public void updateSingleGaugeMeasurements(String localId, String remoteID, Date startDate, Date endDate) throws GaugeUpdateException {
+		// this provide has only 60 days maxium so it does not make sense to do more
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, -60);
+		if(calendar.getTime().after(endDate)) {
+			Logger.getLogger(getClass()).info("No gauge values available for end date " + endDate);
+			return;
+		}
+		
 		try (Statement statementLastEntry = gaugeConnection.createStatement();
 			PreparedStatement statement = gaugeConnection.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)")){
 			Timestamp lastGaugeValueTimestamp = null;
@@ -111,13 +126,14 @@ public class WSVGaugeProvider implements IGaugeProvider {
 				statement.executeBatch();
 			}
 		} catch (SQLException e) {
-			Logger.getLogger(getClass()).error("Database failure", e);
+			throw new GaugeUpdateException(e);
 		} catch (ParseException e) {
-			Logger.getLogger(getClass()).error("Failed to parse gauge date", e);
+			throw new GaugeUpdateException(e);
 		}
 
 	}
 	
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC, target = "(db=gauge)")
 	public void bindConnection(Connection gaugeConnection) {
 		this.gaugeConnection = gaugeConnection;
 	}
@@ -133,16 +149,16 @@ public class WSVGaugeProvider implements IGaugeProvider {
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
 
-		WebTarget path = client.target("http://www.pegelonline.wsv.de").path("webservices").path("rest-api").path("v2").path("stations/" + remoteID + "/W/measurements.json").queryParam("start", "P30D");
+		WebTarget path = client.target("http://www.pegelonline.wsv.de").path("webservices").path("rest-api").path("v2").path("stations/" + remoteID + "/W/measurements.json").queryParam("start", "P60D");
         Response response = path.request(MediaType.APPLICATION_JSON).get();
         if(response.getStatus() == 200) {
         	List<WSVGaugeMeasurement> readEntity = response.readEntity(new GenericType<List<WSVGaugeMeasurement>>(){});
         	return readEntity;
         }
-        return Collections.EMPTY_LIST;
+        return Collections.<WSVGaugeMeasurement>emptyList();
 	}
 	
-	public static void main(String args[]) throws FileNotFoundException, IOException, SQLException {
+	public static void main(String args[]) throws FileNotFoundException, IOException, SQLException, GaugeUpdateException {
 		Properties properties = new Properties();
 		properties.load(new FileInputStream("config.cfg"));
 		Connection connection = PostgresConnectionFactory.getConnection(properties, "database");

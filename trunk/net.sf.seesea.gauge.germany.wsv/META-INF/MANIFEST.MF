@@ -10,6 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  net.java.jersey;bundle-version="2.18.0",
  net.sf.seesea.data.io.postgis;bundle-version="1.0.0",
  org.apache.log4j;bundle-version="1.2.16"
-Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/WSVGaugeProvider.xml
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.osgi.service.component.annotations
+Service-Component: OSGI-INF/net.sf.seesea.gauge.germany.wsv.WSVGaugeProvider.xml
+Bundle-ActivationPolicy: lazy

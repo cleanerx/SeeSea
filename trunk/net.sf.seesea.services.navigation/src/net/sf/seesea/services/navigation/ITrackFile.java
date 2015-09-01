@@ -1,6 +1,9 @@
 package net.sf.seesea.services.navigation;
 
 import java.io.InputStream;
+import java.util.Date;
+
+import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 
 public interface ITrackFile {
 
@@ -16,5 +19,9 @@ public interface ITrackFile {
 	boolean isHasAbsoluteTimedMeasurements();
 
 	boolean isHasRelativeTimedMeasurements();
+
+	Date getStartTime();
+
+	Date getEndTime();
 
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -21,14 +22,15 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import net.sf.seesea.data.io.IParitionRetrival;
 import net.sf.seesea.gauge.GaugeUpdateException;
 import net.sf.seesea.gauge.IGaugeProvider;
 import net.sf.seesea.gauge.IGaugeValueUpdater;
-import net.sf.seesea.services.navigation.IGeoBoundingBox;
 import net.sf.seesea.services.navigation.ITrackFile;
 
 @Component(immediate = true)
@@ -48,9 +50,24 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 		// maybe we hit more polygons than required but thats ok
 		Set<Long> candidatePolygonIds = new HashSet<>();
 		// for all water polygons in the bounding box update the gauge values
+		
+		Set<String> inshoreOSMids = new HashSet<String>();
+		Set<String> offshoreIds = new HashSet<String>();;
+
 		for (ITrackFile trackFile : clusterOfTrackFiles) {
-			candidatePolygonIds.addAll(getHitPartitionizedPolygonIds(trackFile.getBoundingBox()));
+			try {
+				partitionizeReference.get().getHitPartitionizedPolygons(trackFile.getBoundingBox(), inshoreOSMids, offshoreIds);
+				for (String string : inshoreOSMids) {
+					candidatePolygonIds.add(Long.parseLong(string));
+				}
+			} catch (SQLException e1) {
+				throw new GaugeUpdateException(e1);
+			}
 		}
+		if(candidatePolygonIds.isEmpty()) {
+			return;
+		}
+
 		Map<Long, Long> gaugeContainingPolygonIds2gaugeId = getGaugePoly();
 		
 		Set<Long> gaugeIds = new HashSet<>();
@@ -77,33 +94,30 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 			try {
 				retrieveLatestGaugeValues(startTime, endTime, gaugeId);
 			} catch (GaugeUpdateException e) {
-				Logger.getLogger(getClass()).error(" Failed",e);
+				Logger.getLogger(getClass()).error(MessageFormat.format("Failed to update gauge with id {0} start:{1} end:{2}", gaugeId, startTime, endTime) ,e);
 			}
 		}
 	}
 
-	private Set<Long> getHitPartitionizedPolygonIds(IGeoBoundingBox boundingBox) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void retrieveLatestGaugeValues(Date startTime, Date endTime, long gaugeId) throws GaugeUpdateException {
+		Logger.getLogger(getClass()).info(MessageFormat.format("Update gauge {0} between start {1} and end {2}", gaugeId, startTime, endTime));
 		// which gauge provider is responsible for that location ?
 		try (PreparedStatement gaugeProviderStatement = gaugeConnectionReference.get().prepareStatement("SELECT remoteid, provider FROM gauge WHERE id = ?");) {
 			gaugeProviderStatement.setLong(1, gaugeId);
-			ResultSet queryRemoteGauge = gaugeProviderStatement.executeQuery();
-			while(queryRemoteGauge.next()) {
-				String remoteId = queryRemoteGauge.getString(1);
-				String provider = queryRemoteGauge.getString(2);
-				for (ServiceReference<IGaugeProvider> gaugeProviderReference : gaugeProviderRefereneces) {
-					if(gaugeProviderReference.getProperty("provider").equals(provider)) {
-						try {
-							IGaugeProvider gaugeProvider = componentContext.getBundleContext().getService(gaugeProviderReference);
+			try(ResultSet queryRemoteGauge = gaugeProviderStatement.executeQuery()) {
+				while(queryRemoteGauge.next()) {
+					String remoteId = queryRemoteGauge.getString(1);
+					String provider = queryRemoteGauge.getString(2);
+					boolean providerFound = false;
+					for (ServiceReference<IGaugeProvider> gaugeProviderReference : gaugeProviderRefereneces) {
+						if(gaugeProviderReference.getProperty("provider").equals(provider)) {
+							providerFound = true;
+							IGaugeProvider gaugeProvider = (IGaugeProvider) componentContext.locateService("GAUGE_PROVIDERS", gaugeProviderReference);
 							gaugeProvider.updateSingleGaugeMeasurements(Long.toString(gaugeId), remoteId, startTime, endTime);
-							// TODO: return something in case it fails
-						} finally {
-							componentContext.getBundleContext().ungetService(gaugeProviderReference);
 						}
+					}
+					if(!providerFound) {
+						Logger.getLogger(getClass()).info("No gauge provider found for gauge id " + gaugeId + " and provider " + provider);
 					}
 				}
 			}
@@ -116,12 +130,6 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
     
     private boolean debug; 
     
-    @Activate
-    public void activate() {
-    	maxRecursionDepth = 10;
-    	debug = false;
-    }
-	
     /**
      * TODO: area could be better restricted
      * 
@@ -206,8 +214,18 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 		}
 		return null;
 	}
+
 	
 	private AtomicReference<Connection> gaugeConnectionReference = new AtomicReference<Connection>();
+
+	@Reference(policy = ReferencePolicy.DYNAMIC, target = "(db=osm)", cardinality = ReferenceCardinality.MANDATORY)
+	public synchronized void bindOSMConnection(Connection connection) {
+		osmConnectionReference.set(connection);
+	}
+
+	public synchronized void unbindOSMConnection(Connection connection) {
+		osmConnectionReference.compareAndSet(connection, null);
+	}
 
 	private AtomicReference<Connection> osmConnectionReference = new AtomicReference<Connection>();
 
@@ -220,28 +238,36 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 		gaugeConnectionReference.compareAndSet(connection, null);
 	}
 
-	@Reference(policy = ReferencePolicy.DYNAMIC, target = "(db=osm)", cardinality = ReferenceCardinality.MANDATORY)
-	public synchronized void bindOSMConnection(Connection connection) {
-		osmConnectionReference.set(connection);
+	private AtomicReference<IParitionRetrival> partitionizeReference = new AtomicReference<IParitionRetrival>();
+
+	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
+	public void bindPartitionizer(IParitionRetrival partitionize) {
+		partitionizeReference.set(partitionize);
 	}
 
-	public synchronized void unbindOSMConnection(Connection connection) {
-		osmConnectionReference.compareAndSet(connection, null);
+	public void unbindPartitionizer(IParitionRetrival partitionize) {
+		partitionizeReference.compareAndSet(partitionize, null);
 	}
 
 
 	private ComponentContext componentContext;
 	
-	public void actviate(ComponentContext componentContext) {
+	@Activate
+	public synchronized void actviate(ComponentContext componentContext) {
+    	maxRecursionDepth = 10;
+    	debug = false;
 		this.componentContext = componentContext;
 	}
 	
-	public void deactivate(ComponentContext componentContext) {
+	@Deactivate
+	public synchronized void deactivate(ComponentContext componentContext) {
 		this.componentContext = null;
 	}
 	
 	private List<ServiceReference<IGaugeProvider>> gaugeProviderRefereneces;
 
+	
+	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MULTIPLE, service = IGaugeProvider.class, name = "GAUGE_PROVIDERS")
 	public void bindGaugeProvider(ServiceReference<IGaugeProvider> serviceReference) {
 		gaugeProviderRefereneces.add(serviceReference);
 	}
