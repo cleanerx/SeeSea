@@ -68,7 +68,7 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 			return;
 		}
 
-		Map<Long, Long> gaugeContainingPolygonIds2gaugeId = getGaugePoly();
+//		Map<Long, Long> gaugeContainingPolygonIds2gaugeId = getGaugePoly();
 		
 		Set<Long> gaugeIds = new HashSet<>();
 		for (Long polygonIds : candidatePolygonIds) {
@@ -77,7 +77,7 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 			trackPolygonId.add(polygonIds);
 			Long nearestGaugePolygon;
 			try {
-				nearestGaugePolygon = getNearestGaugePolygon(osmConnectionReference.get(), trackPolygonId, 0, gaugeContainingPolygonIds2gaugeId.keySet(), new HashSet<Long>());
+				nearestGaugePolygon = getNearestGaugePolygon(trackPolygonId, 0, gaugeContainingPolygonIds2gaugeId.keySet(), new HashSet<Long>());
 				if(debug) {
 					Logger.getLogger(GaugeValueUpdater.class).debug("Gauge Polygon found:" + nearestGaugePolygon);
 				}
@@ -96,6 +96,16 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 			} catch (GaugeUpdateException e) {
 				Logger.getLogger(getClass()).error(MessageFormat.format("Failed to update gauge with id {0} start:{1} end:{2}", gaugeId, startTime, endTime) ,e);
 			}
+		}
+	}
+	
+	public Long getGaugeId(long polygonId) throws GaugeUpdateException {
+		Set<Long> trackPolygonId = new HashSet<Long>();
+		trackPolygonId.add(polygonId);
+		try {
+			return getNearestGaugePolygon(trackPolygonId, 0, gaugeContainingPolygonIds2gaugeId.keySet(), new HashSet<Long>());
+		} catch (SQLException e) {
+			throw new GaugeUpdateException(e);
 		}
 	}
 
@@ -173,43 +183,54 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 		return gaugeContainingPolygonIds2gaugeId;
 	}
 
-	private Long getNearestGaugePolygon(Connection connection, Set<Long> nodes, int recursionDepth , Set<Long> gaugeContainingPolygonIds, Set<Long> visitedNodes) throws SQLException {
-		Statement statement = connection.createStatement();
-		Set<Long> osmIds = new LinkedHashSet<Long>();
-		visitedNodes.addAll(nodes);
-		// this is a breadth first search. It there fore is related to the distance of reachability and may not always yield the closest point but a first good approximation
-		for (Long node : nodes) {
-			StringBuffer out = new StringBuffer();
-			if(debug) {
-				for (int i = 0 ; i < recursionDepth; i++) {
-					out.append(">");
-				}
-			}
-			try(ResultSet execute = statement.executeQuery("SELECT (b.osm_id) FROM planet_osm_polygon as a,planet_osm_polygon as b WHERE ST_Touches(a.way, b.way) AND a.osm_id != b.osm_id AND (b.water is not null OR b.waterway is not null OR b.natural = 'water') AND a.osm_id = " + node)) {
-				while(execute.next()) {
-					long osmId = execute.getLong(1);
-					if(visitedNodes.contains(osmId)) {
-						continue;
-					}
-					if(gaugeContainingPolygonIds.contains(osmId)) {
-						return osmId;
-					} else {
-						osmIds.add(osmId);
-					}
-					if(debug) {
-						Logger.getLogger(GaugeValueUpdater.class).debug(out.toString() + node + "->" + osmId);
+	/**
+	 * recursively determine the first osm polygon for the given osm node. This is a breadth first search 
+	 * 
+	 * @param nodes
+	 * @param recursionDepth
+	 * @param gaugeContainingPolygonIds
+	 * @param visitedNodes
+	 * @return
+	 * @throws SQLException
+	 */
+	private Long getNearestGaugePolygon(Set<Long> nodes, int recursionDepth, Set<Long> gaugeContainingPolygonIds , Set<Long> visitedNodes) throws SQLException {
+		try (Statement statement = osmConnectionReference.get().createStatement()) {
+			Set<Long> osmIds = new LinkedHashSet<Long>();
+			visitedNodes.addAll(nodes);
+			// this is a breadth first search. It there fore is related to the distance of reachability and may not always yield the closest point but a first good approximation
+			for (Long node : nodes) {
+				StringBuffer out = new StringBuffer();
+				if(debug) {
+					for (int i = 0 ; i < recursionDepth; i++) {
+						out.append(">");
 					}
 				}
+				try(ResultSet execute = statement.executeQuery("SELECT (b.osm_id) FROM planet_osm_polygon as a,planet_osm_polygon as b WHERE ST_Touches(a.way, b.way) AND a.osm_id != b.osm_id AND (b.water is not null OR b.waterway is not null OR b.natural = 'water') AND a.osm_id = " + node)) {
+					while(execute.next()) {
+						long osmId = execute.getLong(1);
+						if(visitedNodes.contains(osmId)) {
+							continue;
+						}
+						if(gaugeContainingPolygonIds.contains(osmId)) {
+							return osmId;
+						} else {
+							osmIds.add(osmId);
+						}
+						if(debug) {
+							Logger.getLogger(GaugeValueUpdater.class).debug(out.toString() + node + "->" + osmId);
+						}
+					}
+				}
 			}
-		}
-		if(recursionDepth < maxRecursionDepth) {
-			Long neighbors = getNearestGaugePolygon(connection, osmIds, ++recursionDepth, gaugeContainingPolygonIds, visitedNodes);
-			if(neighbors != null) {
-				return neighbors;
-			}
-		} else {
-			if(debug) {
-				Logger.getLogger(GaugeValueUpdater.class).debug("recursion depth reached - no gauge found for node id ");
+			if(recursionDepth < maxRecursionDepth) {
+				Long neighbors = getNearestGaugePolygon(osmIds, ++recursionDepth, gaugeContainingPolygonIds, visitedNodes);
+				if(neighbors != null) {
+					return neighbors;
+				}
+			} else {
+				if(debug) {
+					Logger.getLogger(GaugeValueUpdater.class).debug("recursion depth reached - no gauge found for node id ");
+				}
 			}
 		}
 		return null;
@@ -253,9 +274,10 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 	private ComponentContext componentContext;
 	
 	@Activate
-	public synchronized void actviate(ComponentContext componentContext) {
+	public synchronized void actviate(ComponentContext componentContext) throws GaugeUpdateException {
     	maxRecursionDepth = 10;
     	debug = false;
+		gaugeContainingPolygonIds2gaugeId = getGaugePoly();
 		this.componentContext = componentContext;
 	}
 	
@@ -265,6 +287,8 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 	}
 	
 	private List<ServiceReference<IGaugeProvider>> gaugeProviderRefereneces;
+
+	private Map<Long, Long> gaugeContainingPolygonIds2gaugeId;
 
 	
 	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MULTIPLE, service = IGaugeProvider.class, name = "GAUGE_PROVIDERS")

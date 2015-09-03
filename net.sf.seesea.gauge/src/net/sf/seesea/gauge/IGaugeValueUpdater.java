@@ -10,5 +10,7 @@ public interface IGaugeValueUpdater {
 
 	void updateGaugeValues4Track(List<ITrackFile> clusterOfTrackFiles) throws GaugeUpdateException;
 
+	Long getGaugeId(long polygonId) throws GaugeUpdateException;
+
 	
 }
