@@ -42,7 +42,12 @@ import net.sf.seesea.waterlevel.ocean.LengthUnit;
 import net.sf.seesea.waterlevel.ocean.TideLevel;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
+@Component(property = {"type:String=oceantidegauge"})
 public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 
 	private Connection coastlineConnection;
@@ -208,6 +213,7 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 		}
 	}
 
+	@Reference(policy = ReferencePolicy.DYNAMIC, target = "(type=gauge)", cardinality = ReferenceCardinality.MANDATORY)
 	public synchronized void bindWaterLevelCorrection(IWaterLevelCorrection gaugeCorrection) {
 		this.gaugeCorrection = gaugeCorrection;
 	}
@@ -216,6 +222,7 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 		this.gaugeCorrection = null;
 	}
 
+	@Reference(policy = ReferencePolicy.DYNAMIC, target = "(db=coastline)", cardinality = ReferenceCardinality.MANDATORY)
 	public synchronized void bindCoastlineConnection(Connection connection) {
 		this.coastlineConnection = connection;
 	}
@@ -224,6 +231,7 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 		this.coastlineConnection = null;
 	}
 
+	@Reference(policy = ReferencePolicy.DYNAMIC, target = "(db=coastline)", cardinality = ReferenceCardinality.MANDATORY)
 	public synchronized void bindOceanTideProvider(IOceanTideProvider oceantideProvider) {
 		this.oceantideProvider = oceantideProvider;
 	}
