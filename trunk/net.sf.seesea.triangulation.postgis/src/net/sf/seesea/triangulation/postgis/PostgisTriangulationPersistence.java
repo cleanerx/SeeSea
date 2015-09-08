@@ -671,12 +671,13 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 
 			Logger.getLogger(getClass()).debug(MessageFormat.format("INSERT INTO contoursplit (m, the_geom, source) VALUES ({0}, {1}, " + 100L + ")", //$NON-NLS-1$
 					depth, postgisMultiLineString.toString()));
-			statement.addBatch();
-			lastStatement = statement;
-			batchCounter++;
-			if(batchCounter > 50) {
-				statement.executeBatch();
-			}
+			statement.execute();
+//			lastStatement = statement;
+//			batchCounter++;
+//			if(batchCounter > 50) {
+//				int[] executeBatch = statement.executeBatch();
+//				int f = 1;
+//			}
 			
 //			mergeBorderCrossingContours(boundary, boundaryTrianglePairs);
 		} catch (SQLException e) {
