@@ -17,9 +17,14 @@ import javax.ws.rs.core.MediaType;
 import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.Stats;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @Path("/stats")
+@Api(value ="/stats")
 public class StatsResource {
 	
+	@ApiOperation(value = "Get database statistics", response = Stats.class)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Stats getStats() {
