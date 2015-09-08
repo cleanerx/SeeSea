@@ -43,11 +43,21 @@ import org.osm.depth.upload.resources.TrackResource;
 import org.osm.depth.upload.resources.UserResource;
 import org.osm.depth.upload.resources.VesselConfigurationResource;
 
+import com.wordnik.swagger.jaxrs.config.BeanConfig;
+
 /**
  * The core jax-rs class to register all resources and features
  */
 public class OSMAPIApplication extends Application {
 
+	public OSMAPIApplication() {
+		BeanConfig beanConfig = new BeanConfig();
+        beanConfig.setVersion("2.0.0");
+        beanConfig.setBasePath("http://localhost:8080/org.osm.depth.upload/apidoc");
+        beanConfig.setResourcePackage("org.osm.depth.upload.resources");
+        beanConfig.setScan(true);
+	}
+	
 	@Override
     public Set<Class<?>> getClasses() {
 	    HashSet<Class<?>> set = new HashSet<Class<?>>(2);
@@ -62,6 +72,9 @@ public class OSMAPIApplication extends Application {
 	    set.add(VesselConfigurationResource.class);
 	    set.add(MultiPartFeature.class);
 	    set.add(RolesAllowedDynamicFeature.class);
+	    set.add(com.wordnik.swagger.jersey.listing.ApiListingResourceJSON.class);
+	    set.add(com.wordnik.swagger.jersey.listing.JerseyApiDeclarationProvider.class);
+	    set.add(com.wordnik.swagger.jersey.listing.JerseyResourceListingProvider.class);
     return set;
 	}
 }
