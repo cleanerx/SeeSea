@@ -56,6 +56,9 @@ public class GaugeValueUpdater implements IGaugeValueUpdater {
 
 		for (ITrackFile trackFile : clusterOfTrackFiles) {
 			try {
+				if(trackFile.getBoundingBox() != null && (Math.abs(trackFile.getBoundingBox().getRight() - trackFile.getBoundingBox().getLeft()) > 2.0 || Math.abs(trackFile.getBoundingBox().getTop() - trackFile.getBoundingBox().getBottom()) > 2.0)) {
+					throw new GaugeUpdateException("Bounding box of track " + trackFile.getTrackId() + " is larger than 2 degrees. Skipping gauge determination.");
+				}
 				partitionizeReference.get().getHitPartitionizedPolygons(trackFile.getBoundingBox(), inshoreOSMids, offshoreIds);
 				for (String string : inshoreOSMids) {
 					candidatePolygonIds.add(Long.parseLong(string));
