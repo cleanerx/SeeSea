@@ -3,19 +3,19 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Gaugeocean
 Bundle-SymbolicName: net.sf.seesea.waterlevel.gaugeocean
 Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: SeeSea
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Service-Component: OSGI-INF/OceanGauageWaterlevelCorrection.xml,
- OSGI-INF/net.sf.seesea.waterlevel.GaugeValueUpdater.xml,
- OSGI-INF/net.sf.seesea.waterlevel.GaugeWaterLevelCorrection.xml
-Import-Package: org.osgi.framework,
- org.osgi.service.component,
- org.osgi.service.component.annotations
 Bundle-ClassPath: lib/,
  .
+Bundle-Vendor: SeeSea
 Require-Bundle: net.sf.seesea.gauge;bundle-version="1.0.0",
  net.sf.seesea.services.navigation;bundle-version="1.0.0",
  net.sf.seesea.waterlevel;bundle-version="1.0.0",
  org.apache.log4j;bundle-version="1.2.16",
  net.sf.seesea.data.io,
  net.sf.seesea.geometry
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Service-Component: OSGI-INF/net.sf.seesea.waterlevel.CombinedWaterLevelCorrection.xml,
+ OSGI-INF/net.sf.seesea.waterlevel.GaugeValueUpdater.xml,
+ OSGI-INF/net.sf.seesea.waterlevel.GaugeWaterLevelCorrection.xml
+Import-Package: org.osgi.framework,
+ org.osgi.service.component,
+ org.osgi.service.component.annotations
