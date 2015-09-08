@@ -481,6 +481,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 				// formatter:off
 				
 				NumberFormat format = DecimalFormat.getNumberInstance(Locale.ENGLISH);
+				format.setMaximumFractionDigits(Integer.MAX_VALUE);
 				String envelope = MessageFormat.format("ST_MakeEnvelope({0}, {1}, {2}, {3}, 4326)",  format.format(xmin), format.format(ymin), format.format(xmax), format.format(ymax));
 				ResultSet inshorePartionizedPolygonResultSet = inshoreStatement.executeQuery("SELECT osm_id FROM " 
 						+ "(SELECT * FROM ("
