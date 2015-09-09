@@ -100,8 +100,10 @@ public class TriangulationBasedContourLineGeneration implements IContourLineGene
 
 		final List<NeighboringTrianglesOnBoundary> boundaryTrianglePairs = triangulationPersistence.getBoundaryTrianglePairs(triangulationDescription.getBorder());
 		
-		// split boundary crossing contour lines again to reflect the partitionized state
-//		triangulationPersistence.splitMergedContourLines(triangulationDescription.getBorder(), boundaryTrianglePairs);
+		if(!Boolean.getBoolean("disableMerge")) {
+			// split boundary crossing contour lines again to reflect the partitionized state
+			triangulationPersistence.splitMergedContourLines(triangulationDescription.getBorder(), boundaryTrianglePairs);
+		}
 
 		// remove all contour lines that are completely contained in this area since a new triangulation is present
 		triangulationPersistence.removeContourLines(triangulationDescription.getBorder(), triangulationDescription.getHoles());
@@ -130,7 +132,9 @@ public class TriangulationBasedContourLineGeneration implements IContourLineGene
 //				}
 //			});
 		}
-//		triangulationPersistence.mergeBorderCrossingContours(triangulationDescription.getBorder(), boundaryTrianglePairs);
+		if(!Boolean.getBoolean("disableMerge")) {
+			triangulationPersistence.mergeBorderCrossingContours(triangulationDescription.getBorder(), boundaryTrianglePairs);
+		}
 		return contourLines;
 	}
 	
