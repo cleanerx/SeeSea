@@ -59,6 +59,7 @@ import net.sf.seesea.geometry.IEdge;
 import net.sf.seesea.geometry.IPoint;
 import net.sf.seesea.geometry.IPolygon;
 import net.sf.seesea.geometry.ITriangle;
+import net.sf.seesea.geometry.impl.DirectedEdge;
 import net.sf.seesea.geometry.impl.Point;
 import net.sf.seesea.geometry.impl.Polygon;
 import net.sf.seesea.geometry.impl.Triangle;
@@ -603,24 +604,28 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 					contourLineX.getPoints().remove(contourLineX.getPoints().size() - 1);
 				}
 
+				IEdge sharedEdge = outerTriangle.getSharedEdge(neighboringTrianglesOnBoundary.getTriangleA());
 				// delete this contour line, close it on both ends and add new contour lines
 				for (IContourLine existingContourLine : existingBoundaryCrossingContourLines) {
+					
 					IContourLine splitContourLineA = new ContourLine();
 					IContourLine splitContourLineB = new ContourLine();
 					List<IPoint> pointsA = existingContourLine.getPoints();
 					int startIndexSegmentA = -1;
 					int endIndexSegmentA = -1;
 					for (IPoint point : pointsA) {
-						for (IEdge edge : outerTriangle.getEdges()) {
-							if (edge.isOnEdge(point)) {
+						if(!pointsA.get(0).equals(point)) {
+							int index = pointsA.indexOf(point);
+							boolean intersects = sharedEdge.intersects(new DirectedEdge(point, pointsA.get(index - 1)));
+							if(intersects) {
+//							if (sharedEdge.isOnEdge(point)) {
 								if (startIndexSegmentA == -1) {
-									startIndexSegmentA = pointsA.indexOf(point);
-									break;
+									startIndexSegmentA = pointsA.indexOf(point) -1;
 								} else {
-									endIndexSegmentA = pointsA.indexOf(point);
-									break;
+									endIndexSegmentA = pointsA.indexOf(point) - 1;
 								}
 							}
+							Logger.getLogger(getClass()).debug(pointsA.indexOf(point) + ":" + intersects +":" + point.getDistance(sharedEdge.getDestination()) + ":" + point.getDistance(sharedEdge.getOrigin()) + ":" + point);
 						}
 					}
 					splitContourLineA.setDepth(existingContourLine.getDepth());
@@ -639,10 +644,14 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 					// do not add old contours that span only the current
 					// boundary, since these are old contours that are being
 					// updated
-					String postgisLineContourA = PostgisHelper.getPostgisLineString(splitContourLineA.getPoints());
-					updateContourLineStatement.executeUpdate("INSERT INTO contoursplit (the_geom, m) VALUES (" + postgisLineContourA + ", " + existingContourLine.getDepth() + ")");
-					String postgisLineContourB = PostgisHelper.getPostgisLineString(splitContourLineB.getPoints());
-					updateContourLineStatement.executeUpdate("INSERT INTO contoursplit (the_geom, m) VALUES (" + postgisLineContourB + ", " + existingContourLine.getDepth() + ")");
+					if(!splitContourLineA.getPoints().isEmpty()) {
+						String postgisLineContourA = PostgisHelper.getPostgisLineString(splitContourLineA.getPoints());
+						updateContourLineStatement.executeUpdate("INSERT INTO contoursplit (the_geom, m) VALUES (" + postgisLineContourA + ", " + existingContourLine.getDepth() + ")");
+					}
+					if(!splitContourLineB.getPoints().isEmpty()) {
+						String postgisLineContourB = PostgisHelper.getPostgisLineString(splitContourLineB.getPoints());
+						updateContourLineStatement.executeUpdate("INSERT INTO contoursplit (the_geom, m) VALUES (" + postgisLineContourB + ", " + existingContourLine.getDepth() + ")");
+					}
 				}
 			}
 		} catch (SQLException e) {
