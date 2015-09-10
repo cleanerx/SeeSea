@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Simple Filter
+Bundle-SymbolicName: net.sf.seesea.filter.simple
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: net.sf.seesea.data.io;bundle-version="1.0.0",
+ net.sf.seesea.services.navigation;bundle-version="1.0.0",
+ net.sf.seesea.model.core;bundle-version="1.0.0",
+ org.apache.commons.math;bundle-version="3.0.0",
+ net.sf.seesea.waterlevel;bundle-version="1.0.0",
+ net.sf.seesea.filter.api;bundle-version="1.0.0",
+ org.apache.log4j;bundle-version="1.2.16"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Service-Component: OSGI-INF/net.sf.seesea.data.postprocessing.filter.UnfiltertedConfiguration.xml
+Import-Package: org.osgi.service.component.annotations
