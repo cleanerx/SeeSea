@@ -24,4 +24,6 @@ public interface ITrackFile {
 
 	Date getEndTime();
 
+	String getFileType();
+
 }
