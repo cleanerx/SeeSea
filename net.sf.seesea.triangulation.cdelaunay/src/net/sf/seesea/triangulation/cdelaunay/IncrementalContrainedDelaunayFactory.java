@@ -27,9 +27,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.triangulation.cdelaunay;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.triangulation.ITriangulationFactory;
 import net.sf.seesea.triangulation.ITriangulator;
 
+@Component
 public class IncrementalContrainedDelaunayFactory implements ITriangulationFactory {
 
 	@Override
