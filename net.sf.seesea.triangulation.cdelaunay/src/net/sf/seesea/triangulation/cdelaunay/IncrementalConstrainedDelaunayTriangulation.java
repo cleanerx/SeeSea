@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import org.eclipse.core.runtime.Assert;
+
 import net.sf.seesea.geometry.IBoxExtends;
 import net.sf.seesea.geometry.ICircle;
 import net.sf.seesea.geometry.IEdge;
@@ -412,39 +414,40 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 //		System.out.println("Neighbors: " + oppositeTriangle.getNeighbors().size() + ":" + oppositeTriangle.getNeighbors());
 		List<IPoint> aPoints = triangle.getPoints();
 		List<IPoint> bPoints = oppositeTriangle.getPoints();
-		quadtree.remove(triangle);
-		quadtree.remove(oppositeTriangle);
-		Set<ITriangle> oldNeighbors = new LinkedHashSet<ITriangle>(); 
-		oldNeighbors.addAll(triangle.getNeighbors());
-		for (ITriangle neighbor : triangle.getNeighbors()) {
+		if(quadtree != null) {
+			quadtree.remove(triangle);
+			quadtree.remove(oppositeTriangle);
+		}
+		Set<ITriangle> oldNeighbors = new LinkedHashSet<ITriangle>(4); 
+
+		// remove the mutual neighbors
+		if(!triangle.getNeighbors().remove(oppositeTriangle)) {
+			throw new RuntimeException("Failed");
+		}
+		if(!oppositeTriangle.getNeighbors().remove(triangle)) {
+			throw new RuntimeException("Failed");
+		}
+
+		// store the old neighbors of both surroundings
+		Set<ITriangle> t1neighbors = triangle.getNeighbors();
+		oldNeighbors.addAll(t1neighbors);
+		Set<ITriangle> o1neighbors = oppositeTriangle.getNeighbors();
+		oldNeighbors.addAll(o1neighbors);
+
+		// remove the swapping triangles as neighbors since they will be changed
+		for (ITriangle neighbor : t1neighbors) {
 //			System.out.println(neighbor + "Bsize" + neighbor.getNeighbors().size());
 			neighbor.getNeighbors().remove(triangle);
 //			System.out.println(neighbor + "Asize" + neighbor.getNeighbors().size());
 		}
-		for (ITriangle neighbor : oppositeTriangle.getNeighbors()) {
+		for (ITriangle neighbor : o1neighbors) {
 //			System.out.println(neighbor +  "Bsize" + neighbor.getNeighbors().size());
 			neighbor.getNeighbors().remove(oppositeTriangle);
 //			System.out.println(neighbor + "Asize" + neighbor.getNeighbors().size());
 		}
-		oldNeighbors.addAll(oppositeTriangle.getNeighbors());
-//		for (ITriangle neighbor : oldNeighbors) {
-//			neighbor.getNeighbors().remove(triangle);
-//			neighbor.getNeighbors().remove(oppositeTriangle);			
-//		}
-
-		oldNeighbors.remove(triangle);
-		oldNeighbors.remove(oppositeTriangle);
+		t1neighbors.clear();
+		o1neighbors.clear();
 		
-//		for (ITriangle triangleNeighbour : oldNeighbors) {
-//			triangleNeighbour.getNeighbors().remove(triangle);
-//			triangleNeighbour.getNeighbors().remove(oppositeTriangle);
-//		}
-//		triangle.getNeighbors().remove(oppositeTriangle);
-//		oldNeighbors = triangle.getNeighbors();
-//		for (ITriangle triangleNeighbour : oldNeighbors) {
-//			triangleNeighbour.getNeighbors().remove(oppositeTriangle);
-//		}
-//		oppositeTriangle.getNeighbors().remove(triangle);
 		IPoint a1 = aPoints.get(0);
 		IPoint a2 = aPoints.get(1);
 		IPoint a3 = aPoints.get(2);
@@ -453,8 +456,11 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		IPoint b3 = bPoints.get(2);
 		
 		IEdge sharedEdge = triangle.getSharedEdge(oppositeTriangle);
+		Assert.isNotNull(sharedEdge);
 		IPoint pointNotOnEdge = getPointNotOnEdge(triangle, sharedEdge);
+		Assert.isNotNull(pointNotOnEdge);
 		IPoint oppositePointNotOnEdge = getPointNotOnEdge(oppositeTriangle, sharedEdge);
+		Assert.isNotNull(oppositePointNotOnEdge);
 		aPoints.clear();
 		aPoints.add(pointNotOnEdge);
 		aPoints.add(sharedEdge.getOrigin());
@@ -472,8 +478,10 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		restoreNeighbors(oppositeTriangle, oldNeighbors);
 		oppositeTriangle.getNeighbors().add(triangle);
 		triangle.getNeighbors().add(oppositeTriangle);
-		quadtree.insert(triangle);
-		quadtree.insert(oppositeTriangle);
+		if(quadtree != null) {
+			quadtree.insert(triangle);
+			quadtree.insert(oppositeTriangle);
+		}
 	}
 
 	private IPoint getPointNotOnEdge(ITriangle triangle, IEdge sharedEdge) {
@@ -487,7 +495,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 	}
 
 	private void restoreNeighbors(ITriangle triangle, Set<ITriangle> allOldNeighbours) {
-		triangle.getNeighbors().clear();
+//		triangle.getNeighbors().clear();
 		for (Iterator<ITriangle> iterator = allOldNeighbours.iterator(); iterator.hasNext();) {
 			ITriangle neighbour = iterator.next();
 			if(neighbour.getSharedEdge(triangle) != null && !triangle.getNeighbors().contains(neighbour)) {
