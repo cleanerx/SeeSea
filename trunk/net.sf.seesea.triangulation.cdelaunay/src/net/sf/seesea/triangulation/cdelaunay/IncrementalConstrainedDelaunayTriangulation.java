@@ -27,8 +27,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.triangulation.cdelaunay;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -38,8 +41,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import org.eclipse.core.runtime.Assert;
-
+import net.sf.seesea.data.io.PersistenceException;
 import net.sf.seesea.geometry.IBoxExtends;
 import net.sf.seesea.geometry.ICircle;
 import net.sf.seesea.geometry.IEdge;
@@ -53,6 +55,8 @@ import net.sf.seesea.geometry.impl.Triangle;
 import net.sf.seesea.geometry.impl.TriangleComparator;
 import net.sf.seesea.triangulation.ITriangulationPersistence;
 import net.sf.seesea.triangulation.ITriangulator;
+
+import org.eclipse.core.runtime.Assert;
 
 /**
  * This implementation is based upon:<br>
@@ -77,7 +81,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 
 	private List<IPolygon> holes;
 
-	private List<IEdge> constraintEdges;
+	private Collection<IEdge> constraintEdges;
 
 	private long startTime;
 
@@ -85,9 +89,11 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 
 	private ITriangulationPersistence triangulationPersistence;
 	
+	private int edgeCounter = 0;
+	
 	public IncrementalConstrainedDelaunayTriangulation() {
 		points = new MultiArrrayList();
-		constraintEdges = new ArrayList<IEdge>();
+		constraintEdges = new HashSet<IEdge>();
 		
 	}
 
@@ -106,19 +112,20 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		this.boundary = boundary;
 	}
 	
-	private List<IEdge> getContraintEdges() {
+	private Collection<IEdge> getContraintEdges() {
 		return constraintEdges;
 	}
 	
 	public void triangulate(ITriangulationPersistence postgisTriangulationPersistence) {
+		long start = System.currentTimeMillis(); 
 		this.triangulationPersistence = postgisTriangulationPersistence;
 		startTime = System.currentTimeMillis();
 		triangles = new ArrayList<ITriangle>();
 		triangulationPoints = new HashSet<IPoint>();
 		// create super triangle
-		ITriangle createSuperTriangle = createSuperTriangle();
-		quadtree = new Quadtree<IBoxExtends>(1, createSuperTriangle.getBoundingBox());
-		addTriangle(triangles,createSuperTriangle);
+		ITriangle superTriangle = createSuperTriangle();
+		quadtree = new Quadtree<IBoxExtends>(1, superTriangle.getBoundingBox());
+		addTriangle(triangles,superTriangle);
 		System.out.println("Initial triangles count:" + triangles.size() + " Quadtree size:" + quadtree.size());
 		long time = System.currentTimeMillis();
 		
@@ -143,7 +150,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 						System.out.println(i + ":" + (System.currentTimeMillis() - time) );
 						time = System.currentTimeMillis();
 					}
-					addEdge2Triangulation(edge, triangles);
+					addEdge2Triangulation(edge, triangles, superTriangle);
 				}
 			}
 		}
@@ -160,12 +167,35 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		for (int i = 0; i < boundaryPoints.size() - 1; i++) {
 			IPoint point = boundaryPoints.get(i);
 			IPoint point2 = boundaryPoints.get(i + 1);
+			boolean addedPointA = false;
+			boolean addedPointB = false;
+			if(!triangulationPoints.contains(point)) {
+				addedPointA = addPoint2Triangulation(point, false);
+				if(addedPointA) {
+					triangulationPoints.add(point);
+				}
+			}
+			if(!triangulationPoints.contains(point2)) {
+				addedPointB = addPoint2Triangulation(point2, false);	
+				if(addedPointB) {
+					triangulationPoints.add(point2);
+				}
+			}
+			while(!addedPointB) {
+				System.out.println("Skipped point " + point2 );
+				point2 = boundaryPoints.get(++i + 1);
+				if(!triangulationPoints.contains(point2)) {
+					addedPointB = addPoint2Triangulation(point2, false);	
+					if(addedPointB) {
+						triangulationPoints.add(point2);
+					}
+				}
+			}
 			IEdge edge = new DirectedEdge(point, point2);
-			addPoint2Triangulation(edge.getOrigin(), false);
-			triangulationPoints.add(point);
-			addPoint2Triangulation(edge.getDestination(), false);
-			triangulationPoints.add(point2);
-			addEdge2Triangulation(edge, triangles);
+			addEdge2Triangulation(edge, triangles, superTriangle);
+			if((i % 1000) == 0) {
+				System.out.println("processed " + i + " boundary points" + (System.currentTimeMillis() - start));
+			}
 		}
 		for (ITriangle triangle : triangles) {
 			IPoint a = triangle.getPoints().get(0);
@@ -220,9 +250,9 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 	}
 
 	private boolean removeTriangle(List<ITriangle> triangles2,
-			ITriangle createSuperTriangle) {
-		boolean remove = triangles2.remove(createSuperTriangle);
-		quadtree.remove(createSuperTriangle);
+			ITriangle triangle) {
+		boolean remove = triangles2.remove(triangle);
+		quadtree.remove(triangle);
 		return remove;
 	}
 
@@ -255,9 +285,9 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		double yMid = (yMin + yMax) / 2f;
 
 		Triangle superTriangle = new Triangle(
-			new Point(xMid - 2f * dMax, yMid - dMax),
-			new Point(xMid, yMid + 2f * dMax),
-			new Point(xMid + 2f * dMax, yMid - dMax)
+			new Point(xMid - 2f * dMax, yMid - dMax, 0),
+			new Point(xMid, yMid + 2f * dMax, 0),
+			new Point(xMid + 2f * dMax, yMid - dMax, 0)
 		);
 
 		return superTriangle;
@@ -266,9 +296,9 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 	private boolean addPoint2Triangulation(IPoint point, boolean containmentCheck) {
 		// TODO: point must be in interor 
 		// not existing
-		if(triangulationPoints.contains(point)) {
-			return false;
-		}
+//		if(triangulationPoints.contains(point)) {
+//			return false;
+//		}
 //		System.out.println(point);
 		if(containmentCheck) {
 			for(IEdge e : constraintEdges) {
@@ -278,55 +308,163 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 			}
 		}
 		
-		Map<ITriangle, Integer> neighbourCount = new HashMap<ITriangle, Integer>();
+//		Map<ITriangle, Integer> neighbourCount = new HashMap<ITriangle, Integer>();
 		
 		Stack<ITriangle> stack = new Stack<ITriangle>();
-		ITriangle triangle = getTriangle(point);
-		if(triangle == null) {
-			return false;
-		}
-		IPoint a = triangle.getPoints().get(0);
-		IPoint b = triangle.getPoints().get(1);
-		IPoint c = triangle.getPoints().get(2);
+		List<ITriangle> foundTriangles = getTriangle(point);
+		// damn its lying on a line of both triangles, resolve both of them in a coordinated fashion
+		if(foundTriangles.size() == 2) {
+			ITriangle triangleA = foundTriangles.get(0);
+			ITriangle triangleB = foundTriangles.get(1);
+			removeTriangle(triangles, triangleA);
+			removeTriangle(triangles, triangleB);
+
+//			try {
+//				triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//			} catch (PersistenceException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			
+			IEdge sharedEdge = triangleA.getSharedEdge(triangleB);
+			IPoint nonSharedPointA = triangleA.oppositePoint(triangleB);
+			IPoint nonSharedPointB = triangleB.oppositePoint(triangleA);
+			IPoint origin = sharedEdge.getOrigin();
+			IPoint destination = sharedEdge.getDestination();
+				
+			Triangle t1 = new Triangle(nonSharedPointA, origin, point);
+			Triangle t2 = new Triangle(nonSharedPointA, point, destination);
+			Triangle t3 = new Triangle(nonSharedPointB, origin, point);
+			Triangle t4 = new Triangle(nonSharedPointB, point, destination);
+			
+			Set<ITriangle> neighbors = new LinkedHashSet<ITriangle>();
+			neighbors.addAll(triangleA.getNeighbors());
+			neighbors.addAll(triangleB.getNeighbors());
+			neighbors.remove(triangleA);
+			neighbors.remove(triangleB);
+			List<ITriangle> tris = new ArrayList<>(4);
+			tris.add(t1);
+			tris.add(t2);
+			tris.add(t3);
+			tris.add(t4);
+
+			neighbors.addAll(tris);
+			for (ITriangle neighbour : neighbors) {
+//				neighbourCount.put(neighbour, neighbour.getNeighbors().size());
+				neighbour.getNeighbors().remove(triangleA);
+				neighbour.getNeighbors().remove(triangleB);
+				for (ITriangle n : neighbors) {
+					if(neighbour != n && neighbour.getSharedEdge(n) != null) {
+						n.getNeighbors().add(neighbour);
+						neighbour.getNeighbors().add(n);
+					}
+				}
+			}
+			addTriangle(triangles, t1);
+//			try {
+//				triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//			} catch (PersistenceException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			addTriangle(triangles, t2);
+//			try {
+//				triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//			} catch (PersistenceException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			addTriangle(triangles, t3);
+//			try {
+//				triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//			} catch (PersistenceException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			addTriangle(triangles, t4);
+			
+
+			stack.addAll(tris);
+			while(!stack.isEmpty()) {
+				ITriangle t = stack.pop();
+				ITriangle oppositeTriangle = t.opposedTriangle(point);
+//			System.out.println("Cur:"+  t);
+//			System.out.println("Opp:" + oppositeTriangle);
+				// edge not fixed? 
+				if(oppositeTriangle != null && !isSharedEdgeConstrained(t, oppositeTriangle) && oppositeTriangle.getCircumcircle().contains(point)) {
+					// swap
+					swapEdges(t, oppositeTriangle);
+					stack.push(t);
+					stack.push(oppositeTriangle);
+				}
+			}
+
+//			try {
+//				triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//			} catch (PersistenceException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+
+
+			
+		} else if(foundTriangles.size() == 1) {
+			ITriangle triangle = foundTriangles.iterator().next();
+			IPoint a = triangle.getPoints().get(0);
+			IPoint b = triangle.getPoints().get(1);
+			IPoint c = triangle.getPoints().get(2);
 //		if(a.getX() == 8.18539218520265 && a.getY == 48.9334509071769 && b.getX() x=8.186452197237912, y=48.93100338065217, z=0.0], [x=8.18211755649745, y=48.930859616532324, z=0.0]])
 //		if(boundCheck(a, b) || boundCheck(b, a) || boundCheck(a, c) || boundCheck(c, a) || boundCheck(b, c) || boundCheck(c, a)) {
 //			postgisTriangulationPersistence.persistTriangulation(triangles, null);
 //			System.out.println("x");
 //		}
-		
-		Triangle t1 = new Triangle(a, b, point);
-		Triangle t2 = new Triangle(b, c, point);
-		Triangle t3 = new Triangle(c, a, point);
-		removeTriangle(triangles, triangle);
-		t1.getNeighbors().add(t2);
-		t1.getNeighbors().add(t3);
-		t2.getNeighbors().add(t3);
-		t2.getNeighbors().add(t1);
-		t3.getNeighbors().add(t1);
-		t3.getNeighbors().add(t2);
-
-		// add old neighbours
-		Set<ITriangle> neighbors = new LinkedHashSet<ITriangle>();
-		neighbors.addAll(triangle.getNeighbors());
-		for (ITriangle neighbour : neighbors) {
-			neighbourCount.put(neighbour, neighbour.getNeighbors().size());
-			neighbour.getNeighbors().remove(triangle);
-			if(neighbour.getSharedEdge(t1) != null) {
-				t1.getNeighbors().add(neighbour);
-				neighbour.getNeighbors().add(t1);
-//				System.out.println("shared edge t1");
-			} 
-			if(neighbour.getSharedEdge(t2) != null) {
-				t2.getNeighbors().add(neighbour);
-				neighbour.getNeighbors().add(t2);
-//				System.out.println("shared edge t2");
-			} 
-			if(neighbour.getSharedEdge(t3) != null) {
-				t3.getNeighbors().add(neighbour);
-				neighbour.getNeighbors().add(t3);
-//				System.out.println("shared edge t3");
+			int oldNeighbors = triangle.getNeighbors().size();
+			
+			// temporary fix. do not add points that are on edges. This should done differently
+			for(IEdge e : triangle.getEdges()) {
+				if(e.isOnEdge(point, 0.00001)) {
+					return false;
+				}
 			}
-		}
+			
+			Triangle t1 = new Triangle(a, b, point);
+			Triangle t2 = new Triangle(b, c, point);
+			Triangle t3 = new Triangle(c, a, point);
+			removeTriangle(triangles, triangle);
+			t1.getNeighbors().add(t2);
+			t1.getNeighbors().add(t3);
+			t2.getNeighbors().add(t3);
+			t2.getNeighbors().add(t1);
+			t3.getNeighbors().add(t1);
+			t3.getNeighbors().add(t2);
+			
+			// add old neighbours
+			Set<ITriangle> neighbors = new LinkedHashSet<ITriangle>();
+			neighbors.addAll(triangle.getNeighbors());
+			for (ITriangle neighbour : neighbors) {
+//				neighbourCount.put(neighbour, neighbour.getNeighbors().size());
+				neighbour.getNeighbors().remove(triangle);
+				if(neighbour.getSharedEdge(t1) != null) {
+					t1.getNeighbors().add(neighbour);
+					neighbour.getNeighbors().add(t1);
+//				System.out.println("shared edge t1");
+				} 
+				if(neighbour.getSharedEdge(t2) != null) {
+					t2.getNeighbors().add(neighbour);
+					neighbour.getNeighbors().add(t2);
+//				System.out.println("shared edge t2");
+				} 
+				if(neighbour.getSharedEdge(t3) != null) {
+					t3.getNeighbors().add(neighbour);
+					neighbour.getNeighbors().add(t3);
+//				System.out.println("shared edge t3");
+				}
+			}
+			int newNeighbors = t1.getNeighbors().size() + t2.getNeighbors().size() + t3.getNeighbors().size();
+			if(newNeighbors - oldNeighbors - 6 != 0) {
+				throw new RuntimeException();
+			}
+
 //		System.out.println("After Neighbors: " + t1.getNeighbors().size() + ":" + t1.getNeighbors());
 //		System.out.println("After Neighbors: " + t2.getNeighbors().size() + ":" + t2.getNeighbors());
 //		System.out.println("After Neighbors: " + t3.getNeighbors().size() + ":" + t3.getNeighbors());
@@ -340,37 +478,45 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 //				System.out.println("XXX:" + neighbor.getPoints());
 //			}
 //		}
-		
+			
 //		for (ITriangle neigh : neighbors) {
 //			if(!triangles.contains(neigh)) {
 //				System.out.println("neighbor gone:" + neigh );
 //			}
 //		}
-
-
-		addTriangle(triangles, t1);
-		addTriangle(triangles, t2);
-		addTriangle(triangles, t3);
+			
+			
+			addTriangle(triangles, t1);
+			addTriangle(triangles, t2);
+			addTriangle(triangles, t3);
 //		System.out.println(triangles.size() + ":" + quadtree.size());
-
+			
 //		for(ITriangle t : t3.getNeighbors()) {
 //			System.out.println(t.getSharedEdge(t3));
 //		}
-		stack.add(t1);
-		stack.add(t2);
-		stack.add(t3);
-		while(!stack.isEmpty()) {
-			ITriangle t = stack.pop();
-			ITriangle oppositeTriangle = t.opposedTriangle(point);
+			stack.add(t1);
+			stack.add(t2);
+			stack.add(t3);
+			while(!stack.isEmpty()) {
+				ITriangle t = stack.pop();
+				ITriangle oppositeTriangle = t.opposedTriangle(point);
 //			System.out.println("Cur:"+  t);
 //			System.out.println("Opp:" + oppositeTriangle);
-			// edge not fixed? 
-			if(oppositeTriangle != null && !isSharedEdgeConstrained(t, oppositeTriangle) && oppositeTriangle.getCircumcircle().contains(point)) {
-				// swap
-				swapEdges(t, oppositeTriangle);
-				stack.push(t);
-				stack.push(oppositeTriangle);
+				// edge not fixed? 
+				if(oppositeTriangle != null && !isSharedEdgeConstrained(t, oppositeTriangle) && oppositeTriangle.getCircumcircle().contains(point)) {
+					// swap
+					swapEdges(t, oppositeTriangle);
+					stack.push(t);
+					stack.push(oppositeTriangle);
+				}
 			}
+//			try {
+//				triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//			} catch (PersistenceException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+
 		}
 //		System.out.println("After Neighbors: " + t1.getNeighbors().size() + ":" + t1.getNeighbors());
 //		System.out.println("After Neighbors: " + t2.getNeighbors().size() + ":" + t2.getNeighbors());
@@ -397,7 +543,20 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 //			}
 //		}
 //		postgisTriangulationPersistence.persistTriangulation(triangles, null);
-
+	else {
+//		try {
+//			triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//		} catch (PersistenceException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		System.out.println("multi triangles : " + point);
+		for (ITriangle iTriangle : foundTriangles) {
+			System.out.println(iTriangle + ":" + iTriangle.contains(point));
+		}
+		return false;
+	}
+		
 		return true;
 	}
 
@@ -420,6 +579,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		}
 		Set<ITriangle> oldNeighbors = new LinkedHashSet<ITriangle>(4); 
 
+		int oldSize = triangle.getNeighbors().size() + oppositeTriangle.getNeighbors().size();
 		// remove the mutual neighbors
 		if(!triangle.getNeighbors().remove(oppositeTriangle)) {
 			throw new RuntimeException("Failed");
@@ -482,6 +642,8 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 			quadtree.insert(triangle);
 			quadtree.insert(oppositeTriangle);
 		}
+		int newSize = triangle.getNeighbors().size() + oppositeTriangle.getNeighbors().size();
+		Assert.isTrue(oldSize == newSize);
 	}
 
 	private IPoint getPointNotOnEdge(ITriangle triangle, IEdge sharedEdge) {
@@ -511,7 +673,17 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		return getContraintEdges().contains(sharedEdge);
 	}
 
-	protected void addEdge2Triangulation(IEdge edge, List<ITriangle> triangles2) {
+	protected void addEdge2Triangulation(IEdge edge, List<ITriangle> triangles2, ITriangle superTriangle) {
+		edgeCounter++;
+		if(edgeCounter == 27500) {
+			System.out.println("x");
+//			try {
+//				triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//			} catch (PersistenceException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		}
 		// punkte sind in der triangulation und die kante ist nicht in constrained segments
 		List<IPoint> pseudoUpperPolygon = new ArrayList<IPoint>();
 		List<IPoint> pseudoLowerPolygon = new ArrayList<IPoint>();
@@ -520,7 +692,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		
 		ITriangle currentTriangle = null;
 		boolean constraintEdge = getContraintEdges().contains(edge);
-		for (ITriangle triangle : triangles) {
+		for (ITriangle triangle : triangles2) {
 			if(triangle.checkConstraintEdge(edge)) {
 				getContraintEdges().add(edge);
 				break;
@@ -548,6 +720,14 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		
 		while(!currentTriangle.getPoints().contains(edge.getDestination())) {
 			oppositeTriangle = opposedTrianlgeIntersectingEdge(currentTriangle, currentPoint, edge);
+			if(oppositeTriangle == null) {
+				try {
+					triangulationPersistence.persistTriangulation(getTriangulation(), null);
+				} catch (PersistenceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			oppositePoint = oppositeTriangle.oppositePoint(currentTriangle);
 			if(!oppositePoint.equals(edge.getDestination())) {
 				if(edge.isAbove(oppositePoint)) {
@@ -569,7 +749,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 				}
 			}
 			System.out.println("old:" + currentTriangle);
-			if(removeTriangle(triangles,currentTriangle)) {
+			if(removeTriangle(triangles2,currentTriangle)) {
 				oldTriangleNeighbours.addAll(currentTriangle.getNeighbors());
 				for (ITriangle neighbor : currentTriangle.getNeighbors()) {
 					neighbor.getNeighbors().remove(currentTriangle);
@@ -579,8 +759,8 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 			currentTriangle = oppositeTriangle;
 		}
 		System.out.println("old:" + currentTriangle);
-		if(removeTriangle(triangles,currentTriangle)) {
-			oldTriangleNeighbours.add(currentTriangle);
+		if(removeTriangle(triangles2,currentTriangle)) {
+			oldTriangleNeighbours.addAll(currentTriangle.getNeighbors());
 			for (ITriangle neighbor : currentTriangle.getNeighbors()) {
 				neighbor.getNeighbors().remove(currentTriangle);
 			}
@@ -631,6 +811,13 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 				System.out.println("N:To few neigh:"+  iTriangle.getNeighbors());
 				for (ITriangle existingTris : triangles) {
 					if(existingTris.getSharedEdge(iTriangle) != null) {
+						IEdge sharedEdge2 = iTriangle.getSharedEdge(superTriangle);
+						try {
+							triangulationPersistence.persistTriangulation(getTriangulation(), null);
+						} catch (PersistenceException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						System.out.println("forcefully adding neighbr");
 						iTriangle.getNeighbors().add(existingTris);
 						existingTris.getNeighbors().add(iTriangle);
@@ -674,14 +861,27 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 	protected void triangulatePsedopolygonDelaunay(List<IPoint> vertices, IEdge edge,
 			List<ITriangle> triangles2) {
 		IPoint c = null;
+		List<IPoint> allPoints = new ArrayList<>(vertices);
+		allPoints.add(edge.getOrigin());
+		allPoints.add(edge.getDestination());
+		
 		if(vertices.size() > 1) {
-			c = vertices.get(0);
-			ICircle circumcircle = new Triangle(edge.getOrigin(), edge.getDestination(), c).getCircumcircle();
-			for (IPoint point : vertices) {
-				if(circumcircle.contains(point)) {
-					c = point;
+			point : for (IPoint vertex : vertices) {
+				ICircle circumcircle = new Triangle(edge.getOrigin(), edge.getDestination(), vertex).getCircumcircle();
+				for (IPoint iPoint : allPoints) {
+					if(!circumcircle.contains(iPoint)) {
+						c = vertex;
+						break point;
+					}
 				}
 			}
+//			c = vertices.get(0);
+//			for (IPoint point : vertices) {
+//				if(!circumcircle.contains(point)) {
+//					c = point;
+////					break;
+//				}
+//			}
 			// divide P into PE and PD
 			List<IPoint> pseudoPolygonD = new ArrayList<IPoint>();
 			List<IPoint> pseudoPolygonE = new ArrayList<IPoint>();
@@ -701,6 +901,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 			trianglePoints.add(edge.getDestination());
 			trianglePoints.add(c);
 			Triangle triangle = new Triangle(trianglePoints);
+			System.out.println("new:" + triangle);
 			triangles2.add(triangle);
 		}
 		
@@ -725,17 +926,18 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		return triangles;
 	}
 	
-	private ITriangle getTriangle(IPoint point) {
+	private List<ITriangle> getTriangle(IPoint point) {
 		List<ITriangle> indexTriangles = new ArrayList<ITriangle>();
+		List<ITriangle> results = new ArrayList<>(1);
 //		long currentTimeMillis = System.currentTimeMillis();
 //		System.out.println("next: " + currentTimeMillis);
 		quadtree.retrieve((List)indexTriangles, point);
 		ITriangle quadTriangle = null;
 //		System.out.println(indexTriangles.size());
 		for (ITriangle triangle : indexTriangles) {
-			if(triangle.contains(point)) {
-				quadTriangle=  triangle;
-				break;
+			if(triangle.contains(point)) { 
+				results.add(triangle);
+//				break;
 			}
 		}
 //		long l = System.currentTimeMillis() - currentTimeMillis;
@@ -764,7 +966,7 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 //		}
 //		l = System.currentTimeMillis() - currentTimeMillis;
 //		System.out.println("next: " + l);
-		return quadTriangle;
+		return results;
 //		return normalSearch;
 	}
 
