@@ -9,6 +9,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -29,8 +30,10 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.exceptions.ResourceInUseException;
 import org.osm.depth.upload.messages.License;
+import org.osm.depth.upload.messages.Track;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Path("/license")
 @Api(tags = {"License"})
@@ -38,6 +41,7 @@ public class LicenseResource {
 
 	@GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@ApiOperation(value = "Lists available licenses for upload", response = License.class, responseContainer = "List")
 	public List<License> getAllLicenses(@javax.ws.rs.core.Context SecurityContext context) {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
@@ -105,6 +109,7 @@ public class LicenseResource {
 	@GET
 	@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({ MediaType.TEXT_PLAIN})
+	@ApiOperation(value = "Gets all license short name concatenated", notes = "This may be used to show location specific license data in a map")
 	@Path("bbox")
 	public String getLicenses(@QueryParam("lat1") String lat1, @QueryParam("lon1") String lon1, @QueryParam("lat2") String lat2, @QueryParam("lon2") String lon2) {
 		Context initContext;
@@ -164,6 +169,7 @@ public class LicenseResource {
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+	@ApiOperation(value = "Create a new license", notes = "Create your own or fill in an existing license for which to upload data. You may even make it available for everyone")
 	public String newLicense(@javax.ws.rs.core.Context SecurityContext context, License license) {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
@@ -201,6 +207,7 @@ public class LicenseResource {
 	
 	@DELETE
 	@Path("{id}")
+	@ApiOperation(value = "Delete a license", notes = "The license may not be deleted if any track is associated with that license. You may only delete your own licenses. Admin may delete every license")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public Response delete(@javax.ws.rs.core.Context SecurityContext context, @PathParam(value = "id") String id) {
 		String username = context.getUserPrincipal().getName();

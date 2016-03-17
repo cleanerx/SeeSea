@@ -86,7 +86,7 @@ import io.swagger.annotations.ApiResponses;
 
 //@Api(value = "/users", description="This resource is for creating, updating and deleting users")
 @Path("/users")
-@Api(tags = {"User Management"})
+@Api(tags = { "User Management" })
 public class UserResource {
 
 	/**
@@ -101,54 +101,53 @@ public class UserResource {
 	@ApiOperation(value = "Create a BASE64 encoded png as captcha. This may be used to validate a request")
 	public Response createCatpcha() {
 		Builder builder = new Builder(160, 40);
-		jj.play.ns.nl.captcha.Captcha captcha = builder.addText(new DefaultTextProducer(6)).gimp(new BlockGimpyRenderer()).build();
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+		jj.play.ns.nl.captcha.Captcha captcha = builder.addText(new DefaultTextProducer(6))
+				.gimp(new BlockGimpyRenderer()).build();
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 			ImageIO.write(captcha.getImage(), "png", byteArrayOutputStream); //$NON-NLS-1$
 			byte[] imageData = byteArrayOutputStream.toByteArray();
-			
+
 			CaptchaManagement.getInstance().registerCaptcha(captcha.getAnswer());
 			Captcha captcha2 = new Captcha();
-//			captcha2.id = captchaid;
+			// captcha2.id = captchaid;
 			captcha2.imageBase64 = org.postgresql.util.Base64.encodeBytes(imageData);
-			return Response.
-					ok(captcha2).
-					header("Cache-Control", "no-cache, no-store, must-revalidate").
-					header("Pragma", "no-cache").
-					header("Expires", "0").
-					build();
+			return Response.ok(captcha2).header("Cache-Control", "no-cache, no-store, must-revalidate")
+					.header("Pragma", "no-cache").header("Expires", "0").build();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return Response.serverError().build();
 	}
-	
-	@ApiOperation( value="Change the password", notes = "Changes the users password. The user must be signed in in order to do that.")
-	@ApiResponses(value = { @ApiResponse(code = 500, message = "Additional 'Error' header reveals the error")})
+
+	@ApiOperation(value = "Change the password", notes = "Changes the users password. The user must be signed in in order to do that.")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Additional 'Error' header reveals the error") })
 	@Path("changepass")
 	@POST
-	public Response changePassword(@javax.ws.rs.core.Context SecurityContext context, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword) {
+	public Response changePassword(@javax.ws.rs.core.Context SecurityContext context,
+			@QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword) {
 		String username = context.getUserPrincipal().getName();
-		if(oldPassword == null) {
+		if (oldPassword == null) {
 			return Response.serverError().header("Error", ErrorCode.NO_OLD_PASSWORD).build();
 		}
-		if(newPassword == null) {
+		if (newPassword == null) {
 			return Response.serverError().header("Error", ErrorCode.NO_NEW_PASSWORD).build();
 		}
 		Context initContext;
 		try {
 			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			try (Connection conn = ds.getConnection();
-			     PreparedStatement selectstatement = conn.prepareStatement("UPDATE user_profiles SET password = ? WHERE password = ? AND user_name = ?")){
-					selectstatement.setString(1, newPassword);
-					selectstatement.setString(2, oldPassword);
-					selectstatement.setString(3, username);
-					int executeUpdate = selectstatement.executeUpdate();
-					if(executeUpdate == 1) {
-						return Response.ok().build();
-					} else {
-						return Response.serverError().header("Error", ErrorCode.OLD_PASSWORD_MISMATCH).build();
-					}
+					PreparedStatement selectstatement = conn.prepareStatement(
+							"UPDATE user_profiles SET password = ? WHERE password = ? AND user_name = ?")) {
+				selectstatement.setString(1, newPassword);
+				selectstatement.setString(2, oldPassword);
+				selectstatement.setString(3, username);
+				int executeUpdate = selectstatement.executeUpdate();
+				if (executeUpdate == 1) {
+					return Response.ok().build();
+				} else {
+					return Response.serverError().header("Error", ErrorCode.OLD_PASSWORD_MISMATCH).build();
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -158,145 +157,144 @@ public class UserResource {
 			throw new DatabaseException("Database unavailable");
 		}
 	}
-	
+
+	@ApiOperation(value = "Reset your password", notes = "You may reset your password by supplying a valid capture text for a given and email. The reset password will be mailed to the account owner")
 	@Path("reset")
 	@POST
-	@Consumes({MediaType.APPLICATION_FORM_URLENCODED})
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response resetPassword(@FormParam("username") String email, @FormParam("captcha") String captcha) {
-		if(CaptchaManagement.getInstance().unregisterCaptcha(captcha)) {
-		InitialContext initCtx;
-		try {
-			initCtx = new InitialContext();
-			DataSource ds = (DataSource)initCtx.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
+		if (CaptchaManagement.getInstance().unregisterCaptcha(captcha)) {
+			InitialContext initCtx;
 			try {
-				PreparedStatement selectstatement = conn.prepareStatement("SELECT user_name FROM user_profiles WHERE user_name = ?");
-				try {
-					selectstatement.setString(1, email);
-					ResultSet resultSet = selectstatement.executeQuery();
-					if(resultSet.next()) {
-						SecureRandom random = new SecureRandom();
-						String clearTextPassword = new BigInteger(130, random).toString(32);
-						String newPassword = encryptPassword(clearTextPassword);
-						PreparedStatement setNewPasswordStatement = conn.prepareStatement("UPDATE user_profiles SET password = ? WHERE user_name = ?");
-						try {
-							setNewPasswordStatement.setString(1, newPassword);
-							setNewPasswordStatement.setString(2, email);
-							int executeUpdate = setNewPasswordStatement.executeUpdate();
-							if(executeUpdate == 1) {
-								Context envCtx = (Context) initCtx.lookup("java:comp/env");
-								Session session = (Session) envCtx.lookup("mail/Session");
-								
-								Message message = new MimeMessage(session);
-								message.setFrom(new InternetAddress("openseamap-depth@rachael.franken.de"));
-								InternetAddress to[] = new InternetAddress[1];
-								to[0] = new InternetAddress(email);
-								message.setRecipients(Message.RecipientType.TO, to);
-								message.setSubject("[NO REPLY] OpenSeaMap Password Reset");
-								message.setContent("You have requested a password reset.\n\nYour password has been reset to : " + clearTextPassword + "\n\n This is a generated email. Do NOT reply to this email.\n\nThe OpenSeaMap Team", "text/plain");
-								Transport.send(message);
-							} else {
-								return Response.serverError().header("Error", ErrorCode.NO_SUCH_USER).build();
-							}
-							
-						} finally {
-							setNewPasswordStatement.close();
-						}
-
-					}
-				} finally {
-					selectstatement.close();
-				}
-			} finally {
-				conn.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Internal SQL Error");
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		} catch (NamingException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Database unavailable");
-		}
-		return Response.ok().build();
-		}
-		throw new ValidationException(Status.BAD_REQUEST);
-	}
-	
-	@PUT
-	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response updateUser(@javax.ws.rs.core.Context SecurityContext context, User user) {
-			String username = context.getUserPrincipal().getName();
-			Context initContext;
-			try {
-				initContext = new InitialContext();
-				DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+				initCtx = new InitialContext();
+				DataSource ds = (DataSource) initCtx.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 				Connection conn = ds.getConnection();
 				try {
-					conn.setAutoCommit(false);
-					PreparedStatement insertUserStatement = conn.prepareStatement("UPDATE user_profiles (forename, surname, organisation, acceptedEmailContact, country, language, phone) VALUES (?,?,?,?,?,?,?) WHERE user_name = ?");
+					PreparedStatement selectstatement = conn
+							.prepareStatement("SELECT user_name FROM user_profiles WHERE user_name = ?");
 					try {
-					insertUserStatement.setString(1, user.forname);
-					insertUserStatement.setString(2, user.surname);
-					insertUserStatement.setString(3, user.organisation);
-					insertUserStatement.setBoolean(4, "on".equals(user.acceptedEmailContact) || "true".equals(user.acceptedEmailContact));
-					insertUserStatement.setString(5, user.country);
-					insertUserStatement.setString(6, user.language);
-					insertUserStatement.setString(7, user.phone);
-					insertUserStatement.setString(8, username);
-					return Response.status(204).build();
+						selectstatement.setString(1, email);
+						ResultSet resultSet = selectstatement.executeQuery();
+						if (resultSet.next()) {
+							SecureRandom random = new SecureRandom();
+							String clearTextPassword = new BigInteger(130, random).toString(32);
+							String newPassword = encryptPassword(clearTextPassword);
+							PreparedStatement setNewPasswordStatement = conn
+									.prepareStatement("UPDATE user_profiles SET password = ? WHERE user_name = ?");
+							try {
+								setNewPasswordStatement.setString(1, newPassword);
+								setNewPasswordStatement.setString(2, email);
+								int executeUpdate = setNewPasswordStatement.executeUpdate();
+								if (executeUpdate == 1) {
+									Context envCtx = (Context) initCtx.lookup("java:comp/env");
+									Session session = (Session) envCtx.lookup("mail/Session");
+
+									Message message = new MimeMessage(session);
+									message.setFrom(new InternetAddress("openseamap-depth@rachael.franken.de"));
+									InternetAddress to[] = new InternetAddress[1];
+									to[0] = new InternetAddress(email);
+									message.setRecipients(Message.RecipientType.TO, to);
+									message.setSubject("[NO REPLY] OpenSeaMap Password Reset");
+									message.setContent(
+											"You have requested a password reset.\n\nYour password has been reset to : "
+													+ clearTextPassword
+													+ "\n\n This is a generated email. Do NOT reply to this email.\n\nThe OpenSeaMap Team",
+											"text/plain");
+									Transport.send(message);
+								} else {
+									return Response.serverError().header("Error", ErrorCode.NO_SUCH_USER).build();
+								}
+
+							} finally {
+								setNewPasswordStatement.close();
+							}
+
+						}
 					} finally {
-						insertUserStatement.close();
+						selectstatement.close();
 					}
 				} finally {
 					conn.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
-				throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
+				throw new DatabaseException("Internal SQL Error");
+			} catch (MessagingException e) {
+				e.printStackTrace();
 			} catch (NamingException e) {
 				e.printStackTrace();
-				throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+				throw new DatabaseException("Database unavailable");
 			}
+			return Response.ok().build();
+		}
+		throw new ValidationException(Status.BAD_REQUEST);
 	}
-	
+
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@ApiOperation(value = "Update user data", notes = "The users personal data may be updated by himself and himself only")
+	public Response updateUser(@javax.ws.rs.core.Context SecurityContext context, User user) {
+		String username = context.getUserPrincipal().getName();
+		Context initContext;
+		try {
+			initContext = new InitialContext();
+			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+			try (Connection conn = ds.getConnection()) {
+				conn.setAutoCommit(false);
+				try (PreparedStatement insertUserStatement = conn.prepareStatement(
+						"UPDATE user_profiles (forename, surname, organisation, acceptedEmailContact, country, language, phone) VALUES (?,?,?,?,?,?,?) WHERE user_name = ?")) {
+					insertUserStatement.setString(1, user.forname);
+					insertUserStatement.setString(2, user.surname);
+					insertUserStatement.setString(3, user.organisation);
+					insertUserStatement.setBoolean(4,
+							"on".equals(user.acceptedEmailContact) || "true".equals(user.acceptedEmailContact));
+					insertUserStatement.setString(5, user.country);
+					insertUserStatement.setString(6, user.language);
+					insertUserStatement.setString(7, user.phone);
+					insertUserStatement.setString(8, username);
+					return Response.status(204).build();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Internal SQL Error"); //$NON-NLS-1$
+		} catch (NamingException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
+		}
+	}
+
 	@POST
-	@Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.APPLICATION_JSON})
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	public Response createUser(
-			@FormParam("username") String username,
-			@FormParam("password") String password,
-			@FormParam("forename") String forename,
-			@FormParam("surname") String surname,
+	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@ApiOperation(value = "Creates a new user", notes = "The user is identified by his email address.")
+	public Response createUser(@FormParam("username") String username, @FormParam("password") String password,
+			@FormParam("forename") String forename, @FormParam("surname") String surname,
 			@FormParam("organisation") String organisation,
-			@FormParam("acceptedEmailContact") String acceptedEmailContact,
-			@FormParam("country") String country,
-			@FormParam("language") String language,
-			@FormParam("phone") String phone,
-			@FormParam("captcha") String captcha
-			)
-		{
-		if(CaptchaManagement.getInstance().unregisterCaptcha(captcha)) {
+			@FormParam("acceptedEmailContact") String acceptedEmailContact, @FormParam("country") String country,
+			@FormParam("language") String language, @FormParam("phone") String phone,
+			@FormParam("captcha") String captcha) {
+		if (CaptchaManagement.getInstance().unregisterCaptcha(captcha)) {
 			Context initContext;
 			try {
 				initContext = new InitialContext();
-				DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-				Connection conn = ds.getConnection();
-				try {
+				DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
+				try (Connection conn = ds.getConnection()) {
 					conn.setAutoCommit(false);
-					Statement statement = conn.createStatement();
-					try {
-						PreparedStatement insertUserStatement = conn.prepareStatement("INSERT INTO user_profiles (user_name, password, forename, surname, organisation, acceptedEmailContact, country, language, phone) VALUES (?,?,?,?,?,?,?,?,?)");
+					try (Statement statement = conn.createStatement()) {
+						PreparedStatement insertUserStatement = conn.prepareStatement(
+								"INSERT INTO user_profiles (user_name, password, forename, surname, organisation, acceptedEmailContact, country, language, phone) VALUES (?,?,?,?,?,?,?,?,?)");
 						try {
-							PreparedStatement insertUserRoleStatement = conn.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
+							PreparedStatement insertUserRoleStatement = conn
+									.prepareStatement("INSERT INTO userroles (user_name, role) VALUES (?, 'USER')");
 							try {
-								PreparedStatement usernameExists = conn.prepareStatement("SELECT user_name FROM user_profiles WHERE user_name = ?"); //$NON-NLS-1$
+								PreparedStatement usernameExists = conn
+										.prepareStatement("SELECT user_name FROM user_profiles WHERE user_name = ?"); //$NON-NLS-1$
 								try {
 									usernameExists.setString(1, username);
-									if(usernameExists.executeQuery().next()) {
+									if (usernameExists.executeQuery().next()) {
 										throw new ConflictException("Username exists", Status.CONFLICT);
 									}
 									insertUserStatement.setString(1, username);
@@ -304,7 +302,8 @@ public class UserResource {
 									insertUserStatement.setString(3, forename);
 									insertUserStatement.setString(4, surname);
 									insertUserStatement.setString(5, organisation);
-									insertUserStatement.setBoolean(6, "on".equals(acceptedEmailContact) || "true".equals(acceptedEmailContact));
+									insertUserStatement.setBoolean(6,
+											"on".equals(acceptedEmailContact) || "true".equals(acceptedEmailContact));
 									insertUserStatement.setString(7, country);
 									insertUserStatement.setString(8, language);
 									insertUserStatement.setString(9, phone);
@@ -314,14 +313,18 @@ public class UserResource {
 									conn.commit();
 									Context envCtx = (Context) initContext.lookup("java:comp/env");
 									Session session = (Session) envCtx.lookup("mail/Session");
-									
+
 									Message message = new MimeMessage(session);
 									message.setFrom(new InternetAddress("openseamap-depth@rachael.franken.de"));
 									InternetAddress to[] = new InternetAddress[1];
 									to[0] = new InternetAddress(username);
 									message.setRecipients(Message.RecipientType.TO, to);
 									message.setSubject("[NO REPLY] Welcome to OpenSeaMap ");
-									message.setContent("You have successfully registered to the OpenSeaMap Depth Project.\n\nYour username is " + username + ".\n\nPlease regard the upload instructions http://depth.openseamap.org/#instructions and create a vessel configuration http://depth.openseamap.org/#vessels\n\nThis is a generated email. Do NOT reply to this email.\n\nThe OpenSeaMap Team", "text/plain");
+									message.setContent(
+											"You have successfully registered to the OpenSeaMap Depth Project.\n\nYour username is "
+													+ username
+													+ ".\n\nPlease regard the upload instructions http://depth.openseamap.org/#instructions and create a vessel configuration http://depth.openseamap.org/#vessels\n\nThis is a generated email. Do NOT reply to this email.\n\nThe OpenSeaMap Team",
+											"text/plain");
 									Transport.send(message);
 
 									return Response.status(204).build();
@@ -334,11 +337,7 @@ public class UserResource {
 						} finally {
 							insertUserStatement.close();
 						}
-					} finally {
-						statement.close();
 					}
-				} finally {
-					conn.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -353,45 +352,36 @@ public class UserResource {
 		}
 		throw new ValidationException(Status.BAD_REQUEST);
 	}
-	
+
+	@ApiOperation(value = "Retreives a list of all users", notes = "Only admins are allowed to retrieve all users")
 	@GET
-    @Produces({ MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_XML })
 	@RolesAllowed("ADMIN")
 	public List<User> getAllUsers() {
 		Context initContext;
 		try {
 			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
-			Connection conn = ds.getConnection();
-			try {
-				Statement statement = conn.createStatement();
-				try {
-					ResultSet executeQuery = statement.executeQuery("SELECT * FROM user_profiles"); //$NON-NLS-1$
-					try {
-						List<User> list = new ArrayList<User>(2);
-						while(executeQuery.next()) {
-							User user = new User();
-							user.user_name = executeQuery.getString("user_name");
-							user.forname = executeQuery.getString("forename");
-							user.surname = executeQuery.getString("surname");
-							user.country = executeQuery.getString("country");
-							user.language = executeQuery.getString("language");
-							user.organisation = executeQuery.getString("organisation");
-							user.phone = executeQuery.getString("phone");
-							user.acceptedEmailContact = executeQuery.getBoolean("acceptedEmailContact");
-							list.add(user);
-						}
-						return list;
-					} finally {
-						executeQuery.close();
-					}
-				} finally {
-					statement.close();
+			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres");
+			;
+			try (Connection conn = ds.getConnection();
+					Statement statement = conn.createStatement();
+					ResultSet executeQuery = statement.executeQuery("SELECT * FROM user_profiles")) {
+				List<User> list = new ArrayList<User>(2);
+				while (executeQuery.next()) {
+					User user = new User();
+					user.user_name = executeQuery.getString("user_name");
+					user.forname = executeQuery.getString("forename");
+					user.surname = executeQuery.getString("surname");
+					user.country = executeQuery.getString("country");
+					user.language = executeQuery.getString("language");
+					user.organisation = executeQuery.getString("organisation");
+					user.phone = executeQuery.getString("phone");
+					user.acceptedEmailContact = executeQuery.getBoolean("acceptedEmailContact");
+					list.add(user);
 				}
-			} finally {
-				conn.close();
+				return list;
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error");
@@ -400,47 +390,38 @@ public class UserResource {
 			throw new DatabaseException("Database unavailable");
 		}
 	}
-	
+
 	@GET
 	@Path("current")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@RolesAllowed({"ADMIN","USER"})
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@RolesAllowed({ "ADMIN", "USER" })
+	@ApiOperation(value = "Get current user details")
 	public User getCurrentUser(@javax.ws.rs.core.Context SecurityContext context) {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
 		try {
 			initContext = new InitialContext();
-			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres");
-			Connection conn = ds.getConnection();
-			try {
-				PreparedStatement statement = conn.prepareStatement("SELECT * FROM user_profiles WHERE user_name = ?");
-				try {
-					statement.setString(1, username);
-					ResultSet executeQuery = statement.executeQuery();
-					try {
-						while(executeQuery.next()) {
-							User user = new User();
-							user.user_name = executeQuery.getString("user_name");
-							user.forname = executeQuery.getString("forename");
-							user.surname = executeQuery.getString("surname");
-							user.country = executeQuery.getString("country");
-							user.language = executeQuery.getString("language");
-							user.organisation = executeQuery.getString("organisation");
-							user.phone = executeQuery.getString("phone");
-							user.acceptedEmailContact = executeQuery.getBoolean("acceptedEmailContact");
-							return user;
-						}
-						return null;
-					} finally {
-						executeQuery.close();
+			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres");
+			try (Connection conn = ds.getConnection();
+					PreparedStatement statement = conn
+							.prepareStatement("SELECT * FROM user_profiles WHERE user_name = ?")) {
+				statement.setString(1, username);
+				try (ResultSet executeQuery = statement.executeQuery()) {
+					while (executeQuery.next()) {
+						User user = new User();
+						user.user_name = executeQuery.getString("user_name");
+						user.forname = executeQuery.getString("forename");
+						user.surname = executeQuery.getString("surname");
+						user.country = executeQuery.getString("country");
+						user.language = executeQuery.getString("language");
+						user.organisation = executeQuery.getString("organisation");
+						user.phone = executeQuery.getString("phone");
+						user.acceptedEmailContact = executeQuery.getBoolean("acceptedEmailContact");
+						return user;
 					}
-				} finally {
-					statement.close();
+					return null;
 				}
-			} finally {
-				conn.close();
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Internal SQL Error");
@@ -449,7 +430,7 @@ public class UserResource {
 			throw new DatabaseException("Database unavailable");
 		}
 	}
-	
+
 	private String encryptPassword(String password) {
 		String sha1 = ""; //$NON-NLS-1$
 		try {
@@ -475,6 +456,5 @@ public class UserResource {
 		formatter.close();
 		return result;
 	}
-
 
 }
