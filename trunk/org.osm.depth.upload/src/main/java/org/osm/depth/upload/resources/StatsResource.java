@@ -21,7 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Path("/stats")
-@Api(value ="/stats")
+@Api(value ="Statistics")
 public class StatsResource {
 	
 	@ApiOperation(value = "Retrieves statistics about current user and track count")
