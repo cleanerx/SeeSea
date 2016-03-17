@@ -29,8 +29,8 @@ import org.osm.depth.upload.messages.TideLevel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Path("/tide")
-@Api(tags = {"Tide"})
+//@Path("/tide")
+//@Api(tags = {"Tide"})
 public class TideResource {
 	
 	

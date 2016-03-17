@@ -29,25 +29,21 @@ import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeType;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Path("/gauge")
 @Api(tags = {"Gauges"})
 public class GaugeResource {
 
-//	@GET
-//    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("{gaugeid}/measurement")
+	@ApiOperation(value = "Retrieves all measurements for a given gauge id")
 	public GaugeMeasurementResource getAllGauges(@PathParam(value = "gaugeid") String gaugeId) {
 		return new GaugeMeasurementResource(gaugeId);
-////		List<GaugeMeasurement> gaugeMeasurement = new ArrayList<>();
-////		GaugeMeasurement gaugeMeasurement2 = new GaugeMeasurement();
-////		gaugeMeasurement2.value = 1.0f;
-////		gaugeMeasurement.add(gaugeMeasurement2);
-////		return gaugeMeasurement;
 	}
 	
 	@GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@ApiOperation(value = "Get a list of all gauges")
 	public List<Gauge> getAllGauges() {
 		Context initContext;
 		try {
@@ -103,6 +99,7 @@ public class GaugeResource {
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	@RolesAllowed(value = {"USER", "ADMIN"})
+	@ApiOperation(value = "Create a new gauge")
 	public Gauge newGauge(@javax.ws.rs.core.Context SecurityContext context, Gauge gauge) {
 		Context initContext;
 		try {
@@ -152,6 +149,7 @@ public class GaugeResource {
 	@Path("{id}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@RolesAllowed(value = {"ADMIN"})
+	@ApiOperation(value = "Delete a gauge with the given id")
 	public Response delete(@PathParam(value = "id") String id) {
 		Context initContext;
 		try {

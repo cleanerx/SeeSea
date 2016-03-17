@@ -80,6 +80,9 @@ import org.osm.depth.upload.messages.Captcha;
 import org.osm.depth.upload.messages.User;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 //@Api(value = "/users", description="This resource is for creating, updating and deleting users")
 @Path("/users")
@@ -95,6 +98,7 @@ public class UserResource {
 	@Path("captcha")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Create a BASE64 encoded png as captcha. This may be used to validate a request")
 	public Response createCatpcha() {
 		Builder builder = new Builder(160, 40);
 		jj.play.ns.nl.captcha.Captcha captcha = builder.addText(new DefaultTextProducer(6)).gimp(new BlockGimpyRenderer()).build();
@@ -119,8 +123,8 @@ public class UserResource {
 		return Response.serverError().build();
 	}
 	
-//	@ApiOperation( value="changepass", description = "Changes the users password. The user must be signed in in order to do that.")
-//	@ApiError(code=500, reason="No old password supplied, no new password supplied or user does no exist")
+	@ApiOperation( value="Change the password", notes = "Changes the users password. The user must be signed in in order to do that.")
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Additional 'Error' header reveals the error")})
 	@Path("changepass")
 	@POST
 	public Response changePassword(@javax.ws.rs.core.Context SecurityContext context, @QueryParam("oldPassword") String oldPassword, @QueryParam("newPassword") String newPassword) {

@@ -1,13 +1,10 @@
 package org.osm.depth.upload.resources;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,22 +17,18 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import org.osm.depth.upload.exceptions.DatabaseException;
-import org.osm.depth.upload.exceptions.ResourceInUseException;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeMeasurement;
-import org.osm.depth.upload.messages.GaugeType;
 import org.osm.depth.upload.messages.LengthUnit;
 
 //@Path("/gauge//measurement")
