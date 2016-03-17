@@ -79,8 +79,11 @@ import org.osm.depth.upload.exceptions.ValidationException;
 import org.osm.depth.upload.messages.Captcha;
 import org.osm.depth.upload.messages.User;
 
+import io.swagger.annotations.Api;
+
 //@Api(value = "/users", description="This resource is for creating, updating and deleting users")
 @Path("/users")
+@Api(tags = {"User Management"})
 public class UserResource {
 
 	/**

@@ -26,10 +26,15 @@ import org.osm.depth.upload.messages.LengthUnit;
 import org.osm.depth.upload.messages.Tide;
 import org.osm.depth.upload.messages.TideLevel;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @Path("/tide")
+@Api(tags = {"Tide"})
 public class TideResource {
 	
 	
+	@ApiOperation(value = "Gets tide heights", notes = "Based on the DTU10 worldwide tide model returns the height of the tide above lowest astronomical tide (LAT)")
 	@GET
 	public List<Tide> getTideHeights(@QueryParam("lat") double lat, @QueryParam("lon") double lon,@QueryParam("tidelevel") TideLevel level, @QueryParam("startdate") long startDate, @QueryParam("enddate") long endDate, @QueryParam("unit") @DefaultValue("METERS") LengthUnit unit) {
 		JDummy tidePredictor = new JDummy();

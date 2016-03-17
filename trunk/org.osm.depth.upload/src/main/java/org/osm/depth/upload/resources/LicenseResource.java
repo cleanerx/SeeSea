@@ -31,7 +31,10 @@ import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.exceptions.ResourceInUseException;
 import org.osm.depth.upload.messages.License;
 
+import io.swagger.annotations.Api;
+
 @Path("/license")
+@Api(tags = {"License"})
 public class LicenseResource {
 
 	@GET

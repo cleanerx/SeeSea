@@ -43,7 +43,7 @@ import org.osm.depth.upload.resources.TrackResource;
 import org.osm.depth.upload.resources.UserResource;
 import org.osm.depth.upload.resources.VesselConfigurationResource;
 
-import com.wordnik.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.config.BeanConfig;
 
 /**
  * The core jax-rs class to register all resources and features
@@ -51,17 +51,22 @@ import com.wordnik.swagger.jaxrs.config.BeanConfig;
 public class OSMAPIApplication extends Application {
 
 	public OSMAPIApplication() {
-		BeanConfig beanConfig = new BeanConfig();
+        BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion("2.0.0");
-        beanConfig.setBasePath("http://localhost:8080/org.osm.depth.upload/apidoc");
-        beanConfig.setResourcePackage("org.osm.depth.upload.resources");
-        beanConfig.setScan(true);
-	}
+        beanConfig.setSchemes(new String[]{"http"});
+        beanConfig.setHost("depth.openseamap.org:8080");
+        beanConfig.setBasePath("/org.osm.depth.upload/api2");
+        beanConfig.setResourcePackage(TideResource.class.getPackage().getName());
+        beanConfig.setScan(true);	}
 	
 	@Override
     public Set<Class<?>> getClasses() {
 	    HashSet<Class<?>> set = new HashSet<Class<?>>(2);
-	    set.add(MOXyJsonProvider.class);
+	    // apidoc
+        set.add(io.swagger.jaxrs.listing.ApiListingResource.class);
+        set.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);
+
+        set.add(MOXyJsonProvider.class);
 	    set.add(TrackResource.class);
 	    set.add(UserResource.class);
 	    set.add(GaugeResource.class);
@@ -72,9 +77,7 @@ public class OSMAPIApplication extends Application {
 	    set.add(VesselConfigurationResource.class);
 	    set.add(MultiPartFeature.class);
 	    set.add(RolesAllowedDynamicFeature.class);
-	    set.add(com.wordnik.swagger.jersey.listing.ApiListingResourceJSON.class);
-	    set.add(com.wordnik.swagger.jersey.listing.JerseyApiDeclarationProvider.class);
-	    set.add(com.wordnik.swagger.jersey.listing.JerseyResourceListingProvider.class);
+	    
     return set;
 	}
 }

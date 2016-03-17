@@ -70,7 +70,11 @@ import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.exceptions.ErrorCode;
 import org.osm.depth.upload.messages.Track;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @Path("/track")
+@Api(tags = {"Tracks"})
 public class TrackResource {
 
 	@javax.ws.rs.core.Context
@@ -79,6 +83,7 @@ public class TrackResource {
 	@javax.ws.rs.core.Context
 	ServletConfig config;
 
+	@ApiOperation(value = "Lists the users uploaded tracks", response = Track.class, responseContainer = "List")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Track> getAllTracks(
@@ -162,6 +167,8 @@ public class TrackResource {
 		}
 	}
 
+
+	@ApiOperation(value = "Creates a new track", notes = "requires a vessel and license and returns a track with id to be referenced on file upload")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -268,6 +275,7 @@ public class TrackResource {
 	 * @param context
 	 * @return
 	 */
+	@ApiOperation(value = "Creates a new track", notes = "requires a vessel and license and returns a track with id to be referenced on file upload")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -356,6 +364,7 @@ public class TrackResource {
 	 * @param trackID
 	 * @return
 	 */
+	@ApiOperation(value = "Uploades a track file for a given track id", notes = "Requires multipart form data. A new track needs to be created through a post and a put associates the data")
 	@PUT
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -432,6 +441,7 @@ public class TrackResource {
 		return bytesRead.toString();
 	}
 	
+	@ApiOperation(value = "Downloads a track", notes = "Only available to administators right now")
 	@GET
 	@RolesAllowed("ADMIN")
 	@Path("{id}/download")
@@ -481,6 +491,7 @@ public class TrackResource {
 	 * @param id
 	 */
 	@DELETE
+	@ApiOperation(value = "Deletes a track", notes = "Only the users own track may be deleted")
 	@Path("{id}")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
