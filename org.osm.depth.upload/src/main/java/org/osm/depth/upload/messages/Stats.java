@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value="Stats")
+@ApiModel(value="Statistics")
 @XmlRootElement
 public class Stats {
 	

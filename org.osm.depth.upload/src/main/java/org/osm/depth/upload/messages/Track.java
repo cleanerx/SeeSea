@@ -26,35 +26,44 @@
  */
 package org.osm.depth.upload.messages;
 
-import java.util.Date;
-
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(value = "Track", description = "This describes tracks")
 @XmlRootElement(name="track")
 public class Track {
 	
+	@ApiModelProperty("System wide unique track id")
 	public long id;
 
+	@ApiModelProperty("The track file name")
 	public String fileName;
 
+	@ApiModelProperty("Upload state")
 	public int upload_state;
 
+	@ApiModelProperty("Detected format file type, read only")
 	public String fileType;
 
+	@ApiModelProperty("Detected compression type, read only")
 	public String compression;
 
 	public String delete;
 	
+	@ApiModelProperty("Vessel configuration id")
 	public long vesselconfigid;
 
+	@ApiModelProperty("In case of compressed tracks lists the parent uploaded track that contained this track, otherwise 0")
 	public long containertrack;
 	
+	@ApiModelProperty("The license id")
 	public long license;
 	
 //	@XmlElement(name = "uploaddate", required = true)
 //	@XmlJavaTypeAdapter(TimestampAdapter.class)
+	@ApiModelProperty("The date of the upload in UTC milliseconds")
 	public long uploadDate;
 
 	public Track() {
