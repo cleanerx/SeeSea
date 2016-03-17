@@ -121,7 +121,7 @@
     </web-resource-collection>
     <web-resource-collection>
       <web-resource-name>Docs</web-resource-name>
-      <url-pattern>/api2/swagger/*</url-pattern>
+      <url-pattern>/api2/swagger.json</url-pattern>
       <http-method>GET</http-method>
       <http-method>OPTIONS</http-method>
     </web-resource-collection>
