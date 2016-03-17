@@ -31,6 +31,8 @@ import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeMeasurement;
 import org.osm.depth.upload.messages.LengthUnit;
 
+import io.swagger.annotations.ApiOperation;
+
 //@Path("/gauge//measurement")
 public class GaugeMeasurementResource {
 
@@ -47,6 +49,7 @@ public class GaugeMeasurementResource {
 	@GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	// @DefaultValue(value = "METERS") @QueryParam(value = "unit") LengthUnit lengthUnit
+	@ApiOperation(value = "Get a list of gauge measurements for a specific gauge", response = GaugeMeasurement.class, responseContainer = "List")
 	public List<GaugeMeasurement> getGaugesMeasurements() {
 		Context initContext;
 		try {
@@ -91,26 +94,25 @@ public class GaugeMeasurementResource {
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	public Gauge create(@javax.ws.rs.core.Context SecurityContext context, GaugeMeasurement gaugeMeasurement) {
+	@ApiOperation(value = "Create a new gauge measurement for a specific gauge")
+	public void create(@javax.ws.rs.core.Context SecurityContext context, GaugeMeasurement gaugeMeasurement) {
 		Context initContext;
 		try {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
-			try {
-				PreparedStatement statement = conn.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)");
-				try {
+			try (Connection conn = ds.getConnection();
+					PreparedStatement isGaugePresent = conn.prepareStatement("SELECT id FROM gauge WHERE id = ?");
+					PreparedStatement statement = conn.prepareStatement("INSERT INTO gaugemeasurement (gaugeid, value, time) VALUES (?,?,?)")) {
+				isGaugePresent.setLong(1, gaugeMeasurement.gaugeId);
+				ResultSet executeQuery = isGaugePresent.executeQuery();
+				if(executeQuery.next()) {
 					statement.setLong(1, gaugeMeasurement.gaugeId);
 					statement.setFloat(2, gaugeMeasurement.value);
 					statement.setTimestamp(3, new Timestamp(gaugeMeasurement.timestamp));
 					statement.execute();
-					
-					throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
-				} finally {
-					statement.close();
+				} else {
+					throw new DatabaseException("No such gauge id"); //$NON-NLS-1$
 				}
-			} finally {
-				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -125,29 +127,24 @@ public class GaugeMeasurementResource {
 	@Path("{date}")
 	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@RolesAllowed(value = {"ADMIN"})
-	public Response delete(@javax.ws.rs.core.Context SecurityContext context, @PathParam(value = "date") String dateString) {
+	@ApiOperation(value = "Deletes a set of gauge values", notes = "Only admins may delete gauge data")
+	public Response delete(@javax.ws.rs.core.Context SecurityContext context, @PathParam(value = "date") String dateString, Gauge gauge) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		Context initContext;
 		try {
 			java.util.Date date = dateFormat.parse(dateString);
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
-			try {
+			try (Connection conn = ds.getConnection()) {
 				conn.setAutoCommit(false);
-				PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gaugemeasurement WHERE time >= ? AND time < ? ");
-				try {
+				try (PreparedStatement deletestatement = conn.prepareStatement("DELETE FROM gaugemeasurement WHERE time >= ? AND time < ? AND id = ?")) {
 					deletestatement.setTimestamp(1, new Timestamp(date.getTime()));
 					deletestatement.setTimestamp(2, new Timestamp(date.getTime() + 1000));
+					deletestatement.setLong(1, gauge.id);
 					deletestatement.execute();
-//			deletestatement.execute("DELETE FROM gaugemeasurement WHERE time >= TIMESTAMP '" + date.getTime() + "' AND time < TIMESTAMP '" + date.getTime() + 1000 + "'"); //$NON-NLS-1$));
 					conn.commit();
 					return Response.ok().build();
-				} finally {
-					deletestatement.close();
 				}
-			} finally {
-				conn.close();
 			}
 		} catch (SQLException e) {	
 			e.printStackTrace();

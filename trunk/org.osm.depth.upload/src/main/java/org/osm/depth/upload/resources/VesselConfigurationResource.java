@@ -60,6 +60,7 @@ import org.osm.depth.upload.messages.VesselConfiguration;
 import org.osm.depth.upload.messages.VesselType;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Path("/vesselconfig")
 @Api(tags = {"Vessel Configuration"})
@@ -72,6 +73,7 @@ public class VesselConfigurationResource {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("{id}")
+	@ApiOperation(value = "Updates a vessel configuration", notes = "Updates the details of a vessel configuration. User may only update their own configurations")
 	public void updateVesselConfig(
 			@javax.ws.rs.core.Context SecurityContext context,
 			VesselConfiguration vesselConfiguration) {
@@ -80,9 +82,10 @@ public class VesselConfigurationResource {
 			InitialContext initContext = new InitialContext();
 			DataSource ds = (DataSource) initContext
 					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
-			try {
-				PreparedStatement updateStatement = conn
+			try (Connection conn = ds.getConnection()) {
+;
+				try (
+						PreparedStatement updateStatement = conn
 						.prepareStatement(
 								"UPDATE vesselconfiguration SET" +
 										"(name, " +
@@ -123,8 +126,9 @@ public class VesselConfigurationResource {
 										"sensorid, " +
 										"manufacturer, " +
 										"model ) " +
-								" = (?,?,?,?,?,?) WHERE vesselconfigid = ?");
-				try {
+								" = (?,?,?,?,?,?) WHERE vesselconfigid = ?")						
+						) 
+				{
 					conn.setAutoCommit(false);
 
 					updateStatement.setString(1, vesselConfiguration.name); 
@@ -168,14 +172,7 @@ public class VesselConfigurationResource {
 						insertSbasOffset.execute();
 					}
 					conn.commit();
-
-				} finally {
-					updateStatement.close();
-					insertDepthOffset.close();
-					insertSbasOffset.close();
 				}
-			} finally {
-				conn.close();
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -190,6 +187,7 @@ public class VesselConfigurationResource {
 	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("{id}")
+	@ApiOperation(value = "Create an empty vessel configuration")
 	public String createVesselConfigWithNullId(
 			@javax.ws.rs.core.Context SecurityContext context,
 			VesselConfiguration vesselConfiguration) {
@@ -199,6 +197,7 @@ public class VesselConfigurationResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@ApiOperation(value = "Updates a vessel configuration", notes = "Creates all the details of a vessel configuration. User may only update their own configurations")
 	public String createVesselConfig(
 			@javax.ws.rs.core.Context SecurityContext context,
 			VesselConfiguration vesselConfiguration) {
@@ -212,8 +211,7 @@ public class VesselConfigurationResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource) initContext
 					.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
-			try {
+			try (Connection conn = ds.getConnection()) {
 				Statement createIDStatement = conn.createStatement();
 				PreparedStatement insertvesselstatement = conn
 						.prepareStatement(
@@ -321,10 +319,7 @@ public class VesselConfigurationResource {
 					insertvesselstatement.close();
 					createIDStatement.close();
 				}
-			} finally {
-				conn.close();
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Database unavailable"); //$NON-NLS-1$
@@ -338,6 +333,7 @@ public class VesselConfigurationResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@ApiOperation(value = "Get all vessel configurations", notes = "User may retrieve only their own vessel configurations. An admin may see all configurations")
 	public Response getAll(@javax.ws.rs.core.Context SecurityContext context) {
 		String username = context.getUserPrincipal().getName();
 		Context initContext;
@@ -442,6 +438,7 @@ public class VesselConfigurationResource {
 	 */
 	@DELETE
 	@Path("{id}")
+	@ApiOperation(value = "Delete a specific vessel configuration", notes = "Users may delete only their own configuraion. Admins may delete every configuration.")
 	public Response deleteVesselConfig(
 			@javax.ws.rs.core.Context SecurityContext context,
 			@PathParam(value = "id") String id) {
