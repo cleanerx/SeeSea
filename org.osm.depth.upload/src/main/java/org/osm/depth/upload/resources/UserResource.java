@@ -102,8 +102,7 @@ public class UserResource {
 	public Response createCatpcha() {
 		Builder builder = new Builder(160, 40);
 		jj.play.ns.nl.captcha.Captcha captcha = builder.addText(new DefaultTextProducer(6)).gimp(new BlockGimpyRenderer()).build();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 			ImageIO.write(captcha.getImage(), "png", byteArrayOutputStream); //$NON-NLS-1$
 			byte[] imageData = byteArrayOutputStream.toByteArray();
 			
@@ -139,11 +138,8 @@ public class UserResource {
 		try {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource)initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
-			Connection conn = ds.getConnection();
-			try {
-				PreparedStatement selectstatement = conn.prepareStatement("UPDATE user_profiles SET password = ? WHERE password = ? AND user_name = ?");
-				try {
-					
+			try (Connection conn = ds.getConnection();
+			     PreparedStatement selectstatement = conn.prepareStatement("UPDATE user_profiles SET password = ? WHERE password = ? AND user_name = ?")){
 					selectstatement.setString(1, newPassword);
 					selectstatement.setString(2, oldPassword);
 					selectstatement.setString(3, username);
@@ -153,11 +149,6 @@ public class UserResource {
 					} else {
 						return Response.serverError().header("Error", ErrorCode.OLD_PASSWORD_MISMATCH).build();
 					}
-				} finally {
-					selectstatement.close();
-				}
-			} finally {
-				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
