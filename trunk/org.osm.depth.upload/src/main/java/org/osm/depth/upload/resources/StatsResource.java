@@ -34,45 +34,25 @@ public class StatsResource {
 			initContext = new InitialContext();
 			DataSource ds = (DataSource) initContext.lookup("java:/comp/env/jdbc/postgres"); //$NON-NLS-1$
 			DataSource dsDepth = (DataSource)initContext.lookup("java:/comp/env/jdbc/depth"); //$NON-NLS-1$
-			Connection connection = ds.getConnection();
-			try {
-				Statement statement = connection.createStatement();
-				try {
-					statement.execute("SELECT count(user_name) FROM user_profiles"); //$NON-NLS-1$
-					ResultSet resultSet = statement.getResultSet();
-					while(resultSet.next()) {
-						stats.usercount = resultSet.getInt(1);
-					}
-				} finally {
-					statement.close();
-				}
-				Connection depthConn = dsDepth.getConnection();
-				try {
-					statement = depthConn.createStatement();
-					try {
-						statement.execute("SELECT count(datasetid) FROM trackpoints_raw_16"); //$NON-NLS-1$
-						ResultSet resultSet = statement.getResultSet();
-						while(resultSet.next()) {
-							stats.contributedpoints = resultSet.getInt(1);
+			try (Connection connection = ds.getConnection();
+				Connection depthConn = dsDepth.getConnection()) {
+				try (Statement statement = connection.createStatement();
+						 Statement statement2 = depthConn.createStatement();
+						 Statement statement3 = depthConn.createStatement()) {
+						try (ResultSet resultSet = statement.executeQuery("SELECT count(user_name) FROM user_profiles");
+							ResultSet resultSet2 = statement2.executeQuery("SELECT count(datasetid) FROM trackpoints_raw_16");
+							ResultSet resultSet3 = statement3.executeQuery("SELECT COUNT(datasetid) FROM (SELECT DISTINCT datasetid FROM trackpoints_raw_16) AS temp")) {
+							while(resultSet.next()) {
+								stats.usercount = resultSet.getInt(1);
+							}
+							while(resultSet2.next()) {
+								stats.contributedpoints = resultSet2.getInt(1);
+							}
+							while(resultSet3.next()) {
+								stats.trackscount = resultSet3.getInt(1);
+							}
 						}
-					} finally {
-						statement.close();
 					}
-					statement = depthConn.createStatement();
-					try {
-						statement.execute("SELECT COUNT(datasetid) FROM (SELECT DISTINCT datasetid FROM trackpoints_raw_16) AS temp"); //$NON-NLS-1$
-						ResultSet resultSet = statement.getResultSet();
-						while(resultSet.next()) {
-							stats.trackscount = resultSet.getInt(1);
-						}
-					} finally {
-						statement.close();
-					}
-				} finally {
-					depthConn.close();
-				}
-			} finally {
-				connection.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
