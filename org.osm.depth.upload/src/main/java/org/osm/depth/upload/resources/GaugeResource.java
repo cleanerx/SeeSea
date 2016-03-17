@@ -28,7 +28,10 @@ import org.osm.depth.upload.exceptions.DatabaseException;
 import org.osm.depth.upload.messages.Gauge;
 import org.osm.depth.upload.messages.GaugeType;
 
+import io.swagger.annotations.Api;
+
 @Path("/gauge")
+@Api(tags = {"Gauges"})
 public class GaugeResource {
 
 //	@GET

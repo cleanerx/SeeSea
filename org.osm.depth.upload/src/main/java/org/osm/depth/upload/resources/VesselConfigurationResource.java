@@ -59,7 +59,10 @@ import org.osm.depth.upload.messages.SBASSensor;
 import org.osm.depth.upload.messages.VesselConfiguration;
 import org.osm.depth.upload.messages.VesselType;
 
+import io.swagger.annotations.Api;
+
 @Path("/vesselconfig")
+@Api(tags = {"Vessel Configuration"})
 public class VesselConfigurationResource {
 
 	@javax.ws.rs.core.Context

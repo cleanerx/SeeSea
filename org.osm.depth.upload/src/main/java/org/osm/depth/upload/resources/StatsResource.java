@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(value ="/stats")
 public class StatsResource {
 	
-	@ApiOperation(value = "Get database statistics", response = Stats.class)
+	@ApiOperation(value = "Retrieves statistics about current user and track count")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Stats getStats() {

@@ -20,18 +20,18 @@
 
       <Resource auth="Container" name="jdbc/postgres" 
       
-          type="javax.sql.DataSource" username="osm" password="dell3007" 
-            driverClassName="org.postgresql.Driver" url="jdbc:postgresql://192.168.0.1/depthapi" maxActive="150"
+          type="javax.sql.DataSource" username="${osmuser}" password="${osmpass}" 
+            driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${osmdatabase}" maxActive="150"
             maxIdle="1"/>
             
         <Resource auth="Container" name="jdbc/depth" 
-          type="javax.sql.DataSource" username="osm" password="dell3007" 
-            driverClassName="org.postgresql.Driver" url="jdbc:postgresql://192.168.0.1/depthapi" maxActive="150"
+          type="javax.sql.DataSource" username="${osmuser}" password="${osmpass}" 
+            driverClassName="org.postgresql.Driver" url="jdbc:postgresql:/${depthdatabase}" maxActive="150"
             maxIdle="1"/>
 
     	<Resource name="mail/Session" auth="Container"
 		            type="javax.mail.Session"
-		            mail.smtp.host="localhost"/>
+		            mail.smtp.host="${mailserver}"/>
       
                 <Realm className="org.apache.catalina.realm.LockOutRealm">
         <!-- This Realm uses the UserDatabase configured in the global JNDI

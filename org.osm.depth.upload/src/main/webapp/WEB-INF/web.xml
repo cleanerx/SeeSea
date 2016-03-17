@@ -119,6 +119,12 @@
       <url-pattern>/api2/*</url-pattern>
       <http-method>OPTIONS</http-method>
     </web-resource-collection>
+    <web-resource-collection>
+      <web-resource-name>Docs</web-resource-name>
+      <url-pattern>/api2/swagger/*</url-pattern>
+      <http-method>GET</http-method>
+      <http-method>OPTIONS</http-method>
+    </web-resource-collection>
     <!-- required to create users -->
     <web-resource-collection>
       <web-resource-name>Public</web-resource-name>
