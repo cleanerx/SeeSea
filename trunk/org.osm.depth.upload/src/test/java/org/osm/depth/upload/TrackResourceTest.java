@@ -19,10 +19,8 @@ import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import junit.framework.TestCase;
-
 import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
-import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.media.multipart.Boundary;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -33,11 +31,15 @@ import org.osm.depth.upload.messages.License;
 import org.osm.depth.upload.messages.Track;
 import org.osm.depth.upload.messages.VesselConfiguration;
 
+import junit.framework.TestCase;
+
 public class TrackResourceTest extends TestCase {
 
 	public void testX() {
 		Client client = ClientBuilder.newClient();
-		client.register(new HttpBasicAuthFilter(TestConstants.TESTUSER, TestConstants.TESTPASSWORD));
+		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(TestConstants.TESTUSER, TestConstants.TESTPASSWORD);
+		client.register(feature);
+
 		WebTarget basePath = client.target(TestConstants.HOST).path(TestConstants.PATH).path(TestConstants.APIPATH);
 		WebTarget target = basePath.path("track");
 		
@@ -59,7 +61,8 @@ public class TrackResourceTest extends TestCase {
 		LoggingFilter loggingFilter = new LoggingFilter();
 		client.register(loggingFilter);
 
-		client.register(new HttpBasicAuthFilter(TestConstants.TESTUSER, TestConstants.TESTPASSWORD));
+		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(TestConstants.TESTUSER, TestConstants.TESTPASSWORD);
+		client.register(feature);
 		WebTarget basePath = client.target(TestConstants.HOST).path(TestConstants.PATH).path(TestConstants.APIPATH);
 		
 		Long vesselId = createVessel(basePath);
