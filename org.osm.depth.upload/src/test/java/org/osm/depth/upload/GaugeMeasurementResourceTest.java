@@ -13,10 +13,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import junit.framework.TestCase;
-
 import org.eclipse.persistence.jaxb.rs.MOXyJsonProvider;
-import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.osm.depth.upload.messages.Gauge;
@@ -24,11 +22,14 @@ import org.osm.depth.upload.messages.GaugeMeasurement;
 import org.osm.depth.upload.messages.GaugeType;
 import org.osm.depth.upload.messages.LengthUnit;
 
+import junit.framework.TestCase;
+
 public class GaugeMeasurementResourceTest extends TestCase {
 	
 	public void testCRUDRoundTrip() throws FileNotFoundException {
 		Client client = ClientBuilder.newClient();
-		client.register(new HttpBasicAuthFilter("x", "x"));
+		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic("x", "");
+		client.register(feature);
 		client.register(MOXyJsonProvider.class);
 		client.register(MultiPartFeature.class);
 
