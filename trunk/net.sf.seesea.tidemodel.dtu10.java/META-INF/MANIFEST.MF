@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DTU 10 Java
+Bundle-SymbolicName: net.sf.seesea.tidemodel.dtu10.java
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.tidemodel.dtu10.java.DTUJavaActivator
+Require-Bundle: org.eclipse.core.runtime,
+ org.apache.log4j;bundle-version="1.2.16"
+Import-Package: net.sf.seesea.waterlevel,
+ net.sf.seesea.waterlevel.ocean,
+ org.osgi.service.component.annotations;resolution:=optional
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/net.sf.seesea.tidemodel.dtu10.java.DTU.xml,
+ OSGI-INF/net.sf.seesea.tidemodel.dtu10.java.DTUTidePrediction.xml
