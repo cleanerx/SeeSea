@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <relativePath>../net.sf.seesea.tycho/pom.xml</relativePath>
     <groupId>net.sf.seesea</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>net.sf.seesea.tycho.parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../net.sf.seesea.tycho</relativePath>
   </parent>
 
   <artifactId>net.sf.seesea.geometry.test</artifactId>
