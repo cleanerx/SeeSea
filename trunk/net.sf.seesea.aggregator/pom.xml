@@ -1,0 +1,20 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.sf.seesea</groupId>
+  <artifactId>net.sf.seesea.aggregator</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <parent>
+    <groupId>net.sf.seesea</groupId>
+    <artifactId>net.sf.seesea.tycho.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../net.sf.seesea.tycho</relativePath>
+  </parent>
+  
+  <modules>
+  	<module>../net.sf.seesea.geometry.feature</module>
+  	<module>../net.sf.seesea.geometry</module>
+  	<module>../net.sf.seesea.geometry.test</module>
+  </modules>
+</project> 
