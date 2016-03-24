@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test
+Bundle-SymbolicName: net.sf.seesea.geometry.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.geometry.test.GeometryTestActivator
+Require-Bundle: org.eclipse.core.runtime,
+ org.junit,
+ net.sf.seesea.geometry;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
