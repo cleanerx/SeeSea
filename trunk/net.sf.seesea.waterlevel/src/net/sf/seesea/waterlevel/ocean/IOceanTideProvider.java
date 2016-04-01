@@ -28,9 +28,23 @@ package net.sf.seesea.waterlevel.ocean;
 
 import java.util.Date;
 
-
+/**
+ * This interface may be used to estimate the ocean tide at a certain position and point in time
+ * 
+ * @author Jens Kübler
+ *
+ */
 public interface IOceanTideProvider {
 
+	/**
+	 * 
+	 * @param level the {@link TideLevel} to estimate
+	 * @param unit the {@link LengthUnit} the unit in which to return the tide height
+	 * @param lat latitude as decimal degree
+	 * @param lon longitude as decimal degree
+	 * @param date the date for which to predict the tide
+	 * @return
+	 */
 	double getTideHeight(TideLevel level, LengthUnit unit, double lat, double lon, Date date);
 	
 	static final String LATDISTANCECACHED =  "latdistance";
