@@ -53,7 +53,7 @@ import net.sf.seesea.gauge.IGaugeValueUpdater;
 import net.sf.seesea.geometry.IIdentifiablePolygon;
 import net.sf.seesea.geometry.IPolygon;
 import net.sf.seesea.geometry.impl.Point;
-import net.sf.seesea.services.navigation.IGeoBoundingBox;
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
 
 @Component(property = "type=gauge")
 public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
@@ -203,9 +203,8 @@ public class GaugeWaterLevelCorrection implements IWaterLevelCorrection {
 
 
 	@Override
-	public void setBoundingBox(IGeoBoundingBox boundingBox) {
-		// TODO Auto-generated method stub
-		
+	public void setBoundingBox(GeoBoundingBox boundingBox) {
+		// not used
 	}
 
 

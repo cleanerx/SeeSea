@@ -3,11 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Waterlevel API
 Bundle-SymbolicName: net.sf.seesea.waterlevel
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: net.sf.seesea.waterlevel.WaterlevelActivator
-Require-Bundle: org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: net.sf.seesea.services.navigation
 Export-Package: net.sf.seesea.waterlevel,
  net.sf.seesea.waterlevel.ocean
 Bundle-Vendor: SeeSea
+Import-Package: net.sf.seesea.model.core.geo;version="[1.0.0,2.0.0)"
