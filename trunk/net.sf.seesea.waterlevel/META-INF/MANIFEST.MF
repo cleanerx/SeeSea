@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.sf.seesea.waterlevel
 Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: net.sf.seesea.waterlevel,
- net.sf.seesea.waterlevel.ocean
+Export-Package: net.sf.seesea.waterlevel;version="1.0.0",
+ net.sf.seesea.waterlevel.ocean;version="1.0.0"
 Bundle-Vendor: SeeSea
 Import-Package: net.sf.seesea.model.core.geo;version="[1.0.0,2.0.0)"
