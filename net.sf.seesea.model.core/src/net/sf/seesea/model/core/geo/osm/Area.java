@@ -43,12 +43,12 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.Area#getZoomLevel <em>Zoom Level</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.Area#getMapCenterPosition <em>Map Center Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.Area#getSubArea <em>Sub Area</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.osm.OsmPackage#getArea()
  * @model

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Jens KÃ¼bler
+ * Copyright (c) 2010-2012, Jens Kübler
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -27,111 +27,120 @@
  */
 package net.sf.seesea.model.core.geo.impl;
 
-import java.util.Collection;
-import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.GeoPackage;
+
+import net.sf.seesea.model.core.impl.ModelObjectImpl;
 
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>GNSS Measured Position</b></em>'.
+ * An implementation of the model object '<em><b>Bounding Box</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getHdop <em>Hdop</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getVdop <em>Vdop</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getPdop <em>Pdop</em>}</li>
- *   <li>{@link net.sf.seesea.model.core.geo.impl.GNSSMeasuredPositionImpl#getAugmentation <em>Augmentation</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl#getTop <em>Top</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl#getBottom <em>Bottom</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl#getLeft <em>Left</em>}</li>
+ *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl#getRight <em>Right</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements GNSSMeasuredPosition {
+public class GeoBoundingBoxImpl extends ModelObjectImpl implements GeoBoundingBox {
 	/**
-	 * The default value of the '{@link #getHdop() <em>Hdop</em>}' attribute.
+	 * The default value of the '{@link #getTop() <em>Top</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getHdop()
+	 * @see #getTop()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double HDOP_EDEFAULT = 0.0;
+	protected static final double TOP_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getHdop() <em>Hdop</em>}' attribute.
+	 * The cached value of the '{@link #getTop() <em>Top</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getHdop()
+	 * @see #getTop()
 	 * @generated
 	 * @ordered
 	 */
-	protected double hdop = HDOP_EDEFAULT;
+	protected double top = TOP_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getVdop() <em>Vdop</em>}' attribute.
+	 * The default value of the '{@link #getBottom() <em>Bottom</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVdop()
+	 * @see #getBottom()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double VDOP_EDEFAULT = 0.0;
+	protected static final double BOTTOM_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getVdop() <em>Vdop</em>}' attribute.
+	 * The cached value of the '{@link #getBottom() <em>Bottom</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVdop()
+	 * @see #getBottom()
 	 * @generated
 	 * @ordered
 	 */
-	protected double vdop = VDOP_EDEFAULT;
+	protected double bottom = BOTTOM_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getPdop() <em>Pdop</em>}' attribute.
+	 * The default value of the '{@link #getLeft() <em>Left</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPdop()
+	 * @see #getLeft()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double PDOP_EDEFAULT = 0.0;
+	protected static final double LEFT_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getPdop() <em>Pdop</em>}' attribute.
+	 * The cached value of the '{@link #getLeft() <em>Left</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPdop()
+	 * @see #getLeft()
 	 * @generated
 	 * @ordered
 	 */
-	protected double pdop = PDOP_EDEFAULT;
+	protected double left = LEFT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAugmentation() <em>Augmentation</em>}' attribute list.
+	 * The default value of the '{@link #getRight() <em>Right</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAugmentation()
+	 * @see #getRight()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<String> augmentation;
+	protected static final double RIGHT_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getRight() <em>Right</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRight()
+	 * @generated
+	 * @ordered
+	 */
+	protected double right = RIGHT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected GNSSMeasuredPositionImpl() {
+	protected GeoBoundingBoxImpl() {
 		super();
 	}
 
@@ -142,7 +151,7 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return GeoPackage.Literals.GNSS_MEASURED_POSITION;
+		return GeoPackage.Literals.GEO_BOUNDING_BOX;
 	}
 
 	/**
@@ -150,8 +159,8 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getHdop() {
-		return hdop;
+	public double getTop() {
+		return top;
 	}
 
 	/**
@@ -159,11 +168,11 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setHdop(double newHdop) {
-		double oldHdop = hdop;
-		hdop = newHdop;
+	public void setTop(double newTop) {
+		double oldTop = top;
+		top = newTop;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GNSS_MEASURED_POSITION__HDOP, oldHdop, hdop));
+			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GEO_BOUNDING_BOX__TOP, oldTop, top));
 	}
 
 	/**
@@ -171,8 +180,8 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getVdop() {
-		return vdop;
+	public double getBottom() {
+		return bottom;
 	}
 
 	/**
@@ -180,11 +189,11 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setVdop(double newVdop) {
-		double oldVdop = vdop;
-		vdop = newVdop;
+	public void setBottom(double newBottom) {
+		double oldBottom = bottom;
+		bottom = newBottom;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GNSS_MEASURED_POSITION__VDOP, oldVdop, vdop));
+			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GEO_BOUNDING_BOX__BOTTOM, oldBottom, bottom));
 	}
 
 	/**
@@ -192,8 +201,8 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getPdop() {
-		return pdop;
+	public double getLeft() {
+		return left;
 	}
 
 	/**
@@ -201,11 +210,11 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPdop(double newPdop) {
-		double oldPdop = pdop;
-		pdop = newPdop;
+	public void setLeft(double newLeft) {
+		double oldLeft = left;
+		left = newLeft;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GNSS_MEASURED_POSITION__PDOP, oldPdop, pdop));
+			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GEO_BOUNDING_BOX__LEFT, oldLeft, left));
 	}
 
 	/**
@@ -213,11 +222,20 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<String> getAugmentation() {
-		if (augmentation == null) {
-			augmentation = new EDataTypeUniqueEList<String>(String.class, this, GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION);
-		}
-		return augmentation;
+	public double getRight() {
+		return right;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRight(double newRight) {
+		double oldRight = right;
+		right = newRight;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, GeoPackage.GEO_BOUNDING_BOX__RIGHT, oldRight, right));
 	}
 
 	/**
@@ -228,14 +246,14 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case GeoPackage.GNSS_MEASURED_POSITION__HDOP:
-				return getHdop();
-			case GeoPackage.GNSS_MEASURED_POSITION__VDOP:
-				return getVdop();
-			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
-				return getPdop();
-			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
-				return getAugmentation();
+			case GeoPackage.GEO_BOUNDING_BOX__TOP:
+				return getTop();
+			case GeoPackage.GEO_BOUNDING_BOX__BOTTOM:
+				return getBottom();
+			case GeoPackage.GEO_BOUNDING_BOX__LEFT:
+				return getLeft();
+			case GeoPackage.GEO_BOUNDING_BOX__RIGHT:
+				return getRight();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -245,22 +263,20 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case GeoPackage.GNSS_MEASURED_POSITION__HDOP:
-				setHdop((Double)newValue);
+			case GeoPackage.GEO_BOUNDING_BOX__TOP:
+				setTop((Double)newValue);
 				return;
-			case GeoPackage.GNSS_MEASURED_POSITION__VDOP:
-				setVdop((Double)newValue);
+			case GeoPackage.GEO_BOUNDING_BOX__BOTTOM:
+				setBottom((Double)newValue);
 				return;
-			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
-				setPdop((Double)newValue);
+			case GeoPackage.GEO_BOUNDING_BOX__LEFT:
+				setLeft((Double)newValue);
 				return;
-			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
-				getAugmentation().clear();
-				getAugmentation().addAll((Collection<? extends String>)newValue);
+			case GeoPackage.GEO_BOUNDING_BOX__RIGHT:
+				setRight((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -274,17 +290,17 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case GeoPackage.GNSS_MEASURED_POSITION__HDOP:
-				setHdop(HDOP_EDEFAULT);
+			case GeoPackage.GEO_BOUNDING_BOX__TOP:
+				setTop(TOP_EDEFAULT);
 				return;
-			case GeoPackage.GNSS_MEASURED_POSITION__VDOP:
-				setVdop(VDOP_EDEFAULT);
+			case GeoPackage.GEO_BOUNDING_BOX__BOTTOM:
+				setBottom(BOTTOM_EDEFAULT);
 				return;
-			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
-				setPdop(PDOP_EDEFAULT);
+			case GeoPackage.GEO_BOUNDING_BOX__LEFT:
+				setLeft(LEFT_EDEFAULT);
 				return;
-			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
-				getAugmentation().clear();
+			case GeoPackage.GEO_BOUNDING_BOX__RIGHT:
+				setRight(RIGHT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -298,14 +314,14 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case GeoPackage.GNSS_MEASURED_POSITION__HDOP:
-				return hdop != HDOP_EDEFAULT;
-			case GeoPackage.GNSS_MEASURED_POSITION__VDOP:
-				return vdop != VDOP_EDEFAULT;
-			case GeoPackage.GNSS_MEASURED_POSITION__PDOP:
-				return pdop != PDOP_EDEFAULT;
-			case GeoPackage.GNSS_MEASURED_POSITION__AUGMENTATION:
-				return augmentation != null && !augmentation.isEmpty();
+			case GeoPackage.GEO_BOUNDING_BOX__TOP:
+				return top != TOP_EDEFAULT;
+			case GeoPackage.GEO_BOUNDING_BOX__BOTTOM:
+				return bottom != BOTTOM_EDEFAULT;
+			case GeoPackage.GEO_BOUNDING_BOX__LEFT:
+				return left != LEFT_EDEFAULT;
+			case GeoPackage.GEO_BOUNDING_BOX__RIGHT:
+				return right != RIGHT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -320,16 +336,16 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (hdop: ");
-		result.append(hdop);
-		result.append(", vdop: ");
-		result.append(vdop);
-		result.append(", pdop: ");
-		result.append(pdop);
-		result.append(", augmentation: ");
-		result.append(augmentation);
+		result.append(" (top: ");
+		result.append(top);
+		result.append(", bottom: ");
+		result.append(bottom);
+		result.append(", left: ");
+		result.append(left);
+		result.append(", right: ");
+		result.append(right);
 		result.append(')');
 		return result.toString();
 	}
 
-} //GNSSMeasuredPositionImpl
+} //GeoBoundingBoxImpl

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Jens KÃ¼bler
+ * Copyright (c) 2010-2012, Jens Kübler
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -25,43 +25,42 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package net.sf.seesea.model.core.physx.provider;
+package net.sf.seesea.model.core.geo.provider;
 
 
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.seesea.model.core.physx.Acceleration;
-import net.sf.seesea.model.core.physx.PhysxPackage;
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
+import net.sf.seesea.model.core.geo.GeoPackage;
+
+import net.sf.seesea.model.core.provider.ModelObjectItemProvider;
+import net.sf.seesea.model.core.provider.XEditPlugin;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link net.sf.seesea.model.core.physx.Acceleration} object.
+ * This is the item provider adapter for a {@link net.sf.seesea.model.core.geo.GeoBoundingBox} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class AccelerationItemProvider
-	extends MeasurementItemProvider {
+public class GeoBoundingBoxItemProvider extends ModelObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AccelerationItemProvider(AdapterFactory adapterFactory) {
+	public GeoBoundingBoxItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -76,27 +75,28 @@ public class AccelerationItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addXPropertyDescriptor(object);
-			addYPropertyDescriptor(object);
-			addZPropertyDescriptor(object);
+			addTopPropertyDescriptor(object);
+			addBottomPropertyDescriptor(object);
+			addLeftPropertyDescriptor(object);
+			addRightPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the X feature.
+	 * This adds a property descriptor for the Top feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addXPropertyDescriptor(Object object) {
+	protected void addTopPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Acceleration_x_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Acceleration_x_feature", "_UI_Acceleration_type"),
-				 PhysxPackage.Literals.ACCELERATION__X,
+				 getString("_UI_GeoBoundingBox_top_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeoBoundingBox_top_feature", "_UI_GeoBoundingBox_type"),
+				 GeoPackage.Literals.GEO_BOUNDING_BOX__TOP,
 				 true,
 				 false,
 				 false,
@@ -106,19 +106,19 @@ public class AccelerationItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Y feature.
+	 * This adds a property descriptor for the Bottom feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addYPropertyDescriptor(Object object) {
+	protected void addBottomPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Acceleration_y_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Acceleration_y_feature", "_UI_Acceleration_type"),
-				 PhysxPackage.Literals.ACCELERATION__Y,
+				 getString("_UI_GeoBoundingBox_bottom_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeoBoundingBox_bottom_feature", "_UI_GeoBoundingBox_type"),
+				 GeoPackage.Literals.GEO_BOUNDING_BOX__BOTTOM,
 				 true,
 				 false,
 				 false,
@@ -128,19 +128,19 @@ public class AccelerationItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Z feature.
+	 * This adds a property descriptor for the Left feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addZPropertyDescriptor(Object object) {
+	protected void addLeftPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Acceleration_z_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Acceleration_z_feature", "_UI_Acceleration_type"),
-				 PhysxPackage.Literals.ACCELERATION__Z,
+				 getString("_UI_GeoBoundingBox_left_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeoBoundingBox_left_feature", "_UI_GeoBoundingBox_type"),
+				 GeoPackage.Literals.GEO_BOUNDING_BOX__LEFT,
 				 true,
 				 false,
 				 false,
@@ -150,14 +150,36 @@ public class AccelerationItemProvider
 	}
 
 	/**
-	 * This returns Acceleration.gif.
+	 * This adds a property descriptor for the Right feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRightPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_GeoBoundingBox_right_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GeoBoundingBox_right_feature", "_UI_GeoBoundingBox_type"),
+				 GeoPackage.Literals.GEO_BOUNDING_BOX__RIGHT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns GeoBoundingBox.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Acceleration"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/GeoBoundingBox"));
 	}
 
 	/**
@@ -168,11 +190,10 @@ public class AccelerationItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Acceleration)object).getSensorID();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Acceleration_type") :
-			getString("_UI_Acceleration_type") + " " + label;
+		GeoBoundingBox geoBoundingBox = (GeoBoundingBox)object;
+		return getString("_UI_GeoBoundingBox_type") + " " + geoBoundingBox.getTop();
 	}
+	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -185,10 +206,11 @@ public class AccelerationItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Acceleration.class)) {
-			case PhysxPackage.ACCELERATION__X:
-			case PhysxPackage.ACCELERATION__Y:
-			case PhysxPackage.ACCELERATION__Z:
+		switch (notification.getFeatureID(GeoBoundingBox.class)) {
+			case GeoPackage.GEO_BOUNDING_BOX__TOP:
+			case GeoPackage.GEO_BOUNDING_BOX__BOTTOM:
+			case GeoPackage.GEO_BOUNDING_BOX__LEFT:
+			case GeoPackage.GEO_BOUNDING_BOX__RIGHT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -205,6 +227,17 @@ public class AccelerationItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return XEditPlugin.INSTANCE;
 	}
 
 }

@@ -167,6 +167,15 @@ public interface GeoFactory extends EFactory {
 	AnchorPosition createAnchorPosition();
 
 	/**
+	 * Returns a new object of class '<em>Bounding Box</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Bounding Box</em>'.
+	 * @generated
+	 */
+	GeoBoundingBox createGeoBoundingBox();
+
+	/**
 	 * Returns a new object of class '<em>Chart Container</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

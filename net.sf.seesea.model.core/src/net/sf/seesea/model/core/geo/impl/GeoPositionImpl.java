@@ -53,12 +53,12 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoPositionImpl#getLongitude <em>Longitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoPositionImpl#getLatitude <em>Latitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoPositionImpl#getPrecision <em>Precision</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

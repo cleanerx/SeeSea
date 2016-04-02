@@ -55,7 +55,7 @@ public class DiagramInterchangeFactoryImpl extends EFactoryImpl implements Diagr
 	 */
 	public static DiagramInterchangeFactory init() {
 		try {
-			DiagramInterchangeFactory theDiagramInterchangeFactory = (DiagramInterchangeFactory)EPackage.Registry.INSTANCE.getEFactory("diagramInterchange"); 
+			DiagramInterchangeFactory theDiagramInterchangeFactory = (DiagramInterchangeFactory)EPackage.Registry.INSTANCE.getEFactory(DiagramInterchangePackage.eNS_URI);
 			if (theDiagramInterchangeFactory != null) {
 				return theDiagramInterchangeFactory;
 			}

@@ -40,10 +40,10 @@ import net.sf.seesea.model.core.ModelObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.diagramInterchange.GraphicalNode#getRepresents <em>Represents</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.diagramInterchange.DiagramInterchangePackage#getGraphicalNode()
  * @model

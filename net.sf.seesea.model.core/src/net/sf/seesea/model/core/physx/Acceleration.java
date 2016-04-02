@@ -35,12 +35,12 @@ package net.sf.seesea.model.core.physx;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.Acceleration#getX <em>X</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Acceleration#getY <em>Y</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Acceleration#getZ <em>Z</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.physx.PhysxPackage#getAcceleration()
  * @model

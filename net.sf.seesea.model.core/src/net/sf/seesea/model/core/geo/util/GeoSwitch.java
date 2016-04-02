@@ -81,7 +81,7 @@ public class GeoSwitch<T> extends Switch<T> {
 	 * Checks whether this is a switch for the given package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @parameter ePackage the package in question.
+	 * @param ePackage the package in question.
 	 * @return whether this is a switch for the given package.
 	 * @generated
 	 */
@@ -277,6 +277,13 @@ public class GeoSwitch<T> extends Switch<T> {
 				T result = caseAnchorPosition(anchorPosition);
 				if (result == null) result = caseGeoPosition(anchorPosition);
 				if (result == null) result = caseModelObject(anchorPosition);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case GeoPackage.GEO_BOUNDING_BOX: {
+				GeoBoundingBox geoBoundingBox = (GeoBoundingBox)theEObject;
+				T result = caseGeoBoundingBox(geoBoundingBox);
+				if (result == null) result = caseModelObject(geoBoundingBox);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -491,6 +498,21 @@ public class GeoSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAnchorPosition(AnchorPosition object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Bounding Box</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Bounding Box</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGeoBoundingBox(GeoBoundingBox object) {
 		return null;
 	}
 

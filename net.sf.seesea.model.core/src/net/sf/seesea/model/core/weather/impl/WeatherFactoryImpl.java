@@ -56,7 +56,7 @@ public class WeatherFactoryImpl extends EFactoryImpl implements WeatherFactory {
 	 */
 	public static WeatherFactory init() {
 		try {
-			WeatherFactory theWeatherFactory = (WeatherFactory)EPackage.Registry.INSTANCE.getEFactory("weather"); 
+			WeatherFactory theWeatherFactory = (WeatherFactory)EPackage.Registry.INSTANCE.getEFactory(WeatherPackage.eNS_URI);
 			if (theWeatherFactory != null) {
 				return theWeatherFactory;
 			}

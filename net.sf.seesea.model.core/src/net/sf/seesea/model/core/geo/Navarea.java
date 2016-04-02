@@ -40,10 +40,10 @@ import net.sf.seesea.model.core.geo.osm.Area;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.Navarea#getAreanumber <em>Areanumber</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getNavarea()
  * @model

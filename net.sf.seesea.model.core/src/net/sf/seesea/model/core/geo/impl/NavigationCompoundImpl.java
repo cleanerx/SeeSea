@@ -52,12 +52,12 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.NavigationCompoundImpl#getPoiContainer <em>Poi Container</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.NavigationCompoundImpl#getRoutingContainer <em>Routing Container</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.NavigationCompoundImpl#getTracksContainer <em>Tracks Container</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

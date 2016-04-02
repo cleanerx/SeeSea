@@ -45,10 +45,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.GeoPosition3DImpl#getAltitude <em>Altitude</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

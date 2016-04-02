@@ -56,10 +56,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.data.impl.SeriesImpl#getMeasurement <em>Measurement</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

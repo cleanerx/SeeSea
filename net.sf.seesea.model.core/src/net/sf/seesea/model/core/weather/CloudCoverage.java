@@ -342,6 +342,8 @@ public enum CloudCoverage implements Enumerator {
 	 * Returns the '<em><b>Cloud Coverage</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param literal the literal.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static CloudCoverage get(String literal) {
@@ -358,6 +360,8 @@ public enum CloudCoverage implements Enumerator {
 	 * Returns the '<em><b>Cloud Coverage</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param name the name.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static CloudCoverage getByName(String name) {
@@ -374,6 +378,8 @@ public enum CloudCoverage implements Enumerator {
 	 * Returns the '<em><b>Cloud Coverage</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param value the integer value.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static CloudCoverage get(int value) {

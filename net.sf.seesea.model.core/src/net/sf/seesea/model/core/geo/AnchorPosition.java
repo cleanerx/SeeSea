@@ -35,11 +35,11 @@ package net.sf.seesea.model.core.geo;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.AnchorPosition#getXExtent <em>XExtent</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.AnchorPosition#getYExtent <em>YExtent</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getAnchorPosition()
  * @model

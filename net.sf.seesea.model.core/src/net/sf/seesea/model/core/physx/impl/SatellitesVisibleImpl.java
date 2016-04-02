@@ -54,10 +54,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.SatellitesVisibleImpl#getSatelliteInfo <em>Satellite Info</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -47,10 +47,10 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.NamedArtifactImpl#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

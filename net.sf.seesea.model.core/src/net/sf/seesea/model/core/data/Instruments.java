@@ -47,13 +47,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getPosition <em>Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getWaterTemperature <em>Water Temperature</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getSatellitesVisible <em>Satellites Visible</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.data.Instruments#getWindVector <em>Wind Vector</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.data.DataPackage#getInstruments()
  * @model

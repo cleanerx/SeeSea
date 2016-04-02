@@ -38,10 +38,10 @@ package net.sf.seesea.model.core.geo;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.GeoPosition3D#getAltitude <em>Altitude</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getGeoPosition3D()
  * @model

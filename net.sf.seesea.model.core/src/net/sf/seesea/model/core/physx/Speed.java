@@ -39,11 +39,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.Speed#getSpeed <em>Speed</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Speed#getSpeedUnit <em>Speed Unit</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.physx.PhysxPackage#getSpeed()
  * @model

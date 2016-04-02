@@ -41,11 +41,11 @@ import net.sf.seesea.model.core.geo.NavigationCompound;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.ModelRoot#getChartContainer <em>Chart Container</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.ModelRoot#getInstruments <em>Instruments</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.CorePackage#getModelRoot()
  * @model

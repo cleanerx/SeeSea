@@ -59,11 +59,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.POIContainerImpl#getPois <em>Pois</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.POIContainerImpl#getArea <em>Area</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

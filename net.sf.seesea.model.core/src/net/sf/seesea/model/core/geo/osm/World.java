@@ -41,6 +41,7 @@ import net.sf.seesea.model.core.geo.GeoPosition;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#isLatitudeScale <em>Latitude Scale</em>}</li>
@@ -49,7 +50,6 @@ import net.sf.seesea.model.core.geo.GeoPosition;
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#getTrip <em>Trip</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.World#getTotalTrip <em>Total Trip</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.osm.OsmPackage#getWorld()
  * @model

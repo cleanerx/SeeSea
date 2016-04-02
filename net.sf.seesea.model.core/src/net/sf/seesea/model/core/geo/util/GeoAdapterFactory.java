@@ -192,6 +192,10 @@ public class GeoAdapterFactory extends AdapterFactoryImpl {
 				return createAnchorPositionAdapter();
 			}
 			@Override
+			public Adapter caseGeoBoundingBox(GeoBoundingBox object) {
+				return createGeoBoundingBoxAdapter();
+			}
+			@Override
 			public Adapter caseModelObject(ModelObject object) {
 				return createModelObjectAdapter();
 			}
@@ -416,6 +420,20 @@ public class GeoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAnchorPositionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link net.sf.seesea.model.core.geo.GeoBoundingBox <em>Bounding Box</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see net.sf.seesea.model.core.geo.GeoBoundingBox
+	 * @generated
+	 */
+	public Adapter createGeoBoundingBoxAdapter() {
 		return null;
 	}
 

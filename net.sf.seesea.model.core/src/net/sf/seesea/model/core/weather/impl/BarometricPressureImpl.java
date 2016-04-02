@@ -48,11 +48,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.BarometricPressureImpl#getValue <em>Value</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.BarometricPressureImpl#getUnit <em>Unit</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

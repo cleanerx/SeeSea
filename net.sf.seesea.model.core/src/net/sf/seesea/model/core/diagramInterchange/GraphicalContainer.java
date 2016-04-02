@@ -40,10 +40,10 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.diagramInterchange.GraphicalContainer#getChildren <em>Children</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.diagramInterchange.DiagramInterchangePackage#getGraphicalContainer()
  * @model

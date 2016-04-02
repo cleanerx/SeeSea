@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="net"
-    nsURI="net.sf.seesea.model.core" nsPrefix="net.sf.seesea.model.core">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="net" nsURI="net.sf.seesea.model.core" nsPrefix="net.sf.seesea.model.core">
   <eSubpackages name="sf" nsURI="x" nsPrefix="x">
     <eSubpackages name="seesea" nsURI="y" nsPrefix="y">
       <eSubpackages name="model" nsURI="z" nsPrefix="z">
@@ -148,6 +146,12 @@
             <eClassifiers xsi:type="ecore:EClass" name="AnchorPosition" eSuperTypes="#//sf/seesea/model/core/geo/GeoPosition">
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="xExtent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
               <eStructuralFeatures xsi:type="ecore:EAttribute" name="yExtent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+            </eClassifiers>
+            <eClassifiers xsi:type="ecore:EClass" name="GeoBoundingBox" eSuperTypes="#//sf/seesea/model/core/ModelObject">
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="top" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="bottom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="left" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+              <eStructuralFeatures xsi:type="ecore:EAttribute" name="right" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
             </eClassifiers>
             <eSubpackages name="osm" nsURI="osm" nsPrefix="osm">
               <eClassifiers xsi:type="ecore:EClass" name="Area" eSuperTypes="#//sf/seesea/model/core/geo/Chart #//sf/seesea/model/core/geo/NavigationCompound">

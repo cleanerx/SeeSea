@@ -39,11 +39,11 @@ import net.sf.seesea.model.core.physx.Measurement;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.Depth#getMeasurementPosition <em>Measurement Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.Depth#getDepth <em>Depth</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getDepth()
  * @model

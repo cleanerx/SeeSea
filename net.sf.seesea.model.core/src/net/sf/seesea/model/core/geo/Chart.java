@@ -40,10 +40,10 @@ import net.sf.seesea.model.core.diagramInterchange.Diagram;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.Chart#getChartConfiguration <em>Chart Configuration</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getChart()
  * @model

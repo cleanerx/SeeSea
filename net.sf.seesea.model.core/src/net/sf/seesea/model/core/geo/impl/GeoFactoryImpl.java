@@ -56,7 +56,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	 */
 	public static GeoFactory init() {
 		try {
-			GeoFactory theGeoFactory = (GeoFactory)EPackage.Registry.INSTANCE.getEFactory("b"); 
+			GeoFactory theGeoFactory = (GeoFactory)EPackage.Registry.INSTANCE.getEFactory(GeoPackage.eNS_URI);
 			if (theGeoFactory != null) {
 				return theGeoFactory;
 			}
@@ -108,6 +108,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 			case GeoPackage.DEPTH: return createDepth();
 			case GeoPackage.GNSS_MEASURED_POSITION: return createGNSSMeasuredPosition();
 			case GeoPackage.ANCHOR_POSITION: return createAnchorPosition();
+			case GeoPackage.GEO_BOUNDING_BOX: return createGeoBoundingBox();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -283,6 +284,16 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	public AnchorPosition createAnchorPosition() {
 		AnchorPositionImpl anchorPosition = new AnchorPositionImpl();
 		return anchorPosition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GeoBoundingBox createGeoBoundingBox() {
+		GeoBoundingBoxImpl geoBoundingBox = new GeoBoundingBoxImpl();
+		return geoBoundingBox;
 	}
 
 	/**

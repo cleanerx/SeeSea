@@ -1170,6 +1170,61 @@ public interface GeoPackage extends EPackage {
 	int ANCHOR_POSITION_FEATURE_COUNT = GEO_POSITION_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl <em>Bounding Box</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl
+	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getGeoBoundingBox()
+	 * @generated
+	 */
+	int GEO_BOUNDING_BOX = 23;
+
+	/**
+	 * The feature id for the '<em><b>Top</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GEO_BOUNDING_BOX__TOP = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Bottom</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GEO_BOUNDING_BOX__BOTTOM = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Left</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GEO_BOUNDING_BOX__LEFT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Right</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GEO_BOUNDING_BOX__RIGHT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Bounding Box</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GEO_BOUNDING_BOX_FEATURE_COUNT = CorePackage.MODEL_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1177,7 +1232,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 23;
+	int DIRECTION = 24;
 
 
 	/**
@@ -1188,7 +1243,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getLatitudeHemisphere()
 	 * @generated
 	 */
-	int LATITUDE_HEMISPHERE = 24;
+	int LATITUDE_HEMISPHERE = 25;
 
 	/**
 	 * The meta object id for the '{@link net.sf.seesea.model.core.geo.LongitudeHemisphere <em>Longitude Hemisphere</em>}' enum.
@@ -1198,7 +1253,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getLongitudeHemisphere()
 	 * @generated
 	 */
-	int LONGITUDE_HEMISPHERE = 25;
+	int LONGITUDE_HEMISPHERE = 26;
 
 
 	/**
@@ -1209,7 +1264,7 @@ public interface GeoPackage extends EPackage {
 	 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getRelativeDepthMeasurementPosition()
 	 * @generated
 	 */
-	int RELATIVE_DEPTH_MEASUREMENT_POSITION = 26;
+	int RELATIVE_DEPTH_MEASUREMENT_POSITION = 27;
 
 
 	/**
@@ -1550,6 +1605,60 @@ public interface GeoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getAnchorPosition_YExtent();
+
+	/**
+	 * Returns the meta object for class '{@link net.sf.seesea.model.core.geo.GeoBoundingBox <em>Bounding Box</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Bounding Box</em>'.
+	 * @see net.sf.seesea.model.core.geo.GeoBoundingBox
+	 * @generated
+	 */
+	EClass getGeoBoundingBox();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GeoBoundingBox#getTop <em>Top</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Top</em>'.
+	 * @see net.sf.seesea.model.core.geo.GeoBoundingBox#getTop()
+	 * @see #getGeoBoundingBox()
+	 * @generated
+	 */
+	EAttribute getGeoBoundingBox_Top();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GeoBoundingBox#getBottom <em>Bottom</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Bottom</em>'.
+	 * @see net.sf.seesea.model.core.geo.GeoBoundingBox#getBottom()
+	 * @see #getGeoBoundingBox()
+	 * @generated
+	 */
+	EAttribute getGeoBoundingBox_Bottom();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GeoBoundingBox#getLeft <em>Left</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Left</em>'.
+	 * @see net.sf.seesea.model.core.geo.GeoBoundingBox#getLeft()
+	 * @see #getGeoBoundingBox()
+	 * @generated
+	 */
+	EAttribute getGeoBoundingBox_Left();
+
+	/**
+	 * Returns the meta object for the attribute '{@link net.sf.seesea.model.core.geo.GeoBoundingBox#getRight <em>Right</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Right</em>'.
+	 * @see net.sf.seesea.model.core.geo.GeoBoundingBox#getRight()
+	 * @see #getGeoBoundingBox()
+	 * @generated
+	 */
+	EAttribute getGeoBoundingBox_Right();
 
 	/**
 	 * Returns the meta object for enum '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}'.
@@ -2104,6 +2213,48 @@ public interface GeoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ANCHOR_POSITION__YEXTENT = eINSTANCE.getAnchorPosition_YExtent();
+
+		/**
+		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl <em>Bounding Box</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see net.sf.seesea.model.core.geo.impl.GeoBoundingBoxImpl
+		 * @see net.sf.seesea.model.core.geo.impl.GeoPackageImpl#getGeoBoundingBox()
+		 * @generated
+		 */
+		EClass GEO_BOUNDING_BOX = eINSTANCE.getGeoBoundingBox();
+
+		/**
+		 * The meta object literal for the '<em><b>Top</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GEO_BOUNDING_BOX__TOP = eINSTANCE.getGeoBoundingBox_Top();
+
+		/**
+		 * The meta object literal for the '<em><b>Bottom</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GEO_BOUNDING_BOX__BOTTOM = eINSTANCE.getGeoBoundingBox_Bottom();
+
+		/**
+		 * The meta object literal for the '<em><b>Left</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GEO_BOUNDING_BOX__LEFT = eINSTANCE.getGeoBoundingBox_Left();
+
+		/**
+		 * The meta object literal for the '<em><b>Right</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GEO_BOUNDING_BOX__RIGHT = eINSTANCE.getGeoBoundingBox_Right();
 
 		/**
 		 * The meta object literal for the '{@link net.sf.seesea.model.core.geo.Direction <em>Direction</em>}' enum.

@@ -52,13 +52,13 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.WindMeasurementImpl#getSpeed <em>Speed</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.WindMeasurementImpl#getSpeedUnit <em>Speed Unit</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.WindMeasurementImpl#getAngle <em>Angle</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.WindMeasurementImpl#getReference <em>Reference</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

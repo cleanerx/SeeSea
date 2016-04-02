@@ -42,11 +42,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.weather.WindMeasurement#getAngle <em>Angle</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.WindMeasurement#getReference <em>Reference</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.weather.WeatherPackage#getWindMeasurement()
  * @model

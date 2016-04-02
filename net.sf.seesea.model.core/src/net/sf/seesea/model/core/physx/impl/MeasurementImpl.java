@@ -47,13 +47,13 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.MeasurementImpl#getSensorID <em>Sensor ID</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.MeasurementImpl#getTime <em>Time</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.MeasurementImpl#getTimezone <em>Timezone</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.MeasurementImpl#isValid <em>Valid</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

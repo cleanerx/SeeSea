@@ -39,13 +39,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.SatelliteInfo#getId <em>Id</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.SatelliteInfo#getElevation <em>Elevation</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.SatelliteInfo#getAzimuth <em>Azimuth</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.SatelliteInfo#getSignalStrength <em>Signal Strength</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.physx.PhysxPackage#getSatelliteInfo()
  * @model

@@ -63,6 +63,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.AreaImpl#getPoiContainer <em>Poi Container</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.AreaImpl#getRoutingContainer <em>Routing Container</em>}</li>
@@ -71,7 +72,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.AreaImpl#getMapCenterPosition <em>Map Center Position</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.AreaImpl#getSubArea <em>Sub Area</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

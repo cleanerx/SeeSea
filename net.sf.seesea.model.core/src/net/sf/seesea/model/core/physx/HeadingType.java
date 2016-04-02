@@ -242,6 +242,8 @@ public enum HeadingType implements Enumerator {
 	 * Returns the '<em><b>Heading Type</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param literal the literal.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static HeadingType get(String literal) {
@@ -258,6 +260,8 @@ public enum HeadingType implements Enumerator {
 	 * Returns the '<em><b>Heading Type</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param name the name.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static HeadingType getByName(String name) {
@@ -274,6 +278,8 @@ public enum HeadingType implements Enumerator {
 	 * Returns the '<em><b>Heading Type</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param value the integer value.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static HeadingType get(int value) {
