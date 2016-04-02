@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens Kübler
+Copyright (c) 2013-2015, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@ package net.sf.seesea.waterlevel;
 
 import java.util.Date;
 
-import net.sf.seesea.services.navigation.IGeoBoundingBox;
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
 
 /**
  * This interface allows for different implementations of water level corrections
@@ -52,6 +52,6 @@ public interface IWaterLevelCorrection {
 	 * 
 	 * @param boundingBox
 	 */
-	void setBoundingBox(IGeoBoundingBox boundingBox);
+	void setBoundingBox(GeoBoundingBox boundingBox);
 
 }

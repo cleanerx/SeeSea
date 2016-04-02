@@ -34,9 +34,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-
-import net.sf.seesea.services.navigation.GeoBoundingBox;
-import net.sf.seesea.services.navigation.IGeoBoundingBox;
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
+import net.sf.seesea.model.core.geo.GeoFactory;
+import net.sf.seesea.model.core.geo.GeoPackage;
 import net.sf.seesea.waterlevel.ocean.IOceanTideProvider;
 import net.sf.seesea.waterlevel.ocean.LengthUnit;
 import net.sf.seesea.waterlevel.ocean.TideLevel;
@@ -73,7 +73,7 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 	 * checks the bounding box location
 	 */
 	@Override
-	public void setBoundingBox(IGeoBoundingBox boundingBox) {
+	public void setBoundingBox(GeoBoundingBox boundingBox) {
 		if (boundingBox == null) {
 			checkCoordinate = CheckCoordinate.POINT;
 		} else {
@@ -112,7 +112,7 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 	 * @param boundingBox
 	 * @return
 	 */
-	private TrackLocation isBBoxOnOpenSea(IGeoBoundingBox boundingBox) {
+	private TrackLocation isBBoxOnOpenSea(GeoBoundingBox boundingBox) {
 		PreparedStatement statement = null;
 		try {
 			String polygon = "SELECT gid FROM water WHERE ST_CONTAINS(the_geom, ST_SetSRID(ST_MakePolygon(ST_GeomFromText('LINESTRING(" + boundingBox.getLeft() + " " + boundingBox.getTop() + ", " + boundingBox.getRight() + " " + boundingBox.getTop() + ", " + boundingBox.getRight() + " " + boundingBox.getBottom() + ", " + boundingBox.getLeft() + " " + boundingBox.getBottom() + ", " + boundingBox.getLeft() + " " + boundingBox.getTop() + ")')), 4326)) = true"; //$NON-NLS-1$
@@ -139,12 +139,17 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 		// can be both on ocean and land - need to do point checks
 		return TrackLocation.UNDEFINED;
 	}
+	
+	private boolean contains(GeoBoundingBox boundingBox, double lat,double lon) {
+		return lat >= boundingBox.getBottom() && lat < boundingBox.getTop() && lon >= boundingBox.getLeft()
+				&& lon < boundingBox.getRight();
+	}
 
 	private boolean isPointOnOpenSea(double lat, double lon) {
 		// create a virtual bounding box spanning around 1 nautical mile around
 		// for cacheing purposes
-		if (_cacheBoundingBox == null || !_cacheBoundingBox.contains(lat, lon)) {
-			_cacheBoundingBox = new GeoBoundingBox();
+		if (_cacheBoundingBox == null || !contains(_cacheBoundingBox,lat, lon)) {
+			_cacheBoundingBox = GeoFactory.eINSTANCE.createGeoBoundingBox();
 			_cacheBoundingBox.setLeft(lon - 0.016666666666);
 			_cacheBoundingBox.setRight(lon + 0.016666666666);
 			_cacheBoundingBox.setTop(lat + 0.016666666666);
@@ -157,7 +162,7 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 			// lon);
 			return true;
 		} else {
-			_cacheBoundingBox = new GeoBoundingBox();
+			_cacheBoundingBox = GeoFactory.eINSTANCE.createGeoBoundingBox();
 			_cacheBoundingBox.setLeft(lon - 0.0025);
 			_cacheBoundingBox.setRight(lon + 0.0025);
 			_cacheBoundingBox.setTop(lat + 0.0025);
@@ -168,7 +173,7 @@ public class CombinedWaterLevelCorrection implements IWaterLevelCorrection {
 				// ":" + lon);
 				return true;
 			} else {
-				_cacheBoundingBox = new GeoBoundingBox();
+				_cacheBoundingBox = GeoFactory.eINSTANCE.createGeoBoundingBox();
 				_cacheBoundingBox.setLeft(lon - 0.0002);
 				_cacheBoundingBox.setRight(lon + 0.0002);
 				_cacheBoundingBox.setTop(lat + 0.0002);
