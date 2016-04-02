@@ -59,11 +59,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.RoutingContainerImpl#getRoutes <em>Routes</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.RoutingContainerImpl#getArea <em>Area</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

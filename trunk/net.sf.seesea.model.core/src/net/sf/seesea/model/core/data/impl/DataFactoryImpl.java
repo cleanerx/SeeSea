@@ -55,7 +55,7 @@ public class DataFactoryImpl extends EFactoryImpl implements DataFactory {
 	 */
 	public static DataFactory init() {
 		try {
-			DataFactory theDataFactory = (DataFactory)EPackage.Registry.INSTANCE.getEFactory("data"); 
+			DataFactory theDataFactory = (DataFactory)EPackage.Registry.INSTANCE.getEFactory(DataPackage.eNS_URI);
 			if (theDataFactory != null) {
 				return theDataFactory;
 			}

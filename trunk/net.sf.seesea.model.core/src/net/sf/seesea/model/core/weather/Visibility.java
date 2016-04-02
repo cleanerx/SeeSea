@@ -41,11 +41,11 @@ import net.sf.seesea.model.core.physx.Measurement;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.weather.Visibility#getValue <em>Value</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.Visibility#getUnit <em>Unit</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.weather.WeatherPackage#getVisibility()
  * @model

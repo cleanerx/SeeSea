@@ -48,6 +48,7 @@ import net.sf.seesea.model.core.geo.Coordinate;
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.Direction;
 import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.GeoFactory;
 import net.sf.seesea.model.core.geo.GeoPackage;
 import net.sf.seesea.model.core.geo.GeoPosition;
@@ -188,6 +189,13 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * @generated
 	 */
 	private EClass anchorPositionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass geoBoundingBoxEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -661,6 +669,51 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getGeoBoundingBox() {
+		return geoBoundingBoxEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGeoBoundingBox_Top() {
+		return (EAttribute)geoBoundingBoxEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGeoBoundingBox_Bottom() {
+		return (EAttribute)geoBoundingBoxEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGeoBoundingBox_Left() {
+		return (EAttribute)geoBoundingBoxEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGeoBoundingBox_Right() {
+		return (EAttribute)geoBoundingBoxEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -975,6 +1028,12 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		createEAttribute(anchorPositionEClass, ANCHOR_POSITION__XEXTENT);
 		createEAttribute(anchorPositionEClass, ANCHOR_POSITION__YEXTENT);
 
+		geoBoundingBoxEClass = createEClass(GEO_BOUNDING_BOX);
+		createEAttribute(geoBoundingBoxEClass, GEO_BOUNDING_BOX__TOP);
+		createEAttribute(geoBoundingBoxEClass, GEO_BOUNDING_BOX__BOTTOM);
+		createEAttribute(geoBoundingBoxEClass, GEO_BOUNDING_BOX__LEFT);
+		createEAttribute(geoBoundingBoxEClass, GEO_BOUNDING_BOX__RIGHT);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
 		latitudeHemisphereEEnum = createEEnum(LATITUDE_HEMISPHERE);
@@ -1043,6 +1102,7 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		depthEClass.getESuperTypes().add(thePhysxPackage.getMeasurement());
 		gnssMeasuredPositionEClass.getESuperTypes().add(this.getMeasuredPosition3D());
 		anchorPositionEClass.getESuperTypes().add(this.getGeoPosition());
+		geoBoundingBoxEClass.getESuperTypes().add(theCorePackage.getModelObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(geoPositionEClass, GeoPosition.class, "GeoPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1134,6 +1194,12 @@ public class GeoPackageImpl extends EPackageImpl implements GeoPackage {
 		initEClass(anchorPositionEClass, AnchorPosition.class, "AnchorPosition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAnchorPosition_XExtent(), ecorePackage.getEDouble(), "xExtent", null, 0, 1, AnchorPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAnchorPosition_YExtent(), ecorePackage.getEDouble(), "yExtent", null, 0, 1, AnchorPosition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(geoBoundingBoxEClass, GeoBoundingBox.class, "GeoBoundingBox", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGeoBoundingBox_Top(), ecorePackage.getEDouble(), "top", null, 0, 1, GeoBoundingBox.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGeoBoundingBox_Bottom(), ecorePackage.getEDouble(), "bottom", null, 0, 1, GeoBoundingBox.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGeoBoundingBox_Left(), ecorePackage.getEDouble(), "left", null, 0, 1, GeoBoundingBox.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGeoBoundingBox_Right(), ecorePackage.getEDouble(), "right", null, 0, 1, GeoBoundingBox.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

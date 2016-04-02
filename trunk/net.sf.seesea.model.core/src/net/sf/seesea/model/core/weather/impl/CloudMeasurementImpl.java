@@ -55,11 +55,11 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.CloudMeasurementImpl#getCloudCoverage <em>Cloud Coverage</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.CloudMeasurementImpl#getCloudTypes <em>Cloud Types</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

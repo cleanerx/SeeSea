@@ -40,12 +40,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.NavigationCompound#getPoiContainer <em>Poi Container</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.NavigationCompound#getRoutingContainer <em>Routing Container</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.NavigationCompound#getTracksContainer <em>Tracks Container</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getNavigationCompound()
  * @model

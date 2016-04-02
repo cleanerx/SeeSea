@@ -41,11 +41,11 @@ import org.eclipse.emf.common.util.EList;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.weather.CloudMeasurement#getCloudCoverage <em>Cloud Coverage</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.CloudMeasurement#getCloudTypes <em>Cloud Types</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.weather.WeatherPackage#getCloudMeasurement()
  * @model

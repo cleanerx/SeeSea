@@ -41,13 +41,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.Measurement#getSensorID <em>Sensor ID</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Measurement#getTime <em>Time</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Measurement#getTimezone <em>Timezone</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Measurement#isValid <em>Valid</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.physx.PhysxPackage#getMeasurement()
  * @model abstract="true"

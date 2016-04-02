@@ -42,11 +42,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.AnchorPositionImpl#getXExtent <em>XExtent</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.AnchorPositionImpl#getYExtent <em>YExtent</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

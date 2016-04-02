@@ -52,11 +52,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.impl.ModelRootImpl#getChartContainer <em>Chart Container</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.impl.ModelRootImpl#getInstruments <em>Instruments</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

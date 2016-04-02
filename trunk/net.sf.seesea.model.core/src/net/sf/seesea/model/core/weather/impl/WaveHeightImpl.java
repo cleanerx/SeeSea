@@ -48,11 +48,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.WaveHeightImpl#getValue <em>Value</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.weather.impl.WaveHeightImpl#getUnit <em>Unit</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

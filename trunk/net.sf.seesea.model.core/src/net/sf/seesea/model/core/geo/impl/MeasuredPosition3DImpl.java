@@ -54,13 +54,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getLongitude <em>Longitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getLatitude <em>Latitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getPrecision <em>Precision</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.impl.MeasuredPosition3DImpl#getAltitude <em>Altitude</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

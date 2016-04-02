@@ -66,13 +66,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class GeoPositionItemProvider
-	extends ModelObjectItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ModelObjectItemProvider {
 	
 	private ChangeListener changeListener;
 

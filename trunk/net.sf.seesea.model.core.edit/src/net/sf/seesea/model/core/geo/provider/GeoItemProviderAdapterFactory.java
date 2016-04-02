@@ -399,6 +399,29 @@ public class GeoItemProviderAdapterFactory extends GeoAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.geo.GeoBoundingBox} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GeoBoundingBoxItemProvider geoBoundingBoxItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link net.sf.seesea.model.core.geo.GeoBoundingBox}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGeoBoundingBoxAdapter() {
+		if (geoBoundingBoxItemProvider == null) {
+			geoBoundingBoxItemProvider = new GeoBoundingBoxItemProvider(this);
+		}
+
+		return geoBoundingBoxItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link net.sf.seesea.model.core.geo.ChartContainer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -750,6 +773,7 @@ public class GeoItemProviderAdapterFactory extends GeoAdapterFactory implements 
 		if (depthItemProvider != null) depthItemProvider.dispose();
 		if (gnssMeasuredPositionItemProvider != null) gnssMeasuredPositionItemProvider.dispose();
 		if (anchorPositionItemProvider != null) anchorPositionItemProvider.dispose();
+		if (geoBoundingBoxItemProvider != null) geoBoundingBoxItemProvider.dispose();
 	}
 
 }

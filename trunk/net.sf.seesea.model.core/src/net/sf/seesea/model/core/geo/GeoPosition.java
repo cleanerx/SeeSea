@@ -41,12 +41,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.GeoPosition#getLongitude <em>Longitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.GeoPosition#getLatitude <em>Latitude</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.GeoPosition#getPrecision <em>Precision</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getGeoPosition()
  * @model

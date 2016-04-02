@@ -49,6 +49,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#isLongitudeScale <em>Longitude Scale</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#isLatitudeScale <em>Latitude Scale</em>}</li>
@@ -57,7 +58,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#getTrip <em>Trip</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.osm.impl.WorldImpl#getTotalTrip <em>Total Trip</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

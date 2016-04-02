@@ -44,12 +44,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.DistanceImpl#getValue <em>Value</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.DistanceImpl#getUnit <em>Unit</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.DistanceImpl#getDistanceType <em>Distance Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -57,7 +57,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public static PhysxFactory init() {
 		try {
-			PhysxFactory thePhysxFactory = (PhysxFactory)EPackage.Registry.INSTANCE.getEFactory("physx"); 
+			PhysxFactory thePhysxFactory = (PhysxFactory)EPackage.Registry.INSTANCE.getEFactory(PhysxPackage.eNS_URI);
 			if (thePhysxFactory != null) {
 				return thePhysxFactory;
 			}

@@ -42,12 +42,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.AccelerationImpl#getX <em>X</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.AccelerationImpl#getY <em>Y</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.AccelerationImpl#getZ <em>Z</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

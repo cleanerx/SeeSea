@@ -44,10 +44,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.data.Series#getMeasurement <em>Measurement</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.data.DataPackage#getSeries()
  * @model

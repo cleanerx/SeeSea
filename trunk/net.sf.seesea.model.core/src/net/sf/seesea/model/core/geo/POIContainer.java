@@ -43,11 +43,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.geo.POIContainer#getPois <em>Pois</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.geo.POIContainer#getArea <em>Area</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.geo.GeoPackage#getPOIContainer()
  * @model

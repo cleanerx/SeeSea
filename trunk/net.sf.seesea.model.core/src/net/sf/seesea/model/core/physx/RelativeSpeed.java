@@ -35,11 +35,11 @@ package net.sf.seesea.model.core.physx;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.RelativeSpeed#getKey <em>Key</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.RelativeSpeed#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.physx.PhysxPackage#getRelativeSpeed()
  * @model

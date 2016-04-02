@@ -35,12 +35,12 @@ package net.sf.seesea.model.core.physx;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.Distance#getValue <em>Value</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Distance#getUnit <em>Unit</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.Distance#getDistanceType <em>Distance Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see net.sf.seesea.model.core.physx.PhysxPackage#getDistance()
  * @model

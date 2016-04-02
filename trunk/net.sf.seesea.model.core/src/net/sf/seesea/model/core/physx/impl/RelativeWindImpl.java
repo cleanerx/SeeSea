@@ -52,12 +52,12 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.RelativeWindImpl#getSpeed <em>Speed</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.RelativeWindImpl#getSpeedUnit <em>Speed Unit</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.RelativeWindImpl#getBowOrientation <em>Bow Orientation</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

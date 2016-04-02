@@ -46,13 +46,13 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.SatelliteInfoImpl#getId <em>Id</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.SatelliteInfoImpl#getElevation <em>Elevation</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.SatelliteInfoImpl#getAzimuth <em>Azimuth</em>}</li>
  *   <li>{@link net.sf.seesea.model.core.physx.impl.SatelliteInfoImpl#getSignalStrength <em>Signal Strength</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

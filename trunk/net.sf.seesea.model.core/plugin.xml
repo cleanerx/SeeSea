@@ -45,4 +45,59 @@
       </content-type>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated X -->
+      <package
+            uri="a"
+            class="net.sf.seesea.model.core.CorePackage"
+            genModel="model/X.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated X -->
+      <package
+            uri="b"
+            class="net.sf.seesea.model.core.geo.GeoPackage"
+            genModel="model/X.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated X -->
+      <package
+            uri="osm"
+            class="net.sf.seesea.model.core.geo.osm.OsmPackage"
+            genModel="model/X.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated X -->
+      <package
+            uri="physx"
+            class="net.sf.seesea.model.core.physx.PhysxPackage"
+            genModel="model/X.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated X -->
+      <package
+            uri="weather"
+            class="net.sf.seesea.model.core.weather.WeatherPackage"
+            genModel="model/X.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated X -->
+      <package
+            uri="data"
+            class="net.sf.seesea.model.core.data.DataPackage"
+            genModel="model/X.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated X -->
+      <package
+            uri="diagramInterchange"
+            class="net.sf.seesea.model.core.diagramInterchange.DiagramInterchangePackage"
+            genModel="model/X.genmodel"/>
+   </extension>
 </plugin>

@@ -55,7 +55,7 @@ public class OsmFactoryImpl extends EFactoryImpl implements OsmFactory {
 	 */
 	public static OsmFactory init() {
 		try {
-			OsmFactory theOsmFactory = (OsmFactory)EPackage.Registry.INSTANCE.getEFactory("osm"); 
+			OsmFactory theOsmFactory = (OsmFactory)EPackage.Registry.INSTANCE.getEFactory(OsmPackage.eNS_URI);
 			if (theOsmFactory != null) {
 				return theOsmFactory;
 			}
