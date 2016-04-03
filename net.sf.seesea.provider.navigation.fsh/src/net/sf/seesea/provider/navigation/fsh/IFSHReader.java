@@ -28,7 +28,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.fsh;
 
-
+/**
+ * a generic fsh reader that allows for async processing of fsh contents  
+ */
 public interface IFSHReader {
 
 	/**

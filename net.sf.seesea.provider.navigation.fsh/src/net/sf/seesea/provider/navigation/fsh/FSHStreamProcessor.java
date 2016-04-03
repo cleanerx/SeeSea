@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
@@ -47,7 +48,7 @@ import net.sf.seesea.services.navigation.NMEAProcessingException;
  */
 public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 
-	FSHProcessingState state;
+	private FSHProcessingState state;
 	
 	private int counter;
 	
@@ -62,6 +63,7 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 	public FSHStreamProcessor() {
 		state = FSHProcessingState.HEADERSTART;
 		counter = 1;
+		listeners = new CopyOnWriteArrayList<IFSHListener>();
 	}
 	
 	public FSHHeader readHeader(InputStream is) throws IOException {
