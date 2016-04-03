@@ -27,6 +27,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */package net.sf.seesea.provider.navigation.fsh.data;
 
+/**
+ * FSH files contain a header and a block. This is modeling the block. 
+ *
+ */
 public class FSHBlock {
 
 	private final int length;

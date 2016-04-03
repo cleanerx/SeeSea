@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fsh
 Bundle-SymbolicName: net.sf.seesea.provider.navigation.fsh
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: net.sf.seesea.provider.navigation.fsh.FSHActivator
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.model.core;bundle-version="1.0.0",
  net.sf.seesea.services.navigation;bundle-version="1.0.0"

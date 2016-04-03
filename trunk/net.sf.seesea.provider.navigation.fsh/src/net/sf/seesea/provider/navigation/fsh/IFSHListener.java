@@ -31,10 +31,22 @@ package net.sf.seesea.provider.navigation.fsh;
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
 
+/**
+ * This is a low level processing filter that fires events for each fsh content contained 
+ */
 public interface IFSHListener {
 
+	/**
+	 * fired when the header was received
+	 * @param header
+	 */
 	void headerReceived(FSHHeader header);
 	
+	/**
+	 * fired when a block was received
+	 * @param block
+	 * @param message
+	 */
 	void blockReceived(FSHBlock block, byte[] message);
 	
 }

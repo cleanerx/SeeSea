@@ -28,6 +28,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.fsh.data;
 
+/**
+ * FSH files contain a header and a block. This is modeling the header. 
+ * For more information visit <a href="http://wiki.openstreetmap.org/wiki/ARCHIVE.FSH">OpenStreetMap</a>
+ */
 public class FSHHeader {
 	
 	private final short flobcount;
