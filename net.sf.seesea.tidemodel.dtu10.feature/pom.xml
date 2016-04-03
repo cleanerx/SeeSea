@@ -8,7 +8,7 @@
     <relativePath>../net.sf.seesea.tycho</relativePath>
   </parent>
   
-  <groupId>net.sf.seesea.geometry.feature</groupId>
+  <groupId>net.sf.seesea.tidemodel.dtu10.feature</groupId>
   <artifactId>net.sf.seesea.tidemodel.dtu10.feature</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-feature</packaging>
