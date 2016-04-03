@@ -16,6 +16,7 @@
   	<module>../net.sf.seesea.geometry.feature</module>
   	<module>../net.sf.seesea.geometry</module>
   	<module>../net.sf.seesea.geometry.test</module>
+  	<module>../net.sf.seesea.model.core</module>
   	<module>../net.sf.seesea.waterlevel</module>
   </modules>
 </project> 
