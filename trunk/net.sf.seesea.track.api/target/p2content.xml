@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='net.sf.seesea.track.api' version='1.0.0.201604031209' singleton='false'>
+    <update id='net.sf.seesea.track.api' range='[0.0.0,1.0.0.201604031209)' severity='0'/>
+    <properties size='5'>
+      <property name='org.eclipse.equinox.p2.name' value='Track API'/>
+      <property name='org.eclipse.equinox.p2.provider' value='SeeSea'/>
+      <property name='maven-groupId' value='net.sf.seesea'/>
+      <property name='maven-artifactId' value='net.sf.seesea.track.api'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+    </properties>
+    <provides size='6'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='net.sf.seesea.track.api' version='1.0.0.201604031209'/>
+      <provided namespace='osgi.bundle' name='net.sf.seesea.track.api' version='1.0.0.201604031209'/>
+      <provided namespace='java.package' name='net.sf.seesea.track.api' version='1.0.0'/>
+      <provided namespace='java.package' name='net.sf.seesea.track.api.data' version='1.0.0'/>
+      <provided namespace='java.package' name='net.sf.seesea.track.api.exception' version='1.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='1'>
+      <required namespace='osgi.bundle' name='net.sf.seesea.model.core' range='1.0.0'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='net.sf.seesea.track.api' version='1.0.0.201604031209'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: net.sf.seesea.track.api&#xA;Bundle-Version: 1.0.0.201604031209&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>
