@@ -28,19 +28,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.fsh;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
-import net.sf.seesea.services.navigation.CompressionType;
-import net.sf.seesea.services.navigation.IStreamProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 /**
  * This stream procesor takes binary streams from the actisense ngt1 NMEA2000 to USB converter and assembles
@@ -190,11 +186,11 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 		return "application/x-flashfile"; //$NON-NLS-1$
 	}
 
-	@Override
-	public List<ITrack> getTracks(CompressionType compressionType, File file) {
-		return Collections.<ITrack>emptyList();
-	}
-
+//	@Override
+//	public List<ITrack> getTracks(CompressionType compressionType, File file) {
+//		return Collections.<ITrack>emptyList();
+//	}
+//
 	@Override
 	public boolean isBinary() {
 		return true;

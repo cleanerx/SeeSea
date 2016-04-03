@@ -3,22 +3,24 @@ package net.sf.seesea.provider.navigation.fsh.test;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import junit.framework.TestCase;
 import net.sf.seesea.provider.navigation.fsh.FSHStreamProcessor;
 import net.sf.seesea.provider.navigation.fsh.FlobHeader;
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 public class FSHStreamProcessorTest extends TestCase {
 
-	public void input() throws IOException, NMEAProcessingException {
-		String file = "res/ARCHIVE2.FSH"; //$NON-NLS-1$
-		System.out.println(new File(file).getAbsoluteFile());
-		BufferedInputStream input = new BufferedInputStream(new FileInputStream(file));
+	public void testIsValidStreamProcessor() throws IOException, NMEAProcessingException {
+		String file = "res/archive2.fsh"; //$NON-NLS-1$
+		URL fileEntry = FshTestActivator.getContext().getBundle().getEntry(file);
+		InputStream fileStream = fileEntry.openStream();
+		BufferedInputStream input = new BufferedInputStream(fileStream);
 
 		int[] buf = new int[100];
 		for(int i = 0; i < 100 ; i ++) {
@@ -29,13 +31,13 @@ public class FSHStreamProcessorTest extends TestCase {
 		assertTrue(fshStreamProcessor.isValidStreamProcessor(buf));
 	}
 	
-	public void testX() throws IOException {
-		String file = "res/219.dat"; //$NON-NLS-1$
-		System.out.println(new File(file).getAbsoluteFile());
-		BufferedInputStream input = new BufferedInputStream(new FileInputStream(file));
+	public void testBasicFileRead() throws IOException {
+		String file = "res/archive2.fsh"; //$NON-NLS-1$
+		URL fileEntry = FshTestActivator.getContext().getBundle().getEntry(file);
+		InputStream fileStream = fileEntry.openStream();
+		BufferedInputStream input = new BufferedInputStream(fileStream);
 		FSHStreamProcessor fshStreamProcessor = new FSHStreamProcessor();
 		FSHHeader fshHeader = fshStreamProcessor.readHeader(input);
-		int hallo = 0;
 		
 		for(int i = 0 ; i < 8 ; i++) {
 			FlobHeader flobHeader = fshStreamProcessor.readFlobHeader(input);
@@ -45,7 +47,9 @@ public class FSHStreamProcessorTest extends TestCase {
 				input.read(message);
 				System.out.println("Type" + fshBlock.getType() + " : Length" + fshBlock.getLength());
 				fshBlock = fshStreamProcessor.readBlock(input);
-				hallo++;
+				if(fshBlock != null) {
+					assertTrue("Block types should", fshBlock.getType() == 13 || fshBlock.getType() == 14 || fshBlock.getType() == 65535);
+				}
 			}
 		}
 		
