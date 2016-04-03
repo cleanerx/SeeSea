@@ -2,7 +2,8 @@
 <feature
       id="net.sf.seesea.geometry.feature"
       label="Geometry"
-      version="1.0.0.qualifier">
+      version="1.0.0.qualifier"
+      provider-name="SeeSea">
 
    <description url="http://seesea.sourceforge.net">
       Geometry API
