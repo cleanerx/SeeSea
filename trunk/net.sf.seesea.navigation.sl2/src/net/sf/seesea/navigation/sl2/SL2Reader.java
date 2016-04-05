@@ -15,7 +15,7 @@ import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.RelativeDepthMeasurementPosition;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.util.GeoParser;
-import net.sf.seesea.services.navigation.listener.IMeasurementListener;
+import net.sf.seesea.track.api.IMeasurementListener;
 
 public class SL2Reader implements ISL2Listener {
 

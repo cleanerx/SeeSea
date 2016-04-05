@@ -6,17 +6,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.seesea.model.core.physx.Measurement;
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ITrackFile;
-import net.sf.seesea.services.navigation.ITrackFileProcessor;
-import net.sf.seesea.services.navigation.InputStreamNotFoundException;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
-import net.sf.seesea.services.navigation.ProcessingException;
-import net.sf.seesea.services.navigation.SensorDescriptionUpdateRate;
-import net.sf.seesea.services.navigation.listener.IMeasurementListener;
-
 import org.apache.log4j.Logger;
+
+import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.track.api.IMeasurementListener;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.ITrackFile;
+import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
 public class SL2TrackFileProcessor implements ITrackFileProcessor, IMeasurementListener {
 	

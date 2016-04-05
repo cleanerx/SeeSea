@@ -3,12 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Lowrance SL2
 Bundle-SymbolicName: net.sf.seesea.navigation.sl2
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: net.sf.seesea.navigation.sl2.SL2Activator
-Require-Bundle: org.eclipse.core.runtime,
- net.sf.seesea.model.core;bundle-version="1.0.0",
- net.sf.seesea.services.navigation;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16",
- org.eclipse.swt;bundle-version="3.7.1"
+Require-Bundle: net.sf.seesea.model.core;bundle-version="1.0.0",
+ net.sf.seesea.track.api;bundle-version="1.0.0",
+ org.apache.log4j;bundle-version="1.2.16"
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/SL2StreamProcessor.xml, OSGI-INF/SL2TrackFileProcessor.xml
-Export-Package: net.sf.seesea.navigation.sl2
+Export-Package: net.sf.seesea.navigation.sl2;version="1.0.0"
+Bundle-Vendor: SeeSea
