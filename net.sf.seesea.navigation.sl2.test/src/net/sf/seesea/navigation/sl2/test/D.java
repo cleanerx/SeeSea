@@ -1,4 +1,4 @@
-package net.sf.seesea.navigation.sl2;
+package net.sf.seesea.navigation.sl2.test;
 
 import java.awt.BorderLayout;
 import java.awt.ScrollPane;
@@ -28,7 +28,8 @@ public class D {
 	public static void main(String[] args) throws IOException {
 //				 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\Sonar0000.sl2"); //$NON-NLS-1$
 //				 File file = new File("S:\\Segeln\\Data\\markus\\sl2\\sonar1.sl2"); //$NON-NLS-1$
-		File file = new File("S:\\8774.dat"); //$NON-NLS-1$
+		 File file = new File("C:\\pv4\\e37\\27079.dat"); //$NON-NLS-1$
+//		File file = new File("S:\\8774.dat"); //$NON-NLS-1$
 		RandomAccessFile raf = new RandomAccessFile(file, "r");
 		DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
 		byte[] x = new byte[4096];

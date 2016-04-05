@@ -23,10 +23,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipException;
 
-import net.sf.seesea.services.navigation.CompressionType;
-import net.sf.seesea.services.navigation.IStreamProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.ITrack;
+import net.sf.seesea.track.api.data.CompressionType;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 
 public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
@@ -112,12 +112,12 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 
 	}
 
-	@Override
-	public List<ITrack> getTracks(CompressionType compressionType, File file)
-			throws ZipException, IOException {
-		return new ArrayList<ITrack>(1);
-	}
-
+//	@Override
+//	public List<ITrack> getTracks(CompressionType compressionType, File file)
+//			throws ZipException, IOException {
+//		return new ArrayList<ITrack>(1);
+//	}
+//
 	@Override
 	public boolean isBinary() {
 		return true;
