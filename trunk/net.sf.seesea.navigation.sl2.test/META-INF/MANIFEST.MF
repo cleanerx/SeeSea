@@ -6,11 +6,11 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.navigation.sl2.test.SL2TestActivator
 Bundle-Vendor: SeeSea
 Require-Bundle: org.eclipse.core.runtime,
- org.easymock;bundle-version="3.2.0",
- org.junit
+ org.easymock;bundle-version="3.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: junit.framework;version="4.12.0",
  net.sf.seesea.model.core.physx,
  net.sf.seesea.navigation.sl2;version="[1.0.0,2.0.0)",
- net.sf.seesea.track.api;version="1.0.0"
+ net.sf.seesea.track.api;version="1.0.0",
+ org.junit;version="4.12.0"
