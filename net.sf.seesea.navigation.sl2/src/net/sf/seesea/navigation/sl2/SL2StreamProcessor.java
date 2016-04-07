@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 package net.sf.seesea.navigation.sl2;
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.zip.ZipException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.seesea.track.api.IStreamProcessor;
-import net.sf.seesea.track.api.ITrack;
-import net.sf.seesea.track.api.data.CompressionType;
 import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 
@@ -42,7 +38,7 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 	private List<ISL2Listener> listeners;
 
 	public SL2StreamProcessor() {
-		listeners = new ArrayList<ISL2Listener>(1);
+		listeners = new CopyOnWriteArrayList<ISL2Listener>();
 		state = MessageProcessingState.HEADER_START;
 		blockEnd = -1;
 	}
@@ -112,12 +108,6 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 
 	}
 
-//	@Override
-//	public List<ITrack> getTracks(CompressionType compressionType, File file)
-//			throws ZipException, IOException {
-//		return new ArrayList<ITrack>(1);
-//	}
-//
 	@Override
 	public boolean isBinary() {
 		return true;
