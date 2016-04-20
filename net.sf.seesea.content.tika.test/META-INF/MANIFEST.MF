@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Track Content Detection Test
+Bundle-SymbolicName: net.sf.seesea.content.tika.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: SeeSea
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: net.sf.seesea.content.api;bundle-version="1.0.0",
+ net.sf.seesea.content.tika;bundle-version="1.0.0",
+ org.junit,
+ org.easymock;bundle-version="3.2.0",
+ net.sf.seesea.track.api
