@@ -30,6 +30,7 @@ package net.sf.seesea.data.postprocessing.process;
 /**
  * interface for retrieving sensor offset corrections if available
  */
+@Deprecated
 public interface IBoatParameters {
 
 	/**

@@ -27,33 +27,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.data.postprocessing.process;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Set;
+
+import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
-/**
- * A filter configuration used to created measurement processors that take model based input
- */
-public interface IFilterConfiguration {
+public interface IStatisticsPreprocessor extends IMeasurmentProcessor {
 
-	/**
-	 * 
-	 * @param updateRate
-	 * @param positionPrecision
-	 * @return a measurement processor that is configured with the given update rate and position precision
-	 */
-	IMeasurmentProcessor createFilter(long updateRate, int positionPrecision);
-	
-	/**
-	 * This may be used to query if a filter requires a time base. The time base may be a consecutive number of seconds since starting of the device.
-	 * 
-	 * @return true if for filtering a relative time is sufficient
-	 */
-	boolean requiresRelativeTime();
+	Set<SensorDescriptionUpdateRate<Measurement>> getBestSensors() throws FileNotFoundException, IOException;
 
-	/**
-	 * May be used to query for an absolute time. This may be required to do tide corrections based on a global date
-	 * 
-	 * @return true if an absolute time is required for the filter to function
-	 */
-	boolean requiresAbsoluteTime();
+	void processFiles(ITrackFile trackFile) throws FileNotFoundException,
+	IOException, ProcessingException;
 
 }

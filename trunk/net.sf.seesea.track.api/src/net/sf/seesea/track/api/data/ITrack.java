@@ -1,4 +1,4 @@
-package net.sf.seesea.track.api;
+package net.sf.seesea.track.api.data;
 
 import java.io.IOException;
 import java.io.InputStream;

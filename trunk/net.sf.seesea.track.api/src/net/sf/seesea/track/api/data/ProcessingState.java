@@ -25,35 +25,17 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package net.sf.seesea.data.postprocessing.process;
 
-import net.sf.seesea.track.api.IMeasurmentProcessor;
+package net.sf.seesea.track.api.data;
 
-/**
- * A filter configuration used to created measurement processors that take model based input
- */
-public interface IFilterConfiguration {
+public enum ProcessingState {
 
-	/**
-	 * 
-	 * @param updateRate
-	 * @param positionPrecision
-	 * @return a measurement processor that is configured with the given update rate and position precision
-	 */
-	IMeasurmentProcessor createFilter(long updateRate, int positionPrecision);
+	UPLOAD_INCOMPLETE(0), UPLOAD_COMPLETE(1), FILE_CORRUPT(2), PREPROCESSED(3), FILE_CONTENT_UNKNOWN(4), FILE_DUPLICATE(5), FILE_PROCESSED(6), FILE_NODATA(7), REPROCESS(8), CONTOURS_GENERATED(9), REPROCESS_CONTOURS(10), TRIANGULATED(11);
 	
-	/**
-	 * This may be used to query if a filter requires a time base. The time base may be a consecutive number of seconds since starting of the device.
-	 * 
-	 * @return true if for filtering a relative time is sufficient
-	 */
-	boolean requiresRelativeTime();
+	private final int i;
 
-	/**
-	 * May be used to query for an absolute time. This may be required to do tide corrections based on a global date
-	 * 
-	 * @return true if an absolute time is required for the filter to function
-	 */
-	boolean requiresAbsoluteTime();
-
+	private ProcessingState(int i) {
+		this.i = i;
+	}
+	
 }

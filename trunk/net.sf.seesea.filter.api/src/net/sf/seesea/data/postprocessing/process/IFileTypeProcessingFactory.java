@@ -27,33 +27,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.data.postprocessing.process;
 
-import net.sf.seesea.track.api.IMeasurmentProcessor;
+import java.util.Set;
 
-/**
- * A filter configuration used to created measurement processors that take model based input
- */
-public interface IFilterConfiguration {
+import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 
-	/**
-	 * 
-	 * @param updateRate
-	 * @param positionPrecision
-	 * @return a measurement processor that is configured with the given update rate and position precision
-	 */
-	IMeasurmentProcessor createFilter(long updateRate, int positionPrecision);
-	
-	/**
-	 * This may be used to query if a filter requires a time base. The time base may be a consecutive number of seconds since starting of the device.
-	 * 
-	 * @return true if for filtering a relative time is sufficient
-	 */
-	boolean requiresRelativeTime();
+public interface IFileTypeProcessingFactory {
 
-	/**
-	 * May be used to query for an absolute time. This may be required to do tide corrections based on a global date
-	 * 
-	 * @return true if an absolute time is required for the filter to function
-	 */
-	boolean requiresAbsoluteTime();
+	IDepthPositionPreProcessor createLocationPreProcessor(
+			ITrackFile trackFile);
+
+	void disposeLocationPreProcessor(ITrackFile trackFile);
+
+	IStatisticsPreprocessor getPreprocessor(ITrackFile fileType);
+
+	ITrackFileProcessor createProcessor(Set<SensorDescriptionUpdateRate<Measurement>> bestSensors, ITrackFile file);
 
 }

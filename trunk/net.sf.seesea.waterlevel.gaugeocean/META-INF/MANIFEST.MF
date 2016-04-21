@@ -11,7 +11,7 @@ Require-Bundle: net.sf.seesea.gauge;bundle-version="1.0.0",
  net.sf.seesea.data.io,
  net.sf.seesea.geometry,
  net.sf.seesea.model.core,
- net.sf.seesea.services.navigation;bundle-version="1.0.0"
+ net.sf.seesea.track.api;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/net.sf.seesea.waterlevel.CombinedWaterLevelCorrection.xml,
  OSGI-INF/net.sf.seesea.waterlevel.GaugeValueUpdater.xml,

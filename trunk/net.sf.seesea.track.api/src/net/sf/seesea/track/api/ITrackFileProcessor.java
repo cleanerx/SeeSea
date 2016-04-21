@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.ProcessingException;
 

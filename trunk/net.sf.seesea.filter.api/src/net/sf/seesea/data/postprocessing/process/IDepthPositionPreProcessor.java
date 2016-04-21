@@ -27,33 +27,77 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.data.postprocessing.process;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
+import net.sf.seesea.model.core.geo.MeasuredPosition3D;
+import net.sf.seesea.services.navigation.IGeoBoundingBox;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
 /**
- * A filter configuration used to created measurement processors that take model based input
+ * This preprocessor gathers statistics about the track file.
+ * They may be used for clustering, duplicate detection and bounding box calculations
  */
-public interface IFilterConfiguration {
+public interface IDepthPositionPreProcessor extends IMeasurmentProcessor {
 
 	/**
 	 * 
-	 * @param updateRate
-	 * @param positionPrecision
-	 * @return a measurement processor that is configured with the given update rate and position precision
+	 * @return the start position of the track
 	 */
-	IMeasurmentProcessor createFilter(long updateRate, int positionPrecision);
+	MeasuredPosition3D getStart();
 	
 	/**
-	 * This may be used to query if a filter requires a time base. The time base may be a consecutive number of seconds since starting of the device.
 	 * 
-	 * @return true if for filtering a relative time is sufficient
+	 * @return the end position of the track
 	 */
-	boolean requiresRelativeTime();
+	MeasuredPosition3D getEnd();
+	
+	/**
+	 * 
+	 * @return an arbitrary amount of the first track points
+	 */
+	List<MeasuredPosition3D> getFirstTrackPoints();
+	
+	/** returns if this data contains any depth data */
+	boolean hasDepthData();
 
 	/**
-	 * May be used to query for an absolute time. This may be required to do tide corrections based on a global date
 	 * 
-	 * @return true if an absolute time is required for the filter to function
+	 * @param trackFile
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ProcessingException
 	 */
-	boolean requiresAbsoluteTime();
+	void processFiles(ITrackFile trackFile) throws FileNotFoundException,
+			IOException, ProcessingException;
 
+	/**
+	 * 
+	 * @return true if this track contains timed measurements
+	 */
+	boolean hasRelativeTimedMeasurements();
+
+	/**
+	 * 
+	 * @return true if this track contains timed measurements
+	 */
+	boolean hasAbsoluteTimedMeasurements();
+	
+	/**
+	 * 
+	 * @return how many valid raw points are contained
+	 */
+	long getPointCount();
+
+	/**
+	 * 
+	 * 
+	 * @return retrieves the bounding box of the track
+	 */
+	GeoBoundingBox getBoundingBox();
+	
 }
