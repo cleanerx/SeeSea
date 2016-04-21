@@ -7,6 +7,7 @@ Bundle-Activator: net.sf.seesea.gauge.GaugeActivator
 Bundle-Vendor: OpenSeaMap
 Export-Package: net.sf.seesea.gauge
 Require-Bundle: org.eclipse.core.runtime,
- net.sf.seesea.services.navigation;bundle-version="1.0.0"
-Import-Package: org.osgi.service.component.annotations
+ net.sf.seesea.track.api;bundle-version="1.0.0"
+Import-Package: net.sf.seesea.track.api;version="1.0.0",
+ org.osgi.service.component.annotations
 Bundle-ActivationPolicy: lazy

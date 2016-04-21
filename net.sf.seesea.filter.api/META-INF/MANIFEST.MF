@@ -4,6 +4,8 @@ Bundle-Name: Filter API
 Bundle-SymbolicName: net.sf.seesea.filter.api
 Bundle-Version: 1.0.0.qualifier
 Export-Package: net.sf.seesea.data.postprocessing.process
-Require-Bundle: net.sf.seesea.services.navigation;bundle-version="1.0.0"
+Require-Bundle: net.sf.seesea.services.navigation;bundle-version="1.0.0",
+ net.sf.seesea.track.api;bundle-version="1.0.0",
+ net.sf.seesea.model.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.osgi.service.component.annotations

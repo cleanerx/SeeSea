@@ -31,7 +31,7 @@ import net.sf.seesea.data.io.IParitionRetrival;
 import net.sf.seesea.gauge.GaugeUpdateException;
 import net.sf.seesea.gauge.IGaugeProvider;
 import net.sf.seesea.gauge.IGaugeValueUpdater;
-import net.sf.seesea.services.navigation.ITrackFile;
+import net.sf.seesea.track.api.data.ITrackFile;
 
 @Component(immediate = true)
 public class GaugeValueUpdater implements IGaugeValueUpdater {

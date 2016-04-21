@@ -1,10 +1,11 @@
-package net.sf.seesea.track.api;
+package net.sf.seesea.track.api.data;
 
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Collection;
 import java.util.Date;
 
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
-import net.sf.seesea.track.api.data.CompressionType;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
 
 /**
@@ -13,6 +14,8 @@ import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
  */
 public interface ITrackFile {
 
+	URL getTrackURL();
+	
 	/**
 	 * 
 	 * @return an input stream to read from the track file
@@ -64,5 +67,17 @@ public interface ITrackFile {
 	 * @return the mime type of the track file
 	 */
 	String getFileType();
+
+	void setFileType(String fileType);
+
+	void setCompression(CompressionType compression);
+
+	void setUploadState(ProcessingState uploadState);
+
+	ProcessingState getUploadState();
+
+	String getUsername();
+	
+	Collection<ITrackFile> getTrackFiles();
 
 }

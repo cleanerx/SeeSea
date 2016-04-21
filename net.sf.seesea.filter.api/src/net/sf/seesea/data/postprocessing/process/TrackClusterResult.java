@@ -27,33 +27,61 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.data.postprocessing.process;
 
-import net.sf.seesea.track.api.IMeasurmentProcessor;
+import java.util.List;
+import java.util.Set;
+
+import net.sf.seesea.track.api.data.ITrackFile;
 
 /**
- * A filter configuration used to created measurement processors that take model based input
+ * 
  */
-public interface IFilterConfiguration {
-
-	/**
-	 * 
-	 * @param updateRate
-	 * @param positionPrecision
-	 * @return a measurement processor that is configured with the given update rate and position precision
-	 */
-	IMeasurmentProcessor createFilter(long updateRate, int positionPrecision);
+public class TrackClusterResult {
 	
-	/**
-	 * This may be used to query if a filter requires a time base. The time base may be a consecutive number of seconds since starting of the device.
-	 * 
-	 * @return true if for filtering a relative time is sufficient
-	 */
-	boolean requiresRelativeTime();
+	/** the ordered list of tracks */
+	private List<List<ITrackFile>> clusterOfTracks;
+	
+	/** tracks that have been identified as duplicates */
+	private Set<ITrackFile> duplicateTrackFiles;
+	
+	/** tracks that have been identified as corrupt and cannot be read */
+	private Set<ITrackFile> corruptTrackFiles;
 
-	/**
-	 * May be used to query for an absolute time. This may be required to do tide corrections based on a global date
-	 * 
-	 * @return true if an absolute time is required for the filter to function
-	 */
-	boolean requiresAbsoluteTime();
+	/** tracks that have been identified as having no usable data */
+	private Set<ITrackFile> nodataTrackFiles;
+
+	private final Set<ITrackFile> noTimeMeasurementFiles;
+
+	public TrackClusterResult(List<List<ITrackFile>> clusterOfTracks,
+			Set<ITrackFile> duplicateTrackFiles, Set<ITrackFile> corruptTrackFiles, Set<ITrackFile> nodataTrackFiles, Set<ITrackFile> noTimeMeasurementFiles) {
+		super();
+		this.clusterOfTracks = clusterOfTracks;
+		this.duplicateTrackFiles = duplicateTrackFiles;
+		this.corruptTrackFiles = corruptTrackFiles;
+		this.nodataTrackFiles = nodataTrackFiles;
+		this.noTimeMeasurementFiles = noTimeMeasurementFiles;
+	}
+
+	public List<List<ITrackFile>> getOrderedTrackFiles() {
+		return clusterOfTracks;
+	}
+
+	public Set<ITrackFile> getDuplicateTrackFiles() {
+		return duplicateTrackFiles;
+	}
+
+	public Set<ITrackFile> getCorruptTrackFiles() {
+		return corruptTrackFiles;
+	}
+
+	public Set<ITrackFile> getNodataTrackFiles() {
+		return nodataTrackFiles;
+	}
+
+	public Set<ITrackFile> getNoTimeMeasurementFiles() {
+		return noTimeMeasurementFiles;
+	}
+	
+	
+	
 
 }

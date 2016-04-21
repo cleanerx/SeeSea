@@ -2,7 +2,7 @@ package net.sf.seesea.gauge;
 
 import java.util.List;
 
-import net.sf.seesea.services.navigation.ITrackFile;
+import net.sf.seesea.track.api.data.ITrackFile;
 
 public interface IGaugeValueUpdater {
 
