@@ -18,7 +18,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -44,23 +43,31 @@ public class ContentDetector implements IContentDetector {
 
 	private AtomicReference<ITrackPersistence> trackPersistenceAR = new AtomicReference<ITrackPersistence>();
 
-	private IStreamProcessorDetection streamProcessorDetection;
-
 	private List<ITrackFileDecompressor> trackFileDecompressors;
 
 	private String basedir;
 
+	private AtomicReference<IStreamProcessorDetection> streamProcessorDetectionAR = new AtomicReference<IStreamProcessorDetection>();
+
+	private boolean fullprocess;
+
 	@Activate
 	public void activate(Map<String, Object> properties) {
 		basedir = (String) properties.get("basedir");
+		fullprocess = "true".equals(properties.get("fullprocess"));
 	}
 
 	@Override
 	public void setContentTypes() throws ContentDetectionException {
 		ITrackPersistence trackPersistence = trackPersistenceAR.get();
+		IStreamProcessorDetection streamProcessorDetection = streamProcessorDetectionAR.get();
 		DecimalFormat format = new DecimalFormat("#####000"); //$NON-NLS-1$
 		DecimalFormat fileFormat = new DecimalFormat("#######0"); //$NON-NLS-1$
 		format.setGroupingUsed(false);
+		
+		// reset states of previously processed files if they have been marked for reprocessing
+		trackPersistence.resetAnalyzedData();
+		
 		try {
 			List<ITrackFile> trackFiles2Process = trackPersistence.getTrackFiles2Process();
 			for (ITrackFile trackFileX : trackFiles2Process) {
@@ -108,7 +115,7 @@ public class ContentDetector implements IContentDetector {
 						} catch (EOFException e) {
 							trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
 						} catch (IOException e) {
-							Logger.getLogger(getClass()).error("Failed to read track id:" + id, e); //$NON-NLS-1$
+//							Logger.getLogger(getClass()).error("Failed to read track id:" + id, e); //$NON-NLS-1$
 							trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
 						}
 					} else if ("text/plain".equals(mimeType) || "application/xml".equals(mimeType)) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -198,7 +205,7 @@ public class ContentDetector implements IContentDetector {
 					}
 					trackPersistence.storePreprocessingStates(trackFiles2Process);
 				} catch (FileNotFoundException e) {
-					Logger.getLogger(getClass()).error("Failed to find file", e); //$NON-NLS-1$
+//					Logger.getLogger(getClass()).error("Failed to find file", e); //$NON-NLS-1$
 					trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -231,6 +238,15 @@ public class ContentDetector implements IContentDetector {
 		return detect;
 	}
 	
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+	public void bindStreamProcessor(IStreamProcessorDetection  streamProcessorDetection) {
+		streamProcessorDetectionAR.set(streamProcessorDetection);
+	}
+
+	public void unbindStreamProcessor(IStreamProcessorDetection streamProcessorDetection) {
+		streamProcessorDetectionAR.compareAndSet(null, streamProcessorDetection);
+	}
+
 	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
 	public void bindTrackPersistence(ITrackPersistence trackPersistence) {
 		trackPersistenceAR.set(trackPersistence);

@@ -31,6 +31,7 @@ package net.sf.seesea.track.api;
 import java.io.IOException;
 
 import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 /**
  * A stream processor is used to read single bytes 
@@ -50,7 +51,7 @@ public interface IStreamProcessor {
 	 * @return true if the buffer contains data this stream processor is able to process  
 	 * @throws NMEAProcessingException
 	 */
-	boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException;
+	boolean isValidStreamProcessor(int[] buffer) throws RawDataEventException;
 	
 	/**
 	 * reads a single byte from an underlying stream or source
@@ -60,7 +61,7 @@ public interface IStreamProcessor {
 	 * @return false if processing should stop due user termination
 	 * @throws NMEAProcessingException
 	 */
-	boolean readByte(int c, String streamProvider) throws NMEAProcessingException ;
+	boolean readByte(int c, String streamProvider) throws RawDataEventException ;
 	
 	/**
 	 * actively closes the stream
