@@ -11,12 +11,12 @@ import org.apache.log4j.Logger;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.track.api.IMeasurementListener;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
-import net.sf.seesea.track.api.ITrackFile;
 import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
-import net.sf.seesea.track.api.exception.NMEAProcessingException;
 import net.sf.seesea.track.api.exception.ProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 public class SL2TrackFileProcessor implements ITrackFileProcessor, IMeasurementListener {
 	
@@ -51,7 +51,7 @@ public class SL2TrackFileProcessor implements ITrackFileProcessor, IMeasurementL
 			throw new ProcessingException(e);
 		} catch (InputStreamNotFoundException e) {
 			throw new ProcessingException(e);
-		} catch (NMEAProcessingException e) {
+		} catch (RawDataEventException e) {
 			throw new ProcessingException(e);
 		}
 

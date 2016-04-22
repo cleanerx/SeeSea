@@ -23,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 
 public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
@@ -50,7 +51,7 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 
 	@Override
 	public boolean isValidStreamProcessor(int[] buffer)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		if(buffer.length < 10) {
 			return false;
 		}
@@ -64,9 +65,9 @@ public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 
 	@Override
 	public boolean readByte(int c, String streamProvider)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		if(counter == message.length) {
-			throw new NMEAProcessingException("No usable data found within " + counter + "bytes");
+			throw new RawDataEventException("No usable data found within " + counter + "bytes");
 		}
 		if(state.equals(MessageProcessingState.HEADER_START)) {
 			message[counter++] = c;
