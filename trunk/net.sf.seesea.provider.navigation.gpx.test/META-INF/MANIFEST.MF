@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GPX Test
+Bundle-SymbolicName: net.sf.seesea.provider.navigation.gpx.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: net.sf.seesea.provider.navigation.gpx.test.GPXTestActivator
+Require-Bundle: org.eclipse.core.runtime,
+ org.junit;bundle-version="3.8.2",
+ net.sf.seesea.provider.navigation.gpx;bundle-version="1.0.0",
+ net.sf.seesea.model.core;bundle-version="1.0.0",
+ org.easymock;bundle-version="3.2.0",
+ net.sf.seesea.track.api
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
