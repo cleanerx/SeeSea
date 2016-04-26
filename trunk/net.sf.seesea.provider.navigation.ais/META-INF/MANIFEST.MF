@@ -6,6 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.provider.navigation.ais.AISNavigationActivator
 Require-Bundle: org.eclipse.core.runtime,
  nl.esi.metis.aisparser;bundle-version="1.0.0",
- net.sf.seesea.services.navigation;bundle-version="1.0.0"
+ net.sf.seesea.services.navigation;bundle-version="1.0.0",
+ net.sf.seesea.track.api
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/AISParser.xml
