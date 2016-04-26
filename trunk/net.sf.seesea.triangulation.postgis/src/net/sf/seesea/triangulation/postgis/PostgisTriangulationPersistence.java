@@ -618,16 +618,19 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 							int index = pointsA.indexOf(point);
 							boolean intersects = sharedEdge.intersects(new DirectedEdge(point, pointsA.get(index - 1)));
 							if(intersects) {
-//							if (sharedEdge.isOnEdge(point)) {
+//							if () {
 								if (startIndexSegmentA == -1) {
 									startIndexSegmentA = pointsA.indexOf(point) -1;
 								} else {
 									endIndexSegmentA = pointsA.indexOf(point) - 1;
 								}
 							}
-							Logger.getLogger(getClass()).debug(pointsA.indexOf(point) + ":" + intersects +":" + point.getDistance(sharedEdge.getDestination()) + ":" + point.getDistance(sharedEdge.getOrigin()) + ":" + point);
+							Logger.getLogger(getClass()).debug(pointsA.indexOf(point) + ":" + intersects +":" + point.getDistance(sharedEdge.getDestination()) + ":" + point.getDistance(sharedEdge.getOrigin()) + ":" + point + ":" + sharedEdge.isOnEdge(point));
 						}
 					}
+					// FIXME: How can that happen ?
+					if(startIndexSegmentA != -1 || endIndexSegmentA != -1) {
+						
 					splitContourLineA.setDepth(existingContourLine.getDepth());
 					splitContourLineB.setDepth(existingContourLine.getDepth());
 					if (startIndexSegmentA == 0) {
@@ -651,6 +654,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 					if(!splitContourLineB.getPoints().isEmpty()) {
 						String postgisLineContourB = PostgisHelper.getPostgisLineString(splitContourLineB.getPoints());
 						updateContourLineStatement.executeUpdate("INSERT INTO contoursplit (the_geom, m) VALUES (" + postgisLineContourB + ", " + existingContourLine.getDepth() + ")");
+					}
 					}
 				}
 			}

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import net.sf.seesea.track.api.data.ITrack;
+
 public class ZippedTrack implements ITrack {
 
 	private ZipFile zipFile;

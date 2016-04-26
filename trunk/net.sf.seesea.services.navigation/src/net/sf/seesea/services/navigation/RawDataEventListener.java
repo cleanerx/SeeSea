@@ -28,6 +28,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.services.navigation;
 
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 /**
  * An event listener to receive {@link RawDataEvent}s
@@ -40,7 +42,7 @@ public interface RawDataEventListener {
 	 * @param e the event
 	 * @throws NMEAProcessingException 
 	 */
-	public void receiveRawDataEvent(RawDataEvent e) throws NMEAProcessingException;
+	public void receiveRawDataEvent(RawDataEvent e) throws RawDataEventException;
 
 	/**
 	 * called when the listener shell be disabled 
