@@ -13,12 +13,12 @@ import net.sf.seesea.provider.navigation.adm.data.FAT;
 import net.sf.seesea.provider.navigation.adm.data.IMGHeader;
 import net.sf.seesea.provider.navigation.adm.data.TRKHeader;
 import net.sf.seesea.provider.navigation.adm.data.TrackMetadata;
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ITrackFile;
-import net.sf.seesea.services.navigation.ITrackFileProcessor;
-import net.sf.seesea.services.navigation.InputStreamNotFoundException;
-import net.sf.seesea.services.navigation.ProcessingException;
-import net.sf.seesea.services.navigation.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
 public class ADMFileProcessor implements ITrackFileProcessor {
 

@@ -37,6 +37,7 @@ import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 /**
  * This stream procesor takes binary streams from the actisense ngt1 NMEA2000 to USB converter and assembles
@@ -154,7 +155,7 @@ public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 	}
 		
 		
-	public boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException {
+	public boolean isValidStreamProcessor(int[] buffer) throws RawDataEventException {
 		byte[] array =  new byte[buffer.length];
 		for (int i = 0 ; i < buffer.length ; i++) {
 			array[i] = (byte) buffer[i];

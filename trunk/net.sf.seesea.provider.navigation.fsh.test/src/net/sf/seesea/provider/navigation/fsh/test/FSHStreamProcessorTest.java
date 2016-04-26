@@ -11,10 +11,11 @@ import net.sf.seesea.provider.navigation.fsh.FlobHeader;
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
 import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 public class FSHStreamProcessorTest extends TestCase {
 
-	public void testIsValidStreamProcessor() throws IOException, NMEAProcessingException {
+	public void testIsValidStreamProcessor() throws IOException, RawDataEventException {
 		String file = "res/archive2.fsh"; //$NON-NLS-1$
 		URL fileEntry = FshTestActivator.getContext().getBundle().getEntry(file);
 		InputStream fileStream = fileEntry.openStream();
@@ -46,7 +47,7 @@ public class FSHStreamProcessorTest extends TestCase {
 				System.out.println("Type" + fshBlock.getType() + " : Length" + fshBlock.getLength());
 				fshBlock = fshStreamProcessor.readBlock(input);
 				if(fshBlock != null) {
-					assertTrue("Block types should", fshBlock.getType() == 13 || fshBlock.getType() == 14 || fshBlock.getType() == 65535);
+					assertTrue("Block types should exist", fshBlock.getType() == 13 || fshBlock.getType() == 14 || fshBlock.getType() == 65535);
 				}
 			}
 		}

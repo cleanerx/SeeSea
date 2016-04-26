@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.provider.navigation.adm.ADMActivator
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.model.core;bundle-version="1.0.0",
- net.sf.seesea.services.navigation;bundle-version="1.0.0"
+ net.sf.seesea.services.navigation;bundle-version="1.0.0",
+ net.sf.seesea.track.api;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/ADMStreamProcessor.xml, OSGI-INF/ADMMessageDispatcher.xml, OSGI-INF/ADMTrackFileProcessor.xml

@@ -1,16 +1,13 @@
 package net.sf.seesea.provider.navigation.adm;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.ZipException;
 
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GeoFactory;
@@ -24,10 +21,8 @@ import net.sf.seesea.provider.navigation.adm.data.MetadataDescription;
 import net.sf.seesea.provider.navigation.adm.data.TRKHeader;
 import net.sf.seesea.provider.navigation.adm.data.TrackMetadata;
 import net.sf.seesea.provider.navigation.adm.data.TrackPointADM;
-import net.sf.seesea.services.navigation.CompressionType;
-import net.sf.seesea.services.navigation.IStreamProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
@@ -91,7 +86,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
 	@Override
 	public boolean isValidStreamProcessor(int[] buffer)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		reset();
 		TrackPointReader trackPointReader = new TrackPointReader();
 		listeners.add(trackPointReader);
@@ -105,7 +100,7 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
 	@Override
 	public boolean readByte(int c, String streamProvider)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		// if(counter == message.length) {
 		// throw new NMEAProcessingException("No usable data found within " +
 		// counter + "bytes");
@@ -285,13 +280,6 @@ public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 			}
 			return new IMGHeader(intHeader);
 		}
-		return null;
-	}
-
-	@Override
-	public List<ITrack> getTracks(CompressionType compressionType, File file)
-			throws ZipException, IOException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
