@@ -7,6 +7,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
+
 public interface IDataLogger {
 
 	void suspendPersistentLogging() throws NMEAProcessingException;

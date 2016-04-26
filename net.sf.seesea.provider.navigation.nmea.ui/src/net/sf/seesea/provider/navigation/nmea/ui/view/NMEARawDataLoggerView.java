@@ -36,7 +36,8 @@ import net.sf.seesea.provider.navigation.nmea.ui.NMEAUIActivator;
 import net.sf.seesea.provider.navigation.nmea.ui.providers.NMEADataContentProvider;
 import net.sf.seesea.services.navigation.INMEAReader;
 import net.sf.seesea.services.navigation.RawDataEventListener;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 import net.sf.seesea.services.navigation.RawDataEvent;
 import nl.esi.metis.aisparser.AISMessage;
 import nl.esi.metis.aisparser.HandleAISMessage;
@@ -143,7 +144,7 @@ public class NMEARawDataLoggerView extends ViewPart implements RawDataEventListe
 	 * @see net.sf.seesea.provider.navigation.nmea.NMEAEventListener#receiveNMEAEvent(net.sf.seesea.provider.navigation.nmea.RawDataEvent)
 	 */
 	@Override
-	public void receiveRawDataEvent(RawDataEvent e) throws NMEAProcessingException {
+	public void receiveRawDataEvent(RawDataEvent e) throws RawDataEventException {
 		if(messages.size() > 10000) {
 			while (messages.size() > 9999) {
 				messages.remove(9999);

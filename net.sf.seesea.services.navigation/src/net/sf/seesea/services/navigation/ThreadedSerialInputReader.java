@@ -37,6 +37,8 @@ import java.util.concurrent.Callable;
 
 import net.sf.seesea.lib.IFeedbackMessageConsumer;
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;

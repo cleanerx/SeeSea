@@ -9,7 +9,8 @@ Require-Bundle: org.eclipse.ui,
  net.sf.seesea.services.navigation,
  net.sf.seesea.lib,
  net.sf.seesea.provider.navigation.nmea;bundle-version="1.0.0",
- nl.esi.metis.aisparser;bundle-version="1.0.0"
+ nl.esi.metis.aisparser;bundle-version="1.0.0",
+ net.sf.seesea.track.api
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.provider.navigation.nmea.ui
