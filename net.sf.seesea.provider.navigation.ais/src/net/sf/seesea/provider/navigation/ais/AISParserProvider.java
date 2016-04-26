@@ -6,12 +6,11 @@ import java.util.Calendar;
 import java.util.List;
 
 import net.sf.seesea.services.navigation.INMEAReader;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
 import net.sf.seesea.services.navigation.RawDataEvent;
 import net.sf.seesea.services.navigation.RawDataEventListener;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 import nl.esi.metis.aisparser.AISMessage;
 import nl.esi.metis.aisparser.AISParser;
-import nl.esi.metis.aisparser.AisMessageMultiplexer;
 import nl.esi.metis.aisparser.DefaultErrorHandler;
 import nl.esi.metis.aisparser.HandleAISMessage;
 import nl.esi.metis.aisparser.provenance.FileSource;
@@ -65,7 +64,7 @@ public class AISParserProvider implements HandleAISMessage, RawDataEventListener
 
 	@Override
 	public void receiveRawDataEvent(RawDataEvent e)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		File file = new File("."); //$NON-NLS-1$
 		FileSource fileSource = new FileSource(file, lineNumber++, e.getNmeaMessageContent(), Calendar.getInstance().getTime().getTime());
 		aisParser.handleSensorData(fileSource, e.getNmeaMessageContent().trim());
