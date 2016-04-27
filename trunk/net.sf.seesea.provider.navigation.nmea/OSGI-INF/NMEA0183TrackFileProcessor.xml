@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" factory="trackfile.x-nmea0183" name="net.sf.seesea.provider.navigation.nmea0183.trackfileprocessor">
-   <implementation class="net.sf.seesea.provider.navigation.nmea.v183.NMEA0183TrackFileProcessor"/>
-   <service>
-      <provide interface="net.sf.seesea.services.navigation.ITrackFileProcessor"/>
-   </service>
-</scr:component>

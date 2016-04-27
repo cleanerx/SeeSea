@@ -15,8 +15,9 @@ public interface ITrackPersistence {
 	/**
 	 * resets the detected track data 
 	 * @param trackIds
+	 * @throws TrackPerssitenceException 
 	 */
-	void resetAnalyzedData();
+	void resetAnalyzedData() throws TrackPerssitenceException;
 
 	/**
 	 * Determines the track ids that need reprocessing. Due to configuration this may be even more that what was recently uploaded.

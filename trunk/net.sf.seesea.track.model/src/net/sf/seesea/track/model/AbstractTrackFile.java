@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens Kübler
+Copyright (c) 2013-2015, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,7 @@ import java.util.List;
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.track.api.data.CompressionType;
+import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.ProcessingState;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
@@ -53,6 +54,7 @@ public abstract class AbstractTrackFile implements ITrackFile {
 	private boolean hasAbsoluteTimedMeasurements;
 	private boolean hasRelativeTimedMeasurements;
 	private GeoBoundingBox boundingBox;
+	private IBoatParameters boatParameters;
 
 	public AbstractTrackFile() {
 		super();
@@ -183,6 +185,17 @@ public abstract class AbstractTrackFile implements ITrackFile {
 	public GeoBoundingBox getBoundingBox() {
 		return boundingBox;
 	}
+	
+	public IBoatParameters getBoatParameters() {
+		return boatParameters;
+	}
+
+	@Override
+	public void setBoatParameters(IBoatParameters boatParameters) {
+		this.boatParameters = boatParameters;
+	}
+	
+	
 	
 	
 	

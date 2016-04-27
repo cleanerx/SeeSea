@@ -17,7 +17,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.IStreamProcessorDetection;
-import net.sf.seesea.track.api.exception.NMEAProcessingException;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
 @Component

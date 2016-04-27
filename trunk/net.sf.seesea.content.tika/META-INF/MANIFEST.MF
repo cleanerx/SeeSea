@@ -3,11 +3,14 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Track Content Detection
 Bundle-SymbolicName: net.sf.seesea.content.tika
 Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: impl.jar,
- lib/tika-core-1.2.jar
-Import-Package: org.osgi.service.component.annotations
+Bundle-ClassPath: lib/tika-core-1.2.jar,
+ bin/
+Import-Package: org.osgi.framework;version="1.8.0",
+ org.osgi.service.component.annotations
 Service-Component: OSGI-INF/net.sf.seesea.content.impl.ContentDetector.xml
 Bundle-Vendor: SeeSea
 Require-Bundle: net.sf.seesea.track.api;bundle-version="1.0.0",
  net.sf.seesea.track.model;bundle-version="1.0.0",
  net.sf.seesea.content.api
+Export-Package: net.sf.seesea.content.impl
+Bundle-ActivationPolicy: lazy

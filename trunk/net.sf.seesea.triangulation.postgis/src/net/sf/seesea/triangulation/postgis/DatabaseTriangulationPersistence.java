@@ -71,12 +71,17 @@ import net.sf.seesea.triangulation.NeighboringTrianglesOnBoundary;
 import net.sf.seesea.triangulation.TriangulationDescription;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * A persistence implementation for postgis
  *
  */
-public class PostgisTriangulationPersistence implements ITriangulationPersistence {
+@Component
+public class DatabaseTriangulationPersistence implements ITriangulationPersistence {
 
 	private Connection triangulationConnection;
 	private Connection inshoreConnection;
@@ -86,7 +91,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 	private int batchCounter;
 	private PreparedStatement lastStatement;
 
-	public PostgisTriangulationPersistence() {
+	public DatabaseTriangulationPersistence() {
 		batchCounter = 0;
 	}
 	
@@ -972,7 +977,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 										triangulator.addPoint(point);
 									}
 									// execute the triangulation and persist it
-									triangulator.triangulate(PostgisTriangulationPersistence.this);
+									triangulator.triangulate(DatabaseTriangulationPersistence.this);
 									List<ITriangle> triangulation = triangulator.getTriangulation();
 									TriangulationDescription triangulationDescription = new TriangulationDescription(boundary, holes, triangulation);
 									persistTriangulation(triangulation, triangulationDescription);
@@ -1126,6 +1131,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 //		}
 //	}
 
+	@Reference(policy = ReferencePolicy.DYNAMIC, name="OSMConnection", cardinality = ReferenceCardinality.MANDATORY,target="(db=osm)")
 	public void bindInshoreConnection(Connection connection) {
 		this.inshoreConnection = connection;
 	}
@@ -1134,6 +1140,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 		this.inshoreConnection = null;
 	}
 
+	@Reference(policy = ReferencePolicy.DYNAMIC, name="Connection", cardinality = ReferenceCardinality.MANDATORY,target="(db=coastline)")
 	public void bindTriangulationConnection(Connection connection) {
 		this.triangulationConnection = connection;
 	}
@@ -1142,6 +1149,7 @@ public class PostgisTriangulationPersistence implements ITriangulationPersistenc
 		this.triangulationConnection = null;
 	}
 
+	@Reference(policy = ReferencePolicy.DYNAMIC, name="ITriangulationFactory", cardinality = ReferenceCardinality.MANDATORY)
 	public void bindTriangulationFactory(ITriangulationFactory triangulationFactory) {
 		this.triangulationFactory = triangulationFactory;
 	}
