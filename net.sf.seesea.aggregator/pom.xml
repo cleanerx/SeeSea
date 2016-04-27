@@ -9,7 +9,7 @@
     <groupId>net.sf.seesea</groupId>
     <artifactId>net.sf.seesea.tycho.parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../net.sf.seesea.tycho</relativePath>
+    <relativePath>../net.sf.seesea.tycho.parent</relativePath>
   </parent>
   
   <modules>
@@ -18,10 +18,19 @@
   	<module>../net.sf.seesea.geometry.test</module>
 <!-- 	<module>../net.sf.seesea.tidemodel.dtu10.feature</module> -->  
   	<module>../net.sf.seesea.model.core</module>
+  	
+ 	<module>../net.sf.seesea.track.api</module>
+ 	<module>../net.sf.seesea.track.model</module>
+  	
   	<module>../net.sf.seesea.waterlevel</module>
   	<!--  -->
-  	<module>../net.sf.seesea.track.api</module>
+  	<module>../net.sf.seesea.content.api</module>
+  	<module>../net.sf.seesea.content.tika</module>
+  	<module>../net.sf.seesea.content.tika.test</module>
+  	<!--  -->
   	<module>../net.sf.seesea.provider.navigation.fsh</module>
   	<module>../net.sf.seesea.provider.navigation.fsh.test</module>
+  	<module>../net.sf.seesea.provider.navigation.gpx</module>
+  	<module>../net.sf.seesea.provider.navigation.gpx.test</module>
   </modules>
 </project> 
