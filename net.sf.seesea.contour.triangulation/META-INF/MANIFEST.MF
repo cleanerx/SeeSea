@@ -11,5 +11,6 @@ Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.data.io;bundle-version="1.0.0",
  net.sf.seesea.services.navigation;bundle-version="1.0.0",
  org.apache.log4j;bundle-version="1.2.16"
+Import-Package: org.osgi.service.component.annotations
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/TriangulationContour.xml
+Service-Component: OSGI-INF/net.sf.seesea.contour.triangulation.TriangulationBasedContourLineGeneration.xml

@@ -15,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
@@ -37,7 +38,7 @@ import net.sf.seesea.track.api.data.ITrackFile;
 public class GaugeValueUpdater implements IGaugeValueUpdater {
 
 	public GaugeValueUpdater() {
-		gaugeProviderRefereneces = Collections.synchronizedList(new ArrayList<ServiceReference<IGaugeProvider>>());
+		gaugeProviderRefereneces = new CopyOnWriteArrayList<ServiceReference<IGaugeProvider>>();
 	}
 	
 	public void updateGaugeValues4Track(List<ITrackFile> clusterOfTrackFiles) throws GaugeUpdateException {

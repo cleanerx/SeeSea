@@ -25,12 +25,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package net.sf.seesea.data.postprocessing.process;
+package net.sf.seesea.track.api.data;
 
 /**
  * interface for retrieving sensor offset corrections if available
  */
-@Deprecated
 public interface IBoatParameters {
 
 	/**

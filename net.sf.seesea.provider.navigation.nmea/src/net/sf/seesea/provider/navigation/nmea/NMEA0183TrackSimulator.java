@@ -36,9 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.seesea.services.navigation.INMEAReader;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
 import net.sf.seesea.services.navigation.RawDataEvent;
 import net.sf.seesea.services.navigation.RawDataEventListener;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 import org.apache.log4j.Logger;
 import org.osgi.framework.BundleContext;
@@ -92,7 +93,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 								for (RawDataEventListener eventListener : nmeaEventListeners) {
 									eventListener.receiveRawDataEvent(nmeaEvent);
 								}
-							} catch (NMEAProcessingException e) {
+							} catch (RawDataEventException e) {
 								Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
 							}
 							Thread.sleep(5);
@@ -102,7 +103,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 								for (RawDataEventListener eventListener : aisEventListeners) {
 									eventListener.receiveRawDataEvent(nmeaEvent);
 								}
-							} catch (NMEAProcessingException e) {
+							} catch (RawDataEventException e) {
 								Logger.getLogger(getClass()).debug("Failed event " + nmeaEvent.getNmeaMessageContent(), e); //$NON-NLS-1$
 							}
 //							Thread.sleep(5);

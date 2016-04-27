@@ -28,27 +28,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.provider.navigation.nmea.v183;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
 
-import net.sf.seesea.services.navigation.CompressionType;
 import net.sf.seesea.services.navigation.INMEAReader;
-import net.sf.seesea.services.navigation.IStreamProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
 import net.sf.seesea.services.navigation.RawDataEvent;
 import net.sf.seesea.services.navigation.RawDataEventListener;
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
+@Component(property={"type:String=ascii,provider:String=sensor"})
 public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INMEAReader {
 	
 	private StringBuffer stringBuffer;
@@ -71,7 +65,7 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		nmea0183Reader = new NMEA0183Reader();
 	}
  
-	public boolean isValidStreamProcessor(int[] buf) throws NMEAProcessingException {
+	public boolean isValidStreamProcessor(int[] buf) throws RawDataEventException {
 		processData = true;
 		NMEA0183StreamDetector nmea0183StreamDetector = new NMEA0183StreamDetector();
 		nmeaEventListeners.add(nmea0183StreamDetector);
@@ -92,7 +86,7 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 		
 	}
 	
-	public boolean readByte(int i, String streamProvider) throws NMEAProcessingException {
+	public boolean readByte(int i, String streamProvider) throws RawDataEventException {
 		charcounter++;
 		switch (i) {
 		case '\n':
@@ -177,11 +171,6 @@ public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INM
 	@Override
 	public String getMimeType() {
 		return "application/x-nmea0183"; //$NON-NLS-1$
-	}
-
-	@Override
-	public List<ITrack> getTracks(CompressionType compressionType, File file) throws ZipException, IOException {
-		return new ArrayList<ITrack>();
 	}
 
 	@Override

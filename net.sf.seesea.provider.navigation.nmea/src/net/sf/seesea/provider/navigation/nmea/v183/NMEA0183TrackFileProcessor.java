@@ -15,17 +15,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ITrackFile;
-import net.sf.seesea.services.navigation.ITrackFileProcessor;
-import net.sf.seesea.services.navigation.InputStreamNotFoundException;
-import net.sf.seesea.services.navigation.ProcessingException;
-import net.sf.seesea.services.navigation.SensorDescription;
-import net.sf.seesea.services.navigation.SensorDescriptionUpdateRate;
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.nmea.NMEA0183MessageTypes;
-import net.sf.seesea.provider.navigation.nmea.v183.NMEA0183Reader;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.SensorDescription;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
+@Component
 public class NMEA0183TrackFileProcessor implements ITrackFileProcessor {
 
 	private NMEA0183Reader nmea0183Reader;

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
@@ -34,7 +35,7 @@ import net.sf.seesea.track.api.ITrackFileDecompressor;
 import net.sf.seesea.track.api.ITrackPersistence;
 import net.sf.seesea.track.api.data.CompressionType;
 import net.sf.seesea.track.api.data.ITrackFile;
-import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 import net.sf.seesea.track.api.exception.TrackPerssitenceException;
 import net.sf.seesea.track.model.ZipEntryTrackFile;
 
@@ -43,7 +44,7 @@ public class ContentDetector implements IContentDetector {
 
 	private AtomicReference<ITrackPersistence> trackPersistenceAR = new AtomicReference<ITrackPersistence>();
 
-	private List<ITrackFileDecompressor> trackFileDecompressors;
+	private List<ITrackFileDecompressor> trackFileDecompressors = new CopyOnWriteArrayList<ITrackFileDecompressor>();;
 
 	private String basedir;
 
@@ -51,6 +52,10 @@ public class ContentDetector implements IContentDetector {
 
 	private boolean fullprocess;
 
+	public ContentDetector() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	@Activate
 	public void activate(Map<String, Object> properties) {
 		basedir = (String) properties.get("basedir");
@@ -66,7 +71,11 @@ public class ContentDetector implements IContentDetector {
 		format.setGroupingUsed(false);
 		
 		// reset states of previously processed files if they have been marked for reprocessing
-		trackPersistence.resetAnalyzedData();
+		try {
+			trackPersistence.resetAnalyzedData();
+		} catch (TrackPerssitenceException e1) {
+			throw new ContentDetectionException("Failed to reset analyzed data", e1);
+		}
 		
 		try {
 			List<ITrackFile> trackFiles2Process = trackPersistence.getTrackFiles2Process();
@@ -210,7 +219,7 @@ public class ContentDetector implements IContentDetector {
 				} catch (IOException e) {
 					e.printStackTrace();
 					trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
-				} catch (NMEAProcessingException e) {
+				} catch (RawDataEventException e) {
 					e.printStackTrace();
 					trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
 				}

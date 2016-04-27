@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens Kübler
+Copyright (c) 2013-2015, Jens Kï¿½bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -81,6 +81,13 @@ public class SimpleTrackFile extends AbstractTrackFile {
 	public Collection<ITrackFile> getTrackFiles() {
 		return trackFiles;
 	}
+
+	@Override
+	public String getTrackQualifier() {
+		return fileReference;
+	}
+	
+	
 	
 	
 

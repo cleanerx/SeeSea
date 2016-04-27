@@ -7,19 +7,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.seesea.model.core.physx.Measurement;
-import net.sf.seesea.provider.navigation.nmea.v2000.ActisenseStreamProcessor;
-import net.sf.seesea.provider.navigation.nmea.v2000.INMEA2000Listener;
-import net.sf.seesea.provider.navigation.nmea.v2000.NMEA2000Reader;
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ITrackFile;
-import net.sf.seesea.services.navigation.ITrackFileProcessor;
-import net.sf.seesea.services.navigation.InputStreamNotFoundException;
-import net.sf.seesea.services.navigation.ProcessingException;
-import net.sf.seesea.services.navigation.SensorDescriptionUpdateRate;
-
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
 
+import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
+import net.sf.seesea.track.api.exception.ProcessingException;
+
+@Component
 public class NMEA2000TrackFileProcessor implements ITrackFileProcessor,
 		INMEA2000Listener {
 

@@ -3,9 +3,12 @@ package net.sf.seesea.track.api;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.sf.seesea.track.api.exception.NMEAProcessingException;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
+/**
+ * 
+ *
+ */
 public interface IStreamProcessorDetection {
 
 	IStreamProcessor detectStreamProcessorEnblock(InputStream inputStream, boolean log)

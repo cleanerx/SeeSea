@@ -4,8 +4,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
+import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
 
 /**
@@ -79,5 +81,27 @@ public interface ITrackFile {
 	String getUsername();
 	
 	Collection<ITrackFile> getTrackFiles();
+
+	void setBoundingBox(GeoBoundingBox boundingBox);
+
+	void setStart(MeasuredPosition3D start);
+
+	MeasuredPosition3D getEnd();
+
+	void setEnd(MeasuredPosition3D end);
+
+	MeasuredPosition3D getStart();
+
+	void setFirstPositions(List<MeasuredPosition3D> firstTrackPoints);
+
+	void setRelativeTimeMeasurements(boolean hasRelativeTimedMeasurements);
+
+	void setAbsoluteTimeMeasurements(boolean hasAbsoluteTimedMeasurements);
+	
+	IBoatParameters getBoatParameters();
+
+	void setBoatParameters(IBoatParameters boatParameters);
+	
+	String getTrackQualifier();
 
 }

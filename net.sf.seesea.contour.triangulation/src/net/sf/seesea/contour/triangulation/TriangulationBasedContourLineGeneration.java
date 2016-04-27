@@ -50,10 +50,16 @@ import net.sf.seesea.triangulation.ITriangulationPersistence;
 import net.sf.seesea.triangulation.NeighboringTrianglesOnBoundary;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * This class generates contour lines from a triangulation and persists the resulting contour lines
  */
+@Component(configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class TriangulationBasedContourLineGeneration implements IContourLineGeneration {
 
 	private ITriangulationPersistence triangulationPersistence;
@@ -250,6 +256,7 @@ public class TriangulationBasedContourLineGeneration implements IContourLineGene
 		return nextTriangle;
 	}
 
+	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
 	public void bindTriangulationPersistence(ITriangulationPersistence triangulationPersistence) {
 		this.triangulationPersistence = triangulationPersistence;
 	}

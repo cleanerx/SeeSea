@@ -49,18 +49,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
-import net.sf.seesea.lib.ResultStatus;
-import net.sf.seesea.services.navigation.IDataLogger;
-import net.sf.seesea.services.navigation.INMEAReader;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
-import net.sf.seesea.services.navigation.RawDataEvent;
-import net.sf.seesea.services.navigation.RawDataEventListener;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
+
+import net.sf.seesea.lib.ResultStatus;
+import net.sf.seesea.services.navigation.IDataLogger;
+import net.sf.seesea.services.navigation.INMEAReader;
+import net.sf.seesea.services.navigation.RawDataEvent;
+import net.sf.seesea.services.navigation.RawDataEventListener;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 /**
  * A logger for NMEA 0183 Data that logs into a gzipped file
@@ -162,7 +163,7 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 	 */
 	@Override
 	public synchronized void receiveRawDataEvent(RawDataEvent e)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		if (persistentLogging) {
 			if (rotateFileName
 					&& nextLogRotationcalendar.before(Calendar.getInstance()) || gzipOutputStream == null ) {
@@ -187,7 +188,7 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 						transientLog = new StringBuffer();
 					}
 				} catch (IOException e1) {
-					throw new NMEAProcessingException(e1);
+					throw new RawDataEventException(e1);
 				}
 			}
 			try {
@@ -195,7 +196,7 @@ public class NMEA0183DataLogger implements RawDataEventListener, IDataLogger {
 				String nmeaMessageContent = e.getNmeaMessageContent();
 				gzipOutputStream.write(nmeaMessageContent.getBytes(utf8));
 			} catch (IOException e1) {
-				throw new NMEAProcessingException(e1);
+				throw new RawDataEventException(e1);
 			}
 		} else {
 			transientLog.append(e.getNmeaMessageContent());
