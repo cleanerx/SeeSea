@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <tycho.version>0.23.0</tycho.version>
+        <tycho.version>0.24.0</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
         <mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
         
@@ -68,6 +68,15 @@
                             <arch>x86_64</arch>
                         </environment>
                     </environments>
+					<pomDependencies>consider</pomDependencies>
+<!-- <target>
+						<artifact>
+							<groupId>net.sf.seesea</groupId>
+							<artifactId>net.sf.seesea.targetplatform</artifactId>
+							<version>1.0.0</version>
+						</artifact>
+						
+					</target>  -->                    
                 </configuration>
             </plugin>
         </plugins>
