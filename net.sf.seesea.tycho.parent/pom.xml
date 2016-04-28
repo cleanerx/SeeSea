@@ -15,6 +15,7 @@
         <tycho.version>0.24.0</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
         <mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
+        <thirdparty-repo.url>http://localhost:8080/site/</thirdparty-repo.url>
         
     </properties>
 
@@ -24,7 +25,11 @@
             <url>${mars-repo.url}</url>
             <layout>p2</layout>
         </repository>
-
+        <repository>
+            <id>thirdparty</id>
+            <url>${thirdparty-repo.url}</url>
+            <layout>p2</layout>
+        </repository>
     </repositories>
 
     <build>

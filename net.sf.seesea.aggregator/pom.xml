@@ -26,7 +26,7 @@
   	<!--  -->
   	<module>../net.sf.seesea.content.api</module>
   	<module>../net.sf.seesea.content.tika</module>
-  	<module>../net.sf.seesea.content.tika.test</module>
+<!--   	<module>../net.sf.seesea.content.tika.test</module> -->
   	<!--  -->
   	<module>../net.sf.seesea.provider.navigation.fsh</module>
   	<module>../net.sf.seesea.provider.navigation.fsh.test</module>
