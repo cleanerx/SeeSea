@@ -15,7 +15,7 @@
         <tycho.version>0.24.0</tycho.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
         <mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
-        <thirdparty-repo.url>http://localhost:8080/site/</thirdparty-repo.url>
+        <thirdparty-repo.url>http://depth.openseamap/p2/repository/</thirdparty-repo.url>
         
     </properties>
 
