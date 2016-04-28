@@ -4,7 +4,7 @@
     <groupId>net.sf.seesea</groupId>
     <artifactId>net.sf.seesea.tycho.parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../net.sf.seesea.tycho</relativePath>
+    <relativePath>../net.sf.seesea.tycho.parent</relativePath>
   </parent>
   <groupId>net.sf.seesea</groupId>
   <artifactId>net.sf.seesea.content.tika</artifactId>
@@ -25,6 +25,11 @@
     <groupId>org.apache.logging.log4j</groupId>
     <artifactId>log4j-1.2-api</artifactId>
     <version>2.5</version>
+  </dependency>
+  <dependency>
+	<groupId>org.apache.tika</groupId>
+	<artifactId>tika-bundle</artifactId>
+	<version>1.12</version>
   </dependency>
 </dependencies>
 </project> 
