@@ -34,7 +34,8 @@
   	<module>../net.sf.seesea.provider.navigation.gpx.test</module>
   	<module>../net.sf.seesea.provider.navigation.adm</module>
 <!--   	<module>../net.sf.seesea.provider.navigation.adm.test</module> -->
-  	<module>../net.sf.seesea.provider.navigation.nmea</module>
+<!-- 	<module>../net.sf.seesea.lib</module>
+  	<module>../net.sf.seesea.provider.navigation.nmea</module> -->  
   	
   </modules>
 </project> 
