@@ -38,7 +38,7 @@
 <!--   	<module>../net.sf.seesea.provider.navigation.adm.test</module> -->
   	<module>../net.sf.seesea.provider.navigation.nmea</module>  
   	
-  	
+  	<module>../net.sf.seesea.data.io</module>
   	<module>../net.sf.seesea.filter.api</module>
   	
 <!--   	<module>../net.sf.seesea.data.processing.feature</module> -->
