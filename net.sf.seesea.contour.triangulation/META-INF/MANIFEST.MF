@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.sf.seesea.contour.triangulation
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.contour.triangulation.ContourTriangulationActivator
 Require-Bundle: org.eclipse.core.runtime,
- net.sf.seesea.contour;bundle-version="1.0.0",
+ net.sf.seesea.contour.api;bundle-version="1.0.0",
  net.sf.seesea.geometry;bundle-version="1.0.0",
  net.sf.seesea.triangulation;bundle-version="1.0.0",
  net.sf.seesea.data.io;bundle-version="1.0.0",
