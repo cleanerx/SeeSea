@@ -18,7 +18,7 @@ import net.sf.seesea.waterlevel.ocean.TideLevel;
  * This is the tide prediction with the ocean tide correction.
  * Note: The mean sea level to LAT correction is still incomplete and some areas are still missing
  * 
- * @author Jens Kübler
+ * @author Jens KÃ¼bler
  *
  */
 @org.osgi.service.component.annotations.Component(configurationPolicy = org.osgi.service.component.annotations.ConfigurationPolicy.REQUIRE)
