@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens Kübler
+Copyright (c) 2013-2015, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ public class Quadtree<T extends IBoxExtends> {
 	  */
 	  public Quadtree(int pLevel, IRectangle pBounds) {
 	   level = pLevel;
-	   objects = new ArrayList();
+	   objects = new ArrayList<>();
 	   bounds = pBounds;
 	   nodes = new Quadtree[4];
 	  }
