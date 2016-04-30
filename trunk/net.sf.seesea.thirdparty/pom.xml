@@ -30,6 +30,7 @@
                                     <artifact><id>org.glassfish.jersey.media:jersey-media-moxy:2.22.2</id></artifact>
                                     <artifact><id>org.glassfish.jersey.ext:jersey-entity-filtering:2.22.2</id></artifact>
                                     <artifact><id>org.glassfish.jersey.core:jersey-server:2.22.2</id></artifact>
+                                    <artifact><id>postgresql:postgresql:9.1-901-1.jdbc4</id></artifact>
                                     
                                 </artifacts>
                             </configuration>
