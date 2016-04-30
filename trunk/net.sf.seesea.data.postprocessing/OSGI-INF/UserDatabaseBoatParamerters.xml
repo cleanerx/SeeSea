@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="net.sf.seesea.data.postprocessing.boatparameters.database">
+   <implementation class="net.sf.seesea.data.postprocessing.filter.boat.UserDatabaseBoatParameters"/>
+   <reference bind="bindConnection" cardinality="1..1" interface="java.sql.Connection" name="Connection" policy="dynamic" target="(db=userData)" unbind="unbindConnection"/>
+   <service>
+      <provide interface="net.sf.seesea.data.postprocessing.filter.boat.IBoatParameters"/>
+   </service>
+</scr:component>
