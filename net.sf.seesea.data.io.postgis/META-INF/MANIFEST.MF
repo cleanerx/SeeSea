@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Postgis IO
 Bundle-SymbolicName: net.sf.seesea.data.io.postgis
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .,
  lib/postgresql-9.1-903.jdbc4.jar,
  lib/postgis-jdbc-2.1.0SVN.jar
@@ -17,3 +17,5 @@ Import-Package: org.osgi.service.component.annotations
 Service-Component: OSGI-INF/net.sf.seesea.data.io.postgis.PartitionRetrival.xml,
  OSGI-INF/net.sf.seesea.data.io.postgis.PostGISWriterFactory.xml
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: SeeSea
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
