@@ -4,20 +4,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Set;
 
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ITrackFile;
-import net.sf.seesea.services.navigation.ITrackFileProcessor;
-import net.sf.seesea.services.navigation.InputStreamNotFoundException;
-import net.sf.seesea.services.navigation.ProcessingException;
-import net.sf.seesea.services.navigation.SensorDescriptionUpdateRate;
-import net.sf.seesea.model.core.physx.Measurement;
-
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
 public class WinSharpTrackFileProcessor implements ITrackFileProcessor {
 
