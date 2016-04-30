@@ -1,0 +1,14 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>net.sf.seesea</groupId>
+    <artifactId>net.sf.seesea.tycho.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../net.sf.seesea.tycho.parent</relativePath>
+  </parent>
+    
+    <artifactId>net.sf.seesea.data.processing.feature</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>eclipse-feature</packaging>
+</project> 

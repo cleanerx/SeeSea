@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Postprocessing" uid="postprocessing" id="net.sf.seesea.data.postprocessing.product" application="net.sf.seesea.data.postprocessing.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <vmArgs>-Xss1M
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
+   </launcherArgs>
+
+   <windowImages/>
+
+   <launcher>
+      <solaris/>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="net.sf.seesea.eclipse.feature" version="1.0.0.qualifier"/>
+      <feature id="net.sf.seesea.data.processing.feature" version="1.0.0.qualifier"/>
+   </features>
+
+   <configurations>
+      <plugin id="net.sf.seesea.contour.triangulation" autoStart="true" startLevel="0" />
+      <plugin id="net.sf.seesea.tidemodel.dtu10.java" autoStart="false" startLevel="0" />
+      <plugin id="net.sf.seesea.waterlevel.gaugeocean" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.cm" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
+   </configurations>
+
+</product>
