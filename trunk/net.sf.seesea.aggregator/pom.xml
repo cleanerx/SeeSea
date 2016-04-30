@@ -28,6 +28,7 @@
   	<module>../net.sf.seesea.content.tika</module>
 <!--   	<module>../net.sf.seesea.content.tika.test</module> -->
   	<!--  -->
+  	<module>../net.sf.seesea.services.navigation</module>
   	<module>../net.sf.seesea.provider.navigation.fsh</module>
   	<module>../net.sf.seesea.provider.navigation.fsh.test</module>
   	<module>../net.sf.seesea.provider.navigation.gpx</module>
