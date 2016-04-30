@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -338,13 +338,13 @@ public class SatelliteInfoImpl extends MeasurementImpl implements SatelliteInfo 
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (id: ");
+		result.append(" (id: "); //$NON-NLS-1$
 		result.append(id);
-		result.append(", elevation: ");
+		result.append(", elevation: "); //$NON-NLS-1$
 		result.append(elevation);
-		result.append(", azimuth: ");
+		result.append(", azimuth: "); //$NON-NLS-1$
 		result.append(azimuth);
-		result.append(", signalStrength: ");
+		result.append(", signalStrength: "); //$NON-NLS-1$
 		result.append(signalStrength);
 		result.append(')');
 		return result.toString();

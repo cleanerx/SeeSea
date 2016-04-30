@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Jens Kï¿½bler
+ * Copyright (c) 2010-2012, Jens Kübler
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -284,11 +284,11 @@ public class DistanceImpl extends MeasurementImpl implements Distance {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (value: ");
+		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
-		result.append(", unit: ");
+		result.append(", unit: "); //$NON-NLS-1$
 		result.append(unit);
-		result.append(", distanceType: ");
+		result.append(", distanceType: "); //$NON-NLS-1$
 		result.append(distanceType);
 		result.append(')');
 		return result.toString();

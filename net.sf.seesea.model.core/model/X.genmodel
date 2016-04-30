@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2010-2012, Jens Kübler&#xD;&#xA;All rights reserved.&#xD;&#xA;&#xD;&#xA;Redistribution and use in source and binary forms, with or without&#xD;&#xA;modification, are permitted provided that the following conditions are met:&#xD;&#xA;    * Redistributions of source code must retain the above copyright&#xD;&#xA;      notice, this list of conditions and the following disclaimer.&#xD;&#xA;    * Redistributions in binary form must reproduce the above copyright&#xD;&#xA;      notice, this list of conditions and the following disclaimer in the&#xD;&#xA;      documentation and/or other materials provided with the distribution.&#xD;&#xA;    * Neither the name of the &lt;organization> nor the&#xD;&#xA;      names of its contributors may be used to endorse or promote products&#xD;&#xA;      derived from this software without specific prior written permission.&#xD;&#xA;&#xD;&#xA;THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND&#xD;&#xA;ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED&#xD;&#xA;WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE&#xD;&#xA;DISCLAIMED. IN NO EVENT SHALL &lt;COPYRIGHT HOLDER> BE LIABLE FOR ANY&#xD;&#xA;DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES&#xD;&#xA;(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;&#xD;&#xA;LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND&#xD;&#xA;ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT&#xD;&#xA;(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS&#xD;&#xA;SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.&#xD;&#xA;"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2010-2016, Jens Kuebler&#xD;&#xA;All rights reserved.&#xD;&#xA;&#xD;&#xA;Redistribution and use in source and binary forms, with or without&#xD;&#xA;modification, are permitted provided that the following conditions are met:&#xD;&#xA;    * Redistributions of source code must retain the above copyright&#xD;&#xA;      notice, this list of conditions and the following disclaimer.&#xD;&#xA;    * Redistributions in binary form must reproduce the above copyright&#xD;&#xA;      notice, this list of conditions and the following disclaimer in the&#xD;&#xA;      documentation and/or other materials provided with the distribution.&#xD;&#xA;    * Neither the name of the &lt;organization> nor the&#xD;&#xA;      names of its contributors may be used to endorse or promote products&#xD;&#xA;      derived from this software without specific prior written permission.&#xD;&#xA;&#xD;&#xA;THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND&#xD;&#xA;ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED&#xD;&#xA;WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE&#xD;&#xA;DISCLAIMED. IN NO EVENT SHALL &lt;COPYRIGHT HOLDER> BE LIABLE FOR ANY&#xD;&#xA;DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES&#xD;&#xA;(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;&#xD;&#xA;LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND&#xD;&#xA;ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT&#xD;&#xA;(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS&#xD;&#xA;SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.&#xD;&#xA;"
     modelDirectory="/net.sf.seesea.model.core/src" modelPluginID="net.sf.seesea.model.core"
-    modelName="X" importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0"
-    copyrightFields="false" language="">
+    modelName="X" nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" language="">
   <foreignModel>X.ecore</foreignModel>
   <genPackages prefix="Geo" disposableProviderFactory="true" ecorePackage="X.ecore#/">
     <nestedGenPackages prefix="Sf" disposableProviderFactory="true" ecorePackage="X.ecore#//sf">
@@ -53,11 +52,22 @@
               <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/GeoPosition">
                 <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/geo/GeoPosition/longitude"/>
                 <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/geo/GeoPosition/latitude"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GeoPosition/precision"/>
               </genClasses>
               <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/Coordinate">
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/Coordinate/degree"/>
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/Coordinate/minute"/>
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/Coordinate/second"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/Coordinate/decimalDegree"/>
+                <genOperations ecoreOperation="X.ecore#//sf/seesea/model/core/geo/Coordinate/getDegree"/>
+                <genOperations ecoreOperation="X.ecore#//sf/seesea/model/core/geo/Coordinate/getMinute"/>
+                <genOperations ecoreOperation="X.ecore#//sf/seesea/model/core/geo/Coordinate/getSecond"/>
+                <genOperations ecoreOperation="X.ecore#//sf/seesea/model/core/geo/Coordinate/setDegree">
+                  <genParameters ecoreParameter="X.ecore#//sf/seesea/model/core/geo/Coordinate/setDegree/degree"/>
+                </genOperations>
+                <genOperations ecoreOperation="X.ecore#//sf/seesea/model/core/geo/Coordinate/setMinute">
+                  <genParameters ecoreParameter="X.ecore#//sf/seesea/model/core/geo/Coordinate/setMinute/minute"/>
+                </genOperations>
+                <genOperations ecoreOperation="X.ecore#//sf/seesea/model/core/geo/Coordinate/setSecond">
+                  <genParameters ecoreParameter="X.ecore#//sf/seesea/model/core/geo/Coordinate/setSecond/seconds"/>
+                </genOperations>
               </genClasses>
               <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/Latitude"/>
               <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/Longitude"/>
@@ -115,6 +125,22 @@
                 <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/Depth/measurementPosition"/>
                 <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/Depth/depth"/>
               </genClasses>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/GNSSMeasuredPosition">
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GNSSMeasuredPosition/hdop"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GNSSMeasuredPosition/vdop"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GNSSMeasuredPosition/pdop"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GNSSMeasuredPosition/augmentation"/>
+              </genClasses>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/AnchorPosition">
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/AnchorPosition/xExtent"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/AnchorPosition/yExtent"/>
+              </genClasses>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/GeoBoundingBox">
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GeoBoundingBox/top"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GeoBoundingBox/bottom"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GeoBoundingBox/left"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/GeoBoundingBox/right"/>
+              </genClasses>
               <nestedGenPackages prefix="Osm" disposableProviderFactory="true" ecorePackage="X.ecore#//sf/seesea/model/core/geo/osm">
                 <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/osm/Area">
                   <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/osm/Area/zoomLevel"/>
@@ -126,6 +152,12 @@
                 <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/geo/osm/World">
                   <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/osm/World/longitudeScale"/>
                   <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/osm/World/latitudeScale"/>
+                  <genFeatures property="None" children="true" createChild="true"
+                      ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/geo/osm/World/anchorPosition"/>
+                  <genFeatures property="None" children="true" createChild="true"
+                      ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/geo/osm/World/cursorPosition"/>
+                  <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/osm/World/trip"/>
+                  <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/geo/osm/World/totalTrip"/>
                 </genClasses>
               </nestedGenPackages>
             </nestedGenPackages>
@@ -166,6 +198,11 @@
                 <genEnumLiterals ecoreEnumLiteral="X.ecore#//sf/seesea/model/core/physx/SpeedType/COG"/>
                 <genEnumLiterals ecoreEnumLiteral="X.ecore#//sf/seesea/model/core/physx/SpeedType/SPEEDTHOUGHWATER"/>
               </genEnums>
+              <genEnums typeSafeEnumCompatible="false" ecoreEnum="X.ecore#//sf/seesea/model/core/physx/DistanceType">
+                <genEnumLiterals ecoreEnumLiteral="X.ecore#//sf/seesea/model/core/physx/DistanceType/Unknown"/>
+                <genEnumLiterals ecoreEnumLiteral="X.ecore#//sf/seesea/model/core/physx/DistanceType/TRIP"/>
+                <genEnumLiterals ecoreEnumLiteral="X.ecore#//sf/seesea/model/core/physx/DistanceType/TOTAL"/>
+              </genEnums>
               <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/Temperature">
                 <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Temperature/value"/>
                 <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Temperature/unit"/>
@@ -179,11 +216,10 @@
                 <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Heading/headingType"/>
               </genClasses>
               <genClasses image="false" ecoreClass="X.ecore#//sf/seesea/model/core/physx/Measurement">
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Measurement/sensorID"/>
                 <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Measurement/time"/>
-              </genClasses>
-              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/ShipMovementVector">
-                <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/physx/ShipMovementVector/headings"/>
-                <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/physx/ShipMovementVector/speeds"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Measurement/timezone"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Measurement/valid"/>
               </genClasses>
               <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/RelativeWind">
                 <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/RelativeWind/bowOrientation"/>
@@ -197,19 +233,25 @@
               <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/SatellitesVisible">
                 <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/physx/SatellitesVisible/satelliteInfo"/>
               </genClasses>
-              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/Heading2DegreesEntry">
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Heading2DegreesEntry/key"/>
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Heading2DegreesEntry/value"/>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/Time"/>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/Distance">
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Distance/value"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Distance/unit"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Distance/distanceType"/>
               </genClasses>
-              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/SpeedType2SpeedEntry">
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/SpeedType2SpeedEntry/key"/>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/CompositeMeasurement">
                 <genFeatures notify="false" createChild="false" propertySortChoices="true"
-                    ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/physx/SpeedType2SpeedEntry/value"/>
+                    ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/physx/CompositeMeasurement/measurements"/>
               </genClasses>
-              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/SpeedMap"/>
-              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/Time">
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Time/date"/>
-                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Time/timezone"/>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/RelativeSpeed">
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/RelativeSpeed/key"/>
+                <genFeatures notify="false" createChild="false" propertySortChoices="true"
+                    ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/physx/RelativeSpeed/value"/>
+              </genClasses>
+              <genClasses ecoreClass="X.ecore#//sf/seesea/model/core/physx/Acceleration">
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Acceleration/x"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Acceleration/y"/>
+                <genFeatures createChild="false" ecoreFeature="ecore:EAttribute X.ecore#//sf/seesea/model/core/physx/Acceleration/z"/>
               </genClasses>
             </nestedGenPackages>
             <nestedGenPackages prefix="Weather" disposableProviderFactory="true" ecorePackage="X.ecore#//sf/seesea/model/core/weather">
@@ -307,7 +349,6 @@
                 <genFeatures notify="false" createChild="false" propertySortChoices="true"
                     ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/data/Instruments/position"/>
                 <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/data/Instruments/waterTemperature"/>
-                <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/data/Instruments/headingAndVelocity"/>
                 <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/data/Instruments/satellitesVisible"/>
                 <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference X.ecore#//sf/seesea/model/core/data/Instruments/windVector"/>
               </genClasses>

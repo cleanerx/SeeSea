@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -110,7 +110,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 			case GeoPackage.ANCHOR_POSITION: return createAnchorPosition();
 			case GeoPackage.GEO_BOUNDING_BOX: return createGeoBoundingBox();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -131,7 +131,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 			case GeoPackage.RELATIVE_DEPTH_MEASUREMENT_POSITION:
 				return createRelativeDepthMeasurementPositionFromString(eDataType, initialValue);
 			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -152,7 +152,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 			case GeoPackage.RELATIVE_DEPTH_MEASUREMENT_POSITION:
 				return convertRelativeDepthMeasurementPositionToString(eDataType, instanceValue);
 			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -303,7 +303,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	 */
 	public Direction createDirectionFromString(EDataType eDataType, String initialValue) {
 		Direction result = Direction.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -323,7 +323,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	 */
 	public LatitudeHemisphere createLatitudeHemisphereFromString(EDataType eDataType, String initialValue) {
 		LatitudeHemisphere result = LatitudeHemisphere.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -343,7 +343,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	 */
 	public LongitudeHemisphere createLongitudeHemisphereFromString(EDataType eDataType, String initialValue) {
 		LongitudeHemisphere result = LongitudeHemisphere.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -363,7 +363,7 @@ public class GeoFactoryImpl extends EFactoryImpl implements GeoFactory {
 	 */
 	public RelativeDepthMeasurementPosition createRelativeDepthMeasurementPositionFromString(EDataType eDataType, String initialValue) {
 		RelativeDepthMeasurementPosition result = RelativeDepthMeasurementPosition.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 

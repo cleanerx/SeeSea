@@ -320,13 +320,13 @@ public class GNSSMeasuredPositionImpl extends MeasuredPosition3DImpl implements 
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (hdop: ");
+		result.append(" (hdop: "); //$NON-NLS-1$
 		result.append(hdop);
-		result.append(", vdop: ");
+		result.append(", vdop: "); //$NON-NLS-1$
 		result.append(vdop);
-		result.append(", pdop: ");
+		result.append(", pdop: "); //$NON-NLS-1$
 		result.append(pdop);
-		result.append(", augmentation: ");
+		result.append(", augmentation: "); //$NON-NLS-1$
 		result.append(augmentation);
 		result.append(')');
 		return result.toString();

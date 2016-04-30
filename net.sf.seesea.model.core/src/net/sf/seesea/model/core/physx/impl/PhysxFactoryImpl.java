@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -98,7 +98,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 			case PhysxPackage.RELATIVE_SPEED: return createRelativeSpeed();
 			case PhysxPackage.ACCELERATION: return createAcceleration();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -125,7 +125,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 			case PhysxPackage.DISTANCE_TYPE:
 				return createDistanceTypeFromString(eDataType, initialValue);
 			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -152,7 +152,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 			case PhysxPackage.DISTANCE_TYPE:
 				return convertDistanceTypeToString(eDataType, instanceValue);
 			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -273,7 +273,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public TemperatureUnit createTemperatureUnitFromString(EDataType eDataType, String initialValue) {
 		TemperatureUnit result = TemperatureUnit.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -293,7 +293,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public HeadingType createHeadingTypeFromString(EDataType eDataType, String initialValue) {
 		HeadingType result = HeadingType.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -313,7 +313,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public SpeedUnit createSpeedUnitFromString(EDataType eDataType, String initialValue) {
 		SpeedUnit result = SpeedUnit.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -333,7 +333,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public HandOrientation createHandOrientationFromString(EDataType eDataType, String initialValue) {
 		HandOrientation result = HandOrientation.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -353,7 +353,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public LengthUnit createLengthUnitFromString(EDataType eDataType, String initialValue) {
 		LengthUnit result = LengthUnit.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -373,7 +373,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public SpeedType createSpeedTypeFromString(EDataType eDataType, String initialValue) {
 		SpeedType result = SpeedType.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 
@@ -393,7 +393,7 @@ public class PhysxFactoryImpl extends EFactoryImpl implements PhysxFactory {
 	 */
 	public DistanceType createDistanceTypeFromString(EDataType eDataType, String initialValue) {
 		DistanceType result = DistanceType.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return result;
 	}
 

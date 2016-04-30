@@ -282,11 +282,11 @@ public class AccelerationImpl extends MeasurementImpl implements Acceleration {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (x: ");
+		result.append(" (x: "); //$NON-NLS-1$
 		result.append(x);
-		result.append(", y: ");
+		result.append(", y: "); //$NON-NLS-1$
 		result.append(y);
-		result.append(", z: ");
+		result.append(", z: "); //$NON-NLS-1$
 		result.append(z);
 		result.append(')');
 		return result.toString();

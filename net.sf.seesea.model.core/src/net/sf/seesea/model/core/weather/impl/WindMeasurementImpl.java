@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -378,13 +378,13 @@ public class WindMeasurementImpl extends MeasurementImpl implements WindMeasurem
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (speed: ");
+		result.append(" (speed: "); //$NON-NLS-1$
 		result.append(speed);
-		result.append(", speedUnit: ");
+		result.append(", speedUnit: "); //$NON-NLS-1$
 		result.append(speedUnit);
-		result.append(", angle: ");
+		result.append(", angle: "); //$NON-NLS-1$
 		result.append(angle);
-		result.append(", reference: ");
+		result.append(", reference: "); //$NON-NLS-1$
 		result.append(reference);
 		result.append(')');
 		return result.toString();

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -511,38 +511,38 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		visibilityEClass.getESuperTypes().add(thePhysxPackage.getMeasurement());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(windMeasurementEClass, WindMeasurement.class, "WindMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getWindMeasurement_Angle(), ecorePackage.getEDouble(), "angle", null, 0, 1, WindMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getWindMeasurement_Reference(), this.getReference(), "reference", null, 0, 1, WindMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(windMeasurementEClass, WindMeasurement.class, "WindMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getWindMeasurement_Angle(), ecorePackage.getEDouble(), "angle", null, 0, 1, WindMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getWindMeasurement_Reference(), this.getReference(), "reference", null, 0, 1, WindMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(barometricPressureEClass, BarometricPressure.class, "BarometricPressure", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getBarometricPressure_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, BarometricPressure.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getBarometricPressure_Unit(), this.getPressureUnit(), "unit", null, 0, 1, BarometricPressure.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(barometricPressureEClass, BarometricPressure.class, "BarometricPressure", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getBarometricPressure_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, BarometricPressure.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getBarometricPressure_Unit(), this.getPressureUnit(), "unit", null, 0, 1, BarometricPressure.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(cloudMeasurementEClass, CloudMeasurement.class, "CloudMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCloudMeasurement_CloudCoverage(), this.getCloudCoverage(), "cloudCoverage", null, 0, 1, CloudMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCloudMeasurement_CloudTypes(), this.getCloudType(), "cloudTypes", null, 0, -1, CloudMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(cloudMeasurementEClass, CloudMeasurement.class, "CloudMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getCloudMeasurement_CloudCoverage(), this.getCloudCoverage(), "cloudCoverage", null, 0, 1, CloudMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getCloudMeasurement_CloudTypes(), this.getCloudType(), "cloudTypes", null, 0, -1, CloudMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(visibilityEClass, Visibility.class, "Visibility", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVisibility_Value(), ecorePackage.getEDoubleObject(), "value", null, 0, 1, Visibility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVisibility_Unit(), thePhysxPackage.getLengthUnit(), "unit", null, 0, 1, Visibility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(visibilityEClass, Visibility.class, "Visibility", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getVisibility_Value(), ecorePackage.getEDoubleObject(), "value", null, 0, 1, Visibility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getVisibility_Unit(), thePhysxPackage.getLengthUnit(), "unit", null, 0, 1, Visibility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(waveHeightEClass, WaveHeight.class, "WaveHeight", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getWaveHeight_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, WaveHeight.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getWaveHeight_Unit(), thePhysxPackage.getLengthUnit(), "unit", null, 0, 1, WaveHeight.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(waveHeightEClass, WaveHeight.class, "WaveHeight", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getWaveHeight_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, WaveHeight.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getWaveHeight_Unit(), thePhysxPackage.getLengthUnit(), "unit", null, 0, 1, WaveHeight.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
-		initEEnum(referenceEEnum, Reference.class, "Reference");
+		initEEnum(referenceEEnum, Reference.class, "Reference"); //$NON-NLS-1$
 		addEEnumLiteral(referenceEEnum, Reference.RELATIVE);
 		addEEnumLiteral(referenceEEnum, Reference.ABSOLUTE);
 		addEEnumLiteral(referenceEEnum, Reference.UNKNOWN);
 
-		initEEnum(pressureUnitEEnum, PressureUnit.class, "PressureUnit");
+		initEEnum(pressureUnitEEnum, PressureUnit.class, "PressureUnit"); //$NON-NLS-1$
 		addEEnumLiteral(pressureUnitEEnum, PressureUnit.UNDEFINED);
 		addEEnumLiteral(pressureUnitEEnum, PressureUnit.TORR);
 		addEEnumLiteral(pressureUnitEEnum, PressureUnit.HECTOPASCAL);
 
-		initEEnum(cloudTypeEEnum, CloudType.class, "CloudType");
+		initEEnum(cloudTypeEEnum, CloudType.class, "CloudType"); //$NON-NLS-1$
 		addEEnumLiteral(cloudTypeEEnum, CloudType.UNDEFINED);
 		addEEnumLiteral(cloudTypeEEnum, CloudType.CIRRUS);
 		addEEnumLiteral(cloudTypeEEnum, CloudType.CIRROCUMULUS);
@@ -555,7 +555,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		addEEnumLiteral(cloudTypeEEnum, CloudType.CUMULUS);
 		addEEnumLiteral(cloudTypeEEnum, CloudType.CUMULONIMBUS);
 
-		initEEnum(cloudCoverageEEnum, CloudCoverage.class, "CloudCoverage");
+		initEEnum(cloudCoverageEEnum, CloudCoverage.class, "CloudCoverage"); //$NON-NLS-1$
 		addEEnumLiteral(cloudCoverageEEnum, CloudCoverage.UNDEFINED);
 		addEEnumLiteral(cloudCoverageEEnum, CloudCoverage.CLOUDLESS);
 		addEEnumLiteral(cloudCoverageEEnum, CloudCoverage.FAIR);
@@ -568,7 +568,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		addEEnumLiteral(cloudCoverageEEnum, CloudCoverage.DULL);
 		addEEnumLiteral(cloudCoverageEEnum, CloudCoverage.OBSCURED);
 
-		initEEnum(beaufortEEnum, Beaufort.class, "Beaufort");
+		initEEnum(beaufortEEnum, Beaufort.class, "Beaufort"); //$NON-NLS-1$
 		addEEnumLiteral(beaufortEEnum, Beaufort.UNDEFINED);
 		addEEnumLiteral(beaufortEEnum, Beaufort.CALM);
 		addEEnumLiteral(beaufortEEnum, Beaufort.LIGHT_AIR);
@@ -584,7 +584,7 @@ public class WeatherPackageImpl extends EPackageImpl implements WeatherPackage {
 		addEEnumLiteral(beaufortEEnum, Beaufort.VIOLENT_STORM);
 		addEEnumLiteral(beaufortEEnum, Beaufort.HURRICANE_FORCE);
 
-		initEEnum(seaStateEEnum, SeaState.class, "SeaState");
+		initEEnum(seaStateEEnum, SeaState.class, "SeaState"); //$NON-NLS-1$
 		addEEnumLiteral(seaStateEEnum, SeaState.CALM_GLASSY);
 		addEEnumLiteral(seaStateEEnum, SeaState.CALM_RIPPLED);
 		addEEnumLiteral(seaStateEEnum, SeaState.SMOOTH_WAVELETS);

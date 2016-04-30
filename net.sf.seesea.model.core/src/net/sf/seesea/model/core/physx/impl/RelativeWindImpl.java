@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -326,11 +326,11 @@ public class RelativeWindImpl extends HeadingImpl implements RelativeWind {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (speed: ");
+		result.append(" (speed: "); //$NON-NLS-1$
 		result.append(speed);
-		result.append(", speedUnit: ");
+		result.append(", speedUnit: "); //$NON-NLS-1$
 		result.append(speedUnit);
-		result.append(", bowOrientation: ");
+		result.append(", bowOrientation: "); //$NON-NLS-1$
 		result.append(bowOrientation);
 		result.append(')');
 		return result.toString();

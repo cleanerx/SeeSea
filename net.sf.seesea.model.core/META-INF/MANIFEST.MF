@@ -9,20 +9,26 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: net.sf.seesea.model.core,
  net.sf.seesea.model.core.data,
+ net.sf.seesea.model.core.data.impl,
  net.sf.seesea.model.core.data.util,
  net.sf.seesea.model.core.diagramInterchange,
+ net.sf.seesea.model.core.diagramInterchange.impl,
  net.sf.seesea.model.core.diagramInterchange.util,
  net.sf.seesea.model.core.geo;version="1.0.0",
  net.sf.seesea.model.core.geo.impl,
  net.sf.seesea.model.core.geo.osm,
+ net.sf.seesea.model.core.geo.osm.impl,
  net.sf.seesea.model.core.geo.osm.util,
  net.sf.seesea.model.core.geo.util,
  net.sf.seesea.model.core.impl,
  net.sf.seesea.model.core.physx,
+ net.sf.seesea.model.core.physx.impl,
  net.sf.seesea.model.core.physx.util,
  net.sf.seesea.model.core.util,
  net.sf.seesea.model.core.weather,
+ net.sf.seesea.model.core.weather.impl,
  net.sf.seesea.model.core.weather.util,
  net.sf.seesea.model.util
-Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy

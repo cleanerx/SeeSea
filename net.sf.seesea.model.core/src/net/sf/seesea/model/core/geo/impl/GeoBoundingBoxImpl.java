@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2012, Jens Kübler
+ * Copyright (c) 2010-2012, Jens KÃ¼bler
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -336,13 +336,13 @@ public class GeoBoundingBoxImpl extends ModelObjectImpl implements GeoBoundingBo
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (top: ");
+		result.append(" (top: "); //$NON-NLS-1$
 		result.append(top);
-		result.append(", bottom: ");
+		result.append(", bottom: "); //$NON-NLS-1$
 		result.append(bottom);
-		result.append(", left: ");
+		result.append(", left: "); //$NON-NLS-1$
 		result.append(left);
-		result.append(", right: ");
+		result.append(", right: "); //$NON-NLS-1$
 		result.append(right);
 		result.append(')');
 		return result.toString();
