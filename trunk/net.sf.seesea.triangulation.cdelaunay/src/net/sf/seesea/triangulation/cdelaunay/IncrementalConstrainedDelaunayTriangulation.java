@@ -27,21 +27,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.triangulation.cdelaunay;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import net.sf.seesea.data.io.PersistenceException;
+import org.eclipse.core.runtime.Assert;
+
 import net.sf.seesea.geometry.IBoxExtends;
 import net.sf.seesea.geometry.ICircle;
 import net.sf.seesea.geometry.IEdge;
@@ -55,8 +52,6 @@ import net.sf.seesea.geometry.impl.Triangle;
 import net.sf.seesea.geometry.impl.TriangleComparator;
 import net.sf.seesea.triangulation.ITriangulationPersistence;
 import net.sf.seesea.triangulation.ITriangulator;
-
-import org.eclipse.core.runtime.Assert;
 
 /**
  * This implementation is based upon:<br>
@@ -721,12 +716,12 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 		while(!currentTriangle.getPoints().contains(edge.getDestination())) {
 			oppositeTriangle = opposedTrianlgeIntersectingEdge(currentTriangle, currentPoint, edge);
 			if(oppositeTriangle == null) {
-				try {
-					triangulationPersistence.persistTriangulation(getTriangulation(), null);
-				} catch (PersistenceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//				} catch (PersistenceException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 			oppositePoint = oppositeTriangle.oppositePoint(currentTriangle);
 			if(!oppositePoint.equals(edge.getDestination())) {
@@ -812,12 +807,12 @@ public class IncrementalConstrainedDelaunayTriangulation implements
 				for (ITriangle existingTris : triangles) {
 					if(existingTris.getSharedEdge(iTriangle) != null) {
 						IEdge sharedEdge2 = iTriangle.getSharedEdge(superTriangle);
-						try {
-							triangulationPersistence.persistTriangulation(getTriangulation(), null);
-						} catch (PersistenceException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+//						try {
+//							triangulationPersistence.persistTriangulation(getTriangulation(), null);
+//						} catch (PersistenceException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 						System.out.println("forcefully adding neighbr");
 						iTriangle.getNeighbors().add(existingTris);
 						existingTris.getNeighbors().add(iTriangle);
