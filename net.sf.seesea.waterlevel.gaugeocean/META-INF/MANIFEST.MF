@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Vendor: SeeSea
 Require-Bundle: net.sf.seesea.gauge;bundle-version="1.0.0",
  net.sf.seesea.waterlevel;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16",
+ org.apache.log4j;bundle-version="[1.2.0,2.0.0)",
  net.sf.seesea.data.io,
  net.sf.seesea.geometry,
  net.sf.seesea.model.core,
