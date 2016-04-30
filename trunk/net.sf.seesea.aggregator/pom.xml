@@ -22,7 +22,6 @@
  	<module>../net.sf.seesea.track.api</module>
  	<module>../net.sf.seesea.track.model</module>
   	
-  	<module>../net.sf.seesea.waterlevel</module>
   	<!--  -->
   	<module>../net.sf.seesea.content.api</module>
   	<module>../net.sf.seesea.content.tika</module>
@@ -44,7 +43,13 @@
   	<module>../net.sf.seesea.data.io.postgis</module>
   	<module>../net.sf.seesea.filter.api</module>
 
+	<!-- gauge related stuff -->
   	<module>../net.sf.seesea.gauge</module>  
+
+	<!-- Tide related stuff -->
+  	<module>../net.sf.seesea.waterlevel</module>
+  	<module>../net.sf.seesea.waterlevel.gaugeocean</module>
+  	<module>../net.sf.seesea.tidemodel.dtu10.java</module>
 
 	<module>../net.sf.seesea.triangulation</module>
   	<module>../net.sf.seesea.contour</module>  
