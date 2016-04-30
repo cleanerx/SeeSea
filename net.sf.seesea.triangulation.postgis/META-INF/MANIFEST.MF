@@ -6,7 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.triangulation.postgis.PostgisTriangulationActivator
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.data.io;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16"
+ org.apache.log4j;bundle-version="[1.2.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/net.sf.seesea.triangulation.postgis.DatabaseTriangulationPersistence.xml
 Import-Package: net.sf.seesea.contour,
