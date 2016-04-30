@@ -30,7 +30,8 @@ package net.sf.seesea.gauge;
 import java.util.Date;
 
 /**
- * This interface may be used to retrieve gauge values for a given gauge id during the given dates
+ * This interface may be used to retrieve gauge values for a given gauge id during the given dates.
+ * Implement this interface for a particular gauge source to retrieve values from this source.
  *
  */
 public interface IGaugeProvider {
