@@ -28,6 +28,7 @@
   	<module>../net.sf.seesea.content.tika</module>
 <!--   	<module>../net.sf.seesea.content.tika.test</module> -->
   	<!--  -->
+ 	<module>../net.sf.seesea.lib</module>
   	<module>../net.sf.seesea.services.navigation</module>
   	<module>../net.sf.seesea.provider.navigation.fsh</module>
   	<module>../net.sf.seesea.provider.navigation.fsh.test</module>
@@ -35,8 +36,7 @@
   	<module>../net.sf.seesea.provider.navigation.gpx.test</module>
   	<module>../net.sf.seesea.provider.navigation.adm</module>
 <!--   	<module>../net.sf.seesea.provider.navigation.adm.test</module> -->
-<!-- 	<module>../net.sf.seesea.lib</module>
-  	<module>../net.sf.seesea.provider.navigation.nmea</module> -->  
+  	<module>../net.sf.seesea.provider.navigation.nmea</module>  
 <!--   	<module>../net.sf.seesea.data.processing.feature</module> -->
   	<module>../net.sf.seesea.eclipse.feature</module>
   	
