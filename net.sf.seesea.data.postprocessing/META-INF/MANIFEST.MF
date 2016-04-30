@@ -3,8 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Data Postprocessing
 Bundle-SymbolicName: net.sf.seesea.data.postprocessing;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: .,
- lib/commons-cli-1.2.jar
+Bundle-ClassPath: .
 Bundle-Activator: net.sf.seesea.data.postprocessing.DataPostprocessingActivator
 Export-Package: net.sf.seesea.data.postprocessing,
  net.sf.seesea.data.postprocessing.cleaning,
@@ -12,15 +11,15 @@ Export-Package: net.sf.seesea.data.postprocessing,
  net.sf.seesea.data.postprocessing.file,
  net.sf.seesea.data.postprocessing.filter
 Require-Bundle: org.eclipse.core.runtime,
- net.sf.seesea.model.core;bundle-version="1.0.0",
  org.apache.log4j;bundle-version="[1.2.0,2.0.0)",
- net.sf.seesea.data.io.postgis;bundle-version="1.0.0",
- net.sf.seesea.gauge;bundle-version="1.0.0",
- net.sf.seesea.filter.api;bundle-version="1.0.0",
- net.sf.seesea.track.api;bundle-version="1.0.0",
+ net.sf.seesea.model.core,
+ net.sf.seesea.data.io.postgis,
+ net.sf.seesea.track.api,
  net.sf.seesea.content.api,
- net.sf.seesea.content.tika,
- net.sf.seesea.contour;bundle-version="1.0.0"
+ net.sf.seesea.filter.api,
+ net.sf.seesea.gauge,
+ net.sf.seesea.contour,
+ net.sf.seesea.content.tika
 Import-Package: org.osgi.service.cm;version="1.3.0",
  org.osgi.service.component.annotations
 Service-Component: OSGI-INF/UserDatabaseBoatParamerters.xml,
