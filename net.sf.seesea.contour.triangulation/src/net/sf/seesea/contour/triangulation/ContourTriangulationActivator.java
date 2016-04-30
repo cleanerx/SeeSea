@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens Kübler
+Copyright (c) 2013-2015, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -25,6 +25,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
+
 
 package net.sf.seesea.contour.triangulation;
 

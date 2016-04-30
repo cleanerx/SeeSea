@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens Kübler
+Copyright (c) 2013-2015, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.contour.triangulation;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,6 +37,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 import net.sf.seesea.contour.IContourLineGeneration;
 import net.sf.seesea.data.io.PersistenceException;
@@ -48,13 +54,6 @@ import net.sf.seesea.geometry.impl.Point;
 import net.sf.seesea.triangulation.ITriangulationDescription;
 import net.sf.seesea.triangulation.ITriangulationPersistence;
 import net.sf.seesea.triangulation.NeighboringTrianglesOnBoundary;
-
-import org.apache.log4j.Logger;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * This class generates contour lines from a triangulation and persists the resulting contour lines
