@@ -31,7 +31,7 @@ import java.util.Date;
 /**
  * This interface may be used to estimate the ocean tide at a certain position and point in time
  * 
- * @author Jens Kübler
+ * @author Jens KÃ¼bler
  *
  */
 public interface IOceanTideProvider {
