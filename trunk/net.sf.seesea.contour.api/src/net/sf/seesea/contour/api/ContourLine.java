@@ -34,6 +34,10 @@ import java.util.List;
 import net.sf.seesea.contour.api.IContourLine;
 import net.sf.seesea.geometry.IPoint;
 
+/**
+ * An implementation of the contour line 
+ *
+ */
 public class ContourLine implements IContourLine {
 
 	private List<IPoint> points;
