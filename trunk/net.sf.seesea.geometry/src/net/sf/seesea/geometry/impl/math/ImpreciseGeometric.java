@@ -19,7 +19,7 @@
  * 
  * This class holds functionality to get error ranges from double precision.
  * @author Richard Shewchuk (C Implementation)
- * @author Jens Kübler (Java port)
+ * @author Jens KÃ¼bler (Java port)
  */
 package net.sf.seesea.geometry.impl.math;
 
