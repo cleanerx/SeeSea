@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -238,9 +238,9 @@ public class VisibilityImpl extends MeasurementImpl implements Visibility {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (value: ");
+		result.append(" (value: "); //$NON-NLS-1$
 		result.append(value);
-		result.append(", unit: ");
+		result.append(", unit: "); //$NON-NLS-1$
 		result.append(unit);
 		result.append(')');
 		return result.toString();

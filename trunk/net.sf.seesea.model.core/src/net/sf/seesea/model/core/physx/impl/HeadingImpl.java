@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -235,9 +235,9 @@ public class HeadingImpl extends MeasurementImpl implements Heading {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (degrees: ");
+		result.append(" (degrees: "); //$NON-NLS-1$
 		result.append(degrees);
-		result.append(", headingType: ");
+		result.append(", headingType: "); //$NON-NLS-1$
 		result.append(headingType);
 		result.append(')');
 		return result.toString();

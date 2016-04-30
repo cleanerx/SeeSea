@@ -230,9 +230,9 @@ public class AnchorPositionImpl extends GeoPositionImpl implements AnchorPositio
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (xExtent: ");
+		result.append(" (xExtent: "); //$NON-NLS-1$
 		result.append(xExtent);
-		result.append(", yExtent: ");
+		result.append(", yExtent: "); //$NON-NLS-1$
 		result.append(yExtent);
 		result.append(')');
 		return result.toString();

@@ -100,4 +100,5 @@
             class="net.sf.seesea.model.core.diagramInterchange.DiagramInterchangePackage"
             genModel="model/X.genmodel"/>
    </extension>
+
 </plugin>

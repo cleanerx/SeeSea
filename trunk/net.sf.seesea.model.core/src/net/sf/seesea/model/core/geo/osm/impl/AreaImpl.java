@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -548,7 +548,7 @@ public class AreaImpl extends ChartImpl implements Area {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (zoomLevel: ");
+		result.append(" (zoomLevel: "); //$NON-NLS-1$
 		result.append(zoomLevel);
 		result.append(')');
 		return result.toString();

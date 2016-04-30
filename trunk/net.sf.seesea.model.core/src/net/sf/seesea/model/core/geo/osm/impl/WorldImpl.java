@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -485,13 +485,13 @@ public class WorldImpl extends AreaImpl implements World {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (longitudeScale: ");
+		result.append(" (longitudeScale: "); //$NON-NLS-1$
 		result.append(longitudeScale);
-		result.append(", latitudeScale: ");
+		result.append(", latitudeScale: "); //$NON-NLS-1$
 		result.append(latitudeScale);
-		result.append(", trip: ");
+		result.append(", trip: "); //$NON-NLS-1$
 		result.append(trip);
-		result.append(", totalTrip: ");
+		result.append(", totalTrip: "); //$NON-NLS-1$
 		result.append(totalTrip);
 		result.append(')');
 		return result.toString();

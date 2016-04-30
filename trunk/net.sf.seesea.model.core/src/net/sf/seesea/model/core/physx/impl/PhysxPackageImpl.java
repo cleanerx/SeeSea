@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -821,62 +821,62 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		accelerationEClass.getESuperTypes().add(this.getMeasurement());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(temperatureEClass, Temperature.class, "Temperature", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTemperature_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, Temperature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTemperature_Unit(), this.getTemperatureUnit(), "unit", null, 0, 1, Temperature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(temperatureEClass, Temperature.class, "Temperature", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getTemperature_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, Temperature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getTemperature_Unit(), this.getTemperatureUnit(), "unit", null, 0, 1, Temperature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(speedEClass, Speed.class, "Speed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSpeed_Speed(), ecorePackage.getEDouble(), "speed", null, 0, 1, Speed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSpeed_SpeedUnit(), this.getSpeedUnit(), "speedUnit", null, 0, 1, Speed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(speedEClass, Speed.class, "Speed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSpeed_Speed(), ecorePackage.getEDouble(), "speed", null, 0, 1, Speed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSpeed_SpeedUnit(), this.getSpeedUnit(), "speedUnit", null, 0, 1, Speed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(headingEClass, Heading.class, "Heading", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getHeading_Degrees(), ecorePackage.getEDouble(), "degrees", null, 0, 1, Heading.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getHeading_HeadingType(), this.getHeadingType(), "headingType", null, 0, 1, Heading.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(headingEClass, Heading.class, "Heading", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getHeading_Degrees(), ecorePackage.getEDouble(), "degrees", null, 0, 1, Heading.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getHeading_HeadingType(), this.getHeadingType(), "headingType", null, 0, 1, Heading.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(measurementEClass, Measurement.class, "Measurement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getMeasurement_SensorID(), ecorePackage.getEString(), "sensorID", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMeasurement_Time(), ecorePackage.getEDate(), "time", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMeasurement_Timezone(), ecorePackage.getEString(), "timezone", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMeasurement_Valid(), ecorePackage.getEBoolean(), "valid", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(measurementEClass, Measurement.class, "Measurement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getMeasurement_SensorID(), ecorePackage.getEString(), "sensorID", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getMeasurement_Time(), ecorePackage.getEDate(), "time", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getMeasurement_Timezone(), ecorePackage.getEString(), "timezone", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getMeasurement_Valid(), ecorePackage.getEBoolean(), "valid", null, 0, 1, Measurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(relativeWindEClass, RelativeWind.class, "RelativeWind", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRelativeWind_BowOrientation(), this.getHandOrientation(), "bowOrientation", null, 0, 1, RelativeWind.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(relativeWindEClass, RelativeWind.class, "RelativeWind", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getRelativeWind_BowOrientation(), this.getHandOrientation(), "bowOrientation", null, 0, 1, RelativeWind.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(satelliteInfoEClass, SatelliteInfo.class, "SatelliteInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSatelliteInfo_Id(), ecorePackage.getEInt(), "id", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSatelliteInfo_Elevation(), ecorePackage.getEInt(), "elevation", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSatelliteInfo_Azimuth(), ecorePackage.getEInt(), "azimuth", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSatelliteInfo_SignalStrength(), ecorePackage.getEInt(), "signalStrength", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(satelliteInfoEClass, SatelliteInfo.class, "SatelliteInfo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSatelliteInfo_Id(), ecorePackage.getEInt(), "id", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSatelliteInfo_Elevation(), ecorePackage.getEInt(), "elevation", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSatelliteInfo_Azimuth(), ecorePackage.getEInt(), "azimuth", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSatelliteInfo_SignalStrength(), ecorePackage.getEInt(), "signalStrength", null, 0, 1, SatelliteInfo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(satellitesVisibleEClass, SatellitesVisible.class, "SatellitesVisible", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getSatellitesVisible_SatelliteInfo(), this.getSatelliteInfo(), null, "satelliteInfo", null, 0, -1, SatellitesVisible.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(satellitesVisibleEClass, SatellitesVisible.class, "SatellitesVisible", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSatellitesVisible_SatelliteInfo(), this.getSatelliteInfo(), null, "satelliteInfo", null, 0, -1, SatellitesVisible.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(timeEClass, Time.class, "Time", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(timeEClass, Time.class, "Time", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-		initEClass(distanceEClass, Distance.class, "Distance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDistance_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDistance_Unit(), this.getLengthUnit(), "unit", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDistance_DistanceType(), this.getDistanceType(), "distanceType", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(distanceEClass, Distance.class, "Distance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getDistance_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getDistance_Unit(), this.getLengthUnit(), "unit", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getDistance_DistanceType(), this.getDistanceType(), "distanceType", null, 0, 1, Distance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(compositeMeasurementEClass, CompositeMeasurement.class, "CompositeMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCompositeMeasurement_Measurements(), this.getMeasurement(), null, "measurements", null, 0, -1, CompositeMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(compositeMeasurementEClass, CompositeMeasurement.class, "CompositeMeasurement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getCompositeMeasurement_Measurements(), this.getMeasurement(), null, "measurements", null, 0, -1, CompositeMeasurement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(relativeSpeedEClass, RelativeSpeed.class, "RelativeSpeed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRelativeSpeed_Key(), this.getSpeedType(), "key", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRelativeSpeed_Value(), this.getSpeed(), null, "value", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(relativeSpeedEClass, RelativeSpeed.class, "RelativeSpeed", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getRelativeSpeed_Key(), this.getSpeedType(), "key", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getRelativeSpeed_Value(), this.getSpeed(), null, "value", null, 0, 1, RelativeSpeed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-		initEClass(accelerationEClass, Acceleration.class, "Acceleration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getAcceleration_X(), ecorePackage.getEDouble(), "x", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAcceleration_Y(), ecorePackage.getEDouble(), "y", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAcceleration_Z(), ecorePackage.getEDouble(), "z", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(accelerationEClass, Acceleration.class, "Acceleration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getAcceleration_X(), ecorePackage.getEDouble(), "x", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getAcceleration_Y(), ecorePackage.getEDouble(), "y", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getAcceleration_Z(), ecorePackage.getEDouble(), "z", null, 0, 1, Acceleration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
-		initEEnum(temperatureUnitEEnum, TemperatureUnit.class, "TemperatureUnit");
+		initEEnum(temperatureUnitEEnum, TemperatureUnit.class, "TemperatureUnit"); //$NON-NLS-1$
 		addEEnumLiteral(temperatureUnitEEnum, TemperatureUnit.CELSIUS);
 		addEEnumLiteral(temperatureUnitEEnum, TemperatureUnit.FAHRENHEIT);
 		addEEnumLiteral(temperatureUnitEEnum, TemperatureUnit.KELVIN);
 
-		initEEnum(headingTypeEEnum, HeadingType.class, "HeadingType");
+		initEEnum(headingTypeEEnum, HeadingType.class, "HeadingType"); //$NON-NLS-1$
 		addEEnumLiteral(headingTypeEEnum, HeadingType.UNKNOWN);
 		addEEnumLiteral(headingTypeEEnum, HeadingType.COMPASS);
 		addEEnumLiteral(headingTypeEEnum, HeadingType.MAGNETIC);
@@ -885,29 +885,29 @@ public class PhysxPackageImpl extends EPackageImpl implements PhysxPackage {
 		addEEnumLiteral(headingTypeEEnum, HeadingType.COG);
 		addEEnumLiteral(headingTypeEEnum, HeadingType.RELATIVE);
 
-		initEEnum(speedUnitEEnum, SpeedUnit.class, "SpeedUnit");
+		initEEnum(speedUnitEEnum, SpeedUnit.class, "SpeedUnit"); //$NON-NLS-1$
 		addEEnumLiteral(speedUnitEEnum, SpeedUnit.K);
 		addEEnumLiteral(speedUnitEEnum, SpeedUnit.M);
 		addEEnumLiteral(speedUnitEEnum, SpeedUnit.N);
 		addEEnumLiteral(speedUnitEEnum, SpeedUnit.UNKNOWN);
 
-		initEEnum(handOrientationEEnum, HandOrientation.class, "HandOrientation");
+		initEEnum(handOrientationEEnum, HandOrientation.class, "HandOrientation"); //$NON-NLS-1$
 		addEEnumLiteral(handOrientationEEnum, HandOrientation.UNKNOWN);
 		addEEnumLiteral(handOrientationEEnum, HandOrientation.LEFT);
 		addEEnumLiteral(handOrientationEEnum, HandOrientation.RIGHT);
 
-		initEEnum(lengthUnitEEnum, LengthUnit.class, "LengthUnit");
+		initEEnum(lengthUnitEEnum, LengthUnit.class, "LengthUnit"); //$NON-NLS-1$
 		addEEnumLiteral(lengthUnitEEnum, LengthUnit.UNDEFINED);
 		addEEnumLiteral(lengthUnitEEnum, LengthUnit.METERS);
 		addEEnumLiteral(lengthUnitEEnum, LengthUnit.FEET);
 		addEEnumLiteral(lengthUnitEEnum, LengthUnit.NAUTICAL_MILE);
 
-		initEEnum(speedTypeEEnum, SpeedType.class, "SpeedType");
+		initEEnum(speedTypeEEnum, SpeedType.class, "SpeedType"); //$NON-NLS-1$
 		addEEnumLiteral(speedTypeEEnum, SpeedType.UNKNOWN);
 		addEEnumLiteral(speedTypeEEnum, SpeedType.COG);
 		addEEnumLiteral(speedTypeEEnum, SpeedType.SPEEDTHOUGHWATER);
 
-		initEEnum(distanceTypeEEnum, DistanceType.class, "DistanceType");
+		initEEnum(distanceTypeEEnum, DistanceType.class, "DistanceType"); //$NON-NLS-1$
 		addEEnumLiteral(distanceTypeEEnum, DistanceType.UNKNOWN);
 		addEEnumLiteral(distanceTypeEEnum, DistanceType.TRIP);
 		addEEnumLiteral(distanceTypeEEnum, DistanceType.TOTAL);

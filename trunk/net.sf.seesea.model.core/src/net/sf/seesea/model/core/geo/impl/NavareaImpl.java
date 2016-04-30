@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -183,7 +183,7 @@ public class NavareaImpl extends AreaImpl implements Navarea {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (areanumber: ");
+		result.append(" (areanumber: "); //$NON-NLS-1$
 		result.append(areanumber);
 		result.append(')');
 		return result.toString();

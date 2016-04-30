@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -244,7 +244,7 @@ public class CoordinateImpl extends ModelObjectImpl implements Coordinate {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (decimalDegree: ");
+		result.append(" (decimalDegree: "); //$NON-NLS-1$
 		result.append(decimalDegree);
 		result.append(')');
 		return result.toString();

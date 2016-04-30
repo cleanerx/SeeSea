@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -434,9 +434,9 @@ public class MeasuredPosition3DImpl extends MeasurementImpl implements MeasuredP
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (precision: ");
+		result.append(" (precision: "); //$NON-NLS-1$
 		result.append(precision);
-		result.append(", altitude: ");
+		result.append(", altitude: "); //$NON-NLS-1$
 		result.append(altitude);
 		result.append(')');
 		return result.toString();

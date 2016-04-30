@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -331,13 +331,13 @@ public abstract class MeasurementImpl extends ModelObjectImpl implements Measure
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (sensorID: ");
+		result.append(" (sensorID: "); //$NON-NLS-1$
 		result.append(sensorID);
-		result.append(", time: ");
+		result.append(", time: "); //$NON-NLS-1$
 		result.append(time);
-		result.append(", timezone: ");
+		result.append(", timezone: "); //$NON-NLS-1$
 		result.append(timezone);
-		result.append(", valid: ");
+		result.append(", valid: "); //$NON-NLS-1$
 		result.append(valid);
 		result.append(')');
 		return result.toString();

@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -90,7 +90,7 @@ public class DiagramInterchangeFactoryImpl extends EFactoryImpl implements Diagr
 			case DiagramInterchangePackage.DIAGRAM: return createDiagram();
 			case DiagramInterchangePackage.GRAPHICAL_ELEMENT: return createGraphicalElement();
 			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 

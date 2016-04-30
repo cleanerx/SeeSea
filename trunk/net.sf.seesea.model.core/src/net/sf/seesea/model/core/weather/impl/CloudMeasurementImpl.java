@@ -1,6 +1,6 @@
 /**
  * <copyright>
-Copyright (c) 2010-2012, Jens Kübler
+Copyright (c) 2010-2012, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -226,9 +226,9 @@ public class CloudMeasurementImpl extends MeasurementImpl implements CloudMeasur
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (cloudCoverage: ");
+		result.append(" (cloudCoverage: "); //$NON-NLS-1$
 		result.append(cloudCoverage);
-		result.append(", cloudTypes: ");
+		result.append(", cloudTypes: "); //$NON-NLS-1$
 		result.append(cloudTypes);
 		result.append(')');
 		return result.toString();
