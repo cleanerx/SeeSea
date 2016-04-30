@@ -8,9 +8,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ITrackFile;
-import net.sf.seesea.services.navigation.ProcessingException;
+import org.apache.log4j.Logger;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GeoFactory;
 import net.sf.seesea.model.core.geo.Latitude;
@@ -19,11 +21,9 @@ import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.RelativeDepthMeasurementPosition;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.util.GeoParser;
-
-import org.apache.log4j.Logger;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
 public class FullWinProfileHandler extends DefaultHandler {
 

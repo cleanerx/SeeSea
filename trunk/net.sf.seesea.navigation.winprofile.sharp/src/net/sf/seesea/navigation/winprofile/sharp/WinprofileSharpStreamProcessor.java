@@ -30,22 +30,16 @@ package net.sf.seesea.navigation.winprofile.sharp;
 
 import java.io.ByteArrayInputStream;
 import java.io.CharConversionException;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.ZipException;
-
-import net.sf.seesea.services.navigation.CompressionType;
-import net.sf.seesea.services.navigation.IStreamProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.exception.RawDataEventException;
 
 public class WinprofileSharpStreamProcessor implements IStreamProcessor {
 
@@ -56,7 +50,7 @@ public class WinprofileSharpStreamProcessor implements IStreamProcessor {
 
 	@Override
 	public boolean isValidStreamProcessor(int[] buffer)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		byte[] byteBuffer = new byte[buffer.length];
 		for (int i = 0; i < buffer.length; i++) {
 			byteBuffer[i] = (byte) buffer[i];
@@ -82,7 +76,7 @@ public class WinprofileSharpStreamProcessor implements IStreamProcessor {
 
 	@Override
 	public boolean readByte(int c, String streamProvider)
-			throws NMEAProcessingException {
+			throws RawDataEventException {
 		return false;
 	}
 
@@ -91,12 +85,6 @@ public class WinprofileSharpStreamProcessor implements IStreamProcessor {
 		// nothing to do
 	}
 
-	@Override
-	public List<ITrack> getTracks(CompressionType compressionType, File file)
-			throws ZipException, IOException {
-		return new ArrayList<ITrack>(1);
-	}
-	
 	@Override
 	public boolean isBinary() {
 		return false;
