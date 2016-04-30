@@ -31,12 +31,25 @@ import java.util.List;
 
 import net.sf.seesea.track.api.data.ITrackFile;
 
+/**
+ *  
+ */
 public interface IGaugeValueUpdater {
 
-//	void retrieveLatestGaugeValues(Date startTime, Date endTime, long gaugeId) throws GaugeUpdateException;
-
+	/**
+	 * Updates gauge values according to data from track files. The update logic is up to the implementor. 
+	 * 
+	 * @param clusterOfTrackFiles
+	 * @throws GaugeUpdateException
+	 */
 	void updateGaugeValues4Track(List<ITrackFile> clusterOfTrackFiles) throws GaugeUpdateException;
 
+	/**
+	 * 
+	 * @param polygonId 
+	 * @return the gauge id
+	 * @throws GaugeUpdateException
+	 */
 	Long getGaugeId(long polygonId) throws GaugeUpdateException;
 
 	

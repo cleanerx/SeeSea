@@ -27,6 +27,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.gauge;
 
+/**
+ * This exception is thrown if gauges could not be updated 
+ *
+ */
 public class GaugeUpdateException extends Exception {
 
 	/**
