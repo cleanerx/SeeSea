@@ -66,6 +66,7 @@
 <!--   	<module>../net.sf.seesea.data.processing.feature</module> -->
   	<module>../net.sf.seesea.eclipse.feature</module>
   	<module>../net.sf.seesea.data.processing.feature</module>
+  	<module>../net.sf.seesea.postprocess.product</module>
   	
   </modules>
 </project> 
