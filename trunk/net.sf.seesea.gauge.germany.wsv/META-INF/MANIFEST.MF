@@ -7,10 +7,13 @@ Bundle-Activator: net.sf.seesea.gauge.germany.wsv.WSVActivator
 Bundle-Vendor: OpenSeaMap
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.gauge;bundle-version="1.0.0",
- net.java.jersey;bundle-version="2.18.0",
  net.sf.seesea.data.io.postgis;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16"
+ org.apache.log4j;bundle-version="[1.2.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Import-Package: org.osgi.service.component.annotations
+Import-Package: javax.ws.rs.client;version="2.0.1",
+ javax.ws.rs.core;version="2.0.1",
+ org.glassfish.jersey.filter,
+ org.glassfish.jersey.moxy.json,
+ org.osgi.service.component.annotations
 Service-Component: OSGI-INF/net.sf.seesea.gauge.germany.wsv.WSVGaugeProvider.xml
 Bundle-ActivationPolicy: lazy
