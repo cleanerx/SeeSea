@@ -52,10 +52,12 @@
   	<module>../net.sf.seesea.waterlevel.gaugeocean</module>
   	<module>../net.sf.seesea.tidemodel.dtu10.java</module>
 
+	<!-- Triangulation and contour stuff -->
 	<module>../net.sf.seesea.triangulation</module>
+  	<module>../net.sf.seesea.triangulation.cdelaunay</module>
   	<module>../net.sf.seesea.contour</module>  
   	<module>../net.sf.seesea.contour.triangulation</module>  
-  	<module>../net.sf.seesea.triangulation.cdelaunay</module>
+  	<module>../net.sf.seesea.triangulation.postgis</module>
 
   	<module>../net.sf.seesea.data.postprocessing</module>
   	<module>../net.sf.seesea.nmea.rcp.logging</module>
