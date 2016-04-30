@@ -41,6 +41,7 @@
   	<module>../net.sf.seesea.provider.navigation.nmea</module>
   	
   	<module>../net.sf.seesea.data.io</module>
+  	<module>../net.sf.seesea.data.io.postgis</module>
   	<module>../net.sf.seesea.filter.api</module>
 
   	<module>../net.sf.seesea.gauge</module>  
