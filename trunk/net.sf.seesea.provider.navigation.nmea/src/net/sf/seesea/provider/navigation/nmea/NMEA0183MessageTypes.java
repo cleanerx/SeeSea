@@ -1,6 +1,6 @@
 /**
  * 
-Copyright (c) 2010-2012, Jens K�bler
+Copyright (c) 2010-2012, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
