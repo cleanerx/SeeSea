@@ -37,6 +37,10 @@ import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
+/**
+ * this interface is being used to determine statistics about particular track files 
+ *
+ */
 public interface IStatisticsPreprocessor extends IMeasurmentProcessor {
 
 	Set<SensorDescriptionUpdateRate<Measurement>> getBestSensors() throws FileNotFoundException, IOException;

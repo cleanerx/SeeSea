@@ -33,7 +33,6 @@ import java.util.List;
 
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
-import net.sf.seesea.services.navigation.IGeoBoundingBox;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
 import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.ProcessingException;

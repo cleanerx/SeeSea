@@ -37,6 +37,10 @@
   	<module>../net.sf.seesea.provider.navigation.adm</module>
 <!--   	<module>../net.sf.seesea.provider.navigation.adm.test</module> -->
   	<module>../net.sf.seesea.provider.navigation.nmea</module>  
+  	
+  	
+  	<module>../net.sf.seesea.filter.api</module>
+  	
 <!--   	<module>../net.sf.seesea.data.processing.feature</module> -->
   	<module>../net.sf.seesea.eclipse.feature</module>
   	
