@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens Kübler
+Copyright (c) 2013-2015, Jens KÃ¼bler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
