@@ -27,8 +27,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.gauge;
 
+/**
+ * This interface is intended to import new gauge stations or update existing ones. Consumers may call this to update their station ids  
+ *
+ */
 public interface IStationProvider {
 	
+	/**
+	 * Updates the stations 
+	 */
 	void updateStations();
 
 }

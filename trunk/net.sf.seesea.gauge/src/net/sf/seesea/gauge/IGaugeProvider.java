@@ -36,20 +36,22 @@ import java.util.Date;
 public interface IGaugeProvider {
 
 	/**
+	 * Updates a single gauge with the given ids and start / end frames
 	 * 
-	 * @param localID
-	 * @param remoteID
-	 * @param startDate
-	 * @param endDate
-	 * @throws GaugeUpdateException 
+	 * @param localID A systems local unique id identifying the gauge
+	 * @param remoteID A systems remote unique id identifying the gauge 
+	 * @param startDate The start date to update the gauge inclusive 
+	 * @param endDate The end date to update the gauge inclusive
+	 * @throws GaugeUpdateException if the update fails unexpectedly
 	 */
 	void updateSingleGaugeMeasurements(String localID, String remoteID, Date startDate, Date endDate) throws GaugeUpdateException;
 
 	/**
+	 * Updates all known gauges in the given time frame
 	 * 
-	 * @param startDate
-	 * @param endDate
-	 * @throws GaugeUpdateException 
+	 * @param startDate The start date to update the gauge inclusive
+	 * @param endDate The end date to update the gauge inclusive
+	 * @throws GaugeUpdateException if the update fails unexpectedly
 	 */
 	void updateAllGaugeMeasurements(Date startDate, Date endDate) throws GaugeUpdateException;
 
