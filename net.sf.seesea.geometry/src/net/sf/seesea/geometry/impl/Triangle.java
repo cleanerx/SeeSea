@@ -1,6 +1,5 @@
 /**
- * 
-Copyright (c) 2014, Jens Kübler
+Copyright (c) 2013-2015, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -24,7 +23,7 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  */
 
 package net.sf.seesea.geometry.impl;
