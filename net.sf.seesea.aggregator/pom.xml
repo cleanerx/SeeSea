@@ -46,6 +46,7 @@
 
 	<!-- gauge related stuff -->
   	<module>../net.sf.seesea.gauge</module>  
+  	<module>../net.sf.seesea.gauge.germany.wsv</module>
 
 	<!-- Tide related stuff -->
   	<module>../net.sf.seesea.waterlevel</module>
