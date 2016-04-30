@@ -9,7 +9,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 import net.sf.seesea.content.api.ContentDetectionException;
 import net.sf.seesea.content.api.IContentDetector;
-import net.sf.seesea.contour.IContourLineGeneration;
+import net.sf.seesea.contour.api.IContourLineGeneration;
 import net.sf.seesea.data.postprocessing.process.IFilterEngine;
 
 @Component
