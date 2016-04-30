@@ -7,7 +7,7 @@
     <relativePath>../net.sf.seesea.tycho.parent</relativePath>
   </parent>
   <groupId>net.sf.seesea</groupId>
-  <artifactId>net.sf.seesea.provider.navigation</artifactId>
+  <artifactId>net.sf.seesea.services.navigation</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project> 
