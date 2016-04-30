@@ -37,10 +37,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.seesea.services.navigation.CompressionType;
-import net.sf.seesea.services.navigation.IStreamProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.data.CompressionType;
+import net.sf.seesea.track.api.data.ITrack;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 /**
  * This stream procesor takes binary streams from the actisense ngt1 NMEA2000 to USB converter and assembles
@@ -158,7 +158,7 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 		
 	}
 	
-	public boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException {
+	public boolean isValidStreamProcessor(int[] buffer) {
 		processData = true;
 		counter = 0;
 		List<INMEA2000Listener> list = new ArrayList<INMEA2000Listener>(listeners);
@@ -211,11 +211,6 @@ public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Read
 	@Override
 	public String getMimeType() {
 		return "application/x-actisense"; //$NON-NLS-1$
-	}
-
-	@Override
-	public List<ITrack> getTracks(CompressionType compressionType, File file) {
-		return Collections.<ITrack>emptyList();
 	}
 
 	@Override

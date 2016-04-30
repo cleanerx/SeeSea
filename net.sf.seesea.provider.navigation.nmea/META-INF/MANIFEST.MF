@@ -10,16 +10,15 @@ Export-Package: net.sf.seesea.provider.navigation.nmea,
  net.sf.seesea.provider.navigation.nmea.v2000,
  net.sf.seesea.provider.navigation.nmea.v2000.datadictionary,
  net.sf.seesea.provider.navigation.nmea.v2000.pgn
-Require-Bundle: org.eclipse.osgi.services;bundle-version="3.2.100",
- org.eclipse.core.runtime,
- net.sf.seesea.services.navigation,
- net.sf.seesea.model.core,
- org.apache.log4j;bundle-version="1.2.16",
+Require-Bundle: net.sf.seesea.model.core,
  net.sf.seesea.data.io;bundle-version="1.0.0",
  net.sf.seesea.lib;bundle-version="1.0.0",
- net.sf.seesea.track.api;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.osgi.service.component;version="1.1.0",
+ net.sf.seesea.track.api;bundle-version="1.0.0",
+ net.sf.seesea.services.navigation,
+ org.eclipse.equinox.registry
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.osgi.framework;version="1.8.0",
+ org.osgi.service.component;version="1.1.0",
  org.osgi.service.component.annotations
 Service-Component: OSGI-INF/CSVDataWriterFactory.xml,
  OSGI-INF/NMEADataWriterFactory.xml,

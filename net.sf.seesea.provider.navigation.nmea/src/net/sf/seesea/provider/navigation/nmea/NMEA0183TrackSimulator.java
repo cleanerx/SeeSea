@@ -66,7 +66,7 @@ public class NMEA0183TrackSimulator implements Runnable, INMEAReader {
 		try {
 			String currentLine = ""; //$NON-NLS-1$
 
-			BundleContext bundleContext = NMEA0183Activator.getDefault()
+			BundleContext bundleContext = NMEA0183Activator.getContext()
 					.getBundle().getBundleContext();
 			ServiceRegistration<INMEAReader> serviceRegistration = bundleContext.registerService(INMEAReader.class, this, null);
 //			AISParser aisParser = new AISParser(new AisMessageMultiplexer(), new DummyErrorHandler());
