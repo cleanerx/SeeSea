@@ -112,13 +112,6 @@
          unpack="false"/>
 
    <plugin
-         id="net.sf.seesea.navigation.son"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="net.sf.seesea.provider.navigation.fsh"
          download-size="0"
          install-size="0"
