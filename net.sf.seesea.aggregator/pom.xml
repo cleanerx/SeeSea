@@ -46,6 +46,7 @@
 
   	<module>../net.sf.seesea.gauge</module>  
 
+	<module>../net.sf.seesea.triangulation</module>
   	<module>../net.sf.seesea.contour</module>  
   	<module>../net.sf.seesea.contour.triangulation</module>  
   	
