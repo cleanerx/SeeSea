@@ -29,6 +29,7 @@
                                     <artifact><id>javax.ws.rs:javax.ws.rs-api:2.0.1</id></artifact>
                                     <artifact><id>org.glassfish.jersey.media:jersey-media-moxy:2.22.2</id></artifact>
                                     <artifact><id>org.glassfish.jersey.ext:jersey-entity-filtering:2.22.2</id></artifact>
+                                    <artifact><id>org.glassfish.jersey.core:jersey-server:2.22.2</id></artifact>
                                     
                                 </artifacts>
                             </configuration>
