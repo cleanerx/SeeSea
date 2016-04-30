@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.content.api,
  net.sf.seesea.filter.api,
  net.sf.seesea.gauge,
- net.sf.seesea.contour,
+ net.sf.seesea.contour.api,
  net.sf.seesea.content.tika
 Import-Package: org.osgi.service.cm;version="1.3.0",
  org.osgi.service.component.annotations

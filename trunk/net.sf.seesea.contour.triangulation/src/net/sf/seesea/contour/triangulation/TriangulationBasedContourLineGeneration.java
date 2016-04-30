@@ -45,7 +45,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-import net.sf.seesea.contour.IContourLineGeneration;
+import net.sf.seesea.contour.api.IContourLineGeneration;
 import net.sf.seesea.data.io.PersistenceException;
 import net.sf.seesea.geometry.IPoint;
 import net.sf.seesea.geometry.IPolygon;
