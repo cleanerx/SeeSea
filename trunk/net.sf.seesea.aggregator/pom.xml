@@ -56,7 +56,7 @@
 	<!-- Triangulation and contour stuff -->
 	<module>../net.sf.seesea.triangulation</module>
   	<module>../net.sf.seesea.triangulation.cdelaunay</module>
-  	<module>../net.sf.seesea.contour</module>  
+  	<module>../net.sf.seesea.contour.api</module>  
   	<module>../net.sf.seesea.contour.triangulation</module>  
   	<module>../net.sf.seesea.triangulation.postgis</module>
 
