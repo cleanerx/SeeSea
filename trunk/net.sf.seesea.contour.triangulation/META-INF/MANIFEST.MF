@@ -9,8 +9,7 @@ Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.geometry;bundle-version="1.0.0",
  net.sf.seesea.triangulation;bundle-version="1.0.0",
  net.sf.seesea.data.io;bundle-version="1.0.0",
- net.sf.seesea.services.navigation;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16"
+ org.apache.log4j;bundle-version="[1.2.0,2.0.0)"
 Import-Package: org.osgi.service.component.annotations
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/net.sf.seesea.contour.triangulation.TriangulationBasedContourLineGeneration.xml
