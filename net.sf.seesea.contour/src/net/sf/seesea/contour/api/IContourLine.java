@@ -26,33 +26,46 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
-package net.sf.seesea.contour;
+package net.sf.seesea.contour.api;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+import java.util.List;
 
-public class ContourActivator implements BundleActivator {
+import net.sf.seesea.geometry.IPoint;
 
-	private static BundleContext context;
+/**
+ * This describes a contour line. 
+ *
+ */
+public interface IContourLine {
 
-	static BundleContext getContext() {
-		return context;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	/**
+	 * 
+	 * @return the points of the contour line
 	 */
-	public void start(BundleContext bundleContext) throws Exception {
-		ContourActivator.context = bundleContext;
-	}
+	List<IPoint> getPoints();
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	/**
+	 * a unique id
+	 * @param id
 	 */
-	public void stop(BundleContext bundleContext) throws Exception {
-		ContourActivator.context = null;
-	}
+	void setId(long id);
+
+	/**
+	 * 
+	 * @param depth the depth of the contour line
+	 */
+	void setDepth(int depth);
+
+	/**
+	 * 
+	 * @return the unique contour line identifier
+	 */
+	long getId();
+
+	/**
+	 * 
+	 * @return the depth of the contour line
+	 */
+	int getDepth();
 
 }

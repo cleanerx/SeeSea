@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
-package net.sf.seesea.contour;
+package net.sf.seesea.contour.api;
 
 import java.sql.PreparedStatement;
 import java.util.List;

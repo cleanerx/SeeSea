@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Contour API
-Bundle-SymbolicName: net.sf.seesea.contour
+Bundle-SymbolicName: net.sf.seesea.contour.api
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: net.sf.seesea.contour.ContourActivator
+Bundle-Activator: net.sf.seesea.contour.api.ContourActivator
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.geometry;bundle-version="1.0.0",
  net.sf.seesea.services.navigation;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Export-Package: net.sf.seesea.contour
+Export-Package: net.sf.seesea.contour.api
 Bundle-Vendor: SeeSea

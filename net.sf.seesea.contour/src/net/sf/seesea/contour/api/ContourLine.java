@@ -26,12 +26,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
-package net.sf.seesea.contour;
+package net.sf.seesea.contour.api;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.seesea.contour.IContourLine;
+import net.sf.seesea.contour.api.IContourLine;
 import net.sf.seesea.geometry.IPoint;
 
 public class ContourLine implements IContourLine {
