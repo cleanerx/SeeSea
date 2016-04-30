@@ -4,7 +4,7 @@
  * 
  * It was originally written in Fortran an ported to Java
  * @author R Ray (Initial Implementation)
- * @author Jens Kübler (port to java)
+ * @author Jens KÃ¼bler (port to java)
  */
 
 package net.sf.seesea.tidemodel.dtu10.java;
