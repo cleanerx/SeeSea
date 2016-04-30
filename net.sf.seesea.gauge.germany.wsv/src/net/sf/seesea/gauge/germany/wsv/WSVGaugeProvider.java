@@ -53,6 +53,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -145,8 +146,8 @@ public class WSVGaugeProvider implements IGaugeProvider {
 	private List<WSVGaugeMeasurement> getRemoteMeasurements(String remoteID) {
 		Client client = ClientBuilder.newClient();
 		client.register(MoxyJsonFeature.class);
-//		LoggingFilter loggingFilter = new LoggingFilter();
-//		client.register(loggingFilter);
+		LoggingFilter loggingFilter = new LoggingFilter();
+		client.register(loggingFilter);
 
 		WebTarget path = client.target("http://www.pegelonline.wsv.de").path("webservices").path("rest-api").path("v2").path("stations/" + remoteID + "/W/measurements.json").queryParam("start", "P60D");
         Response response = path.request(MediaType.APPLICATION_JSON).get();
