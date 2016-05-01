@@ -90,8 +90,7 @@ public class ContentDetector implements IContentDetector {
 					String mimeType = getMimeType(fis);
 					// Tika does not detect zips reliably
 					if (mimeType.equals("application/octet-stream")) {
-						try {
-							ZipFile zipFile = new ZipFile(file, Charset.forName("ISO_8859_1")); //$NON-NLS-1$
+						try (ZipFile zipFile = new ZipFile(file, Charset.forName("ISO_8859_1"))){
 							zipFile.entries();
 							mimeType = "application/zip";
 						} catch (IOException e) {
