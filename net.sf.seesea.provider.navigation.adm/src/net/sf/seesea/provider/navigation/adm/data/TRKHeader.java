@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings(value = { "unused" })
 public class TRKHeader {
 
 	private int length;

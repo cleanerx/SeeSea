@@ -2,10 +2,10 @@ package net.sf.seesea.provider.navigation.adm.data;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+@SuppressWarnings(value = { "unused" })
 public class IMGHeader {
 	
 	private int firstSubFileOffset;
