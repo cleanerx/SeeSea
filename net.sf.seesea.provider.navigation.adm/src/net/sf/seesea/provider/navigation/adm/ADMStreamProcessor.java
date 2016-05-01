@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GeoFactory;
 import net.sf.seesea.model.core.geo.Latitude;
@@ -24,6 +26,7 @@ import net.sf.seesea.provider.navigation.adm.data.TrackPointADM;
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
+@Component(property={"type:String=binary"})
 public class ADMStreamProcessor implements IStreamProcessor, IADMReader {
 
 	private List<IADMListener> listeners;

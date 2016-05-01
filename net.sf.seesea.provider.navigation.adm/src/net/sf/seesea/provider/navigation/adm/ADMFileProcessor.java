@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.adm.data.FAT;
 import net.sf.seesea.provider.navigation.adm.data.IMGHeader;
@@ -20,6 +22,7 @@ import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
+@Component(factory = "trackfile.x-adm")
 public class ADMFileProcessor implements ITrackFileProcessor {
 
 	private IMeasurmentProcessor measurmentProcessor;
