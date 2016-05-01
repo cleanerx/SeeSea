@@ -1,89 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
     http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>net.sf.seesea</groupId>
-    <artifactId>net.sf.seesea.tycho.parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <properties>
-        <tycho.version>0.24.0</tycho.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-        <mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
-        <thirdparty-repo.url>http://depth.openseamap.org/p2/repository/</thirdparty-repo.url>
-        
-    </properties>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.sf.seesea</groupId>
+	<artifactId>net.sf.seesea.tycho.parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <repositories>
-        <repository>
-            <id>mars</id>
-            <url>${mars-repo.url}</url>
-            <layout>p2</layout>
-        </repository>
-        <repository>
-            <id>thirdparty</id>
-            <url>${thirdparty-repo.url}</url>
-            <layout>p2</layout>
-        </repository>
-    </repositories>
+	<properties>
+		<tycho.version>0.24.0</tycho.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
+		<thirdparty-repo.url>http://depth.openseamap.org/p2/repository/</thirdparty-repo.url>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-maven-plugin</artifactId>
-                <version>${tycho.version}</version>
-                <extensions>true</extensions>
-            </plugin>
+	</properties>
 
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>target-platform-configuration</artifactId>
-                <version>${tycho.version}</version>
-                <configuration>
-                    <environments>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                    </environments>
+	<repositories>
+		<repository>
+			<id>mars</id>
+			<url>${mars-repo.url}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>thirdparty</id>
+			<url>${thirdparty-repo.url}</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
 					<pomDependencies>consider</pomDependencies>
-<!-- <target>
-						<artifact>
-							<groupId>net.sf.seesea</groupId>
-							<artifactId>net.sf.seesea.targetplatform</artifactId>
-							<version>1.0.0</version>
-						</artifact>
-						
-					</target>  -->                    
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+					<!-- <target> <artifact> <groupId>net.sf.seesea</groupId> <artifactId>net.sf.seesea.targetplatform</artifactId> 
+						<version>1.0.0</version> </artifact> </target> -->
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>3.0.4-SNAPSHOT</version>
+				<configuration>
+					<findbugsXmlOutput>true</findbugsXmlOutput>
+					<failOnError>false</failOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<sourceEncoding>utf-8</sourceEncoding>
+					<minimumTokens>100</minimumTokens>
+					<targetJdk>1.5</targetJdk>
+					<format>xml</format>
+					<failOnViolation>false</failOnViolation>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>cpd-check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project> 
