@@ -28,12 +28,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package net.sf.seesea.geometry.impl;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import net.sf.seesea.geometry.IPoint;
 
 
-public class DepthComparator implements Comparator<IPoint> {
+public class DepthComparator implements Comparator<IPoint>, Serializable {
 
 	@Override
 	public int compare(IPoint o1, IPoint o2) {

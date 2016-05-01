@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package net.sf.seesea.geometry.impl;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import net.sf.seesea.geometry.IPoint;
@@ -36,7 +37,7 @@ import net.sf.seesea.geometry.IPoint;
 /**
  * A 2D point comparator
  */
-public class PointComparator implements Comparator<IPoint> {
+public class PointComparator implements Comparator<IPoint>, Serializable {
 
 	@Override
 	public int compare(IPoint o1, IPoint o2) {
