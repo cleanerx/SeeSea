@@ -36,15 +36,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
 import net.sf.seesea.track.api.IStreamProcessor;
-import net.sf.seesea.track.api.exception.NMEAProcessingException;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
 /**
- * This stream procesor takes binary streams from the actisense ngt1 NMEA2000 to USB converter and assembles
- * the stream to nmea 2000 messages that may be processed by {@link INMEA2000Listener}s.
+ * This stream processor takes binary streams from the Raymarine fsh exports.
  */
 public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 
+	/** internal prcessing state of this stream processor */
 	private FSHProcessingState state;
 	
 	private int counter;
