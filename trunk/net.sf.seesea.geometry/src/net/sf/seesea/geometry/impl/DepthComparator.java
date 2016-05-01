@@ -38,6 +38,6 @@ public class DepthComparator implements Comparator<IPoint>, Serializable {
 
 	@Override
 	public int compare(IPoint o1, IPoint o2) {
-		return ((Double)o1.getZ()).compareTo(o2.getZ());
+		return Double.compare(o1.getZ(),o2.getZ());
 	}
 }

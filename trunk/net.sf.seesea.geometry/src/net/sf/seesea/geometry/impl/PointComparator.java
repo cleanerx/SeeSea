@@ -41,9 +41,9 @@ public class PointComparator implements Comparator<IPoint>, Serializable {
 
 	@Override
 	public int compare(IPoint o1, IPoint o2) {
-		int compareTo = ((Double)o1.getX()).compareTo(o2.getX());
+		int compareTo = Double.compare(o1.getX(),o2.getX());
 		if(compareTo == 0) {
-			compareTo = ((Double)o1.getY()).compareTo(o2.getY());
+			compareTo = Double.compare(o1.getY(),o2.getY());
 			return compareTo;
 		}
 		return compareTo;
