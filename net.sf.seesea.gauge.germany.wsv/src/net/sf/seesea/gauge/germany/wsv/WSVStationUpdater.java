@@ -62,9 +62,7 @@ public class WSVStationUpdater implements IStationProvider {
         if(response.getStatus() == 200) {
         	List<Station> readEntity = response.readEntity(new GenericType<List<Station>>(){});
         	
-			PreparedStatement statement = null;
-			try {
-				statement = gaugeConnection.prepareStatement("INSERT INTO gauge (name, gaugetype, provider, water, remoteid, geom) VALUES (?,?,?,?,?, ST_SetSRID(ST_MakePoint(?, ?), 4326))");
+			try (PreparedStatement statement = gaugeConnection.prepareStatement("INSERT INTO gauge (name, gaugetype, provider, water, remoteid, geom) VALUES (?,?,?,?,?, ST_SetSRID(ST_MakePoint(?, ?), 4326))")) {
 				for (Station station : readEntity) {
 					statement.setString(1, station.longname);
 					statement.setString(2, "RIVER");
@@ -77,13 +75,6 @@ public class WSVStationUpdater implements IStationProvider {
 				}
 				statement.executeBatch();
 			} catch (SQLException e) {
-				if(statement != null) {
-					try {
-						statement.close();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
 				e.printStackTrace();
 			} 
         }
