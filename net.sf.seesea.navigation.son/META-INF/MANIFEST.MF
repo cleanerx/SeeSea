@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hummingbird SON
-Bundle-SymbolicName: net.sf.seesea.navigation.son
+Bundle-SymbolicName: net.sf.seesea.provider.navigation.son
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.navigation.son.SONActivator
 Export-Package: net.sf.seesea.navigation.son,
