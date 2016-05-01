@@ -39,6 +39,7 @@
   	<module>../net.sf.seesea.provider.navigation.son</module>
   	<module>../net.sf.seesea.provider.navigation.son.int.test</module>
   	<module>../net.sf.seesea.navigation.winprofile.sharp</module>
+  	<module>../net.sf.seesea.navigation.winprofile.sharp.int.test</module>
 <!--   	<module>../net.sf.seesea.provider.navigation.adm.test</module> -->
   	<module>../net.sf.seesea.provider.navigation.nmea</module>
   	
