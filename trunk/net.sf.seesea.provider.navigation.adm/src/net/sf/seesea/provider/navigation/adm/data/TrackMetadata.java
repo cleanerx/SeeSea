@@ -2,10 +2,10 @@ package net.sf.seesea.provider.navigation.adm.data;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings(value = { "unused" })
 public class TrackMetadata {
 
 	private String trackName;
