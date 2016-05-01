@@ -28,13 +28,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package net.sf.seesea.lib;
 
+import java.io.Serializable;
 import java.text.Collator;
 import java.util.Comparator;
 
 /**
  * 
  */
-public class StringComparator implements Comparator<String> {
+public class StringComparator implements Comparator<String>, Serializable {
 
 	/* (non-Javadoc)
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
