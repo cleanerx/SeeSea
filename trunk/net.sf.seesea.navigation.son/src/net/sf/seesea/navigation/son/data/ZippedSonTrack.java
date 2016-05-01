@@ -25,15 +25,22 @@
  */
 package net.sf.seesea.navigation.son.data;
 
-import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Collection;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import net.sf.seesea.services.navigation.ITrack;
+import net.sf.seesea.track.api.data.IContainedTrackFile;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.model.AbstractTrackFile;
 
-public class ZippedSonTrack implements ITrack {
+/**
+ * A zipped son track is a little bit different from a ZippedTrackEntry since it requires two files rather than one 
+ *
+ */
+public class ZippedSonTrack extends AbstractTrackFile implements IContainedTrackFile {
 
 	private final ZipFile zipFile;
 	private final ZipEntry rootFile;
@@ -59,7 +66,7 @@ public class ZippedSonTrack implements ITrack {
 	}
 
 	@Override
-	public String getMimeType() {
+	public String getFileType() {
 		return "application/x-humminbird"; //$NON-NLS-1$
 	}
 
@@ -85,6 +92,18 @@ public class ZippedSonTrack implements ITrack {
 
 	public ZipFile getZipFile() {
 		return zipFile;
+	}
+
+	@Override
+	public URL getTrackURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<ITrackFile> getTrackFiles() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

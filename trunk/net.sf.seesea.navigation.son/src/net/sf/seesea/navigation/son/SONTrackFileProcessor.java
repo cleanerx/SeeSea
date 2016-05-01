@@ -33,14 +33,13 @@ import net.sf.seesea.model.core.physx.SpeedUnit;
 import net.sf.seesea.navigation.son.data.SONHeader;
 import net.sf.seesea.navigation.son.data.SONRoot;
 import net.sf.seesea.navigation.son.data.ZippedSonTrack;
-import net.sf.seesea.services.navigation.CompressionType;
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.ITrackFile;
-import net.sf.seesea.services.navigation.ITrackFileProcessor;
-import net.sf.seesea.services.navigation.IZipTrackFile;
-import net.sf.seesea.services.navigation.ProcessingException;
-import net.sf.seesea.services.navigation.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.CompressionType;
+import net.sf.seesea.track.api.data.ITrack;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
 public class SONTrackFileProcessor implements ITrackFileProcessor {
 
@@ -52,8 +51,8 @@ public class SONTrackFileProcessor implements ITrackFileProcessor {
 		if(CompressionType.ZIP.equals(trackFile.getCompression())) {
 
 			SONStreamProcessor sonStreamProcessor = new SONStreamProcessor();
-			if(trackFile instanceof IZipTrackFile) {
-				List<ITrack> tracks = sonStreamProcessor.getTracks(trackFile.getCompression(), ((IZipTrackFile) trackFile).getZipFile());
+			if(trackFile instanceof ZippedSonTrack) {
+				List<ITrack> tracks = sonStreamProcessor.getTracks(trackFile.getCompression(), ((ZippedSonTrack) trackFile).getZipFile());
 				for (ITrack track : tracks) {
 					ZippedSonTrack sonTrack = (ZippedSonTrack) track;
 					ZipFile file = sonTrack.getZipFile();

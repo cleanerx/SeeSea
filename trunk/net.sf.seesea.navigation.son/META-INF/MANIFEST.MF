@@ -4,12 +4,16 @@ Bundle-Name: Hummingbird SON
 Bundle-SymbolicName: net.sf.seesea.navigation.son
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.navigation.son.SONActivator
-Require-Bundle: org.eclipse.core.runtime,
- net.sf.seesea.model.core;bundle-version="1.0.0",
- net.sf.seesea.services.navigation;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16"
-Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.sf.seesea.navigation.son,
  net.sf.seesea.navigation.son.data
-Service-Component: OSGI-INF/SonStreamProcessor.xml, OSGI-INF/SONTrackFileProcessor.xml
+Require-Bundle: org.eclipse.core.runtime,
+ net.sf.seesea.model.core;bundle-version="1.0.0",
+ org.apache.log4j;bundle-version="1.2.16",
+ net.sf.seesea.track.api;bundle-version="1.0.0",
+ net.sf.seesea.track.model
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: org.osgi.service.component.annotations
+Service-Component: OSGI-INF/SONTrackFileProcessor.xml,
+ OSGI-INF/SonStreamProcessor.xml,
+ OSGI-INF/net.sf.seesea.navigation.son.SONTrackFileDecompressor.xml
+Bundle-ActivationPolicy: lazy
