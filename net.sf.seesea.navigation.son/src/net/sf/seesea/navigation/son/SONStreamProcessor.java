@@ -39,7 +39,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,19 +47,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import org.apache.log4j.Logger;
+
 import net.sf.seesea.navigation.son.data.SONHeader;
 import net.sf.seesea.navigation.son.data.SONRoot;
 import net.sf.seesea.navigation.son.data.ZippedSonTrack;
-import net.sf.seesea.services.navigation.CompressionType;
-import net.sf.seesea.services.navigation.IStreamProcessor;
-import net.sf.seesea.services.navigation.ITrack;
-import net.sf.seesea.services.navigation.NMEAProcessingException;
-
-import org.apache.log4j.Logger;
+import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.data.CompressionType;
+import net.sf.seesea.track.api.data.ITrack;
+import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 /**
- * This stream procesor takes binary streams from the actisense ngt1 NMEA2000 to USB converter and assembles
- * the stream to nmea 2000 messages that may be processed by {@link INMEA2000Listener}s.
+ * This stream procesor takes binary streams from the humminbird son files and analyze the block types
  */
 public class SONStreamProcessor implements IStreamProcessor {
 
@@ -256,7 +254,7 @@ public class SONStreamProcessor implements IStreamProcessor {
 	  }
 
 		
-	public boolean isValidStreamProcessor(int[] buffer) throws NMEAProcessingException {
+	public boolean isValidStreamProcessor(int[] buffer) {
 		for (int i : buffer) {
 			readByte(i, "none"); //$NON-NLS-1$
 		}
@@ -348,7 +346,7 @@ public class SONStreamProcessor implements IStreamProcessor {
 		if(!sonFiles.values().isEmpty()) {
 			for (Entry<ZipEntry, Map<ZipEntry, ZipEntry>> zipEntry : sonFiles.entrySet()) {
 				if(!zipEntry.getValue().isEmpty()) {
-					tracks.add(new ZippedSonTrack(file, zipEntry.getKey(), zipEntry.getValue(), encoding));
+//					tracks.add(new ZippedSonTrack(file, zipEntry.getKey(), zipEntry.getValue(), encoding));
 				}
 			}
 		}
