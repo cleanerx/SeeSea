@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SON Test
-Bundle-SymbolicName: net.sf.seesea.navigation.son.int.test
+Bundle-SymbolicName: net.sf.seesea.provider.navigation.son.int.test
 Bundle-Version: 1.0.0.qualifier
-Fragment-Host: net.sf.seesea.navigation.son;bundle-version="1.0.0"
+Fragment-Host: net.sf.seesea.provider.navigation.son;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: SeeSea
-Require-Bundle: net.sf.seesea.navigation.son,
+Require-Bundle: net.sf.seesea.provider.navigation.son,
  org.junit
 Bundle-ClassPath: res/,
  .
