@@ -83,10 +83,8 @@ public class ContentDetector implements IContentDetector {
 				long id = trackFileX.getTrackId();
 				String trackFile = MessageFormat.format("{0}/{1}/{2}.dat", basedir, format.format((id / 100) * 100), //$NON-NLS-1$
 						fileFormat.format(id));
-				FileInputStream fis;
-				try {
-					File file = new File(trackFile);
-					fis = new FileInputStream(file);
+				File file = new File(trackFile);
+				try (FileInputStream fis = new FileInputStream(file)) {
 					String mimeType = getMimeType(fis);
 					// Tika does not detect zips reliably
 					if (mimeType.equals("application/octet-stream")) {
