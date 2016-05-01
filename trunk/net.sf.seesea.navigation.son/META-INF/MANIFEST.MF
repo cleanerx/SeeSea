@@ -8,7 +8,7 @@ Export-Package: net.sf.seesea.navigation.son,
  net.sf.seesea.navigation.son.data
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.model.core;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16",
+ org.apache.log4j;bundle-version="[1.2.0,2.0.0)",
  net.sf.seesea.track.api;bundle-version="1.0.0",
  net.sf.seesea.track.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
