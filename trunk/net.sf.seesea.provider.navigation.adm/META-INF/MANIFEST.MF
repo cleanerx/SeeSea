@@ -3,10 +3,13 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ADM Provider
 Bundle-SymbolicName: net.sf.seesea.provider.navigation.adm
 Bundle-Version: 1.0.0.qualifier
-Require-Bundle: net.sf.seesea.model.core;bundle-version="1.0.0",
- net.sf.seesea.track.api;bundle-version="1.0.0"
-Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Service-Component: OSGI-INF/ADMStreamProcessor.xml, OSGI-INF/ADMMessageDispatcher.xml, OSGI-INF/ADMTrackFileProcessor.xml
 Export-Package: net.sf.seesea.provider.navigation.adm,
  net.sf.seesea.provider.navigation.adm.data
+Require-Bundle: net.sf.seesea.model.core;bundle-version="1.0.0",
+ net.sf.seesea.track.api;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Service-Component: OSGI-INF/net.sf.seesea.provider.navigation.adm.ADMFileProcessor.xml,
+ OSGI-INF/net.sf.seesea.provider.navigation.adm.ADMStreamProcessor.xml
+Import-Package: org.osgi.service.component.annotations
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: SeeSea
