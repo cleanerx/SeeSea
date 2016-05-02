@@ -83,7 +83,7 @@ public class NMEA0183TrackFileProcessorTest {
 		Date time2 = gnssMeasuredPosition.getTime();
 
 		Measurement subTwo = submeasurements.get(1);
-		assertTrue(subTwo instanceof GNSSMeasuredPosition);
+		assertTrue(subTwo instanceof RelativeSpeed);
 		RelativeSpeed relativeSpeed = (RelativeSpeed) subTwo;
 
 		Measurement subThree = submeasurements.get(2);
