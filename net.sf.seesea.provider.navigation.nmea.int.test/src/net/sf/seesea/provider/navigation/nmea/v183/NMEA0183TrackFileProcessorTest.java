@@ -33,7 +33,6 @@ public class NMEA0183TrackFileProcessorTest {
 
 	@Test
 	public void testProcessing() throws FileNotFoundException, IOException, ProcessingException {
-		String file = "res/9220.dat"; //$NON-NLS-1$
 		URL fileEntry = NMEA0183Activator.getContext().getBundle().findEntries("res", "9220.dat", false).nextElement();
 
 		SimpleTrackFile simpleTrackFile = new SimpleTrackFile();
@@ -80,7 +79,7 @@ public class NMEA0183TrackFileProcessorTest {
 		GNSSMeasuredPosition gnssMeasuredPosition = (GNSSMeasuredPosition) subOne;
 		double altitude = gnssMeasuredPosition.getAltitude();
 		Latitude latitude = gnssMeasuredPosition.getLatitude();assertEquals(52.31036, latitude.getDecimalDegree(), 0.0001);
-		Longitude longitude = gnssMeasuredPosition.getLongitude();assertEquals(10.306433333333333, latitude.getDecimalDegree(), 0.0001);
+		Longitude longitude = gnssMeasuredPosition.getLongitude();assertEquals(10.306433333333333, longitude.getDecimalDegree(), 0.0001);
 		Date time2 = gnssMeasuredPosition.getTime();
 
 		Measurement subTwo = submeasurements.get(1);

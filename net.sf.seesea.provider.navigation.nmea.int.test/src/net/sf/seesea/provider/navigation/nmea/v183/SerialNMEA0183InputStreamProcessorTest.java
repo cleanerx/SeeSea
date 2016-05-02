@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.junit.Test;
 
 import net.sf.seesea.provider.navigation.nmea.NMEA0183Activator;
@@ -16,9 +17,8 @@ public class SerialNMEA0183InputStreamProcessorTest {
 
 	@Test
 	public void testStreamProcessor() throws IOException, RawDataEventException {
-		String file = "res/9220.dat"; //$NON-NLS-1$
-		URL fileEntry = NMEA0183Activator.getContext().getBundle().getEntry(file);
-		InputStream fileStream = fileEntry.openStream();
+		URL fileEntry = NMEA0183Activator.getContext().getBundle().findEntries("res", "9220.dat", false).nextElement();
+		InputStream fileStream = FileLocator.resolve(fileEntry).openStream();
 		BufferedInputStream input = new BufferedInputStream(fileStream);
 
 		int[] buf = new int[100];
