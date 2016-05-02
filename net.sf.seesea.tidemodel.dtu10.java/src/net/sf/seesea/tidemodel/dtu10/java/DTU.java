@@ -13,12 +13,14 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.zip.GZIPInputStream;
 
 import net.sf.seesea.tidemodel.dtu10.java.data.HelperDate;
 import net.sf.seesea.tidemodel.dtu10.java.data.ITideHeight;
@@ -53,7 +55,7 @@ public class DTU implements ITideProvider {
 
 	@org.osgi.service.component.annotations.Activate
 	public void activate(Map<String, Object> config) throws IOException {
-		dataLocation = DTUJavaActivator.getDefault().getBundle().getEntry("res/tidalConsituents.txt");
+		dataLocation = DTUJavaActivator.getDefault().getBundle().getEntry("res/tidalConsituents.txt.gz");
 		loadTidalConsituents();
 		double dx = (lonmax - lonmin) / (double) (nx - 1);
 		wrap = Math.abs(lonmax - lonmin - 360.0) < 2 * dx;
@@ -287,8 +289,10 @@ public class DTU implements ITideProvider {
 	 */
 	private void loadTidalConsituents() throws IOException {
 		double degree2radians = Math.toRadians(1);
+		InputStream openStream = dataLocation.openStream();
+		GZIPInputStream gzipInputStream = new GZIPInputStream(openStream);
 		try (DataInputStream dataInputStream = new DataInputStream(
-				new BufferedInputStream(dataLocation.openStream(), 65536 * 4))) {
+				new BufferedInputStream(gzipInputStream, 65536 * 4))) {
 
 			for (int i = 0; i < 10; i++) {
 				TideConsituents amplitude = grdinp(dataInputStream);
