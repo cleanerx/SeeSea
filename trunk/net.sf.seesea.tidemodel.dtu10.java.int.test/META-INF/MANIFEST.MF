@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DTU 10 Test
+Bundle-SymbolicName: net.sf.seesea.tidemodel.dtu10.java.int.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: SeeSea
+Fragment-Host: net.sf.seesea.tidemodel.dtu10.java;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.junit

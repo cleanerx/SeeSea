@@ -55,6 +55,7 @@
   	<module>../net.sf.seesea.waterlevel</module>
   	<module>../net.sf.seesea.waterlevel.gaugeocean</module>
   	<module>../net.sf.seesea.tidemodel.dtu10.java</module>
+  	<module>../net.sf.seesea.tidemodel.dtu10.java.int.test</module>
 
 	<!-- Triangulation and contour stuff -->
 	<module>../net.sf.seesea.triangulation</module>
