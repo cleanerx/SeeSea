@@ -11,6 +11,7 @@ package net.sf.seesea.tidemodel.dtu10.java;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -994,6 +995,8 @@ public class DTU implements ITideProvider {
 	public static void main(String args[]) throws IOException {
 		DTU dtu = new DTU();
 		Calendar cal = Calendar.getInstance();
+		dtu.dataLocation = new URL("file:///C:/workspaceOpenStreetmap4/net.sf.seesea.tidemodel.dtu10.java/res/tidalConsituents.txt");
+		dtu.loadTidalConsituents();
 		// Date parse =
 		// DateFormat.getDateInstance().parse("Wed Sep 17 13:28:03 CEST 2014");
 		cal.set(Calendar.YEAR, 1993);
