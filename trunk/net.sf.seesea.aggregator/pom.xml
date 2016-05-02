@@ -42,6 +42,7 @@
   	<module>../net.sf.seesea.navigation.winprofile.sharp.int.test</module>
 <!--   	<module>../net.sf.seesea.provider.navigation.adm.test</module> -->
   	<module>../net.sf.seesea.provider.navigation.nmea</module>
+  	<module>../net.sf.seesea.provider.navigation.nmea.int.test</module>
   	
   	<module>../net.sf.seesea.data.io</module>
   	<module>../net.sf.seesea.data.io.postgis</module>
