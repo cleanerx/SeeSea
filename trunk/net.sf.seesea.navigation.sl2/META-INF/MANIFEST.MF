@@ -10,3 +10,4 @@ Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/SL2StreamProcessor.xml, OSGI-INF/SL2TrackFileProcessor.xml
 Export-Package: net.sf.seesea.navigation.sl2;version="1.0.0"
 Bundle-Vendor: SeeSea
+Import-Package: org.osgi.framework

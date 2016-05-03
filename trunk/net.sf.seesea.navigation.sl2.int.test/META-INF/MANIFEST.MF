@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test
+Bundle-SymbolicName: net.sf.seesea.navigation.sl2.int.test
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: net.sf.seesea.navigation.sl2;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.junit,
+ net.sf.seesea.track.model,
+ org.easymock
+Import-Package: org.eclipse.core.runtime
