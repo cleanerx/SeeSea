@@ -16,12 +16,12 @@ public class SL2StreamProcessorTest {
 
 	@Test
 	public void testStreamProcessor() throws IOException, RawDataEventException {
-		URL fileEntry = SL2Activator.getContext().getBundle().findEntries("res", "20001114_10_nmea_trace.dat", false).nextElement();
+		URL fileEntry = SL2Activator.getContext().getBundle().findEntries("res", "50127.dat", false).nextElement();
 		InputStream fileStream = FileLocator.resolve(fileEntry).openStream();
 		BufferedInputStream input = new BufferedInputStream(fileStream);
 
-		int[] buf = new int[100];
-		for(int i = 0; i < 100 ; i ++) {
+		int[] buf = new int[1024];
+		for(int i = 0; i < 1024 ; i ++) {
 			buf[i] = input.read();
 		}
 		
