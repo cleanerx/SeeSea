@@ -1,0 +1,12 @@
+2016-05-02 20:21:11,426 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-02 20:22:55,539 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-02 20:32:27,246 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-02 20:49:43,075 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 06:28:15,363 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 06:30:13,852 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 06:32:17,545 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 06:34:16,470 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 06:41:15,050 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 06:44:21,494 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 07:03:22,483 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-03 07:05:22,508 INFO  root - Heartbeat thread sucessfully interrupted

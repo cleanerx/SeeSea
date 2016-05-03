@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +23,8 @@ import net.sf.seesea.model.core.physx.Heading;
 import net.sf.seesea.model.core.physx.HeadingType;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.core.physx.RelativeSpeed;
+import net.sf.seesea.model.core.physx.SpeedUnit;
+import net.sf.seesea.model.core.physx.Time;
 import net.sf.seesea.provider.navigation.nmea.NMEA0183Activator;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
 import net.sf.seesea.track.api.exception.ProcessingException;
@@ -77,25 +78,37 @@ public class NMEA0183TrackFileProcessorTest {
 		Measurement subOne = submeasurements.get(0);
 		assertTrue(subOne instanceof GNSSMeasuredPosition);
 		GNSSMeasuredPosition gnssMeasuredPosition = (GNSSMeasuredPosition) subOne;
-		double altitude = gnssMeasuredPosition.getAltitude();
+		double altitude = gnssMeasuredPosition.getAltitude();assertEquals(0.0, gnssMeasuredPosition.getAltitude(), 0.0001);
 		Latitude latitude = gnssMeasuredPosition.getLatitude();assertEquals(52.31036, latitude.getDecimalDegree(), 0.0001);
 		Longitude longitude = gnssMeasuredPosition.getLongitude();assertEquals(10.306433333333333, longitude.getDecimalDegree(), 0.0001);
 		Date time2 = gnssMeasuredPosition.getTime();
+		assertEquals(1405256685000L, time2.getTime());
+		assertEquals("UTC", gnssMeasuredPosition.getTimezone());
 
 		Measurement subTwo = submeasurements.get(1);
 		assertTrue(subTwo instanceof RelativeSpeed);
 		RelativeSpeed relativeSpeed = (RelativeSpeed) subTwo;
-
+		assertEquals("GP", relativeSpeed.getSensorID());
+		assertEquals(1405256685000L, relativeSpeed.getTime().getTime());
+		assertEquals(6.3, relativeSpeed.getValue().getSpeed(), 0.00001);
+		assertEquals(SpeedUnit.N, relativeSpeed.getValue().getSpeedUnit());
+		assertEquals("UTC", relativeSpeed.getTimezone());
+		
 		Measurement subThree = submeasurements.get(2);
 		assertTrue(subThree instanceof Heading);
 		Heading heading = (Heading) subThree;
-		double degrees = heading.getDegrees();
-		HeadingType headingType = heading.getHeadingType();
-
-//		Measurement subFour = submeasurements.get(3);
-//		assertTrue(subOne instanceof Time);
-//		Time time = (Time) subOne;
-//		time.getTime();
+		assertEquals(94.1, heading.getDegrees(), 0.00001);
+		assertEquals("COG", heading.getHeadingType().getName());
+		assertEquals("GP", heading.getSensorID());
+		assertTrue(heading.isValid());
+		assertEquals(1405256685000L, heading.getTime().getTime());
+		assertEquals("UTC", heading.getTimezone());
+		
+		Measurement subFour = submeasurements.get(3);
+		assertTrue(subFour instanceof Time);
+		Time time = (Time) subFour;
+		assertEquals(1405256685000L, time.getTime().getTime());
+		assertEquals("UTC", time.getTimezone());
 
 	}
 
