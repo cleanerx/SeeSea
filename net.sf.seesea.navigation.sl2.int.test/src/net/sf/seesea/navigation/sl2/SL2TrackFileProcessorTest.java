@@ -1,8 +1,6 @@
 package net.sf.seesea.navigation.sl2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,6 +11,7 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.junit.Test;
 
+import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.Latitude;
 import net.sf.seesea.model.core.geo.Longitude;
@@ -26,7 +25,7 @@ public class SL2TrackFileProcessorTest {
 
 	@Test
 	public void testProcessing() throws FileNotFoundException, IOException, ProcessingException {
-		URL fileEntry = SL2Activator.getContext().getBundle().findEntries("res", "20001114_10_nmea_trace.dat", false).nextElement();
+		URL fileEntry = SL2Activator.getContext().getBundle().findEntries("res", "50127.dat", false).nextElement();
 
 		SimpleTrackFile simpleTrackFile = new SimpleTrackFile();
 		simpleTrackFile.setFileReference(FileLocator.resolve(fileEntry).getFile());
@@ -53,20 +52,27 @@ public class SL2TrackFileProcessorTest {
 		nmea2000TrackFileProcessor.processFile(simpleTrackFile);
 		
 		assertFalse(measurements.isEmpty());
-		assertEquals(8373, measurements.size());
+		assertEquals(16614, measurements.size());
 
 		Measurement measurement = measurements.get(0);
 		assertTrue(measurement instanceof MeasuredPosition3D);
 		MeasuredPosition3D gnssMeasuredPosition = (MeasuredPosition3D) measurement;
-		assertEquals("245", gnssMeasuredPosition.getSensorID());
-		assertEquals(1346678690000L,gnssMeasuredPosition.getTime().getTime());
-		assertEquals(-27.01, gnssMeasuredPosition.getAltitude(), 0.0001);
+		assertNull(gnssMeasuredPosition.getSensorID());
+		assertEquals(7153887L,gnssMeasuredPosition.getTime().getTime());
+		assertEquals(0.0, gnssMeasuredPosition.getAltitude(), 0.0001);
 		Latitude latitude = gnssMeasuredPosition.getLatitude();
-		assertEquals(36.541331357774645, latitude.getDecimalDegree(), 0.0001);
+		assertEquals(47.471064309147096, latitude.getDecimalDegree(), 0.0001);
 		Longitude longitude = gnssMeasuredPosition.getLongitude();
-		assertEquals(29.051541471730072, longitude.getDecimalDegree(), 0.0001);
-		assertEquals("UTC", gnssMeasuredPosition.getTimezone());
+		assertEquals(11.711553214266035, longitude.getDecimalDegree(), 0.0001);
+		assertNull(gnssMeasuredPosition.getTimezone());
 		assertTrue(gnssMeasuredPosition.isValid());
+
+		measurement = measurements.get(1);
+		assertTrue(measurement instanceof Depth);
+		Depth depth = (Depth) measurement;
+		assertEquals(95.75260925292969, depth.getDepth(), 0.0001);
+		assertTrue(depth.isValid());
+		
 
 	}
 
