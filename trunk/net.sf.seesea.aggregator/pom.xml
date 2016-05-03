@@ -34,6 +34,7 @@
   	<module>../net.sf.seesea.provider.navigation.gpx</module>
   	<module>../net.sf.seesea.provider.navigation.gpx.test</module>
   	<module>../net.sf.seesea.provider.navigation.adm</module>
+  	<module>../net.sf.seesea.provider.navigation.adm.int.test</module>
   	<module>../net.sf.seesea.navigation.sl2</module>
   	<module>../net.sf.seesea.navigation.sl2.test</module>
   	<module>../net.sf.seesea.provider.navigation.son</module>
