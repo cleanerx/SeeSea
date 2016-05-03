@@ -20,8 +20,8 @@ public class ADMStreamProcessorTest {
 		InputStream fileStream = FileLocator.resolve(fileEntry).openStream();
 		BufferedInputStream input = new BufferedInputStream(fileStream);
 
-		int[] buf = new int[100];
-		for(int i = 0; i < 100 ; i ++) {
+		int[] buf = new int[1024];
+		for(int i = 0; i < 1024 ; i ++) {
 			buf[i] = input.read();
 		}
 		
