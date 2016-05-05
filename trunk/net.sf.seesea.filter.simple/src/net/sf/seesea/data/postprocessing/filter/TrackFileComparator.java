@@ -1,5 +1,5 @@
 /**
-Copyright (c) 2013-2015, Jens KÃ¼bler
+Copyright (c) 2013-2015, Jens Kübler
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -25,29 +25,32 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
-package net.sf.seesea.data.postprocessing.process;
 
-import java.util.Set;
+package net.sf.seesea.data.postprocessing.filter;
 
-import net.sf.seesea.model.core.physx.Measurement;
-import net.sf.seesea.track.api.ITrackFileProcessor;
+import java.util.Comparator;
+
 import net.sf.seesea.track.api.data.ITrackFile;
-import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 
-public interface IFileTypeProcessingFactory {
+public class TrackFileComparator implements Comparator<ITrackFile> {
 
-	/**
-	 * creates a measurement processor for the track file that gathers location information
-	 * @param trackFile
-	 * @return
-	 */
-	IDepthPositionPreProcessor createLocationPreProcessor(
-			ITrackFile trackFile);
-
-	void disposeLocationPreProcessor(ITrackFile trackFile);
-
-	IStatisticsPreprocessor getPreprocessor(ITrackFile fileType);
-
-	ITrackFileProcessor createProcessor(Set<SensorDescriptionUpdateRate<Measurement>> bestSensors, ITrackFile file);
+	@Override
+	public int compare(ITrackFile fileA, ITrackFile fileB) {
+		if(fileB.getEnd().getTime() != null && fileA.getEnd().getTime() != null && fileB.getStartTime() != null && fileA.getStartTime() != null &&
+				fileA.getEnd().getTime().getTime() - fileA.getStartTime().getTime() > 0 && (fileB.getEnd().getTime().getTime() - fileB.getStartTime().getTime()) > 0) {
+			long a = (fileA.getEnd().getTime().getTime() - fileB.getStartTime().getTime());
+			if(a < 0 ) {
+				return -1;
+			} else if(a > 0) {
+				return 1;
+			}
+		}
+		int compareTo = fileA.getTrackQualifier().compareTo(fileB.getTrackQualifier());
+		if(compareTo == 0) {
+			return (int) (fileA.getTrackId() - fileB.getTrackId());
+		} else {
+			return compareTo;
+		}
+	}
 
 }
