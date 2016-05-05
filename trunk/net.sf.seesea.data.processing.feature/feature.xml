@@ -202,13 +202,6 @@
          unpack="false"/>
 
    <plugin
-         id="net.sf.seesea.contour"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="net.sf.seesea.gauge"
          download-size="0"
          install-size="0"
@@ -248,5 +241,12 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+
+   <plugin
+         id="net.sf.seesea.contour.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
