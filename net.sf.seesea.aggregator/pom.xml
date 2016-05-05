@@ -48,6 +48,8 @@
   	<module>../net.sf.seesea.data.io</module>
   	<module>../net.sf.seesea.data.io.postgis</module>
   	<module>../net.sf.seesea.filter.api</module>
+  	<module>../net.sf.seesea.filter.simple</module>
+  	<module>../net.sf.seesea.filter.simple.int.test</module>
 
 	<!-- gauge related stuff -->
   	<module>../net.sf.seesea.gauge</module>  

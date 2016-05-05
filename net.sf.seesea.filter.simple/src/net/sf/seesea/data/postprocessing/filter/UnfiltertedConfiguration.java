@@ -39,9 +39,9 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
 import net.sf.seesea.data.io.IWriterFactory;
-import net.sf.seesea.data.postprocessing.process.IBoatParameters;
 import net.sf.seesea.data.postprocessing.process.IFilterConfiguration;
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.waterlevel.IWaterLevelCorrection;
 
 @Component(property = {"type:String=unfiltered"}, configurationPolicy = ConfigurationPolicy.REQUIRE) 

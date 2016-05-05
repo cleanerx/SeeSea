@@ -14,16 +14,16 @@ import org.apache.log4j.Logger;
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.IWriterFactory;
 import net.sf.seesea.data.io.WriterException;
-import net.sf.seesea.data.postprocessing.process.IBoatParameters;
 import net.sf.seesea.model.core.geo.Depth;
+import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.GeoPosition;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.util.GeoUtil;
-import net.sf.seesea.services.navigation.IGeoBoundingBox;
-import net.sf.seesea.services.navigation.IMeasurmentProcessor;
-import net.sf.seesea.services.navigation.ProcessingException;
+import net.sf.seesea.track.api.IMeasurmentProcessor;
+import net.sf.seesea.track.api.data.IBoatParameters;
+import net.sf.seesea.track.api.exception.ProcessingException;
 import net.sf.seesea.waterlevel.IWaterLevelCorrection;
 
 public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor {
@@ -45,7 +45,7 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 
 	private double sensorOffsetToWaterline;
 
-	private IGeoBoundingBox boundingBox;
+	private GeoBoundingBox boundingBox;
 	
 	private MeasuredPosition3D lastPosition;
 
@@ -74,7 +74,7 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 
 	@Override
 	public void processMeasurements(List<Measurement> results,
-			String messageType,long sourceTrackIdentifier, IGeoBoundingBox boundingBox) throws ProcessingException {
+			String messageType,long sourceTrackIdentifier, GeoBoundingBox boundingBox) throws ProcessingException {
 		try {
 			for (Measurement measurement : results) {
 				if(measurement instanceof CompositeMeasurement) {
@@ -92,7 +92,7 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 
 	}
 	
-	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, IGeoBoundingBox boundingBox) throws WriterException, ProcessingException {
+	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, GeoBoundingBox boundingBox) throws WriterException, ProcessingException {
 		if(lastSourceTrackIdentifier != sourceTrackIdentifier) {
 			sensorOffsetToWaterline = boatParameters.getSensorOffsetToWaterline(sourceTrackIdentifier, measurement.getSensorID());
 			this.boundingBox = boundingBox;
