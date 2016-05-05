@@ -7,7 +7,7 @@
     <relativePath>../net.sf.seesea.tycho.parent</relativePath>
   </parent>
   <groupId>net.sf.seesea</groupId>
-  <artifactId>net.sf.seesea.filter.api</artifactId>
+  <artifactId>net.sf.seesea.filter.simple</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project> 
