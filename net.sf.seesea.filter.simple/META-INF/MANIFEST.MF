@@ -10,7 +10,7 @@ Require-Bundle: net.sf.seesea.data.io;bundle-version="1.0.0",
  net.sf.seesea.waterlevel;bundle-version="1.0.0",
  net.sf.seesea.track.api;bundle-version="1.0.0",
  net.sf.seesea.filter.api;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16",
+ org.apache.log4j;bundle-version="1.2.0",
  net.sf.seesea.gauge,
  org.eclipse.osgi,
  org.apache.commons.math3;bundle-version="3.0.0"
