@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
 /**
@@ -19,9 +20,10 @@ public interface IMeasurmentProcessor {
 	 * @param messageType
 	 * @param sourceTrackIdentifier
 	 * @param boundingBox
+	 * @param boatParameters TODO
 	 * @throws ProcessingException
 	 */
-	void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier, GeoBoundingBox boundingBox) throws ProcessingException;
+	void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier, GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws ProcessingException;
 
 	/**
 	 * 
