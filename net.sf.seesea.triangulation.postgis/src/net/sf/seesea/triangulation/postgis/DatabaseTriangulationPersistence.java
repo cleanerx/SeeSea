@@ -52,8 +52,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import net.sf.seesea.contour.ContourLine;
-import net.sf.seesea.contour.IContourLine;
+import net.sf.seesea.contour.api.ContourLine;
+import net.sf.seesea.contour.api.IContourLine;
 import net.sf.seesea.data.io.PersistenceException;
 import net.sf.seesea.geometry.IEdge;
 import net.sf.seesea.geometry.IPoint;
