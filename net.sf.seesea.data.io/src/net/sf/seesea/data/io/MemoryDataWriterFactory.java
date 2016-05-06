@@ -14,7 +14,7 @@ public class MemoryDataWriterFactory implements IWriterFactory {
 	}
 	
 	@Override
-	public IDataWriter createWriter(Map<String, Object> parameters) {
+	public IDataWriter createWriter() {
 		MemoryDataWriter memoryDataWriter = new MemoryDataWriter();
 		createDatawriters.add(memoryDataWriter);
 		return memoryDataWriter;
