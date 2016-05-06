@@ -6,11 +6,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Locale;
 
 import net.sf.seesea.data.io.IDataWriter;
-import net.sf.seesea.data.io.WriterException;
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.geo.RelativeDepthMeasurementPosition;
@@ -179,12 +177,5 @@ public class NMEA0183Writer implements IDataWriter {
         //return the calculated checksum
         return chk_s;
     }
-
-	@Override
-	public void write(double lat, double lon, double depth, long sourceTrackIdentifier, double latVariance, double lonVariance, double depthVariance, Date time)
-			throws WriterException {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

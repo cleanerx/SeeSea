@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.data.io.postgis;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.service.component.annotations.Component;
@@ -45,7 +46,8 @@ public class PostGISWriterFactory implements IWriterFactory {
 	}
 
 	@Override
-	public IDataWriter createWriter(Map<String,Object> parameters) throws WriterException {
+	public IDataWriter createWriter() throws WriterException {
+		Map<String,Object> parameters = new HashMap<String, Object>();
 		String user = (String) parameters.get("user"); //$NON-NLS-1$
 		String password = (String) parameters.get("password"); //$NON-NLS-1$
 		String host = (String) parameters.get("host"); //$NON-NLS-1$
@@ -64,3 +66,4 @@ public class PostGISWriterFactory implements IWriterFactory {
 		return new PostInsertGISWriter(url, user, password,Arrays.asList(outputTables));
 	}
 }
+

@@ -120,13 +120,6 @@ public class PostInsertGISWriter implements IDataWriter {
 		} catch (SQLException e) {
 			throw new WriterException(e);
 		} finally {
-//			try {
-//			if(connection != null && !connection.isClosed()) {
-//					connection.close();
-//				}
-//			} catch (SQLException e) {
-////				e.printStackTrace();
-//			}
 		}
 		connection = null;
 	}
@@ -160,7 +153,7 @@ public class PostInsertGISWriter implements IDataWriter {
 		}
 	}
 
-	@Override
+//	@Override
 	public void write(double lat, double lon, double depth, long sourceTrackIdentifier, double latVariance, double lonVariance, double depthVariance, Date time) throws WriterException {
 		try {
 		for (int i = 0; i < insertStatements.size(); i++) {
