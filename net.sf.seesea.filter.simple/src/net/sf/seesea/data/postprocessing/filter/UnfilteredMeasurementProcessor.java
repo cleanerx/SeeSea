@@ -30,9 +30,12 @@ package net.sf.seesea.data.postprocessing.filter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.IWriterFactory;
@@ -49,45 +52,34 @@ import net.sf.seesea.waterlevel.IWaterLevelCorrection;
 
 public class UnfilteredMeasurementProcessor implements IMeasurmentProcessor {
 
-	// output information
-	private IWriterFactory writerFactory;
+	// internal states
 	
-	private final Map<String, Object> outputOptions;
-
 	private IDataWriter dataWriter = null;
 
 	private MeasurmentWindow measurementWindow2;
 
 	private long lastSourceTrackIdentifier;
 
-	private final IWaterLevelCorrection tideProvider;
+	private double sensorOffsetToWaterline = 0.0;
 
-	private final IBoatParameters boatParameters;
+	// references
+	
+	private AtomicReference<IWriterFactory> writerFactoryAR = new AtomicReference<IWriterFactory>();
 
-	private double sensorOffsetToWaterline;
-
-	private GeoBoundingBox boundingBox;
-
-	public UnfilteredMeasurementProcessor(IWriterFactory writerFactory, Map<String, Object> outputOptions, IWaterLevelCorrection waterLevelCorrection, IBoatParameters boatParameters) {
-		this.writerFactory = writerFactory;
-		this.outputOptions = outputOptions;
-		this.tideProvider = waterLevelCorrection;
-		this.boatParameters = boatParameters;
-	}
-
-
+	private AtomicReference<IWaterLevelCorrection> waterLevelCorrectionAR = new AtomicReference<IWaterLevelCorrection>();
+	
 	@Override
 	public void processMeasurements(List<Measurement> results,
-			String messageType,long sourceTrackIdentifier, GeoBoundingBox boundingBox) throws ProcessingException {
+			String messageType,long sourceTrackIdentifier, GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws ProcessingException {
 		try {
 			for (Measurement measurement : results) {
 				if(measurement instanceof CompositeMeasurement) {
 					CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
 					for (Measurement containedMeasurement : compositeMeasurement.getMeasurements()) {
-						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox);
+						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox, boatParameters);
 					}
 				} else {
-					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox);
+					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox, boatParameters);
 				}
 			}
 		} catch (WriterException e) {
@@ -96,11 +88,13 @@ public class UnfilteredMeasurementProcessor implements IMeasurmentProcessor {
 
 	}
 	
-	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, GeoBoundingBox boundingBox) throws WriterException, ProcessingException {
-		if(lastSourceTrackIdentifier != sourceTrackIdentifier) {
+	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws WriterException, ProcessingException {
+//		if(lastSourceTrackIdentifier != sourceTrackIdentifier) {
+		if(boatParameters != null) {
 			sensorOffsetToWaterline = boatParameters.getSensorOffsetToWaterline(sourceTrackIdentifier, measurement.getSensorID());
-			this.boundingBox = boundingBox;
 		}
+////			this.boundingBox = boundingBox;
+//		}
 		this.lastSourceTrackIdentifier = sourceTrackIdentifier;
 		if(measurement.isValid()) {
 				if(measurement instanceof MeasuredPosition3D) {
@@ -152,7 +146,7 @@ public class UnfilteredMeasurementProcessor implements IMeasurmentProcessor {
 
 	
 	private void createNewDataWriter() throws WriterException {
-		dataWriter = writerFactory.createWriter(outputOptions);
+		dataWriter = writerFactoryAR.get().createWriter();
 	}
 
 	/**
@@ -174,6 +168,7 @@ public class UnfilteredMeasurementProcessor implements IMeasurmentProcessor {
 				measurements.add(lastPosition);
 				depth = measurementWindow2.getDepths().get(measurementWindow2.getDepths().size() -1 );
 //				System.out.println(lastPosition.getLatitude().getDecimalDegree() + ":" + lastPosition.getLongitude().getDecimalDegree() + ":" + depth.getDepth());
+				IWaterLevelCorrection tideProvider = waterLevelCorrectionAR.get();
 				if(tideProvider != null) {
 					double tideHeight = tideProvider.getCorrection(lastPosition.getLatitude().getDecimalDegree(), lastPosition.getLongitude().getDecimalDegree(), lastPosition.getTime());
 					if(!Double.isNaN(tideHeight)) {
@@ -190,6 +185,24 @@ public class UnfilteredMeasurementProcessor implements IMeasurmentProcessor {
 				}
 //				System.out.println(latitude.getDecimalDegree() + ":" + longitude.getDecimalDegree() + ": " + depth);
 			}
+	}
+
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+	public void bindWriterFactory(IWriterFactory writerFactory) {
+		writerFactoryAR.set(writerFactory);
+	}
+
+	public void unbindWriterFactory(IWriterFactory writerFactory) {
+		writerFactoryAR.compareAndSet(writerFactory, null);
+	}
+
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+	public void bindWaterLevelCorrection(IWaterLevelCorrection waterLevelCorrection) {
+		waterLevelCorrectionAR.set(waterLevelCorrection);
+	}
+
+	public void unbindWaterLevelCorrection(IWaterLevelCorrection waterLevelCorrection) {
+		waterLevelCorrectionAR.compareAndSet(waterLevelCorrection, null);
 	}
 
 }

@@ -10,6 +10,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.IWriterFactory;
@@ -28,10 +31,7 @@ import net.sf.seesea.waterlevel.IWaterLevelCorrection;
 
 public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor {
 
-	// output information
-	private IWriterFactory writerFactory;
-	
-	private final Map<String, Object> outputOptions;
+//	private final Map<String, Object> outputOptions;
 
 	private IDataWriter dataWriter = null;
 
@@ -39,51 +39,52 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 
 	private long lastSourceTrackIdentifier;
 
-	private final IWaterLevelCorrection tideProvider;
-
 	private final IBoatParameters boatParameters;
 
 	private double sensorOffsetToWaterline;
 
-	private GeoBoundingBox boundingBox;
+//	private GeoBoundingBox boundingBox;
 	
 	private MeasuredPosition3D lastPosition;
 
-	private Object positionInvalid;
+//	private Object positionInvalid;
 
-	private boolean positionValid;
+//	private boolean positionValid;
 
 	private List<Depth> lastDepths;
 
 	private DescriptiveStatistics descStats;
 
-	private DecimalFormat decimalFormat;
+//	private DecimalFormat decimalFormat;
+//
+//	private List<Double> diffs;
 
-	private List<Double> diffs;
+	private AtomicReference<IWriterFactory> writerFactoryAR = new AtomicReference<IWriterFactory>();
 
-	public ManualFilteredMeasurementProcessor(IWriterFactory writerFactory, Map<String, Object> outputOptions, IWaterLevelCorrection waterLevelCorrection, IBoatParameters boatParameters) {
-		this.writerFactory = writerFactory;
-		this.outputOptions = outputOptions;
-		this.tideProvider = waterLevelCorrection;
+	private AtomicReference<IWaterLevelCorrection> waterLevelCorrectionAR = new AtomicReference<IWaterLevelCorrection>();
+
+	public ManualFilteredMeasurementProcessor(IBoatParameters boatParameters) {
+//		this.writerFactory = writerFactory;
+//		this.outputOptions = outputOptions;
 		this.boatParameters = boatParameters;
 		lastDepths = new ArrayList<Depth>();
-		decimalFormat = new DecimalFormat("###.##");
-		diffs = new ArrayList<Double>();
+//		decimalFormat = new DecimalFormat("###.##");
+//		diffs = new ArrayList<Double>();
 	}
 
 
 	@Override
 	public void processMeasurements(List<Measurement> results,
-			String messageType,long sourceTrackIdentifier, GeoBoundingBox boundingBox) throws ProcessingException {
+			String messageType,long sourceTrackIdentifier, GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws ProcessingException {
 		try {
 			for (Measurement measurement : results) {
 				if(measurement instanceof CompositeMeasurement) {
 					CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
 					for (Measurement containedMeasurement : compositeMeasurement.getMeasurements()) {
-						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox);
+						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox, boatParameters);
 					}
 				} else {
-					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox);
+					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox, boatParameters);
 				}
 			}
 		} catch (WriterException e) {
@@ -92,13 +93,13 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 
 	}
 	
-	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, GeoBoundingBox boundingBox) throws WriterException, ProcessingException {
+	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws WriterException, ProcessingException {
 		if(lastSourceTrackIdentifier != sourceTrackIdentifier) {
 			sensorOffsetToWaterline = boatParameters.getSensorOffsetToWaterline(sourceTrackIdentifier, measurement.getSensorID());
-			this.boundingBox = boundingBox;
+//			this.boundingBox = boundingBox;
 			lastPosition = null;
 			descStats = new DescriptiveStatistics(100);
-			diffs = new ArrayList<Double>();
+//			diffs = new ArrayList<Double>();
 		}
 		this.lastSourceTrackIdentifier = sourceTrackIdentifier;
 		if(measurement.isValid()) {
@@ -130,7 +131,7 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 							if(measurement.getTime() != null) {
 								lastPosition = (MeasuredPosition3D) measurement;
 							}
-							positionValid = true;
+//							positionValid = true;
 							
 						} else if(measurementWindow2 == null) {
 							finish();
@@ -211,7 +212,7 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 
 	
 	private void createNewDataWriter() throws WriterException {
-		dataWriter = writerFactory.createWriter(outputOptions);
+		dataWriter = writerFactoryAR.get().createWriter();
 	}
 
 	/**
@@ -232,7 +233,7 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 				List<Measurement> measurements = new ArrayList<Measurement>(2);
 				measurements.add(lastPosition);
 				depth = measurementWindow2.getDepths().get(measurementWindow2.getDepths().size() -1 );
-//				System.out.println(lastPosition.getLatitude().getDecimalDegree() + ":" + lastPosition.getLongitude().getDecimalDegree() + ":" + depth.getDepth());
+				IWaterLevelCorrection tideProvider = waterLevelCorrectionAR.get();
 				if(tideProvider != null) {
 					double tideHeight = tideProvider.getCorrection(lastPosition.getLatitude().getDecimalDegree(), lastPosition.getLongitude().getDecimalDegree(), lastPosition.getTime());
 					if(!Double.isNaN(tideHeight)) {
@@ -247,7 +248,6 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 					measurements.add(depth);
 					dataWriter.write(measurements, true, lastSourceTrackIdentifier);
 				}
-//				System.out.println(latitude.getDecimalDegree() + ":" + longitude.getDecimalDegree() + ": " + depth);
 			}
 	}
 	
@@ -288,6 +288,23 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 		double grubbs = maxDev / stddev;
 //		System.out.println("mean/stddev/maxDev/grubbs: " + mean + " - " + stddev + " - " + maxDev + " - " + grubbs);
 		return grubbs;
+	}
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+	public void bindWriterFactory(IWriterFactory writerFactory) {
+		writerFactoryAR.set(writerFactory);
+	}
+
+	public void unbindWriterFactory(IWriterFactory writerFactory) {
+		writerFactoryAR.compareAndSet(writerFactory, null);
+	}
+
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+	public void bindWaterLevelCorrection(IWaterLevelCorrection waterLevelCorrection) {
+		waterLevelCorrectionAR.set(waterLevelCorrection);
+	}
+
+	public void unbindWaterLevelCorrection(IWaterLevelCorrection waterLevelCorrection) {
+		waterLevelCorrectionAR.compareAndSet(waterLevelCorrection, null);
 	}
 
 }

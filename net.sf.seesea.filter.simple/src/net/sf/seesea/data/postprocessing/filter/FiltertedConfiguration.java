@@ -39,14 +39,15 @@ public class FiltertedConfiguration implements IFilterConfiguration {
 	@Override
 	public IMeasurmentProcessor createFilter(long updateRate, int positionPrecision) {
 		
+//		ManualFilteredMeasurementProcessor smoother = new ManualFilteredMeasurementProcessor();
 		// let noise depend on the ship type
 //		NoiseKalmanSetup noiseKalmanSetup = getNoiseSetup(updateRate, positionPrecision);
-		ManualFilteredMeasurementProcessor smoother = new ManualFilteredMeasurementProcessor(writerFactory, properties, waterLevelCorrection, boatParameters);
+//		ManualFilteredMeasurementProcessor smoother = new ManualFilteredMeasurementProcessor(writerFactory, properties, waterLevelCorrection, boatParameters);
 //		StaticRateFilteringNoTimeBase smoother = new StaticRateFilteringNoTimeBase(writerFactory, outputOptions, noiseKalmanSetup, tideProvider);
 //		StaticRateFiltering smoother = new StaticRateFiltering(writerFactory, outputOptions, updateRate, timeout, noiseKalmanSetup, tideProvider);
 
 		// TODO Auto-generated method stub
-		return smoother;
+		return null;
 	}
 
 	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)

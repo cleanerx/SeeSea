@@ -74,11 +74,11 @@ public class FilterController implements IFilterController {
 
 	private List<Map<String, Object>> filterProperties;
 
-	private IFileTypeProcessingFactory processingFactory;
-
 	private BundleContext context;
 	
 	private AtomicReference<IFileTypeProcessingFactory> fileTypeProcessingFactoryAR = new AtomicReference<IFileTypeProcessingFactory>();
+
+	private AtomicReference<ConfigurationAdmin> configurationAdminAR = new AtomicReference<ConfigurationAdmin>();
 
 	public void setFilterProperties(List<Map<String, Object>> filterProperties) {
 		this.filterProperties = filterProperties;
@@ -105,6 +105,8 @@ public class FilterController implements IFilterController {
 	 */
 	public void process(Collection<ITrackFile> orderedFiles, boolean executeSensorDistribution) throws FilterException {
 
+		IFileTypeProcessingFactory processingFactory = fileTypeProcessingFactoryAR.get();
+		Logger logger = Logger.getLogger(getClass());
 		// when the file type changes, consider it a new track
 		String lastFileType = null;
 		IStatisticsPreprocessor preprocessor = null;
@@ -127,7 +129,7 @@ public class FilterController implements IFilterController {
 							preprocessor.processFiles(trackFile);
 						} catch (ProcessingException e) {
 							// must be correct at this point since the preprocessor passed it with depth points
-							Logger.getLogger(getClass()).error("Partially correct data for for track id " + trackFile.getTrackId());
+							logger.error("Partially correct data for for track id " + trackFile.getTrackId());
 						}
 					}
 					trackFiles.add(trackFile);
@@ -139,7 +141,7 @@ public class FilterController implements IFilterController {
 					trackFiles.add(trackFile);
 				}
 			} catch (Exception e) {
-				Logger.getLogger(getClass()).error("Failed to process file", e); //$NON-NLS-1$
+				logger.error("Failed to process file", e); //$NON-NLS-1$
 			}
 		}
 		try {
@@ -166,6 +168,7 @@ public class FilterController implements IFilterController {
 	 * @throws ProcessingException
 	 */
 	public void runFilters(List<ITrackFile> orderedFiles, Set<SensorDescriptionUpdateRate<Measurement>> bestSensors) throws IOException, ProcessingException {
+		ConfigurationAdmin configurationAdmin = configurationAdminAR.get();
 		logBestSensorChoice(bestSensors);
 //		System.out.println("Wrinting Filter data to " + format);
 		
@@ -201,8 +204,7 @@ public class FilterController implements IFilterController {
 
 				// create the kind of filter to run
 				String filterType = (String) filterProperty.get("type"); //$NON-NLS-1$
-				ServiceReference<ConfigurationAdmin> caServiceReference = context.getServiceReference(ConfigurationAdmin.class);
-				ConfigurationAdmin configurationAdmin = context.getService(caServiceReference);
+				
 				Configuration[] configurationsPID = configurationAdmin.listConfigurations(MessageFormat.format("(service.factoryPid={0})", filterType) ); //$NON-NLS-1$
 				if(configurationsPID != null) {
 					for (Configuration configuration : configurationsPID) {
@@ -294,6 +296,16 @@ public class FilterController implements IFilterController {
 	public void unbindFileTypeProcessingFactory(IFileTypeProcessingFactory fileTypeProcessingFactory) {
 		fileTypeProcessingFactoryAR.compareAndSet(null, fileTypeProcessingFactory);
 	}
+	
+	@Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
+	public void bindConfigAdmin(ConfigurationAdmin configurationAdmin) {
+		configurationAdminAR.set(configurationAdmin);
+	}
+
+	public void unbindConfigAdmin(ConfigurationAdmin configurationAdmin) {
+		configurationAdminAR.compareAndSet(configurationAdmin, null);
+	}
+	
 
 	public long getTimeout() {
 		return timeout;
