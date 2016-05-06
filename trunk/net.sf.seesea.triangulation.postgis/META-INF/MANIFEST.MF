@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.log4j;bundle-version="[1.2.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/net.sf.seesea.triangulation.postgis.DatabaseTriangulationPersistence.xml
-Import-Package: net.sf.seesea.contour,
+Import-Package: net.sf.seesea.contour.api,
  net.sf.seesea.data.io.postgis,
  net.sf.seesea.geometry,
  net.sf.seesea.geometry.impl,
