@@ -47,6 +47,9 @@ public class FilterEngine implements IFilterEngine {
 	@Override
 	public void filterTracks() {
 		ITrackPersistence trackPersistence = trackPersistenceAR.get();
+		ITrackClustering trackClustering = trackClusteringAR.get();
+		IFilterController filterController = filterControllerAR.get();
+		IGaugeValueUpdater gaugeValueUpdater = gaugeValueUpdaterAR.get();
 		// cluster the tracks per user
 		// Set<String> whitelistUsers = new HashSet<String>();
 		// Set<String> blacklistUsers = new HashSet<String>();
@@ -90,14 +93,16 @@ public class FilterEngine implements IFilterEngine {
 					try {
 						if (!clusterOfTrackFiles.isEmpty()) {
 							List<ITrackFile> trackFilesCluster = new ArrayList<ITrackFile>(clusterOfTrackFiles);
-							try {
-								gaugeValueUpdater.updateGaugeValues4Track(trackFilesCluster);
-							} catch (GaugeUpdateException e) {
-								Logger.getLogger(getClass()).error("Failed to update gauge", e);
+							if(gaugeValueUpdater != null) {
+								try {
+									gaugeValueUpdater.updateGaugeValues4Track(trackFilesCluster);
+								} catch (GaugeUpdateException e) {
+									Logger.getLogger(getClass()).error("Failed to update gauge", e);
+								}
 							}
 							filterController.setTimeout(60000);
 							filterController.setFilterProperties(filterProperties);
-							filterController.process(clusterOfTrackFiles, true);
+							filterController.process(trackFilesCluster, true);
 							for (ITrackFile iTrackFile : trackFilesCluster) {
 								iTrackFile.setUploadState(ProcessingState.FILE_PROCESSED);
 							}
@@ -120,12 +125,6 @@ public class FilterEngine implements IFilterEngine {
 		}
 
 	}
-
-	private ITrackClustering trackClustering;
-
-	private IFilterController filterController;
-
-	private IGaugeValueUpdater gaugeValueUpdater;
 
 	private boolean preprocessRun;
 

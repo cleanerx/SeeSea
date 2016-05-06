@@ -47,6 +47,7 @@ import net.sf.seesea.model.core.physx.Heading;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.core.physx.Speed;
 import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.SensorDescription;
 import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
@@ -90,13 +91,13 @@ public class DepthPositionMeasurementStatisticsProcessor<T extends Measurement> 
 	 */
 	public void processMeasurements(List<Measurement> results,
 			String messageType, long sourceTrackIdentifier,
-			GeoBoundingBox boundingBox) {
+			GeoBoundingBox boundingBox, IBoatParameters boatParameters) {
 		// update rate for depth, position, velocity
 		for (Measurement measurement : results) {
 			if (measurement instanceof CompositeMeasurement) {
 				processMeasurements(
 						((CompositeMeasurement) measurement).getMeasurements(),
-						messageType, sourceTrackIdentifier, boundingBox);
+						messageType, sourceTrackIdentifier, boundingBox, boatParameters);
 			} else if (measurement instanceof MeasuredPosition3D
 					&& (measurement.getTime() != null || !trackFileProcessor.hasTimedMeasurments()) && measurement.isValid()) {
 				MeasuredPosition3D measuredPosition3D = (MeasuredPosition3D) measurement;

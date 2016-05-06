@@ -68,12 +68,12 @@ public class UnfiltertedConfiguration implements IFilterConfiguration {
 		
 		// let noise depend on the ship type
 //		NoiseKalmanSetup noiseKalmanSetup = getNoiseSetup(updateRate, positionPrecision);
-		UnfilteredMeasurementProcessor smoother = new UnfilteredMeasurementProcessor(writerFactory, properties, waterLevelCorrection, boatParameters);
+//		UnfilteredMeasurementProcessor smoother = new UnfilteredMeasurementProcessor(writerFactory, properties, waterLevelCorrection, boatParameters);
 //		StaticRateFilteringNoTimeBase smoother = new StaticRateFilteringNoTimeBase(writerFactory, outputOptions, noiseKalmanSetup, tideProvider);
 //		StaticRateFiltering smoother = new StaticRateFiltering(writerFactory, outputOptions, updateRate, timeout, noiseKalmanSetup, tideProvider);
 
 		// TODO Auto-generated method stub
-		return smoother;
+		return null;
 	}
 
 	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)

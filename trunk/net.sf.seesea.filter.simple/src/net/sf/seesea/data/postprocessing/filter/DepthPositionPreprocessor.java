@@ -43,6 +43,7 @@ import net.sf.seesea.model.core.physx.PhysxFactory;
 //import net.sf.seesea.services.navigation.GeoBoundingBox;
 //import net.sf.seesea.services.navigation.IGeoBoundingBox;
 import net.sf.seesea.track.api.ITrackFileProcessor;
+import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
@@ -103,10 +104,10 @@ public class DepthPositionPreprocessor implements IDepthPositionPreProcessor {
 	}
 
 	public void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier,
-			GeoBoundingBox boundingBox) {
+			GeoBoundingBox boundingBox, IBoatParameters boatParameters) {
 		for (Measurement measurement : results) {
 			if(measurement instanceof CompositeMeasurement) {
-				processMeasurements(((CompositeMeasurement) measurement).getMeasurements(), messageType, sourceTrackIdentifier, boundingBox);
+				processMeasurements(((CompositeMeasurement) measurement).getMeasurements(), messageType, sourceTrackIdentifier, boundingBox, boatParameters);
 				
 			} else if (measurement instanceof MeasuredPosition3D && measurement.isValid()) {
 				// && (measurement.getTime() != null || !trackFileProcessor.hasTimedMeasurments())  &&
