@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Database Persistence Test
+Bundle-SymbolicName: net.sf.seesea.track.persistence.database.int.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: SeeSea
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Fragment-Host: net.sf.seesea.track.persistence.database;bundle-version="1.0.0"
+Require-Bundle: org.hsqldb.hsqldb;bundle-version="2.3.3",
+ org.junit,
+ org.eclipse.equinox.registry

@@ -21,7 +21,8 @@
   	
  	<module>../net.sf.seesea.track.api</module>
  	<module>../net.sf.seesea.track.model</module>
-  	
+  	<module>../net.sf.seesea.track.persistence.database</module>
+  	<module>../net.sf.seesea.track.persistence.database.int.test</module>
   	<!--  -->
   	<module>../net.sf.seesea.content.api</module>
   	<module>../net.sf.seesea.content.tika</module>

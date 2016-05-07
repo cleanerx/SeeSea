@@ -11,3 +11,4 @@ Import-Package: org.osgi.framework;version="1.8.0",
  org.osgi.service.component.annotations
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/net.sf.seesea.track.persistence.database.DatabaseTrackPersistence.xml
+Bundle-Activator: net.sf.seesea.track.persistence.database.DatabaseActivator
