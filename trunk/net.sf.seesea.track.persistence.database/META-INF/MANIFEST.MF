@@ -4,7 +4,7 @@ Bundle-Name: Database Track Persistence
 Bundle-SymbolicName: net.sf.seesea.track.persistence.database
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: net.sf.seesea.track.api;bundle-version="1.0.0",
- org.apache.log4j;bundle-version="1.2.16",
+ org.apache.log4j;bundle-version="1.2.0",
  net.sf.seesea.track.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.osgi.framework;version="1.8.0",
