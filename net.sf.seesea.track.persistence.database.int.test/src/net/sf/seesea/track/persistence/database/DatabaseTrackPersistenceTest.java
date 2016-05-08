@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,11 @@ import org.eclipse.core.runtime.FileLocator;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.junit.Test;
 
+import net.sf.seesea.track.api.data.CompressionType;
 import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.data.ProcessingState;
 import net.sf.seesea.track.api.exception.TrackPerssitenceException;
+import net.sf.seesea.track.model.SimpleTrackFile;
 
 public class DatabaseTrackPersistenceTest {
 
@@ -190,6 +194,106 @@ public class DatabaseTrackPersistenceTest {
 					ResultSet set = statement.executeQuery()) {
 				boolean next = set.next();
 				assertFalse("Container track must have been deleted", next);
+			}
+		}
+	}
+	
+	@Test
+	public void testStoreStates() throws TrackPerssitenceException, IOException, SQLException {
+		JDBCDataSource uploadDataSource = new JDBCDataSource();
+		uploadDataSource.setDatabase("jdbc:hsqldb:" + "uploadUnitTest");
+
+		URL dumpURL = DatabaseActivator.getContext().getBundle().findEntries("res", "dump.sql", false)
+				.nextElement();
+		try (Connection c = uploadDataSource.getConnection()) {
+			try (Statement statement = c.createStatement()) {
+				statement.execute("DROP SCHEMA PUBLIC CASCADE");
+			}
+
+			URL resolve = FileLocator.resolve(dumpURL);
+			File file = new File(resolve.getFile());
+			FileReader fileReader = new FileReader(file);
+			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+			scriptRunner.runScript(fileReader);
+
+			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
+			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("basedir", file.getParentFile().getPath());
+			databaseTrackPersistence.activate(properties);
+
+			List<ITrackFile> files = new ArrayList<ITrackFile>();
+			SimpleTrackFile simpleTrackFile = new SimpleTrackFile();
+			simpleTrackFile.setTrackId(1L);
+			simpleTrackFile.setUploadState(ProcessingState.PREPROCESSED);
+			simpleTrackFile.setCompression(CompressionType.ZIP);
+			simpleTrackFile.setFileType("application/myOwnFormat");
+			files.add(simpleTrackFile);
+			databaseTrackPersistence.storePreprocessingStates(files);
+			
+			try (PreparedStatement statement = c.prepareStatement("SELECT upload_state, filetype, compression FROM user_tracks WHERE track_id = 1");
+					ResultSet set = statement.executeQuery()) {
+				set.next();
+				int uploadState = set.getInt(1);
+				String fileType = set.getString(2);
+				String compression = set.getString(3);
+				assertEquals(ProcessingState.PREPROCESSED.ordinal(), uploadState);
+				assertEquals("application/myOwnFormat", fileType);
+				assertEquals(CompressionType.ZIP.getMimeType(), compression);
+			}
+		}
+	}
+	
+//	@Test
+	public void testCompositeStoreStates() throws TrackPerssitenceException, IOException, SQLException {
+		JDBCDataSource uploadDataSource = new JDBCDataSource();
+		uploadDataSource.setDatabase("jdbc:hsqldb:" + "uploadUnitTest");
+
+		URL dumpURL = DatabaseActivator.getContext().getBundle().findEntries("res", "dump.sql", false)
+				.nextElement();
+		try (Connection c = uploadDataSource.getConnection()) {
+			try (Statement statement = c.createStatement()) {
+				statement.execute("DROP SCHEMA PUBLIC CASCADE");
+			}
+
+			URL resolve = FileLocator.resolve(dumpURL);
+			File file = new File(resolve.getFile());
+			FileReader fileReader = new FileReader(file);
+			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+			scriptRunner.runScript(fileReader);
+
+			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
+			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("basedir", file.getParentFile().getPath());
+			databaseTrackPersistence.activate(properties);
+
+			List<ITrackFile> files = new ArrayList<ITrackFile>();
+			SimpleTrackFile simpleTrackFile = new SimpleTrackFile();
+			simpleTrackFile.setTrackId(1L);
+			simpleTrackFile.setUploadState(ProcessingState.PREPROCESSED);
+			simpleTrackFile.setCompression(CompressionType.ZIP);
+			simpleTrackFile.setFileType(null);
+			files.add(simpleTrackFile);
+			
+			SimpleTrackFile simpleTrackFileContained = new SimpleTrackFile();
+			simpleTrackFileContained.setTrackId(2L);
+			simpleTrackFileContained.setUploadState(ProcessingState.PREPROCESSED);
+			simpleTrackFileContained.setCompression(CompressionType.NONE);
+			simpleTrackFileContained.setFileType("application/myOwnFormat");
+			simpleTrackFile.getTrackFiles().add(simpleTrackFileContained);
+			
+			databaseTrackPersistence.storePreprocessingStates(files);
+			
+			try (PreparedStatement statement = c.prepareStatement("SELECT upload_state, filetype, compression FROM user_tracks WHERE track_id = 1");
+					ResultSet set = statement.executeQuery()) {
+				set.next();
+				int uploadState = set.getInt(1);
+				String fileType = set.getString(2);
+				String compression = set.getString(3);
+				assertEquals(ProcessingState.PREPROCESSED.ordinal(), uploadState);
+				assertEquals("application/myOwnFormat", fileType);
+				assertEquals(CompressionType.ZIP.getMimeType(), compression);
 			}
 		}
 	}

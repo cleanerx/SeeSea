@@ -4,7 +4,6 @@
     <service>
         <provide interface="net.sf.seesea.track.api.ITrackPersistence"/>
     </service>
-    <reference name="StreamProcessor" interface="net.sf.seesea.track.api.IStreamProcessor" cardinality="0..n" policy="dynamic" bind="bindStreamProcessor" unbind="unbindStreamProcessor"/>
     <reference name="DepthConnection" interface="javax.sql.DataSource" cardinality="1..1" policy="dynamic" target="(db=userData)" bind="bindDepthConnection" unbind="unbindDepthConnection"/>
     <reference name="OutputConnection" interface="javax.sql.DataSource" cardinality="0..n" policy="dynamic" target="(db=filters)" bind="bindOutputConnection" unbind="unbindOutputConnection"/>
     <implementation class="net.sf.seesea.track.persistence.database.DatabaseTrackPersistence"/>
