@@ -50,4 +50,5 @@ CREATE TABLE user_profiles (
 
 INSERT INTO user_profiles(user_name)  VALUES ( 'test@test.de');
 
-INSERT INTO user_tracks(track_id,file_ref,upload_state,vesselconfigid,license,uploaddate, user_name)  VALUES ('1', 'track1.dat', '1', '1', '1', NULL, 'test@test.de');
+INSERT INTO user_tracks(track_id,file_ref,upload_state,vesselconfigid,license,uploaddate, user_name)  VALUES ('1', 'track1.dat', '8', '1', '1', NULL, 'test@test.de');
+INSERT INTO user_tracks(track_id,file_ref,upload_state,vesselconfigid,license,uploaddate, user_name, containertrack)  VALUES ('2', 'track2.dat', '3', '1', '1', NULL, 'test@test.de', 1);
