@@ -33,7 +33,7 @@ public interface ITrackPersistence {
 	 * @return a map of users to track files that are considered for data processing
 	 * @throws TrackPerssitenceException if it unable to retrieve that data due to an IO error or internal problem
 	 */
-	Map<String, List<ITrackFile>> getUser2PostprocessTrackCluster();
+	Map<String, List<ITrackFile>> getUser2PostprocessTrackCluster() throws TrackPerssitenceException;
 
 
 	/**
