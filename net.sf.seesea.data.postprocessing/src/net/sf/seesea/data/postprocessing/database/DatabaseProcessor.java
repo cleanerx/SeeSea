@@ -589,30 +589,7 @@ public class DatabaseProcessor {
 
 
 
-	private static String encryptUser(String password) {
-		String sha1 = ""; //$NON-NLS-1$
-		try {
-			MessageDigest crypt = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
-			crypt.reset();
-			crypt.update(password.getBytes("UTF-8")); //$NON-NLS-1$
-			sha1 = byteToHex(crypt.digest());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return sha1;
-	}
 
-	private static String byteToHex(final byte[] hash) {
-		Formatter formatter = new Formatter();
-		for (byte b : hash) {
-			formatter.format("%02x", b); //$NON-NLS-1$
-		}
-		String result = formatter.toString();
-		formatter.close();
-		return result;
-	}
 
 	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy =ReferencePolicy.DYNAMIC, target = "(db=database)")
 	public synchronized void bindDepthConnection(Connection connection) {
