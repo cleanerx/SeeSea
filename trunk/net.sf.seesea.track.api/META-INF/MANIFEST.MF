@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.sf.seesea.track.api
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: SeeSea
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: net.sf.seesea.model.core;bundle-version="1.0.0"
 Export-Package: net.sf.seesea.track.api;version="1.0.0";uses:="net.sf.seesea.track.api.data,net.sf.seesea.model.core.geo",
- net.sf.seesea.track.api.data;version="1.0.0",
+ net.sf.seesea.track.api.data;version="1.0.0";uses:="net.sf.seesea.model.core.geo",
  net.sf.seesea.track.api.exception;version="1.0.0"
+Require-Bundle: net.sf.seesea.model.core;bundle-version="1.0.0"
