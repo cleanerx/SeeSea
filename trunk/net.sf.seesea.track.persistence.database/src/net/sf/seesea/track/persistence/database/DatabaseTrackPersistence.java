@@ -603,7 +603,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 
 	// bind database outputs based on filters
 
-	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "(db=filters)")
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "(db=depth)")
 	public synchronized void bindOutputConnection(DataSource outputDataSource) {
 		this.outputDataSource = outputDataSource;
 	}
