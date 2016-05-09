@@ -2,6 +2,11 @@ package net.sf.seesea.content.api;
 
 public class ContentDetectionException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5025843276182544719L;
+
 	public ContentDetectionException() {
 		// 
 	}
