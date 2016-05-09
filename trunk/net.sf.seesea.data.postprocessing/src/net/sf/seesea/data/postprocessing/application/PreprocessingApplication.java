@@ -33,26 +33,22 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.sql.DataSource;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
-import net.sf.seesea.content.impl.ContentDetector;
-import net.sf.seesea.data.io.postgis.PostgresConnectionFactory;
-import net.sf.seesea.data.postprocessing.DataPostprocessingActivator;
-import net.sf.seesea.data.postprocessing.database.DatabaseProcessor;
-import net.sf.seesea.data.postprocessing.database.IUploadedData2Contours;
-import net.sf.seesea.data.postprocessing.database.UploadedData2Contours;
-import net.sf.seesea.track.api.exception.NMEAProcessingException;
-
-import org.apache.log4j.Logger;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -60,7 +56,12 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.util.tracker.ServiceTracker;
+
+import com.sun.xml.internal.stream.events.XMLEventAllocatorImpl;
+
+import net.sf.seesea.data.io.postgis.PostgresConnectionFactory;
+import net.sf.seesea.data.postprocessing.DataPostprocessingActivator;
+import net.sf.seesea.data.postprocessing.database.IUploadedData2Contours;
 
 /**
  * This class controls all aspects of the application's execution
@@ -74,7 +75,11 @@ public class PreprocessingApplication implements IApplication {
 	 * IApplicationContext)
 	 */
 	@Override
-	public Object start(IApplicationContext context) throws InvalidSyntaxException, SQLException {
+	public Object start(IApplicationContext context) throws InvalidSyntaxException, SQLException, XMLStreamException {
+
+		ServiceReference<ConfigurationAdmin> serviceReference = DataPostprocessingActivator.getContext()
+				.getServiceReference(ConfigurationAdmin.class);
+		ConfigurationAdmin configurationAdmin = DataPostprocessingActivator.getContext().getService(serviceReference);
 
 		Map arguments = context.getArguments();
 		String[] args = (String[]) arguments.get("application.args"); //$NON-NLS-1$
@@ -83,59 +88,111 @@ public class PreprocessingApplication implements IApplication {
 		if (args.length > 0) {
 			configFile = args[0];
 		} else {
-			configFile = "config.cfg"; //$NON-NLS-1$
+			configFile = "config.xml"; //$NON-NLS-1$
 		}
 		try {
 			File file = new File(configFile);
 			System.out.println(file.getAbsolutePath());
-			properties.load(new FileInputStream(configFile));
-			properties.putAll(arguments);
 
-			ServiceReference<ConfigurationAdmin> serviceReference = DataPostprocessingActivator.getContext()
-					.getServiceReference(ConfigurationAdmin.class);
-			ConfigurationAdmin configurationAdmin = DataPostprocessingActivator.getContext()
-					.getService(serviceReference);
+			XMLInputFactory xmlif = XMLInputFactory.newInstance();
+			XMLEventReader xmlr = xmlif.createXMLEventReader(configFile, new FileInputStream(file));
+			xmlif.setEventAllocator(new XMLEventAllocatorImpl());
 
-				// configure content detector
-				Configuration configuration = configurationAdmin
-						.getConfiguration("net.sf.seesea.content.impl.ContentDetector");
-				Dictionary<String, Object> contentDetector = new Hashtable<String, Object>();
-				contentDetector.put("basedir", properties.get("basedir"));
-				contentDetector.put("fullprocess", properties.get("fullprocess"));
-				if(properties.get("detectContent").equals("true")) {
-				configuration.update(contentDetector);
-				} else {
-					configuration.delete();
+			XMLConfig xmlConfig = null;
+			boolean singleton = true;
+
+			while (xmlr.hasNext()) {
+				XMLEvent event = xmlr.nextEvent();
+				// Get all "Book" elements as XMLEvent object
+				if (event.isStartElement()) {
+					StartElement startElement = event.asStartElement();
+					if (startElement.getName().getLocalPart() == ("singleton")) {
+						singleton = true;
+					}
+					if (startElement.getName().getLocalPart() == ("multiton")) {
+						singleton = false;
+					}
+					if (startElement.getName().getLocalPart() == ("config")) {
+						xmlConfig = new XMLConfig();
+						for (Iterator iterator = startElement.getAttributes(); iterator.hasNext();) {
+							Attribute attribute = (Attribute) iterator.next();
+							if("persistentIdentifier".equals(attribute.getName().getLocalPart())) {
+								xmlConfig.setConfigID(attribute.getValue());
+							}
+							
+						}
+					}
+					if (startElement.getName().getLocalPart() == ("property")) {
+						for (Iterator iterator = startElement.getAttributes(); iterator.hasNext();) {
+							Attribute attribute = (Attribute) iterator.next();
+							if("key".equals(attribute.getName().getLocalPart())) {
+								xmlConfig.getProperties().put(attribute.getValue(), xmlr.nextEvent().asCharacters().getData());
+							}
+							
+						}
+					}
+
+				} else if(event.isEndElement()) {
+					EndElement endElement = event.asEndElement();
+					if(endElement.getName().getLocalPart() == "config") {
+						if(singleton) {
+							Configuration configuration = configurationAdmin.getConfiguration(xmlConfig.getConfigID());
+							configuration.update(xmlConfig.getProperties());
+						}
+					}
 				}
+			}
 
-//			DataSource s;
-//			s.
+//			properties.load(new FileInputStream(configFile));
+//			properties.putAll(arguments);
+
+			// ServiceReference<ConfigurationAdmin> serviceReference =
+			// DataPostprocessingActivator.getContext()
+			// .getServiceReference(ConfigurationAdmin.class);
+			// ConfigurationAdmin configurationAdmin =
+			// DataPostprocessingActivator.getContext()
+			// .getService(serviceReference);
+
+			// configure content detector
+//			Configuration configuration = configurationAdmin
+//					.getConfiguration("net.sf.seesea.content.impl.ContentDetector");
+//			Dictionary<String, Object> contentDetector = new Hashtable<String, Object>();
+//			contentDetector.put("basedir", properties.get("basedir"));
+//			contentDetector.put("fullprocess", properties.get("fullprocess"));
+//			if (properties.get("detectContent").equals("true")) {
+//				configuration.update(contentDetector);
+//			} else {
+//				configuration.delete();
+//			}
+
+			// DataSource s;
+			// s.
 			// configure track persistence
-			
-			configureDatabaseConnections(properties);
-			
-			Configuration configurationDatabase = configurationAdmin
-					.getConfiguration("net.sf.seesea.track.persistence.database.DatabaseTrackPersistence");
-			Dictionary<String, Object> configDatabase = new Hashtable<String, Object>();
-			configDatabase.put("basedir", properties.get("basedir"));
-			configDatabase.put("fullprocess", properties.get("fullprocess"));
-			configurationDatabase.update(configDatabase);
 
-				Configuration configurationContours = configurationAdmin
-						.getConfiguration("net.sf.seesea.contour.triangulation.TriangulationBasedContourLineGeneration");
-				Dictionary<String, Object> configContours = new Hashtable<String, Object>();
-				if(properties.get("detectContent").equals("true")) {
-					configurationContours.update(configContours);
-				} else {
-					configurationContours.delete();
-				}
-			
-			
-			ServiceReference<IUploadedData2Contours> serviceReference2 = DataPostprocessingActivator.getContext()
-					.getServiceReference(IUploadedData2Contours.class);
-			IUploadedData2Contours uploadedData2Contours = DataPostprocessingActivator.getContext().getService(serviceReference2);
-			uploadedData2Contours.processData();
-			
+//			configureDatabaseConnections(properties);
+//
+//			Configuration configurationDatabase = configurationAdmin
+//					.getConfiguration("net.sf.seesea.track.persistence.database.DatabaseTrackPersistence");
+//			Dictionary<String, Object> configDatabase = new Hashtable<String, Object>();
+//			configDatabase.put("basedir", properties.get("basedir"));
+//			configDatabase.put("fullprocess", properties.get("fullprocess"));
+//			configurationDatabase.update(configDatabase);
+//
+//			Configuration configurationContours = configurationAdmin
+//					.getConfiguration("net.sf.seesea.contour.triangulation.TriangulationBasedContourLineGeneration");
+//			Dictionary<String, Object> configContours = new Hashtable<String, Object>();
+//			if (properties.get("detectContent").equals("true")) {
+//				configurationContours.update(configContours);
+//			} else {
+//				configurationContours.delete();
+//			}
+//
+//			ServiceReference<IUploadedData2Contours> serviceReference2 = DataPostprocessingActivator.getContext()
+//					.getServiceReference(IUploadedData2Contours.class);
+//			IUploadedData2Contours uploadedData2Contours = DataPostprocessingActivator.getContext()
+//					.getService(serviceReference2);
+//			uploadedData2Contours.processData();
+//
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -165,23 +222,23 @@ public class PreprocessingApplication implements IApplication {
 		// Logger.getLogger(getClass()).error("Failed to start processing", e1);
 		// } catch (NMEAProcessingException e2) {
 		// Logger.getLogger(getClass()).error("Failed to start processing", e2);
-		// }
+//		 }
 		return 0;
 	}
 
-//	private void configureContourGeneration() {
-//		Set<String> contourTracks = getValues("contourTracks"); //$NON-NLS-1$
-//
-//		List<Integer> contourLineDepths = new ArrayList<Integer>();
-//		contourLineDepths.add(2);
-//		contourLineDepths.add(5);
-//		contourLineDepths.add(10);
-//		contourLineDepths.add(20);
-//		contourLineDepths.add(30);
-//		contourLineDepths.add(40);
-//		contourLineDepths.add(50);
-//
-//	}
+	// private void configureContourGeneration() {
+	// Set<String> contourTracks = getValues("contourTracks"); //$NON-NLS-1$
+	//
+	// List<Integer> contourLineDepths = new ArrayList<Integer>();
+	// contourLineDepths.add(2);
+	// contourLineDepths.add(5);
+	// contourLineDepths.add(10);
+	// contourLineDepths.add(20);
+	// contourLineDepths.add(30);
+	// contourLineDepths.add(40);
+	// contourLineDepths.add(50);
+	//
+	// }
 
 	private void configureTideProvider(Properties properties) throws IOException, InvalidSyntaxException {
 		ServiceReference<ConfigurationAdmin> configAdminServiceReference = DataPostprocessingActivator.getContext()
@@ -229,7 +286,6 @@ public class PreprocessingApplication implements IApplication {
 		ServiceRegistration<Connection> filtersConnectionService = DataPostprocessingActivator.getContext()
 				.registerService(Connection.class, coastlineDBConnection, hashtable);
 
-		
 		hashtable = new Hashtable<String, Object>();
 		hashtable.put("db", "dtu");
 		ServiceRegistration<Connection> dtuConnectionService = DataPostprocessingActivator.getContext()
