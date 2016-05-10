@@ -10,3 +10,6 @@
 2016-05-03 06:44:21,494 INFO  root - Heartbeat thread sucessfully interrupted
 2016-05-03 07:03:22,483 INFO  root - Heartbeat thread sucessfully interrupted
 2016-05-03 07:05:22,508 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-10 07:04:43,833 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-10 07:09:41,006 INFO  root - Heartbeat thread sucessfully interrupted
+2016-05-10 07:25:24,997 INFO  root - Heartbeat thread sucessfully interrupted

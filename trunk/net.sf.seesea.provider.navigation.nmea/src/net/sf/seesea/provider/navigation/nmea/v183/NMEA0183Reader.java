@@ -117,13 +117,11 @@ public class NMEA0183Reader implements IDataReader {
 	@Override
 	public Collection<Measurement> read() throws IOException {
 		String line = null;
+		List<Measurement> list = new ArrayList<Measurement>(1);
 		while ((line = bufferedReader.readLine()) != null) {
-			List<Measurement> results = null;
-			results = extractMeasurementsFromNMEA(line,
-					new ArrayList<Measurement>(1));
-			return results;
+			extractMeasurementsFromNMEA(line,list);
 		}
-		return null;
+		return list;
 	}
 
 	/**
