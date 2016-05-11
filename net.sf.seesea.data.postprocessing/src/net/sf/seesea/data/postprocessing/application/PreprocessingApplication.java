@@ -33,7 +33,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -57,11 +56,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 
-import com.sun.xml.internal.stream.events.XMLEventAllocatorImpl;
-
 import net.sf.seesea.data.io.postgis.PostgresConnectionFactory;
 import net.sf.seesea.data.postprocessing.DataPostprocessingActivator;
-import net.sf.seesea.data.postprocessing.database.IUploadedData2Contours;
 
 /**
  * This class controls all aspects of the application's execution
@@ -96,7 +92,7 @@ public class PreprocessingApplication implements IApplication {
 
 			XMLInputFactory xmlif = XMLInputFactory.newInstance();
 			XMLEventReader xmlr = xmlif.createXMLEventReader(configFile, new FileInputStream(file));
-			xmlif.setEventAllocator(new XMLEventAllocatorImpl());
+//			xmlif.setEventAllocator(new XMLEventAllocatorImpl());
 
 			XMLConfig xmlConfig = null;
 			boolean singleton = true;
