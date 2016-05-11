@@ -18,7 +18,7 @@ public class GPXStreamProcessorTest {
 
 
 	@Test
-	public void testX() throws RawDataEventException, IOException {
+	public void testStreamProcessor() throws RawDataEventException, IOException {
 		URL fileEntry = GPXActivator.getContext().getBundle().findEntries("res", "8629.dat", false).nextElement();
 		InputStream fileStream = FileLocator.resolve(fileEntry).openStream();
 		BufferedInputStream input = new BufferedInputStream(fileStream);
