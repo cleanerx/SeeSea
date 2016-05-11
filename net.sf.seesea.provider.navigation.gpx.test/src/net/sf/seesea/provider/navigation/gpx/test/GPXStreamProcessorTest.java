@@ -10,7 +10,6 @@ import java.net.URL;
 import org.eclipse.core.runtime.FileLocator;
 import org.junit.Test;
 
-import net.sf.seesea.provider.navigation.gpx.GPXActivator;
 import net.sf.seesea.provider.navigation.gpx.GPXStreamProcessor;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
@@ -19,7 +18,7 @@ public class GPXStreamProcessorTest {
 
 	@Test
 	public void testStreamProcessor() throws RawDataEventException, IOException {
-		URL fileEntry = GPXActivator.getContext().getBundle().findEntries("res", "8629.dat", false).nextElement();
+		URL fileEntry = GPXTestActivator.getContext().getBundle().findEntries("res", "8629.dat", false).nextElement();
 		InputStream fileStream = FileLocator.resolve(fileEntry).openStream();
 		BufferedInputStream input = new BufferedInputStream(fileStream);
 
