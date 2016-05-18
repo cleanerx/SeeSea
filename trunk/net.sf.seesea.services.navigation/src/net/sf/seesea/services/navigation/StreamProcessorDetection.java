@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -23,6 +25,11 @@ import net.sf.seesea.track.api.exception.RawDataEventException;
 public class StreamProcessorDetection implements IStreamProcessorDetection {
 
 	private Map<IStreamProcessor, Map<String,Object>> processors = new ConcurrentHashMap<IStreamProcessor, Map<String,Object>>();
+	
+	@Activate
+	public void activate(Map<String,Object> properties) {
+		
+	}
 	
 //	public List<ITrack> getCompositeTrack(CompressionType compressionType, File file,
 //			Collection<IStreamProcessor> streamProcessors) throws ZipException, IOException, NMEAProcessingException {
