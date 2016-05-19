@@ -4,12 +4,14 @@ Bundle-Name: GPX Navigation
 Bundle-SymbolicName: net.sf.seesea.provider.navigation.gpx
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.provider.navigation.gpx.GPXActivator
+Export-Package: net.sf.seesea.provider.navigation.gpx
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.model.core;bundle-version="1.0.0",
  net.sf.seesea.track.api;bundle-version="1.0.0"
-Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: net.sf.seesea.provider.navigation.gpx
-Service-Component: OSGI-INF/GPXStreamProcessor.xml, OSGI-INF/GPXTrackFileProcessor.xml
 Import-Package: org.apache.log4j;version="1.2.16",
- org.apache.logging.log4j.core;version="2.5.0"
+ org.apache.logging.log4j.core;version="2.5.0",
+ org.osgi.service.component.annotations
+Service-Component: OSGI-INF/net.sf.seesea.provider.navigation.gpx.GPXStreamProcessor.xml,
+ OSGI-INF/net.sf.seesea.provider.navigation.gpx.GPXTrackFileProcessor.xml
+Bundle-ActivationPolicy: lazy

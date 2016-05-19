@@ -34,6 +34,7 @@ import java.io.CharConversionException;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -42,6 +43,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
+@Component
 public class GPXStreamProcessor implements IStreamProcessor {
 
 	@Override
