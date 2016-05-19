@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
 
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.track.api.IMeasurementListener;
@@ -18,6 +19,7 @@ import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
 import net.sf.seesea.track.api.exception.ProcessingException;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
+@Component(factory="trackfile.sl2")
 public class SL2TrackFileProcessor implements ITrackFileProcessor, IMeasurementListener {
 	
 	private SL2StreamProcessor sl2StreamProcessor;
