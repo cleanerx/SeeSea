@@ -21,11 +21,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.exception.NMEAProcessingException;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
 
+@Component(property={"type:String=binary"})
 public class SL2StreamProcessor implements IStreamProcessor, ISL2Reader {
 
 	private MessageProcessingState state;
