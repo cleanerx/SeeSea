@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.provider.navigation.fsh.data.FSHBlock;
 import net.sf.seesea.provider.navigation.fsh.data.FSHHeader;
 import net.sf.seesea.track.api.IStreamProcessor;
@@ -41,6 +43,7 @@ import net.sf.seesea.track.api.exception.RawDataEventException;
 /**
  * This stream processor takes binary streams from the Raymarine fsh exports.
  */
+@Component(property="type:String=binary")
 public class FSHStreamProcessor implements IStreamProcessor, IFSHReader {
 
 	/** internal prcessing state of this stream processor */

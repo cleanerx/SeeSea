@@ -35,6 +35,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.fsh.FSHReader;
 import net.sf.seesea.provider.navigation.fsh.FSHStreamProcessor;
@@ -47,6 +49,7 @@ import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
+@Component(factory="trackfile.x-flashfile")
 public class FSHTrackFileProcessor implements ITrackFileProcessor {
 
 	private IMeasurmentProcessor measurmentProcessor;
