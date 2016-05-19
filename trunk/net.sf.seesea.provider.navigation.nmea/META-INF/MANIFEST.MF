@@ -25,6 +25,7 @@ Service-Component: OSGI-INF/CSVDataWriterFactory.xml,
  OSGI-INF/Nmea2000DataProvider.xml,
  OSGI-INF/net.sf.seesea.provider.navigation.nmea.v183.NMEA0183TrackFileProcessor.xml,
  OSGI-INF/net.sf.seesea.provider.navigation.nmea.v183.SerialNMEA0183InputStreamProcessor.xml,
+ OSGI-INF/net.sf.seesea.provider.navigation.nmea.v2000.ActisenseStreamProcessor.xml,
  OSGI-INF/net.sf.seesea.provider.navigation.nmea.v2000.NMEA2000TrackFileProcessor.xml,
  OSGI-INF/nmeaDataLogger.xml,
  OSGI-INF/nmeaDataProvider.xml
