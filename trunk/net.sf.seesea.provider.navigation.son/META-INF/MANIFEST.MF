@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.track.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.osgi.service.component.annotations
-Service-Component: OSGI-INF/SONTrackFileProcessor.xml,
- OSGI-INF/SonStreamProcessor.xml,
- OSGI-INF/net.sf.seesea.navigation.son.SONTrackFileDecompressor.xml
+Service-Component: OSGI-INF/net.sf.seesea.navigation.son.SONStreamProcessor.xml,
+ OSGI-INF/net.sf.seesea.navigation.son.SONTrackFileDecompressor.xml,
+ OSGI-INF/net.sf.seesea.navigation.son.SONTrackFileProcessor.xml
 Bundle-ActivationPolicy: lazy

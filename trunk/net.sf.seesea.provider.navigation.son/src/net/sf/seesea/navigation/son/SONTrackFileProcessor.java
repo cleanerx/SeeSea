@@ -16,6 +16,8 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GeoFactory;
 import net.sf.seesea.model.core.geo.Latitude;
@@ -41,6 +43,7 @@ import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
+@Component(factory="trackfile.x-humminbird")
 public class SONTrackFileProcessor implements ITrackFileProcessor {
 
 	private IMeasurmentProcessor measurmentProcessor;
