@@ -37,6 +37,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.osgi.service.component.annotations.Component;
+
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.data.CompressionType;
 import net.sf.seesea.track.api.data.ITrack;
@@ -46,6 +48,7 @@ import net.sf.seesea.track.api.exception.NMEAProcessingException;
  * This stream procesor takes binary streams from the actisense ngt1 NMEA2000 to USB converter and assembles
  * the stream to nmea 2000 messages that may be processed by {@link INMEA2000Listener}s.
  */
+@Component(property={"type:String=binary"})
 public class ActisenseStreamProcessor implements IStreamProcessor, INMEA2000Reader {
 
 	private MessageProcessingState state;

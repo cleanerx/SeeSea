@@ -42,7 +42,7 @@ import net.sf.seesea.services.navigation.RawDataEventListener;
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.exception.RawDataEventException;
 
-@Component(property={"type:String=ascii,provider:String=sensor"})
+@Component(property={"type:String=ascii","provider:String=sensor"})
 public class SerialNMEA0183InputStreamProcessor implements IStreamProcessor, INMEAReader {
 	
 	private StringBuffer stringBuffer;
