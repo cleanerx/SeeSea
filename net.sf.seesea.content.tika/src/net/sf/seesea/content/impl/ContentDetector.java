@@ -84,142 +84,161 @@ public class ContentDetector implements IContentDetector {
 				String trackFile = MessageFormat.format("{0}/{1}/{2}.dat", basedir, format.format((id / 100) * 100), //$NON-NLS-1$
 						fileFormat.format(id));
 				File file = new File(trackFile);
-				try (FileInputStream fis = new FileInputStream(file)) {
-					String mimeType = getMimeType(fis);
-					// Tika does not detect zips reliably
-					if (mimeType.equals("application/octet-stream")) {
-						try (ZipFile zipFile = new ZipFile(file, Charset.forName("ISO_8859_1"))){
-							zipFile.entries();
-							mimeType = "application/zip";
-						} catch (IOException e) {
-							// nothing to do;
+				if(file.length() == 0L) {
+					trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_NODATA);
+				} else {
+					try (FileInputStream fis = new FileInputStream(file)) {
+						String mimeType = getMimeType(fis);
+						// Tika does not detect zips reliably
+						if (mimeType.equals("application/octet-stream")) {
+							try (ZipFile zipFile = new ZipFile(file, Charset.forName("ISO_8859_1"))){
+								zipFile.entries();
+								mimeType = "application/zip";
+							} catch (IOException e) {
+								// nothing to do;
+							}
 						}
-					}
-					// only one file may be compressed in gz (tar not yet
-					// considered
-					// here)
-					if (CompressionType.GZ.getMimeType().equals(mimeType)) {
-						try {
-							GZIPInputStream gzipInputStream = new GZIPInputStream(
-									new FileInputStream(new File(trackFile)));
-							String containerType = getMimeType(gzipInputStream);
-							if ("text/plain".equals(containerType)) { //$NON-NLS-1$
-								gzipInputStream = new GZIPInputStream(new FileInputStream(new File(trackFile)));
-								CompressionType compressionType = CompressionType.getCompressionType(mimeType);
-								IStreamProcessor streamProcessor = streamProcessorDetection
-										.detectStreamProcessorEnblock(gzipInputStream, false);
-								if (streamProcessor != null) {
-									trackFileX.setFileType(streamProcessor.getMimeType());
-									trackFileX.setCompression(compressionType);
-									trackFileX
-											.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
-								} else {
-									trackFileX.setUploadState(
-											net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
+						// only one file may be compressed in gz (tar not yet
+						// considered
+						// here)
+						if (CompressionType.GZ.getMimeType().equals(mimeType)) {
+							try {
+								GZIPInputStream gzipInputStream = new GZIPInputStream(
+										new FileInputStream(new File(trackFile)));
+								String containerType = getMimeType(gzipInputStream);
+								if ("text/plain".equals(containerType)) { //$NON-NLS-1$
+									gzipInputStream = new GZIPInputStream(new FileInputStream(new File(trackFile)));
+									CompressionType compressionType = CompressionType.getCompressionType(mimeType);
+									IStreamProcessor streamProcessor = streamProcessorDetection
+											.detectStreamProcessorEnblock(gzipInputStream, false);
+									if (streamProcessor != null) {
+										trackFileX.setFileType(streamProcessor.getMimeType());
+										trackFileX.setCompression(compressionType);
+										trackFileX
+										.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
+									} else {
+										trackFileX.setUploadState(
+												net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
+									}
+								}
+							} catch (EOFException e) {
+								trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
+							} catch (IOException e) {
+//							Logger.getLogger(getClass()).error("Failed to read track id:" + id, e); //$NON-NLS-1$
+								trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
+							}
+						} else if ("text/plain".equals(mimeType) || "application/xml".equals(mimeType)) { //$NON-NLS-1$ //$NON-NLS-2$
+							FileInputStream fileInputStream = new FileInputStream(new File(trackFile));
+							CompressionType compressionType = CompressionType.getCompressionType(mimeType);
+							IStreamProcessor streamProcessor = streamProcessorDetection
+									.detectStreamProcessorEnblock(fileInputStream, false);
+							if (streamProcessor != null) {
+								trackFileX.setFileType(streamProcessor.getMimeType());
+								trackFileX.setCompression(compressionType);
+								trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
+							} else {
+								trackFileX
+								.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
+							}
+						} else if (CompressionType.ZIP.getMimeType().equals(mimeType)) {
+							// determine zip entries
+							List<ZipEntry> zipEntries = new ArrayList<ZipEntry>(1);
+							String encoding = null;
+							ZipFile zipFile = null;
+							try {
+								zipFile = new ZipFile(file, Charset.forName("UTF-8"));
+								zipEntries = getZipEntries(zipFile); // $NON-NLS-1$
+								encoding = "UTF-8";
+							} catch (IllegalArgumentException e) {
+								// Logger.getLogger(this.getClass()).error("Failed
+								// to
+								// open zip entry. May it is not UTF-8 encoded:" +
+								// file.getAbsolutePath());
+								try {
+									zipFile = new ZipFile(file, Charset.forName("ISO-8859-1"));
+									zipEntries = getZipEntries(zipFile); // $NON-NLS-1$
+									encoding = "ISO-8859-1"; //$NON-NLS-1$
+								} catch (IllegalArgumentException e2) {
+									// Logger.getLogger(this.getClass()).error("Failed
+									// to open zip entry. May it is not ISO-8859-1
+									// encoded:" + file.getAbsolutePath());
+									// return Collections.emptyList();
 								}
 							}
-						} catch (EOFException e) {
-							trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
-						} catch (IOException e) {
-//							Logger.getLogger(getClass()).error("Failed to read track id:" + id, e); //$NON-NLS-1$
-							trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
-						}
-					} else if ("text/plain".equals(mimeType) || "application/xml".equals(mimeType)) { //$NON-NLS-1$ //$NON-NLS-2$
-						FileInputStream fileInputStream = new FileInputStream(new File(trackFile));
-						CompressionType compressionType = CompressionType.getCompressionType(mimeType);
-						IStreamProcessor streamProcessor = streamProcessorDetection
-								.detectStreamProcessorEnblock(fileInputStream, false);
-						if (streamProcessor != null) {
-							trackFileX.setFileType(streamProcessor.getMimeType());
-							trackFileX.setCompression(compressionType);
-							trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
-						} else {
-							trackFileX
-									.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
-						}
-					} else if (CompressionType.ZIP.getMimeType().equals(mimeType)) {
-						// determine zip entries
-						List<ZipEntry> zipEntries = new ArrayList<ZipEntry>(1);
-						String encoding = null;
-						ZipFile zipFile = null;
-						try {
-							zipFile = new ZipFile(file, Charset.forName("UTF-8"));
-							zipEntries = getZipEntries(zipFile); // $NON-NLS-1$
-							encoding = "UTF-8";
-						} catch (IllegalArgumentException e) {
-							// Logger.getLogger(this.getClass()).error("Failed
-							// to
-							// open zip entry. May it is not UTF-8 encoded:" +
-							// file.getAbsolutePath());
-							try {
-								zipFile = new ZipFile(file, Charset.forName("ISO-8859-1"));
-								zipEntries = getZipEntries(zipFile); // $NON-NLS-1$
-								encoding = "ISO-8859-1"; //$NON-NLS-1$
-							} catch (IllegalArgumentException e2) {
-								// Logger.getLogger(this.getClass()).error("Failed
-								// to open zip entry. May it is not ISO-8859-1
-								// encoded:" + file.getAbsolutePath());
-								// return Collections.emptyList();
+							// if it is compressed, ask the providers for
+							// decompression
+							List<ITrackFile> unzippedFiles = new ArrayList<ITrackFile>();
+							for (ITrackFileDecompressor trackFileDecompressor : trackFileDecompressors) {
+								unzippedFiles.addAll(trackFileDecompressor.getUnzippedFiles(zipFile, zipEntries, encoding));
 							}
-						}
-						// if it is compressed, ask the providers for
-						// decompression
-						List<ITrackFile> unzippedFiles = new ArrayList<ITrackFile>();
-						for (ITrackFileDecompressor trackFileDecompressor : trackFileDecompressors) {
-							unzippedFiles.addAll(trackFileDecompressor.getUnzippedFiles(zipFile, zipEntries, encoding));
-						}
-						if (!unzippedFiles.isEmpty()) {
-							trackFileX.getTrackFiles().addAll(unzippedFiles);
-							continue; // format prececeds single decompression
-						}
-
-						// if it is not decompressed by the format, treat every
-						// entry individually
-						for (ZipEntry zipEntry : zipEntries) {
-							InputStream inputStream = zipFile.getInputStream(zipEntry);
+							if (!unzippedFiles.isEmpty()) {
+								trackFileX.getTrackFiles().addAll(unzippedFiles);
+								continue; // format prececeds single decompression
+							}
+							
+							// if it is not decompressed by the format, treat every
+							// entry individually
+							for (ZipEntry zipEntry : zipEntries) {
+								InputStream inputStream = zipFile.getInputStream(zipEntry);
+								IStreamProcessor streamProcessor = streamProcessorDetection
+										.detectStreamProcessorEnblock(inputStream, false);
+								if (streamProcessor != null) {
+									ZipEntryTrackFile zipEntryTrackFile = new ZipEntryTrackFile(zipFile, zipEntry);
+									zipEntryTrackFile.setFileType(streamProcessor.getMimeType());
+									zipEntryTrackFile.setCompression(CompressionType.ZIP);
+									zipEntryTrackFile
+									.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
+									zipEntryTrackFile.setUsername(trackFileX.getUsername());
+									// zipEntryTrackFile.setTrackId(trackId);
+									trackFileX.getTrackFiles().add(zipEntryTrackFile);
+								}
+							}
+							
+						} else if ("application/octet-stream".equals(mimeType)) { //$NON-NLS-1$
+							// let the stream processors decide what type of data
+							// this
+							// is
+							FileInputStream fileInputStream = new FileInputStream(new File(trackFile));
 							IStreamProcessor streamProcessor = streamProcessorDetection
-									.detectStreamProcessorEnblock(inputStream, false);
+									.detectBinaryStreamProcessorEnblock(fileInputStream, false);
+							// tika falsely identifies tracks that contain AIS data as binary
+							if(streamProcessor == null) {
+								fileInputStream = new FileInputStream(new File(trackFile));
+								streamProcessor = streamProcessorDetection
+										.detectStreamProcessorEnblock(fileInputStream, false);
+							}
 							if (streamProcessor != null) {
-								ZipEntryTrackFile zipEntryTrackFile = new ZipEntryTrackFile(zipFile, zipEntry);
-								zipEntryTrackFile.setFileType(streamProcessor.getMimeType());
-								zipEntryTrackFile.setCompression(CompressionType.ZIP);
-								zipEntryTrackFile
-										.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
-								zipEntryTrackFile.setUsername(trackFileX.getUsername());
-								// zipEntryTrackFile.setTrackId(trackId);
-								trackFileX.getTrackFiles().add(zipEntryTrackFile);
+								trackFileX.setFileType(streamProcessor.getMimeType());
+								trackFileX.setCompression(CompressionType.NONE);
+								trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
+							} else {
+								trackFileX
+								.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
+							}
+						} else {
+							IStreamProcessor streamProcessor = streamProcessorDetection.detectMimeTypeStreamProcessor(mimeType);
+							if (streamProcessor != null) {
+								trackFileX.setFileType(streamProcessor.getMimeType());
+								trackFileX.setCompression(CompressionType.NONE);
+								trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
+							} else {
+								trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
 							}
 						}
-
-					} else if ("application/octet-stream".equals(mimeType)) { //$NON-NLS-1$
-						// let the stream processors decide what type of data
-						// this
-						// is
-						FileInputStream fileInputStream = new FileInputStream(new File(trackFile));
-						IStreamProcessor streamProcessor = streamProcessorDetection
-								.detectBinaryStreamProcessorEnblock(fileInputStream, false);
-						if (streamProcessor != null) {
-							trackFileX.setFileType(streamProcessor.getMimeType());
-							trackFileX.setCompression(CompressionType.NONE);
-							trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.PREPROCESSED);
-						} else {
-							trackFileX
-									.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
-						}
-					} else {
-						trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CONTENT_UNKNOWN);
-					}
-					trackPersistence.storePreprocessingStates(trackFiles2Process);
-				} catch (FileNotFoundException e) {
+					} catch (FileNotFoundException e) {
 //					Logger.getLogger(getClass()).error("Failed to find file", e); //$NON-NLS-1$
-					trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
-				} catch (IOException e) {
-					e.printStackTrace();
-					trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
-				} catch (RawDataEventException e) {
-					e.printStackTrace();
-					trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
+						trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
+					} catch (IOException e) {
+						e.printStackTrace();
+						trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
+					} catch (RawDataEventException e) {
+						e.printStackTrace();
+						trackFileX.setUploadState(net.sf.seesea.track.api.data.ProcessingState.FILE_CORRUPT);
+					}
 				}
+			}
+			if(!trackFiles2Process.isEmpty()) {
+				trackPersistence.storePreprocessingStates(trackFiles2Process);
 			}
 		} catch (TrackPerssitenceException e) {
 			throw new ContentDetectionException(e);
@@ -261,5 +280,6 @@ public class ContentDetector implements IContentDetector {
 	public void unbindTrackPersistence(ITrackPersistence trackPersistence) {
 		trackPersistenceAR.compareAndSet(null, trackPersistence);
 	}
+	
 
 }
