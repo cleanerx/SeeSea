@@ -4,10 +4,12 @@ Bundle-Name: Winprofile Sharp
 Bundle-SymbolicName: net.sf.seesea.navigation.winprofile.sharp
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.sf.seesea.navigation.winprofile.sharp.WinprofileSharpActivator
+Export-Package: net.sf.seesea.navigation.winprofile.sharp
 Require-Bundle: org.eclipse.core.runtime,
  net.sf.seesea.lib;bundle-version="1.0.0",
  net.sf.seesea.model.core;bundle-version="1.0.0",
  net.sf.seesea.track.api
+Service-Component: OSGI-INF/net.sf.seesea.navigation.winprofile.sharp.WinSharpTrackFileProcessor.xml,
+ OSGI-INF/net.sf.seesea.navigation.winprofile.sharp.WinprofileSharpStreamProcessor.xml
+Import-Package: org.osgi.service.component.annotations
 Bundle-ActivationPolicy: lazy
-Export-Package: net.sf.seesea.navigation.winprofile.sharp
-Service-Component: OSGI-INF/WinProfileSharpStreamProcessor.xml, OSGI-INF/WinProfileTrackFileProcessor.xml
