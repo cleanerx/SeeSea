@@ -48,18 +48,18 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.apache.log4j.Logger;
+import org.osgi.service.component.annotations.Component;
 
 import net.sf.seesea.navigation.son.data.SONHeader;
 import net.sf.seesea.navigation.son.data.SONRoot;
-import net.sf.seesea.navigation.son.data.ZippedSonTrack;
 import net.sf.seesea.track.api.IStreamProcessor;
 import net.sf.seesea.track.api.data.CompressionType;
 import net.sf.seesea.track.api.data.ITrack;
-import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 /**
  * This stream procesor takes binary streams from the humminbird son files and analyze the block types
  */
+@Component(property={"type:String=binary"})
 public class SONStreamProcessor implements IStreamProcessor {
 
 	SONProcessingState state;
