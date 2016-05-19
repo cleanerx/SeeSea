@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" factory="trackfile.x-gpx" name="net.sf.seesea.provider.navigation.gpx.trackfileprocessor">
-   <implementation class="net.sf.seesea.provider.navigation.gpx.GPXTrackFileProcessor"/>
-   <service>
-      <provide interface="net.sf.seesea.services.navigation.ITrackFileProcessor"/>
-   </service>
-</scr:component>
