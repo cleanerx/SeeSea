@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Component;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -19,6 +20,7 @@ import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
+@Component(factory="trackfile.x-sharp")
 public class WinSharpTrackFileProcessor implements ITrackFileProcessor {
 
 	private IMeasurmentProcessor measurmentProcessor;
