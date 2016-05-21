@@ -31,6 +31,8 @@ public enum CompressionType {
 			return CompressionType.TAR;
 		} else if("application/x-gzip".equals(type)) {
 			return CompressionType.GZ;
+		} else if("application/gzip".equals(type)) {
+			return CompressionType.GZ;
 		} else if("application/x-targz".equals(type)) {
 			return CompressionType.TARGZ;
 		} else if("application/x-rar".equals(type)) {
