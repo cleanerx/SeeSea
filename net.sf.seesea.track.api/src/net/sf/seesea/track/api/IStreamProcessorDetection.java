@@ -17,4 +17,5 @@ public interface IStreamProcessorDetection {
 	IStreamProcessor detectBinaryStreamProcessorEnblock(InputStream inputStream, boolean log)
 			throws IOException, RawDataEventException;
 
+	IStreamProcessor detectMimeTypeStreamProcessor(String mimeType);
 }
