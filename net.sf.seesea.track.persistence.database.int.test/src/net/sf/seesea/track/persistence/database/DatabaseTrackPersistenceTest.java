@@ -2,6 +2,7 @@ package net.sf.seesea.track.persistence.database;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -43,9 +44,10 @@ public class DatabaseTrackPersistenceTest {
 
 			URL resolve = FileLocator.resolve(dumpURL);
 			File file = new File(resolve.getFile());
-			FileReader fileReader = new FileReader(file);
-			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
-			scriptRunner.runScript(fileReader);
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
 
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
@@ -76,9 +78,10 @@ public class DatabaseTrackPersistenceTest {
 
 			URL resolve = FileLocator.resolve(dumpURL);
 			File file = new File(resolve.getFile());
-			FileReader fileReader = new FileReader(file);
-			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
-			scriptRunner.runScript(fileReader);
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
 
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
@@ -106,9 +109,10 @@ public class DatabaseTrackPersistenceTest {
 
 			URL resolve = FileLocator.resolve(dumpURL);
 			File file = new File(resolve.getFile());
-			FileReader fileReader = new FileReader(file);
-			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
-			scriptRunner.runScript(fileReader);
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
 
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
@@ -135,9 +139,10 @@ public class DatabaseTrackPersistenceTest {
 
 			URL resolve = FileLocator.resolve(dumpURL);
 			File file = new File(resolve.getFile());
-			FileReader fileReader = new FileReader(file);
-			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
-			scriptRunner.runScript(fileReader);
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
 
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
@@ -171,9 +176,10 @@ public class DatabaseTrackPersistenceTest {
 
 			URL resolve = FileLocator.resolve(dumpURL);
 			File file = new File(resolve.getFile());
-			FileReader fileReader = new FileReader(file);
-			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
-			scriptRunner.runScript(fileReader);
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
 
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
@@ -212,9 +218,10 @@ public class DatabaseTrackPersistenceTest {
 
 			URL resolve = FileLocator.resolve(dumpURL);
 			File file = new File(resolve.getFile());
-			FileReader fileReader = new FileReader(file);
-			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
-			scriptRunner.runScript(fileReader);
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
 
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
@@ -244,7 +251,7 @@ public class DatabaseTrackPersistenceTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void testCompositeStoreStates() throws TrackPerssitenceException, IOException, SQLException {
 		JDBCDataSource uploadDataSource = new JDBCDataSource();
 		uploadDataSource.setDatabase("jdbc:hsqldb:" + "uploadUnitTest");
@@ -258,10 +265,11 @@ public class DatabaseTrackPersistenceTest {
 
 			URL resolve = FileLocator.resolve(dumpURL);
 			File file = new File(resolve.getFile());
-			FileReader fileReader = new FileReader(file);
-			ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
-			scriptRunner.runScript(fileReader);
-
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
+				
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
 			Map<String, Object> properties = new HashMap<String, Object>();
@@ -292,9 +300,19 @@ public class DatabaseTrackPersistenceTest {
 				String fileType = set.getString(2);
 				String compression = set.getString(3);
 				assertEquals(ProcessingState.PREPROCESSED.ordinal(), uploadState);
-				assertEquals("application/myOwnFormat", fileType);
+				assertNull(fileType);
 				assertEquals(CompressionType.ZIP.getMimeType(), compression);
 			}
+//			try (PreparedStatement statement = c.prepareStatement("SELECT upload_state, filetype, compression FROM user_tracks WHERE track_id = 2");
+//					ResultSet set = statement.executeQuery()) {
+//				set.next();
+//				int uploadState = set.getInt(1);
+//				String fileType = set.getString(2);
+//				String compression = set.getString(3);
+//				assertEquals(ProcessingState.PREPROCESSED.ordinal(), uploadState);
+//				assertEquals("application/myOwnFormat", fileType);
+//				assertEquals(CompressionType.NONE.getMimeType(), compression);
+//			}
 		}
 	}
 }
