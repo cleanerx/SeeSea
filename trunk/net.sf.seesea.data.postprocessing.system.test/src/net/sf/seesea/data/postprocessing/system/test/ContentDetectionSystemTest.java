@@ -19,6 +19,7 @@ import java.util.zip.GZIPInputStream;
 import javax.sql.DataSource;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -39,7 +40,8 @@ public class ContentDetectionSystemTest {
 	 * @throws SQLException
 	 */
 	@Test
-	public void xtestContentDetectionEmptySchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
+	@Ignore
+	public void testContentDetectionEmptySchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
 		BundleContext context = Activator.getContext();
 		ServiceReference<ConfigurationAdmin> serviceReference = context.getServiceReference(ConfigurationAdmin.class);
 		ConfigurationAdmin configurationAdmin = context.getService(serviceReference);
@@ -90,6 +92,7 @@ public class ContentDetectionSystemTest {
 	 * @throws SQLException
 	 */
 	@Test
+	@Ignore
 	public void xtestContentDetectionFullSchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
 		BundleContext context = Activator.getContext();
 		ServiceReference<ConfigurationAdmin> serviceReference = context.getServiceReference(ConfigurationAdmin.class);
@@ -183,10 +186,6 @@ public class ContentDetectionSystemTest {
 		postgresUploadProperties.put("port", "5432");
 		postgresUploadProperties.put("db", "userData");
 		postgresConfiguration.update(postgresUploadProperties);
-	}
-
-	public void testX() {
-		// disable test
 	}
 
 }
