@@ -38,6 +38,7 @@ import java.util.concurrent.Callable;
 import net.sf.seesea.lib.IFeedbackMessageConsumer;
 import net.sf.seesea.services.navigation.provider.INMEAStreamProvider;
 import net.sf.seesea.track.api.IStreamProcessor;
+import net.sf.seesea.track.api.IStreamProcessorDetection;
 import net.sf.seesea.track.api.exception.NMEAProcessingException;
 
 import org.apache.log4j.Logger;
@@ -57,7 +58,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 	private final INMEAStreamProvider streamProvider;
 	private Thread processingThread;
 
-	private ServiceTracker<IStreamProcessor, IStreamProcessor> streamTracker;
+	private ServiceTracker<IStreamProcessorDetection, IStreamProcessorDetection> streamTracker;
 
 	private InputStream pushbackInputStream;
 
@@ -81,7 +82,7 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 		if(NavigationServicesActivator.getDefault() != null) {
 			BundleContext bundleContext = NavigationServicesActivator.getDefault().getBundle().getBundleContext();
 //			serviceRegistration = bundleContext.registerService(INMEAReader.class.getName(), this, properties);
-			streamTracker = new ServiceTracker<IStreamProcessor,IStreamProcessor>(bundleContext, IStreamProcessor.class, null);
+			streamTracker = new ServiceTracker<IStreamProcessorDetection,IStreamProcessorDetection>(bundleContext, IStreamProcessorDetection.class, null);
 			streamTracker.open();
 		}
 		
@@ -114,10 +115,10 @@ public class ThreadedSerialInputReader implements Callable<Void>{
 	public Void call() throws Exception {
 		try {
 			processingThread = Thread.currentThread();
-			Object[] services = streamTracker.getServices();
-			if(services != null) {
+			IStreamProcessorDetection processorDetection = streamTracker.getService();
+			if(processorDetection != null) {
 //				while(retryCount < 100) {
-					IStreamProcessor streamProcessor = StreamProcessorDetection.detectStreamProcessor(pushbackInputStream, services, true);
+					IStreamProcessor streamProcessor = processorDetection.detectStreamProcessorEnblock(pushbackInputStream, true);
 					String streamProviderName = streamProvider.getName();
 					if(streamProcessor == null) {
 						feedbackMessageConsumer.noProviderAvailable();
