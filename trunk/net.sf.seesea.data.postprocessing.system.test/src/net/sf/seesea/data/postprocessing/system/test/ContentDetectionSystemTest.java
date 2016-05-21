@@ -39,7 +39,7 @@ public class ContentDetectionSystemTest {
 	 * @throws SQLException
 	 */
 	@Test
-	public void testContentDetectionEmptySchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
+	public void xtestContentDetectionEmptySchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
 		BundleContext context = Activator.getContext();
 		ServiceReference<ConfigurationAdmin> serviceReference = context.getServiceReference(ConfigurationAdmin.class);
 		ConfigurationAdmin configurationAdmin = context.getService(serviceReference);
@@ -90,7 +90,7 @@ public class ContentDetectionSystemTest {
 	 * @throws SQLException
 	 */
 	@Test
-	public void testContentDetectionFullSchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
+	public void xtestContentDetectionFullSchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
 		BundleContext context = Activator.getContext();
 		ServiceReference<ConfigurationAdmin> serviceReference = context.getServiceReference(ConfigurationAdmin.class);
 		ConfigurationAdmin configurationAdmin = context.getService(serviceReference);
@@ -185,6 +185,9 @@ public class ContentDetectionSystemTest {
 		postgresConfiguration.update(postgresUploadProperties);
 	}
 
+	public void testX() {
+		// disable test
+	}
 
 }
 
