@@ -57,6 +57,14 @@
 						</dependency>
 						<dependency>
 							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.equinox.cm</artifactId>
+						</dependency>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.equinox.ds</artifactId>
+						</dependency>
+						<dependency>
+							<type>p2-installable-unit</type>
 							<artifactId>org.eclipse.core.runtime</artifactId>
 							<version>3.7.0</version>
 						</dependency>
