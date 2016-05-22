@@ -49,7 +49,13 @@
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
 			</plugin>
-
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
@@ -83,8 +89,16 @@
 						</environment>
 					</environments>
 					<pomDependencies>consider</pomDependencies>
-					<!-- <target> <artifact> <groupId>net.sf.seesea</groupId> <artifactId>net.sf.seesea.targetplatform</artifactId> 
-						<version>1.0.0</version> </artifact> </target> -->
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>p2-installable-unit</type>
+								<id>postprocessing.product</id>
+								<versionRange>1.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+
 				</configuration>
 			</plugin>
 			<plugin>
