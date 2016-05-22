@@ -13,6 +13,10 @@
   </parent>
   
   <modules>
+  
+   	<module>../net.sf.seesea.data.postprocessing</module>
+  	<module>../net.sf.seesea.data.postprocessing.system.test</module>
+  
   	<module>../net.sf.seesea.geometry.feature</module>
   	<module>../net.sf.seesea.geometry</module>
   	<module>../net.sf.seesea.geometry.test</module>
@@ -69,8 +73,6 @@
   	<module>../net.sf.seesea.contour.triangulation</module>  
   	<module>../net.sf.seesea.triangulation.postgis</module>
 
-  	<module>../net.sf.seesea.data.postprocessing</module>
-  	<module>../net.sf.seesea.data.postprocessing.system.test</module>
   	<module>../net.sf.seesea.nmea.rcp.logging</module>
   	
 <!--   	<module>../net.sf.seesea.data.processing.feature</module> -->
