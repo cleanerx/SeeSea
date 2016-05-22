@@ -18,7 +18,7 @@
         <artifactId>tycho-surefire-plugin</artifactId>
         <version>${tycho.version}</version>
         <configuration>
-          <useUIHarness>true</useUIHarness>
+          <useUIHarness>false</useUIHarness>
           <useUIThread>false</useUIThread>
           <showEclipseLog>true</showEclipseLog>
           <!-- use our product and application to launch the tests -->
