@@ -20,6 +20,7 @@
         <configuration>
           <useUIHarness>true</useUIHarness>
           <useUIThread>false</useUIThread>
+          <showEclipseLog>true</showEclipseLog>
           <!-- use our product and application to launch the tests -->
           <product>net.sf.seesea.data.postprocessing.product</product>
           <application>net.sf.seesea.data.postprocessing.application</application>
