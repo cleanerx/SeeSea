@@ -89,16 +89,6 @@
 						</environment>
 					</environments>
 					<pomDependencies>consider</pomDependencies>
-					<dependency-resolution>
-						<extraRequirements>
-							<requirement>
-								<type>p2-installable-unit</type>
-								<id>postprocessing.product</id>
-								<versionRange>1.0.0</versionRange>
-							</requirement>
-						</extraRequirements>
-					</dependency-resolution>
-
 				</configuration>
 			</plugin>
 			<plugin>
