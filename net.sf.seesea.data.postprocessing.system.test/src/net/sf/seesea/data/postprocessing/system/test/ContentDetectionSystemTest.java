@@ -43,7 +43,10 @@ public class ContentDetectionSystemTest {
 //	@Ignore
 	public void testContentDetectionEmptySchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
 		BundleContext context = Activator.getContext();
-		ServiceReference<ConfigurationAdmin> serviceReference = context.getServiceReference(ConfigurationAdmin.class);
+		ServiceReference<ConfigurationAdmin> serviceReference = null;
+		while(serviceReference == null) {
+			serviceReference = context.getServiceReference(ConfigurationAdmin.class);
+		}
 		ConfigurationAdmin configurationAdmin = context.getService(serviceReference);
 		URL url = context.getBundle().findEntries("res", "data", false).nextElement();
 		URL resolvedURL = FileLocator.resolve(url);
