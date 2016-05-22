@@ -40,7 +40,7 @@ public class ContentDetectionSystemTest {
 	 * @throws SQLException
 	 */
 	@Test
-	@Ignore
+//	@Ignore
 	public void testContentDetectionEmptySchema() throws IOException, ContentDetectionException, InterruptedException, SQLException {
 		BundleContext context = Activator.getContext();
 		ServiceReference<ConfigurationAdmin> serviceReference = context.getServiceReference(ConfigurationAdmin.class);
