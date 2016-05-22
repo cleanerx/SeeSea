@@ -1,15 +1,69 @@
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>net.sf.seesea</groupId>
-    <artifactId>net.sf.seesea.tycho.parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../net.sf.seesea.tycho.parent</relativePath>
-  </parent>
-  <groupId>net.sf.seesea</groupId>
-  <artifactId>net.sf.seesea.data.postprocessing.system.test</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>eclipse-test-plugin</packaging>
-  
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.sf.seesea</groupId>
+		<artifactId>net.sf.seesea.tycho.parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../net.sf.seesea.tycho.parent</relativePath>
+	</parent>
+	<groupId>net.sf.seesea</groupId>
+	<artifactId>net.sf.seesea.data.postprocessing.system.test</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<appArgLine>-DREFRESH_BUNDLES=FALSE</appArgLine>
+					<!-- Bundle start levels for database tests -->
+					<bundleStartLevel>
+						<bundle>
+							<id>org.eclipse.equinox.cm</id>
+							<level>1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.equinox.ds</id>
+							<level>2</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.osgi</id>
+							<level>-1</level>
+							<autoStart>true</autoStart>
+						</bundle>
+					</bundleStartLevel>
+
+					<!-- Dependencies for database tests -->
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.equinox.simpleconfigurator</artifactId>
+							<version>1.0.200</version>
+						</dependency>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.equinox.common</artifactId>
+							<version>3.6.0</version>
+						</dependency>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.update.configurator</artifactId>
+							<version>3.3.1</version>
+						</dependency>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.core.runtime</artifactId>
+							<version>3.7.0</version>
+						</dependency>
+					</dependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project> 
