@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.hsqldb.jdbc.JDBCDataSource;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sf.seesea.track.api.data.CompressionType;
@@ -315,4 +316,34 @@ public class DatabaseTrackPersistenceTest {
 //			}
 		}
 	}
+	
+	@Test
+	@Ignore
+	public void testGetUser2PostprocessTrackCluster() throws TrackPerssitenceException, IOException, SQLException {
+		JDBCDataSource uploadDataSource = new JDBCDataSource();
+		uploadDataSource.setDatabase("jdbc:hsqldb:" + "uploadUnitTest");
+		URL dumpURL = DatabaseActivator.getContext().getBundle().findEntries("res", "dump.sql", false)
+				.nextElement();
+		try (Connection c = uploadDataSource.getConnection()) {
+			try (Statement statement = c.createStatement()) {
+				statement.execute("DROP SCHEMA PUBLIC CASCADE");
+			}
+
+			URL resolve = FileLocator.resolve(dumpURL);
+			File file = new File(resolve.getFile());
+			try(FileReader fileReader = new FileReader(file)) {
+				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
+				scriptRunner.runScript(fileReader);
+			}
+			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
+			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
+			Map<String, Object> properties = new HashMap<String, Object>();
+			properties.put("basedir", file.getParentFile().getPath());
+			databaseTrackPersistence.activate(properties);
+			
+			Map<String, List<ITrackFile>> user2PostprocessTrackCluster = databaseTrackPersistence.getUser2PostprocessTrackCluster();
+			
+		}
+	}
+
 }
