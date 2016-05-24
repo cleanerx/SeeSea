@@ -27,7 +27,7 @@ import net.sf.seesea.track.api.data.SensorDescriptionUpdateRate;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
-@Component
+@Component(factory = "trackfile.x-nmea0183")
 public class NMEA0183TrackFileProcessor implements ITrackFileProcessor {
 
 	private NMEA0183Reader nmea0183Reader;
