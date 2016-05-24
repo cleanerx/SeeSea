@@ -18,9 +18,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/net.sf.seesea.data.postprocessing.filter.FileTypeProcessingFactory.xml,
  OSGI-INF/net.sf.seesea.data.postprocessing.filter.FilterController.xml,
  OSGI-INF/net.sf.seesea.data.postprocessing.filter.FilterEngine.xml,
- OSGI-INF/net.sf.seesea.data.postprocessing.filter.FiltertedConfiguration.xml,
  OSGI-INF/net.sf.seesea.data.postprocessing.filter.TimeBasedTrackClustering.xml,
- OSGI-INF/net.sf.seesea.data.postprocessing.filter.UnfiltertedConfiguration.xml
+ OSGI-INF/net.sf.seesea.data.postprocessing.filter.UnfilteredMeasurementProcessor.xml
 Import-Package: org.osgi.framework;version="1.8.0",
  org.osgi.service.cm;version="1.5.0",
  org.osgi.service.component;version="1.2.2",

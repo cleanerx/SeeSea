@@ -41,7 +41,9 @@ public class PostgresDatasourceConfiguration {
 		Properties dbProps = new Properties();
 		dbProps.put(DataSourceFactory.JDBC_DATABASE_NAME, properties.get("dbname"));
 		dbProps.put(DataSourceFactory.JDBC_USER, properties.get("user"));
-		dbProps.put(DataSourceFactory.JDBC_PASSWORD, properties.get("password"));
+		if(properties.get("password") != null) {
+			dbProps.put(DataSourceFactory.JDBC_PASSWORD, properties.get("password"));
+		}
 		dbProps.put(DataSourceFactory.JDBC_SERVER_NAME, properties.get("server"));
 		dbProps.put(DataSourceFactory.JDBC_PORT_NUMBER, properties.get("port"));
 //		dbProps.put("db", properties.get("db"));

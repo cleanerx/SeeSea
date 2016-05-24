@@ -7,4 +7,5 @@
     </service>
     <reference name="FileTypeProcessingFactory" interface="net.sf.seesea.data.postprocessing.process.IFileTypeProcessingFactory" cardinality="0..1" policy="dynamic" bind="bindFileTypeProcessingFactory" unbind="unbindFileTypeProcessingFactory"/>
     <reference name="ConfigAdmin" interface="org.osgi.service.cm.ConfigurationAdmin" cardinality="0..1" policy="dynamic" bind="bindConfigAdmin" unbind="unbindConfigAdmin"/>
+    <reference name="Filter" interface="net.sf.seesea.data.postprocessing.process.IFilter" cardinality="1..1" policy="dynamic" bind="bindFilter" unbind="unbindFilter"/>
 </scr:component>

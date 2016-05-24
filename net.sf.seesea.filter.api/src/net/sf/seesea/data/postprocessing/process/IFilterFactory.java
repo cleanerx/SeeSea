@@ -32,7 +32,7 @@ import net.sf.seesea.track.api.IMeasurmentProcessor;
 /**
  * A filter configuration used to created measurement processors that take model based input
  */
-public interface IFilterConfiguration {
+public interface IFilterFactory {
 
 	/**
 	 * 
@@ -40,20 +40,20 @@ public interface IFilterConfiguration {
 	 * @param positionPrecision
 	 * @return a measurement processor that is configured with the given update rate and position precision
 	 */
-	IMeasurmentProcessor createFilter(long updateRate, int positionPrecision);
+	IMeasurmentProcessor createFilter(long updateRate, int positionPrecision, boolean relativeTime, boolean absoluteTime);
 	
-	/**
-	 * This may be used to query if a filter requires a time base. The time base may be a consecutive number of seconds since starting of the device.
-	 * 
-	 * @return true if for filtering a relative time is sufficient
-	 */
-	boolean requiresRelativeTime();
-
-	/**
-	 * May be used to query for an absolute time. This may be required to do tide corrections based on a global date
-	 * 
-	 * @return true if an absolute time is required for the filter to function
-	 */
-	boolean requiresAbsoluteTime();
+//	/**
+//	 * This may be used to query if a filter requires a time base. The time base may be a consecutive number of seconds since starting of the device.
+//	 * 
+//	 * @return true if for filtering a relative time is sufficient
+//	 */
+//	boolean requiresRelativeTime();
+//
+//	/**
+//	 * May be used to query for an absolute time. This may be required to do tide corrections based on a global date
+//	 * 
+//	 * @return true if an absolute time is required for the filter to function
+//	 */
+//	boolean requiresAbsoluteTime();
 
 }

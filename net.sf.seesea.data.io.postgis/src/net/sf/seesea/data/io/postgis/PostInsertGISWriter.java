@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.sf.seesea.data.io.postgis;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -40,6 +39,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.WriterException;
 import net.sf.seesea.model.core.geo.Depth;
@@ -48,6 +55,8 @@ import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Measurement;
 
 /**
+ * 
+ * This class writes data points to multiple tables
  * 
  * Schema to write to is;
  * <pre>
@@ -64,48 +73,48 @@ import net.sf.seesea.model.core.physx.Measurement;
  * </pre>
  * 
  */
+@Component(configurationPolicy = ConfigurationPolicy.REQUIRE, property = "type=postgis")
 public class PostInsertGISWriter implements IDataWriter {
 
-	private Connection connection;
 	private List<PreparedStatement> insertStatements;
 	private int batchSizeCounter;
 	private List<String> tableNames;
 	private Map<Integer, Long> counters;
+	private DataSource outputDataSource;
+	private Connection connection;
 
-	public PostInsertGISWriter(String url, String user, String password, List<String> tables) throws WriterException  {
-		try {
-			insertStatements = new ArrayList<PreparedStatement>(tables.size());
-			connection = DriverManager.getConnection (url, user, password);
-//			DriverWrapper.addGISTypes(((PGConnection)connection));
-			this.tableNames = tables;
-			prepareInsertStatement();
-			batchSizeCounter = 0;
-			counters = new HashMap<Integer,Long>();
-			for (int i = 0; i < tables.size(); i++) {
-				counters.put(i, 100L);
-			}
-		} catch (SQLException e) {
-			throw new WriterException("Could not create PostGIS Writer", e); //$NON-NLS-1$
+	public void activate(Map<String, Object> properties) throws SQLException {
+		tableNames = (List<String>) properties.get("outputTables"); 
+		connection = outputDataSource.getConnection();
+		insertStatements = new ArrayList<PreparedStatement>(tableNames.size());
+		prepareInsertStatement();
+		batchSizeCounter = 0;
+		counters = new HashMap<Integer,Long>();
+		for (int i = 0; i < tableNames.size(); i++) {
+			counters.put(i, 100L);
 		}
 	}
-
-
+	
+	public void deactivate(Map<String, Object> properties) throws SQLException {
+		connection.close();
+	}
+	
 
 	private void prepareInsertStatement() throws SQLException {
-		for(int i = 0 ; i < tableNames.size() ; i++) {
-			String insert = null;
-			if(i == 0) {
-				insert = "INSERT INTO " //$NON-NLS-1$
-						+ tableNames.get(i)
-						+ " (lat, lon , dbs, datasetid, valid, recordingdate, latvar, lonvar, depthvar, the_geom) VALUES (?::numeric(8,6), ?::numeric(11,8), ?::numeric(8,2), ?, ?, ?, ?, ?, ?, ST_SetSRID(ST_MakePoint(?, ?), 4326))"; //$NON-NLS-1$
-			} else {
-				insert = "INSERT INTO " //$NON-NLS-1$
-						+ tableNames.get(i)
-						+ " (lat, lon , dbs, datasetid, valid, recordingdate, the_geom) VALUES (?::numeric(8,6), ?::numeric(11,8), ?::numeric(8,2), ?, ?, ?,  ST_SetSRID(ST_MakePoint(?, ?), 4326))"; //$NON-NLS-1$
+			for(int i = 0 ; i < tableNames.size() ; i++) {
+				String insert = null;
+				if(i == 0) {
+					insert = "INSERT INTO " //$NON-NLS-1$
+							+ tableNames.get(i)
+							+ " (lat, lon , dbs, datasetid, valid, recordingdate, latvar, lonvar, depthvar, the_geom) VALUES (?::numeric(8,6), ?::numeric(11,8), ?::numeric(8,2), ?, ?, ?, ?, ?, ?, ST_SetSRID(ST_MakePoint(?, ?), 4326))"; //$NON-NLS-1$
+				} else {
+					insert = "INSERT INTO " //$NON-NLS-1$
+							+ tableNames.get(i)
+							+ " (lat, lon , dbs, datasetid, valid, recordingdate, the_geom) VALUES (?::numeric(8,6), ?::numeric(11,8), ?::numeric(8,2), ?, ?, ?,  ST_SetSRID(ST_MakePoint(?, ?), 4326))"; //$NON-NLS-1$
+				}
+				PreparedStatement prepareStatement = connection.prepareStatement(insert);
+				insertStatements.add(prepareStatement);
 			}
-			PreparedStatement prepareStatement = connection.prepareStatement(insert);
-			insertStatements.add(prepareStatement);
-		}
 	}
 
 
@@ -116,12 +125,9 @@ public class PostInsertGISWriter implements IDataWriter {
 			for (PreparedStatement insertStatement : insertStatements) {
 				insertStatement.executeBatch();
 			}
-			connection.close();
 		} catch (SQLException e) {
 			throw new WriterException(e);
-		} finally {
 		}
-		connection = null;
 	}
 	
 
@@ -148,7 +154,11 @@ public class PostInsertGISWriter implements IDataWriter {
 		}
 		if(geoPosition != null && depth != null) {
 			if(valid && (float)depth.getDepth() > 0.01) {
-				write(geoPosition.getLatitude().getDecimalDegree(), geoPosition.getLongitude().getDecimalDegree(), depth.getDepth(), sourceTrackIdentifier, 0, 0, 0, geoPosition.getTime());
+				double latitude = geoPosition.getLatitude().getDecimalDegree();
+				double longitude = geoPosition.getLongitude().getDecimalDegree();
+				double depth2 = depth.getDepth();
+				Date time = geoPosition.getTime();
+				write(latitude, longitude, depth2, sourceTrackIdentifier, 0, 0, 0, time);
 			}
 		}
 	}
@@ -223,7 +233,15 @@ public class PostInsertGISWriter implements IDataWriter {
 		} catch (SQLException e) {
 			throw new WriterException("Failed to insert data into table", e); //$NON-NLS-1$
 		}
+	}
+	
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC, target = "(db=depth)")
+	public synchronized void bindOutputConnection(DataSource outputDataSource) {
+		this.outputDataSource = outputDataSource;
+	}
 
+	public synchronized void unbindOutputConnection(DataSource outputDataSource) {
+		this.outputDataSource = null;
 	}
 	
 }

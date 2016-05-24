@@ -6,4 +6,5 @@
     <service>
         <provide interface="net.sf.seesea.data.io.IWriterFactory"/>
     </service>
+    <reference name="Writer" interface="net.sf.seesea.data.io.IDataWriter" cardinality="1..1" policy="dynamic" target="(type=postgis)" bind="bindWriter" unbind="unbindWriter"/>
 </scr:component>

@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.junit,
  net.sf.seesea.content.api,
  org.eclipse.equinox.cm;bundle-version="1.1.100",
- org.eclipse.equinox.ds;bundle-version="1.4.300"
+ org.eclipse.equinox.ds;bundle-version="1.4.300",
+ net.sf.seesea.filter.api;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.osgi.service.jdbc

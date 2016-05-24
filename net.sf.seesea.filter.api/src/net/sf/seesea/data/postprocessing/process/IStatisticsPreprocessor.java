@@ -27,8 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package net.sf.seesea.data.postprocessing.process;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Set;
 
 import net.sf.seesea.model.core.physx.Measurement;
@@ -43,9 +41,13 @@ import net.sf.seesea.track.api.exception.ProcessingException;
  */
 public interface IStatisticsPreprocessor extends IMeasurmentProcessor {
 
-	Set<SensorDescriptionUpdateRate<Measurement>> getBestSensors() throws FileNotFoundException, IOException;
+	/**
+	 * 
+	 * @return the best sensors for the given track file
+	 * @throws StatisticsException if a processing error occured during statistics calculation
+	 */
+	Set<SensorDescriptionUpdateRate<Measurement>> getBestSensors() throws StatisticsException;
 
-	void processFiles(ITrackFile trackFile) throws FileNotFoundException,
-	IOException, ProcessingException;
+	void processFiles(ITrackFile trackFile) throws StatisticsException;
 
 }
