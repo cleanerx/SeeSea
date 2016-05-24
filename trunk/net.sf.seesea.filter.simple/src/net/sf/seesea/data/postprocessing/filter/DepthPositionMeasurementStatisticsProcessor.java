@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.seesea.data.postprocessing.process.IStatisticsPreprocessor;
+import net.sf.seesea.data.postprocessing.process.StatisticsException;
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GNSSMeasuredPosition;
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
@@ -417,7 +418,7 @@ public class DepthPositionMeasurementStatisticsProcessor<T extends Measurement> 
 	}
 
 	public Set<SensorDescriptionUpdateRate<Measurement>> getBestSensors()
-			throws FileNotFoundException, IOException {
+			throws StatisticsException {
 		// processFiles(orderedFiles);
 
 		Set<SensorDescriptionUpdateRate<Measurement>> descriptions = new HashSet<SensorDescriptionUpdateRate<Measurement>>();
@@ -433,9 +434,12 @@ public class DepthPositionMeasurementStatisticsProcessor<T extends Measurement> 
 	}
 
 	@Override
-	public void processFiles(ITrackFile trackFile) throws FileNotFoundException,
-			IOException, ProcessingException {
-		trackFileProcessor.processFile(trackFile);
+	public void processFiles(ITrackFile trackFile) throws StatisticsException {
+		try {
+			trackFileProcessor.processFile(trackFile);
+		} catch (IOException | ProcessingException e) {
+			throw new StatisticsException(e);
+		}
 	}
 
 	@Override

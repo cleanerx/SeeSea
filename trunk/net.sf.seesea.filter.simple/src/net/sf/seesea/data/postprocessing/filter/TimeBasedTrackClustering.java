@@ -38,20 +38,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import net.sf.seesea.data.postprocessing.process.FilterException;
-import net.sf.seesea.data.postprocessing.process.IDepthPositionPreProcessor;
-import net.sf.seesea.data.postprocessing.process.IFileTypeProcessingFactory;
-import net.sf.seesea.data.postprocessing.process.ITrackClustering;
-import net.sf.seesea.data.postprocessing.process.TrackClusterResult;
-import net.sf.seesea.gauge.IGaugeValueUpdater;
-import net.sf.seesea.track.api.data.ITrackFile;
-import net.sf.seesea.track.api.exception.ProcessingException;
-
 import org.apache.log4j.Logger;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+import net.sf.seesea.data.postprocessing.process.FilterException;
+import net.sf.seesea.data.postprocessing.process.IDepthPositionPreProcessor;
+import net.sf.seesea.data.postprocessing.process.IFileTypeProcessingFactory;
+import net.sf.seesea.data.postprocessing.process.ITrackClustering;
+import net.sf.seesea.data.postprocessing.process.TrackClusterResult;
+import net.sf.seesea.track.api.data.ITrackFile;
+import net.sf.seesea.track.api.exception.ProcessingException;
 
 /**
  * this clustering orders files according to their recorded date.

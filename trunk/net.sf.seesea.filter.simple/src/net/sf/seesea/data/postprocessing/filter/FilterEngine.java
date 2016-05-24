@@ -41,6 +41,7 @@ public class FilterEngine implements IFilterEngine {
 
 	public void activate(Map<String, Object> config) {
 		preprocessRun = (boolean) config.get("preprocessRun");
+//		filterProperties = (List<Map<String, Object>>) config.get("filterProperties");
 		// filterProperties = config.get("filterProperties");
 	}
 

@@ -1,10 +1,8 @@
 package net.sf.seesea.data.postprocessing.filter;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.math3.distribution.TDistribution;
@@ -17,6 +15,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.IWriterFactory;
 import net.sf.seesea.data.io.WriterException;
+import net.sf.seesea.data.postprocessing.process.IFilter;
 import net.sf.seesea.model.core.geo.Depth;
 import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.GeoPosition;
@@ -24,12 +23,11 @@ import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.util.GeoUtil;
-import net.sf.seesea.track.api.IMeasurmentProcessor;
 import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.track.api.exception.ProcessingException;
 import net.sf.seesea.waterlevel.IWaterLevelCorrection;
 
-public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor {
+public class ManualFilteredMeasurementProcessor implements IFilter {
 
 //	private final Map<String, Object> outputOptions;
 
@@ -305,6 +303,20 @@ public class ManualFilteredMeasurementProcessor implements IMeasurmentProcessor 
 
 	public void unbindWaterLevelCorrection(IWaterLevelCorrection waterLevelCorrection) {
 		waterLevelCorrectionAR.compareAndSet(waterLevelCorrection, null);
+	}
+
+
+	@Override
+	public boolean requiresAbsoluteTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean requiresRelativeTime() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -28,11 +28,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package net.sf.seesea.data.io.postgis;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.IWriterFactory;
@@ -41,29 +40,20 @@ import net.sf.seesea.data.io.WriterException;
 @Component(property = "type=postgis")
 public class PostGISWriterFactory implements IWriterFactory {
 
-	public PostGISWriterFactory() throws ClassNotFoundException {
-		Class.forName ("org.postgresql.Driver"); //$NON-NLS-1$
-	}
+	private IDataWriter writer;
 
 	@Override
 	public IDataWriter createWriter() throws WriterException {
-		Map<String,Object> parameters = new HashMap<String, Object>();
-		String user = (String) parameters.get("user"); //$NON-NLS-1$
-		String password = (String) parameters.get("password"); //$NON-NLS-1$
-		String host = (String) parameters.get("host"); //$NON-NLS-1$
-		if(host == null || host.isEmpty()) {
-			host = "localhost"; //$NON-NLS-1$
-		}
-		String port = (String) parameters.get("port"); //$NON-NLS-1$
-		if(port == null || port.isEmpty()) {
-			port = "5432"; //$NON-NLS-1$
-		}
-		String database = (String) parameters.get("outputDatabase"); //$NON-NLS-1$
-		String table = (String) parameters.get("outputTable"); //$NON-NLS-1$
-		String[] outputTables = table.split(","); //$NON-NLS-1$
-		
-		String url = "jdbc:postgresql:" + (host != null ? ("//" + host) + (port != null ? ":" + port : "") + "/" : "") + database; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		return new PostInsertGISWriter(url, user, password,Arrays.asList(outputTables));
+		return writer;
+	}
+	
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC, target = "(type=postgis)")
+	public synchronized void bindWriter(IDataWriter writer) {
+		this.writer = writer;
+	}
+
+	public synchronized void unbindWriter(IDataWriter writer) {
+		this.writer = null;
 	}
 }
 

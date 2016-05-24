@@ -18,6 +18,7 @@ Import-Package: org.osgi.service.component;version="1.2.1",
  org.osgi.service.jdbc;version="[1.0.0,2.0.0)"
 Service-Component: OSGI-INF/net.sf.seesea.data.io.postgis.PartitionRetrival.xml,
  OSGI-INF/net.sf.seesea.data.io.postgis.PostGISWriterFactory.xml,
+ OSGI-INF/net.sf.seesea.data.io.postgis.PostInsertGISWriter.xml,
  OSGI-INF/net.sf.seesea.data.io.postgis.PostgresDatasourceConfiguration.xml
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
