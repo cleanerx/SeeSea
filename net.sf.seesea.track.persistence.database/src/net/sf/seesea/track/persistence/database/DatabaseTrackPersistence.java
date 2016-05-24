@@ -70,7 +70,12 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 
 	public void activate(Map<String, Object> properties) {
 		basedir = (String) properties.get("basedir");
-		fullprocess = "true".equals(properties.get("fullprocess"));
+		Boolean fp = (Boolean) properties.get("fullprocess");
+		if(fp == null) {
+			fullprocess =  false; 
+		} else {
+			fullprocess = fp.booleanValue();
+		}
 
 		whitelistUsers = getValues("whitelistUsers", properties);
 		blacklistUsers = getValues("blacklistUsers", properties);
@@ -185,11 +190,10 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 		try (Connection connection = uploadDataSource.getConnection();
 				Statement usersStatement = connection.createStatement();
 				ResultSet userSet = usersStatement.executeQuery(
-						"SELECT user_name FROM user_profiles WHERE user_name IN (SELECT DISTINCT user_name FROM user_tracks")) {
+						"SELECT user_name FROM user_profiles WHERE user_name IN (SELECT DISTINCT user_name FROM user_tracks)")) {
 			while (userSet.next()) {
 				List<ITrackFile> orderedFiles = new ArrayList<ITrackFile>();
 				String user = userSet.getString(1);
-				user2Tracks.put(user, orderedFiles);
 				String sha1Username = encryptUser(user);
 				try (Statement createStatement = connection.createStatement();
 						ResultSet vesselConfigurations = createStatement.executeQuery(
@@ -373,6 +377,9 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 					// ProcessingState.PREPROCESSED.ordinal() + "' AND
 					// containertrack IS NULL"); //$NON-NLS-1$ //$NON-NLS-2$
 					// //$NON-NLS-3$
+				}
+				if(!orderedFiles.isEmpty()) {
+					user2Tracks.put(user, orderedFiles);
 				}
 			}
 		} catch (SQLException | IOException e1) {
