@@ -38,7 +38,7 @@ public class BoatParameters implements IBoatParameters {
 			return 0.0D;
 		}
 		double depthOffsetWaterline;
-		if(point3d.getOffsetType().equals("KEEL") && point3d.getOffsetKeel() != 0.0) {
+		if(point3d.getOffsetType() != null && point3d.getOffsetType().equals("KEEL") && point3d.getOffsetKeel() != 0.0) {
 			depthOffsetWaterline = point3d.getZ();
 			depthOffsetWaterline+=point3d.getOffsetKeel();
 		} else {
