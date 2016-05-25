@@ -36,15 +36,15 @@ public class VesselConfiguration {
 	
 	private Map<String, Point3D> gpsSensorOffsets;
 	
-	private Map<String, Point3D> depthSensorOffsets;
+	private Map<String, DepthSensor> depthSensorOffsets;
 	
 	public VesselConfiguration() {
 		gpsSensorOffsets = new HashMap<String, Point3D>();
-		depthSensorOffsets = new HashMap<String, Point3D>();
+		depthSensorOffsets = new HashMap<String, DepthSensor>();
 	}
 	
 	public VesselConfiguration(Map<String, Point3D> gpsSensorOffsets,
-			Map<String, Point3D> depthSensorOffsets) {
+			Map<String, DepthSensor> depthSensorOffsets) {
 		super();
 		this.gpsSensorOffsets = gpsSensorOffsets;
 		this.depthSensorOffsets = depthSensorOffsets;
@@ -56,7 +56,7 @@ public class VesselConfiguration {
 		return gpsSensorOffsets;
 	}
 
-	public Map<String, Point3D> getDepthSensorOffsets() {
+	public Map<String, DepthSensor> getDepthSensorOffsets() {
 		return depthSensorOffsets;
 	}
 	

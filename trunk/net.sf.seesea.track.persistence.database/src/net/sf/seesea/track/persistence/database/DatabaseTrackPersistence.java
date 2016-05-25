@@ -40,6 +40,7 @@ import net.sf.seesea.track.api.data.IContainedTrackFile;
 import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.ProcessingState;
 import net.sf.seesea.track.api.exception.TrackPerssitenceException;
+import net.sf.seesea.track.model.DepthSensor;
 import net.sf.seesea.track.model.GzipTrackFile;
 import net.sf.seesea.track.model.SimpleTrackFile;
 import net.sf.seesea.track.model.VesselConfiguration;
@@ -218,11 +219,11 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 
 						try (Statement depthStatement = connection.createStatement();
 								ResultSet depthOffsets = depthStatement.executeQuery(
-										"SELECT vesselconfigid, sensorid, x,y,z FROM depthsensor WHERE vesselconfigid = '" //$NON-NLS-1$
+										"SELECT vesselconfigid, sensorid, x,y,z,offsetkeel,offsettype FROM depthsensor WHERE vesselconfigid = '" //$NON-NLS-1$
 												+ id + "'")) { //$NON-NLS-1$
 							while (depthOffsets.next()) {
-								Point3D offset = new Point3D(depthOffsets.getDouble(3), depthOffsets.getDouble(4),
-										depthOffsets.getDouble(5));
+								DepthSensor offset = new DepthSensor(depthOffsets.getDouble(3), depthOffsets.getDouble(4),
+										depthOffsets.getDouble(5), depthOffsets.getDouble(6), depthOffsets.getString(7));
 								vesselConfiguration.getDepthSensorOffsets().put(depthOffsets.getString(2), offset);
 							}
 						}
