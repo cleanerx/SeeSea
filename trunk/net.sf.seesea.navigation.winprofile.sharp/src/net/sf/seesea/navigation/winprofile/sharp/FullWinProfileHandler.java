@@ -67,7 +67,7 @@ public class FullWinProfileHandler extends DefaultHandler {
 				List<Measurement> measurements = new ArrayList<Measurement>(2);
 				measurements.add(geoPosition3D);
 				measurements.add(depth);
-				measurmentProcessor.processMeasurements(measurements, "", trackFile.getTrackId(), trackFile.getBoundingBox(), trackFile.getBoatParameters()); //$NON-NLS-1$
+				measurmentProcessor.processMeasurements(measurements, "", trackFile.getTrackId(), trackFile.getBoundingBox(), trackFile); //$NON-NLS-1$
 				
 			} catch (ParseException e) {
 				e.printStackTrace();

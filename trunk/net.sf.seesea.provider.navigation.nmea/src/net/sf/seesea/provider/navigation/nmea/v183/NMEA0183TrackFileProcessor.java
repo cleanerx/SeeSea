@@ -61,7 +61,7 @@ public class NMEA0183TrackFileProcessor implements ITrackFileProcessor {
 				}
 				if(results !=null && !results.isEmpty()) {
 					int startOfMessage = line.indexOf("$"); //$NON-NLS-1$
-					measurmentProcessor.processMeasurements(results, line.substring(startOfMessage + 3, startOfMessage + 6), recordedFile.getTrackId(), recordedFile.getBoundingBox(), recordedFile.getBoatParameters());
+					measurmentProcessor.processMeasurements(results, line.substring(startOfMessage + 3, startOfMessage + 6), recordedFile.getTrackId(), recordedFile.getBoundingBox(), recordedFile);
 				}
 				int i = 0;
 			}

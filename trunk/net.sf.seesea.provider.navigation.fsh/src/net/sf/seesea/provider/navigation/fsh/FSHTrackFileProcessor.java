@@ -81,7 +81,7 @@ public class FSHTrackFileProcessor implements ITrackFileProcessor {
 //					System.out.println(read);
 					bytesRead += fshBlock.getLength();
 					List<Measurement> measurements = fshReader.extractMeasurementsFromFSH(fshBlock, message);
-					measurmentProcessor.processMeasurements(measurements, "none", recordedFile.getTrackId(), recordedFile.getBoundingBox(), recordedFile.getBoatParameters());
+					measurmentProcessor.processMeasurements(measurements, "none", recordedFile.getTrackId(), recordedFile.getBoundingBox(), recordedFile);
 //					System.out.println("Type" + fshBlock.getType() + " : Length" + fshBlock.getLength() + " measurements : " + measurements.size() / 2);
 					fshBlock = fshStreamProcessor.readBlock(inputStream);
 					bytesRead += 14;
