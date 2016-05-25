@@ -59,7 +59,7 @@ public class FullGPXProfileHandlerTest extends TestCase {
 		IMeasurmentProcessor measurmentProcessor = EasyMock.createNiceMock(IMeasurmentProcessor.class);
 		List<Measurement> list = new ArrayList<Measurement>();
 		Capture<List<Measurement>> measurements = new Capture<List<Measurement>>();
-		measurmentProcessor.processMeasurements(EasyMock.capture(measurements), EasyMock.anyString(), EasyMock.anyLong(), EasyMock.<GeoBoundingBox>anyObject(), null);
+		measurmentProcessor.processMeasurements(EasyMock.capture(measurements), EasyMock.anyString(), EasyMock.anyLong(), EasyMock.<GeoBoundingBox>anyObject(), EasyMock.<ITrackFile>anyObject());
 		EasyMock.replay(measurmentProcessor);
 		
 		URL url = GPXTestActivator.getContext().getBundle().getEntry("/res/8629.dat"); //$NON-NLS-1$
