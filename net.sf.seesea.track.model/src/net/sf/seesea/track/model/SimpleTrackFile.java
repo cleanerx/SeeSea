@@ -45,7 +45,7 @@ public class SimpleTrackFile extends AbstractTrackFile {
 	private String fileReference;
 	private URL url;
 	
-	private List<ITrackFile> trackFiles = new ArrayList<ITrackFile>();
+	private List<ITrackFile> trackFiles = new ArrayList<ITrackFile>(0);
 	
 	public SimpleTrackFile() {
 		super();

@@ -27,7 +27,7 @@ import net.sf.seesea.model.core.physx.SpeedUnit;
 import net.sf.seesea.model.core.physx.Time;
 import net.sf.seesea.provider.navigation.nmea.NMEA0183Activator;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
-import net.sf.seesea.track.api.data.IBoatParameters;
+import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.ProcessingException;
 import net.sf.seesea.track.model.SimpleTrackFile;
 
@@ -45,7 +45,7 @@ public class NMEA0183TrackFileProcessorTest {
 			
 			@Override
 			public void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier,
-					GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws ProcessingException {
+					GeoBoundingBox boundingBox, ITrackFile trackfile) throws ProcessingException {
 				measurements.addAll(results);
 				
 			}

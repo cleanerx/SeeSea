@@ -48,7 +48,7 @@ import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Measurement;
-import net.sf.seesea.track.api.data.IBoatParameters;
+import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.ProcessingException;
 import net.sf.seesea.waterlevel.IWaterLevelCorrection;
 
@@ -82,17 +82,16 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 
 	@Override
 	public void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier,
-			GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws ProcessingException {
+			GeoBoundingBox boundingBox, ITrackFile trackfile) throws ProcessingException {
 		try {
 			for (Measurement measurement : results) {
 				if (measurement instanceof CompositeMeasurement) {
 					CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
 					for (Measurement containedMeasurement : compositeMeasurement.getMeasurements()) {
-						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox,
-								boatParameters);
+						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox, trackfile);
 					}
 				} else {
-					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox, boatParameters);
+					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox, trackfile);
 				}
 			}
 		} catch (WriterException e) {
@@ -102,10 +101,10 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 	}
 
 	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier,
-			GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws WriterException, ProcessingException {
+			GeoBoundingBox boundingBox, ITrackFile trackfile) throws WriterException, ProcessingException {
 		// if(lastSourceTrackIdentifier != sourceTrackIdentifier) {
-		if (boatParameters != null) {
-			sensorOffsetToWaterline = boatParameters.getSensorOffsetToWaterline(sourceTrackIdentifier,
+		if (trackfile.getBoatParameters() != null) {
+			sensorOffsetToWaterline = trackfile.getBoatParameters().getSensorOffsetToWaterline(
 					measurement.getSensorID());
 		}
 		//// this.boundingBox = boundingBox;

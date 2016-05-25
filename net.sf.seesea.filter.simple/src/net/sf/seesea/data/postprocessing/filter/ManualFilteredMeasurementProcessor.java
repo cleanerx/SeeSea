@@ -24,6 +24,7 @@ import net.sf.seesea.model.core.physx.CompositeMeasurement;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.model.util.GeoUtil;
 import net.sf.seesea.track.api.data.IBoatParameters;
+import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.ProcessingException;
 import net.sf.seesea.waterlevel.IWaterLevelCorrection;
 
@@ -73,16 +74,16 @@ public class ManualFilteredMeasurementProcessor implements IFilter {
 
 	@Override
 	public void processMeasurements(List<Measurement> results,
-			String messageType,long sourceTrackIdentifier, GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws ProcessingException {
+			String messageType,long sourceTrackIdentifier, GeoBoundingBox boundingBox, ITrackFile trackfile) throws ProcessingException {
 		try {
 			for (Measurement measurement : results) {
 				if(measurement instanceof CompositeMeasurement) {
 					CompositeMeasurement compositeMeasurement = (CompositeMeasurement) measurement;
 					for (Measurement containedMeasurement : compositeMeasurement.getMeasurements()) {
-						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox, boatParameters);
+						processSingleMeasurement(containedMeasurement, sourceTrackIdentifier, boundingBox,  trackfile);
 					}
 				} else {
-					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox, boatParameters);
+					processSingleMeasurement(measurement, sourceTrackIdentifier, boundingBox, trackfile);
 				}
 			}
 		} catch (WriterException e) {
@@ -91,9 +92,9 @@ public class ManualFilteredMeasurementProcessor implements IFilter {
 
 	}
 	
-	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws WriterException, ProcessingException {
+	protected void processSingleMeasurement(Measurement measurement, long sourceTrackIdentifier, GeoBoundingBox boundingBox, ITrackFile trackfile) throws WriterException, ProcessingException {
 		if(lastSourceTrackIdentifier != sourceTrackIdentifier) {
-			sensorOffsetToWaterline = boatParameters.getSensorOffsetToWaterline(sourceTrackIdentifier, measurement.getSensorID());
+			sensorOffsetToWaterline = boatParameters.getSensorOffsetToWaterline(measurement.getSensorID());
 //			this.boundingBox = boundingBox;
 			lastPosition = null;
 			descStats = new DescriptiveStatistics(100);

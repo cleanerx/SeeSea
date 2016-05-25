@@ -195,6 +195,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 				List<ITrackFile> orderedFiles = new ArrayList<ITrackFile>();
 				String user = userSet.getString(1);
 				String sha1Username = encryptUser(user);
+				Map<Long,VesselConfiguration> vesselConfigurationList = new HashMap<>(); 
 				try (Statement createStatement = connection.createStatement();
 						ResultSet vesselConfigurations = createStatement.executeQuery(
 								"SELECT id, name, description FROM vesselconfiguration WHERE user_name = '" + user //$NON-NLS-1$
@@ -202,7 +203,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 				) {
 					while (vesselConfigurations.next()) {
 						VesselConfiguration vesselConfiguration = new VesselConfiguration();
-						int id = vesselConfigurations.getInt(1);
+						long id = vesselConfigurations.getLong(1);
 
 						try (Statement gpsStatement = connection.createStatement();
 								ResultSet gpsOffsets = gpsStatement.executeQuery(
@@ -225,6 +226,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 								vesselConfiguration.getDepthSensorOffsets().put(depthOffsets.getString(2), offset);
 							}
 						}
+						vesselConfigurationList.put( id, vesselConfiguration);
 					}
 
 					Statement orderStatement = connection.createStatement();
@@ -232,15 +234,15 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 					ResultSet singleUserTrackFiles = null;
 					if (preprocessed) {
 						singleUserTrackFiles = orderStatement
-								.executeQuery("SELECT track_id, filetype, compression, file_ref FROM user_tracks " + //$NON-NLS-1$
-										"WHERE (user_name = '" + user + "' OR user_name = '" + sha1Username + "')" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								.executeQuery("SELECT track_id, filetype, compression, file_ref, vesselconfigid FROM user_tracks  " + //$NON-NLS-1$
+										"WHERE (user_tracks.user_name = '" + user + "' OR user_tracks.user_name = '" + sha1Username + "')" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 										"AND upload_state = '" + ProcessingState.PREPROCESSED.ordinal() + "' " + //$NON-NLS-1$ //$NON-NLS-2$
 										"AND containertrack IS NULL " + //$NON-NLS-1$
 										"AND track_id NOT IN (SELECT containertrack FROM user_tracks WHERE containertrack IS NOT NULL)"); //$NON-NLS-1$
 					} else {
 						singleUserTrackFiles = orderStatement
-								.executeQuery("SELECT track_id, filetype, compression, file_ref FROM user_tracks " + //$NON-NLS-1$
-										"WHERE (user_name = '" + user + "' OR user_name = '" + sha1Username + "')" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								.executeQuery("SELECT track_id, filetype, compression, file_ref, vesselconfigid FROM user_tracks " + //$NON-NLS-1$
+										"WHERE (user_tracks.user_name = '" + user + "' OR user_tracks.user_name = '" + sha1Username + "')" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 										"AND upload_state = '" + ProcessingState.FILE_PROCESSED.ordinal() + "' " + //$NON-NLS-1$ //$NON-NLS-2$
 										"AND containertrack IS NULL " + //$NON-NLS-1$
 										"AND track_id NOT IN (SELECT containertrack FROM user_tracks WHERE containertrack IS NOT NULL)"); //$NON-NLS-1$
@@ -252,6 +254,8 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 								+ format.format((id / 100) * 100) + "/" + id + ".dat"; //$NON-NLS-1$ //$NON-NLS-2$
 						String compression = singleUserTrackFiles.getString("compression"); //$NON-NLS-1$
 						String fileType = singleUserTrackFiles.getString("filetype"); //$NON-NLS-1$
+						Long vesselConfigId = singleUserTrackFiles.getLong("vesselconfigid"); //$NON-NLS-1$
+						
 						if (compression == null) {
 							SimpleTrackFile trackFileX = new SimpleTrackFile();
 							trackFileX.setTrackId(id);
@@ -259,6 +263,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 							trackFileX.setCompression(CompressionType.NONE);
 							trackFileX.setFileType(fileType);
 							trackFileX.setName(singleUserTrackFiles.getString("file_ref"));
+							trackFileX.setVesselConfiguration(vesselConfigurationList.get(vesselConfigId));
 							orderedFiles.add(trackFileX);
 						} else {
 							CompressionType compressionType = CompressionType.getCompressionType(compression);
@@ -270,6 +275,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 								trackFileX.setCompression(compressionType);
 								trackFileX.setFileType(fileType);
 								trackFileX.setName(singleUserTrackFiles.getString("file_ref"));
+								trackFileX.setVesselConfiguration(vesselConfigurationList.get(vesselConfigId));
 								orderedFiles.add(trackFileX);
 								break;
 							case ZIP:
@@ -281,6 +287,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 									trackFileY.setCompression(compressionType);
 									trackFileY.setFileType(fileType);
 									trackFileY.setName(singleUserTrackFiles.getString("file_ref"));
+									trackFileY.setVesselConfiguration(vesselConfigurationList.get(vesselConfigId));
 									orderedFiles.add(trackFileY);
 								} catch (IllegalArgumentException e) {
 									e.printStackTrace();
@@ -291,6 +298,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 									trackFileY.setCompression(compressionType);
 									trackFileY.setFileType(fileType);
 									trackFileY.setName(singleUserTrackFiles.getString("file_ref"));
+									trackFileY.setVesselConfiguration(vesselConfigurationList.get(vesselConfigId));
 									orderedFiles.add(trackFileY);
 								}
 							default:
@@ -301,7 +309,7 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 
 					orderStatement = connection.createStatement();
 					ResultSet mutliTrackFiles = orderStatement
-							.executeQuery("SELECT track_id, filetype, compression FROM user_tracks " + //$NON-NLS-1$
+							.executeQuery("SELECT track_id, filetype, compression, vesselconfigid FROM user_tracks " + //$NON-NLS-1$
 									"WHERE (user_name = '" + user + "' OR user_name = '" + sha1Username + "')" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 									"AND upload_state = '" + ProcessingState.PREPROCESSED.ordinal() + "' " + //$NON-NLS-1$ //$NON-NLS-2$
 									"AND containertrack IS NULL " + //$NON-NLS-1$
@@ -311,8 +319,10 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 						String trackFile = basedir + "/" //$NON-NLS-1$
 								+ format.format((id / 100) * 100) + "/" + id + ".dat"; //$NON-NLS-1$ //$NON-NLS-2$
 						String compression = mutliTrackFiles.getString("compression"); //$NON-NLS-1$
+						Long vesselConfigId = singleUserTrackFiles.getLong("vesselconfigid"); //$NON-NLS-1$
 						Statement compressedFilesStatement = connection.createStatement();
 						ResultSet compressedTracks = compressedFilesStatement
+								
 								.executeQuery("SELECT track_id, filetype, compression, file_ref FROM user_tracks " + //$NON-NLS-1$
 										"WHERE (user_name = '" + user + "' OR user_name = '" + sha1Username + "')" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 										"AND upload_state = '" + ProcessingState.PREPROCESSED.ordinal() + "' " + //$NON-NLS-1$ //$NON-NLS-2$
@@ -331,6 +341,8 @@ public class DatabaseTrackPersistence implements ITrackPersistence {
 									zippedTrack.setFileType(mimeType);
 									zippedTrack.setTrackId(compressedTracks.getLong("track_id"));
 									zippedTrack.setName(compressedTracks.getString("file_ref"));
+									zippedTrack.setVesselConfiguration(vesselConfigurationList.get(vesselConfigId));
+
 									orderedFiles.add(zippedTrack);
 								} catch (IllegalArgumentException e) {
 									ZipFile zipFile = new ZipFile(trackFile, Charset.forName("ISO_8859_1")); //$NON-NLS-1$

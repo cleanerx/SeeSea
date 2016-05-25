@@ -53,6 +53,6 @@ public interface IBoatParameters {
 	 * @param sensorId
 	 * @return
 	 */
-	double getSensorOffsetToWaterline(long trackId, String sensorId);
+	double getSensorOffsetToWaterline(String sensorId);
 
 }

@@ -176,7 +176,7 @@ public class FullGPXProfileHandler extends DefaultHandler {
 			geoPositionInTrackPoint = null;
 			try {
 				if(list.size() > 1) {
-					measurmentProcessor.processMeasurements(list, "trkpt", trackFile.getTrackId(), trackFile.getBoundingBox(), trackFile.getBoatParameters());
+					measurmentProcessor.processMeasurements(list, "trkpt", trackFile.getTrackId(), trackFile.getBoundingBox(), trackFile);
 				}
 			} catch (ProcessingException e) {
 				e.printStackTrace();
@@ -193,7 +193,7 @@ public class FullGPXProfileHandler extends DefaultHandler {
 			list.add(depth);
 			geoPositionInTrackPoint = null;
 			try {
-				measurmentProcessor.processMeasurements(list, "lgb", trackFile.getTrackId(), trackFile.getBoundingBox(), trackFile.getBoatParameters());
+				measurmentProcessor.processMeasurements(list, "lgb", trackFile.getTrackId(), trackFile.getBoundingBox(), null);
 			} catch (ProcessingException e) {
 				e.printStackTrace();
 			}

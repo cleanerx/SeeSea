@@ -72,7 +72,7 @@ public class SL2TrackFileProcessor implements ITrackFileProcessor, IMeasurementL
 	@Override
 	public void notify(List<Measurement> measurements) {
 		try {
-			measurmentProcessor.processMeasurements(measurements, null, currentProcessedFile.getTrackId(), currentProcessedFile.getBoundingBox(), currentProcessedFile.getBoatParameters());
+			measurmentProcessor.processMeasurements(measurements, null, currentProcessedFile.getTrackId(), currentProcessedFile.getBoundingBox(), currentProcessedFile);
 		} catch (ProcessingException e) {
 			Logger.getLogger(getClass()).error("Failed to process", e);
 		}

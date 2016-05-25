@@ -22,7 +22,7 @@ import net.sf.seesea.model.core.geo.Longitude;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
-import net.sf.seesea.track.api.data.IBoatParameters;
+import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.ProcessingException;
 import net.sf.seesea.track.model.SimpleTrackFile;
 
@@ -40,7 +40,7 @@ public class ADMTrackFileProcessorTest {
 			
 			@Override
 			public void processMeasurements(List<Measurement> results, String messageType, long sourceTrackIdentifier,
-					GeoBoundingBox boundingBox, IBoatParameters boatParameters) throws ProcessingException {
+					GeoBoundingBox boundingBox, ITrackFile trackfile) throws ProcessingException {
 				measurements.addAll(results);
 				
 			}

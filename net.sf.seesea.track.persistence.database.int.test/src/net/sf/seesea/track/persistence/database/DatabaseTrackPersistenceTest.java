@@ -2,6 +2,7 @@ package net.sf.seesea.track.persistence.database;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -25,6 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sf.seesea.track.api.data.CompressionType;
+import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.data.ProcessingState;
 import net.sf.seesea.track.api.exception.TrackPerssitenceException;
@@ -318,7 +320,6 @@ public class DatabaseTrackPersistenceTest {
 	}
 	
 	@Test
-	@Ignore
 	public void testGetUser2PostprocessTrackCluster() throws TrackPerssitenceException, IOException, SQLException {
 		JDBCDataSource uploadDataSource = new JDBCDataSource();
 		uploadDataSource.setDatabase("jdbc:hsqldb:" + "uploadUnitTest");
@@ -335,6 +336,10 @@ public class DatabaseTrackPersistenceTest {
 				ScriptRunner scriptRunner = new ScriptRunner(c, true, true);
 				scriptRunner.runScript(fileReader);
 			}
+			try (Statement statement = c.createStatement()) {
+				statement.execute("UPDATE user_tracks SET upload_state = 3");
+			}
+
 			DatabaseTrackPersistence databaseTrackPersistence = new DatabaseTrackPersistence();
 			databaseTrackPersistence.bindDepthConnection(uploadDataSource);
 			Map<String, Object> properties = new HashMap<String, Object>();
@@ -342,6 +347,14 @@ public class DatabaseTrackPersistenceTest {
 			databaseTrackPersistence.activate(properties);
 			
 			Map<String, List<ITrackFile>> user2PostprocessTrackCluster = databaseTrackPersistence.getUser2PostprocessTrackCluster();
+			assertEquals(1,user2PostprocessTrackCluster.size());
+			List<ITrackFile> list = user2PostprocessTrackCluster.get("test@test.de");
+			assertNotNull(list);
+			assertEquals(1,list.size());
+			ITrackFile trackFile = list.iterator().next();
+			IBoatParameters boatParameters = trackFile.getBoatParameters();
+			assertNotNull(boatParameters);
+			assertEquals(-0.1, boatParameters.getSensorOffsetToWaterline("DBT"), 0.0000001);
 			
 		}
 	}

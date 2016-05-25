@@ -48,7 +48,6 @@ import net.sf.seesea.model.core.geo.GeoBoundingBox;
 import net.sf.seesea.model.core.physx.Measurement;
 import net.sf.seesea.provider.navigation.gpx.FullGPXProfileHandler;
 import net.sf.seesea.track.api.IMeasurmentProcessor;
-import net.sf.seesea.track.api.data.IBoatParameters;
 import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.InputStreamNotFoundException;
 import net.sf.seesea.track.api.exception.ProcessingException;
@@ -60,7 +59,7 @@ public class FullGPXProfileHandlerTest extends TestCase {
 		IMeasurmentProcessor measurmentProcessor = EasyMock.createNiceMock(IMeasurmentProcessor.class);
 		List<Measurement> list = new ArrayList<Measurement>();
 		Capture<List<Measurement>> measurements = new Capture<List<Measurement>>();
-		measurmentProcessor.processMeasurements(EasyMock.capture(measurements), EasyMock.anyString(), EasyMock.anyLong(), EasyMock.<GeoBoundingBox>anyObject(), EasyMock.<IBoatParameters>anyObject());
+		measurmentProcessor.processMeasurements(EasyMock.capture(measurements), EasyMock.anyString(), EasyMock.anyLong(), EasyMock.<GeoBoundingBox>anyObject(), null);
 		EasyMock.replay(measurmentProcessor);
 		
 		URL url = GPXTestActivator.getContext().getBundle().getEntry("/res/8629.dat"); //$NON-NLS-1$

@@ -56,7 +56,7 @@ public class ADMFileProcessor implements ITrackFileProcessor {
 						if(size <= limit) {
 							for (int k = 0 ; k < trackMetadata.getTrackppointCount() - 1 ; k++) {
 								List<Measurement> measurements = streamProcessor.extractMeasurementsFromADM(inputStream);
-								measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId(), trackFile.getBoundingBox(), trackFile.getBoatParameters());
+								measurmentProcessor.processMeasurements(measurements, "none", trackFile.getTrackId(), trackFile.getBoundingBox(), trackFile);
 							}
 							if(size >= limit) {
 								break x;
