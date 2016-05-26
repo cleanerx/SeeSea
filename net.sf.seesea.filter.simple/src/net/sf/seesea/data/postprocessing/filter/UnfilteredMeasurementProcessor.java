@@ -66,7 +66,7 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 
 	public static final String WRITER_REFERENCE = "writer";
 
-	private IDataWriter dataWriter = null;
+//	private IDataWriter dataWriter;
 
 	private MeasurmentWindow measurementWindow2;
 
@@ -76,7 +76,7 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 
 	// references
 
-	private AtomicReference<IWriterFactory> writerFactoryAR = new AtomicReference<IWriterFactory>();
+	private AtomicReference<IDataWriter> writerFactoryAR = new AtomicReference<IDataWriter>();
 
 	private AtomicReference<IWaterLevelCorrection> waterLevelCorrectionAR = new AtomicReference<IWaterLevelCorrection>();
 
@@ -128,7 +128,7 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 
 					} else if (measurementWindow2 == null) {
 						finish();
-						createNewDataWriter();
+//						createNewDataWriter();
 						// create a new window and add time measurment
 						measurementWindow2 = new MeasurmentWindow();
 					}
@@ -157,14 +157,14 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 
 	private void internalFinishProcessing() throws WriterException {
 
-		if (dataWriter != null) {
-			dataWriter.closeOutput();
+		if (writerFactoryAR.get() != null) {
+			writerFactoryAR.get().closeOutput();
 		}
-		dataWriter = null;
+//		dataWriter = null;
 	}
 
 	private void createNewDataWriter() throws WriterException {
-		dataWriter = writerFactoryAR.get().createWriter();
+//		dataWriter = writerFactoryAR.get().createWriter();
 	}
 
 	/**
@@ -174,11 +174,6 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 	 * @throws WriterException
 	 */
 	private void filterMeasurementWindow() throws WriterException {
-		if (measurementWindow2 != null) {
-			if (dataWriter == null) {
-				createNewDataWriter();
-			}
-		}
 		MeasuredPosition3D lastPosition = (MeasuredPosition3D) measurementWindow2.getPositions()
 				.get(measurementWindow2.getPositions().size() - 1);
 
@@ -198,7 +193,7 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 					depth.setDepth(depth.getDepth() - tideHeight);
 					depth.setDepth(depth.getDepth() - sensorOffsetToWaterline);
 					measurements.add(depth);
-					dataWriter.write(measurements, true, lastSourceTrackIdentifier);
+					writerFactoryAR.get().write(measurements, true, lastSourceTrackIdentifier);
 				} else {
 					Logger.getLogger(getClass())
 							.info("No water level correction for:" + lastPosition.getLatitude().getDecimalDegree() + ":"
@@ -206,7 +201,7 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 				}
 			} else {
 				measurements.add(depth);
-				dataWriter.write(measurements, true, lastSourceTrackIdentifier);
+				writerFactoryAR.get().write(measurements, true, lastSourceTrackIdentifier);
 			}
 			// System.out.println(latitude.getDecimalDegree() + ":" +
 			// longitude.getDecimalDegree() + ": " + depth);
@@ -217,11 +212,11 @@ public class UnfilteredMeasurementProcessor implements IFilter {
 	}
 
 	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC, name = WRITER_REFERENCE)
-	public void bindWriterFactory(IWriterFactory writerFactory) {
+	public void bindWriter(IDataWriter writerFactory) {
 		writerFactoryAR.set(writerFactory);
 	}
 
-	public void unbindWriterFactory(IWriterFactory writerFactory) {
+	public void unbindWriter(IDataWriter writerFactory) {
 		writerFactoryAR.compareAndSet(writerFactory, null);
 	}
 
