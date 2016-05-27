@@ -40,7 +40,7 @@ import javax.bluetooth.UUID;
 import net.sf.seesea.gps.bluetooth.ui.BluetoothDeviceLabelProvider;
 import net.sf.seesea.gps.bluetooth.ui.BluetoothDiscoveryListener;
 import net.sf.seesea.gps.bluetooth.ui.GPSBluetoothUIActivator;
-import net.sf.seesea.lib.IValidatingPage;
+import net.sf.seesea.lib.ui.IValidatingPage;
 import net.sf.seesea.provider.navigation.nmea.ui.NMEAWizard;
 
 import org.apache.log4j.Logger;

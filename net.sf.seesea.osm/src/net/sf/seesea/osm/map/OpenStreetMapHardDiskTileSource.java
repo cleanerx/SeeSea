@@ -29,6 +29,7 @@ package net.sf.seesea.osm.map;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
@@ -123,6 +124,8 @@ public class OpenStreetMapHardDiskTileSource implements ITileSource {
 			WritableByteChannel writableByteChannel = Channels.newChannel(fileOutputStream);
 			IOUtils.channelCopy(readableByteChannel, writableByteChannel);
 			fileOutputStream.close();
+		} catch (SocketTimeoutException e) {
+			// socket timeout
 		} catch (UnknownHostException e) {
 			Logger.getLogger(getClass()).debug("Host not found");
 		}
