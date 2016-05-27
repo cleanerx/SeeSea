@@ -9,6 +9,7 @@ import java.util.List;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
+import net.sf.seesea.data.io.IDataWriter;
 import net.sf.seesea.data.io.IWriterFactory;
 import net.sf.seesea.data.io.MemoryDataWriter;
 import net.sf.seesea.data.io.WriterException;
@@ -54,13 +55,11 @@ public class UnfilteredMeasurementProcessorTest {
 		
 		MemoryDataWriter memoryDataWriter = new MemoryDataWriter();
 		
-		IWriterFactory writerFactory = EasyMock.createNiceMock(IWriterFactory.class);
-		EasyMock.expect(writerFactory.createWriter()).andReturn(memoryDataWriter);
-		EasyMock.expectLastCall().anyTimes();
-		EasyMock.replay(writerFactory);
+		IDataWriter writer = EasyMock.createNiceMock(IDataWriter.class);
+		EasyMock.replay(writer);
 		
 		UnfilteredMeasurementProcessor unfilteredMeasurementProcessor = new UnfilteredMeasurementProcessor();
-		unfilteredMeasurementProcessor.bindWriterFactory(writerFactory);
+		unfilteredMeasurementProcessor.bindWriter(writer);
 		
 		unfilteredMeasurementProcessor.processMeasurements(measurements, "Pos", 1L, null, null);
 		unfilteredMeasurementProcessor.finish();
