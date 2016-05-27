@@ -4,7 +4,7 @@
     <service>
         <provide interface="net.sf.seesea.data.postprocessing.process.IFilter"/>
     </service>
-    <reference name="writer" interface="net.sf.seesea.data.io.IWriterFactory" cardinality="1..1" policy="dynamic" bind="bindWriterFactory" unbind="unbindWriterFactory"/>
+    <reference name="writer" interface="net.sf.seesea.data.io.IDataWriter" cardinality="1..1" policy="dynamic" bind="bindWriter" unbind="unbindWriter"/>
     <reference name="WaterLevelCorrection" interface="net.sf.seesea.waterlevel.IWaterLevelCorrection" cardinality="0..1" policy="dynamic" bind="bindWaterLevelCorrection" unbind="unbindWaterLevelCorrection"/>
     <implementation class="net.sf.seesea.data.postprocessing.filter.UnfilteredMeasurementProcessor"/>
 </scr:component>
