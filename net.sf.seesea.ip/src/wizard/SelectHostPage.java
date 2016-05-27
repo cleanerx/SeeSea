@@ -26,8 +26,6 @@
  */
 package wizard;
 
-import net.sf.seesea.lib.IValidatingPage;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -41,6 +39,8 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+
+import net.sf.seesea.lib.ui.IValidatingPage;
 
 /**
  * 
