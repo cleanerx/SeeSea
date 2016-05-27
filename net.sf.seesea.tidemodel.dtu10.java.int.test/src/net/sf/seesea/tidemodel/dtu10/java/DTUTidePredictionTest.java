@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sf.seesea.waterlevel.ocean.IOceanTideProvider;
@@ -19,6 +20,7 @@ public class DTUTidePredictionTest {
 
 	
 	@Test
+	@Ignore
 	public void testTidePrediction() throws IOException {
 		DTUTidePrediction dtuTidePrediction = new DTUTidePrediction();
 		DTU dtu = new DTU();

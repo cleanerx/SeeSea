@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.TimeZone;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class DTU10Test {
@@ -16,6 +17,7 @@ public class DTU10Test {
 	}
 
 	@Test
+	@Ignore
 	public void testTide() throws IOException {
 		DTU dtu = new DTU();
 		Calendar cal = Calendar.getInstance();
