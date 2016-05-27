@@ -13,6 +13,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -86,9 +87,11 @@ public class FilterSystemTest {
 		databaseProperties.put("basedir", resolvedURL.getFile());
 		databaseConfiguration.update(databaseProperties );
 
+		String uuid = UUID.randomUUID().toString();
+		
 		Configuration filter1 = configurationAdmin.getConfiguration("net.sf.seesea.data.postprocessing.filter.UnfilteredMeasurementProcessor");
 		Dictionary<String, Object> filter1Properties = new Hashtable<String, Object>();
-		filter1Properties.put("writer.target" , "(type=postgis)");
+		filter1Properties.put("writer.target" , "(writer=" + uuid +")");
 //		contentProperties.put("basedir", resolvedURL.getFile());
 		filter1.update(filter1Properties);
 		
@@ -100,6 +103,7 @@ public class FilterSystemTest {
 		tables.add("trackpoints_raw_filter_10");
 		tables.add("trackpoints_raw_filter_8");
 		writerProperties.put("outputTables", tables);
+		writerProperties.put("writer", uuid);
 		writer.update(writerProperties);
 		
 		Thread.sleep(1000);
