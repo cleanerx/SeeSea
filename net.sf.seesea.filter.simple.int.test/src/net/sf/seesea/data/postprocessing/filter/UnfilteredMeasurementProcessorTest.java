@@ -19,6 +19,7 @@ import net.sf.seesea.model.core.geo.Latitude;
 import net.sf.seesea.model.core.geo.Longitude;
 import net.sf.seesea.model.core.geo.MeasuredPosition3D;
 import net.sf.seesea.model.core.physx.Measurement;
+import net.sf.seesea.track.api.data.ITrackFile;
 import net.sf.seesea.track.api.exception.ProcessingException;
 
 public class UnfilteredMeasurementProcessorTest {
@@ -55,13 +56,13 @@ public class UnfilteredMeasurementProcessorTest {
 		
 		MemoryDataWriter memoryDataWriter = new MemoryDataWriter();
 		
-		IDataWriter writer = EasyMock.createNiceMock(IDataWriter.class);
-		EasyMock.replay(writer);
-		
+		ITrackFile trackFile = EasyMock.createNiceMock(ITrackFile.class);
+		EasyMock.replay(trackFile);
+
 		UnfilteredMeasurementProcessor unfilteredMeasurementProcessor = new UnfilteredMeasurementProcessor();
-		unfilteredMeasurementProcessor.bindWriter(writer);
+		unfilteredMeasurementProcessor.bindWriter(memoryDataWriter);
 		
-		unfilteredMeasurementProcessor.processMeasurements(measurements, "Pos", 1L, null, null);
+		unfilteredMeasurementProcessor.processMeasurements(measurements, "Pos", 1L, null, trackFile);
 		unfilteredMeasurementProcessor.finish();
 		
 		List<Measurement> writtenMeasurements = memoryDataWriter.getMeasurements();
